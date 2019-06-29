@@ -36,7 +36,7 @@ jdbc:
   # Mysql 数据库配置
   type: mysql
   driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://127.0.0.1:3306/appraisal?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
+  url: jdbc:mysql://192.168.0.106:3306/appraisal?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
   username: root
   password: root
   testSql: SELECT 1
@@ -156,7 +156,7 @@ spring:
     
   # Redis 连接参数 （RedisProperties）
   redis:
-    host: 127.0.0.1
+    host: 192.168.0.106
     port: 6379
     ssl: false
     database: 0

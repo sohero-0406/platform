@@ -1,0 +1,165 @@
+<% layout('/layouts/default.html', {title: '委托方信息管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('委托方信息管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('aa:delegateUser:edit')){ %>
+					<a href="${ctx}/aa/delegateUser/form" class="btn btn-default btnTool" title="${text('新增委托方信息')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${delegateUser}" action="${ctx}/aa/delegateUser/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('外键Id')}：</label>
+					<div class="control-inline">
+						<#form:input path="examUserId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('试卷id')}：</label>
+					<div class="control-inline">
+						<#form:input path="paperId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('委托方姓名')}：</label>
+					<div class="control-inline">
+						<#form:input path="name" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('身份证号')}：</label>
+					<div class="control-inline">
+						<#form:input path="idNum" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('民族')}：</label>
+					<div class="control-inline">
+						<#form:input path="national" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('生日')}：</label>
+					<div class="control-inline">
+						<#form:input path="birthday" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('委托方地址')}：</label>
+					<div class="control-inline">
+						<#form:input path="address" maxlength="256" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('性别')}：</label>
+					<div class="control-inline">
+						<#form:input path="gender" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('委托书编号')}：</label>
+					<div class="control-inline">
+						<#form:input path="entrustNum" maxlength="128" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('联系人')}：</label>
+					<div class="control-inline">
+						<#form:input path="contact" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('电话')}：</label>
+					<div class="control-inline">
+						<#form:input path="phone" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('委托书类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="entrustType" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('申请缘由')}：</label>
+					<div class="control-inline">
+						<#form:input path="applyReason" maxlength="256" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('完成日期')}：</label>
+					<div class="control-inline">
+						<#form:input path="completeDate" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('备注信息')}：</label>
+					<div class="control-inline">
+						<#form:input path="remarks" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("外键Id")}', name:'examUserId', index:'a.exam_user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/aa/delegateUser/form?id='+row.id+'" class="btnList" data-title="${text("编辑委托方信息")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("试卷id")}', name:'paperId', index:'a.paper_id', width:150, align:"left"},
+		{header:'${text("委托方姓名")}', name:'name', index:'a.name', width:150, align:"left"},
+		{header:'${text("身份证号")}', name:'idNum', index:'a.id_num', width:150, align:"left"},
+		{header:'${text("民族")}', name:'national', index:'a.national', width:150, align:"left"},
+		{header:'${text("生日")}', name:'birthday', index:'a.birthday', width:150, align:"left"},
+		{header:'${text("委托方地址")}', name:'address', index:'a.address', width:150, align:"left"},
+		{header:'${text("性别")}', name:'gender', index:'a.gender', width:150, align:"left"},
+		{header:'${text("委托书编号")}', name:'entrustNum', index:'a.entrust_num', width:150, align:"left"},
+		{header:'${text("联系人")}', name:'contact', index:'a.contact', width:150, align:"left"},
+		{header:'${text("电话")}', name:'phone', index:'a.phone', width:150, align:"left"},
+		{header:'${text("委托书类型")}', name:'entrustType', index:'a.entrust_type', width:150, align:"left"},
+		{header:'${text("申请缘由")}', name:'applyReason', index:'a.apply_reason', width:150, align:"left"},
+		{header:'${text("完成日期")}', name:'completeDate', index:'a.complete_date', width:150, align:"left"},
+		{header:'${text("状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
+		}},
+		{header:'${text("更新时间")}', name:'updateDate', index:'a.update_date', width:150, align:"center"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('aa:delegateUser:edit')){ %>
+				actions.push('<a href="${ctx}/aa/delegateUser/form?id='+row.id+'" class="btnList" title="${text("编辑委托方信息")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/aa/delegateUser/delete?id='+row.id+'" class="btnList" title="${text("删除委托方信息")}" data-confirm="${text("确认要删除该委托方信息吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>
