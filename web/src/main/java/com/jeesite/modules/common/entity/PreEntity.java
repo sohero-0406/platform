@@ -2,6 +2,7 @@ package com.jeesite.modules.common.entity;
 
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.web.http.ServletUtils;
+import com.jeesite.modules.common.utils.UserUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,8 +11,7 @@ public class PreEntity<T extends DataEntity<?>> extends DataEntity<T> {
     @Override
     public void preInsert() {
         super.preInsert();
-        HttpServletRequest request = ServletUtils.getRequest();
-        ExamUser examUser = (ExamUser) request.getSession().getAttribute("examUser");
+        ExamUser examUser = UserUtils.getExamUser();
         if (null != examUser) {
             this.createBy = examUser.getUserId();
             this.updateBy = examUser.getUserId();
@@ -21,8 +21,7 @@ public class PreEntity<T extends DataEntity<?>> extends DataEntity<T> {
     @Override
     public void preUpdate() {
         super.preUpdate();
-        HttpServletRequest request = ServletUtils.getRequest();
-        ExamUser examUser = (ExamUser) request.getSession().getAttribute("examUser");
+        ExamUser examUser = UserUtils.getExamUser();
         if (null != examUser) {
             this.updateBy = examUser.getUserId();
         }

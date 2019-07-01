@@ -3,14 +3,13 @@
  */
 package com.jeesite.modules.test.web;
 
+import com.jeesite.common.lang.StringUtils;
+import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.sys.entity.DictData;
-import com.jeesite.modules.sys.service.DictDataService;
 import com.jeesite.modules.sys.utils.DictUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import javafx.scene.layout.Priority;
+import com.jeesite.modules.test.entity.TestData;
+import com.jeesite.modules.test.service.TestDataService;
+import io.swagger.annotations.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,13 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.jeesite.common.lang.StringUtils;
-import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.test.entity.TestData;
-import com.jeesite.modules.test.service.TestDataService;
-
 import java.util.List;
-import java.util.Set;
 
 /**
  * 演示实例Controller
@@ -74,10 +67,10 @@ public class DemoController extends BaseController {
         return "modules/demo/demoForm" + StringUtils.cap(viewName);
     }
 
-    @ApiOperation(value = "你好", notes = "你好")
+    @ApiOperation(value = "税务报表二次计算", notes = "税务报表二次计算")
     @RequestMapping(value = "hello", method = RequestMethod.GET)
     @ResponseBody
-    public String hello() {
+    public String hello(@ApiParam("二次计算参数") TestData testData) {
 //		redisTemplate.opsForHash().put("a","a","aaa");
 //		redisTemplate.opsForHash().put("a","b","bbb");
 //		String a = (String) redisTemplate.opsForHash().get("a","b");

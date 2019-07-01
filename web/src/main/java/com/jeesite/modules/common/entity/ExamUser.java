@@ -32,6 +32,8 @@ public class ExamUser extends DataEntity<ExamUser> {
 	private String userNum;		// 用户名
 	private String password;		// 密码
 
+	private String paperId;		//试卷id
+
 	public ExamUser() {
 		this(null);
 	}
@@ -75,5 +77,12 @@ public class ExamUser extends DataEntity<ExamUser> {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	public String getPaperId() {
+		return paperId;
+	}
+
+	public void setPaperId(String paperId) {
+		this.paperId = paperId;
+	}
 }

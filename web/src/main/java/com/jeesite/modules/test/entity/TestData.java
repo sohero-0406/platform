@@ -4,6 +4,8 @@
 package com.jeesite.modules.test.entity;
 
 import javax.validation.constraints.NotBlank;
+
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import com.jeesite.common.mybatis.annotation.JoinTable;
@@ -41,7 +43,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 public class TestData extends DataEntity<TestData> {
 	
 	private static final long serialVersionUID = 1L;
+	@ApiModelProperty(value = "待算报表")
 	private String testInput;		// 单行文本
+	@ApiModelProperty(value = "账套信息")
 	private String testTextarea;		// 多行文本
 	private String testSelect;		// 下拉框
 	private String testSelectMultiple;		// 下拉多选

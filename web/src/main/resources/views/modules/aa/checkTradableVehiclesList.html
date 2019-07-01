@@ -1,0 +1,172 @@
+<% layout('/layouts/default.html', {title: '检查可交易车辆管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('检查可交易车辆管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('aa:checkTradableVehicles:edit')){ %>
+					<a href="${ctx}/aa/checkTradableVehicles/form" class="btn btn-default btnTool" title="${text('新增检查可交易车辆')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${checkTradableVehicles}" action="${ctx}/aa/checkTradableVehicles/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('外键id')}：</label>
+					<div class="control-inline">
+						<#form:input path="examUserId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('试卷id')}：</label>
+					<div class="control-inline">
+						<#form:input path="paperId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车辆维保记录')}：</label>
+					<div class="control-inline">
+						<#form:input path="vehicleMaintenance" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('出险记录')}：</label>
+					<div class="control-inline">
+						<#form:input path="compensationRecord" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否达到国家强制报废标准')}：</label>
+					<div class="control-inline">
+						<#form:input path="check1" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否为抵押期间或海关监管期间')}：</label>
+					<div class="control-inline">
+						<#form:input path="check2" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否为人民法院、检察院、行政执法等部门依法查封、扣押期间的车辆')}：</label>
+					<div class="control-inline">
+						<#form:input path="check3" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否为通过盗窃、抢劫、诈骗等违法犯罪手段获得的车辆')}：</label>
+					<div class="control-inline">
+						<#form:input path="check4" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('发动机号与机动车登记证书登记号码是否一致，且无凿改痕迹')}：</label>
+					<div class="control-inline">
+						<#form:input path="check5" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车辆识别代号或车架号码与机动车登记证书登记号码是否一致，且无凿改痕迹')}：</label>
+					<div class="control-inline">
+						<#form:input path="check6" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否走私、非法拼组装车辆')}：</label>
+					<div class="control-inline">
+						<#form:input path="check7" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否法律法规禁止经营的车辆')}：</label>
+					<div class="control-inline">
+						<#form:input path="check8" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否可交易')}：</label>
+					<div class="control-inline">
+						<#form:input path="isTrade" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否事故车')}：</label>
+					<div class="control-inline">
+						<#form:input path="isAccident" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('归档时效性')}：</label>
+					<div class="control-inline">
+						<#form:input path="fileDuring" maxlength="256" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('备注信息')}：</label>
+					<div class="control-inline">
+						<#form:input path="remarks" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("外键id")}', name:'examUserId', index:'a.exam_user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/aa/checkTradableVehicles/form?id='+row.id+'" class="btnList" data-title="${text("编辑检查可交易车辆")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("试卷id")}', name:'paperId', index:'a.paper_id', width:150, align:"left"},
+		{header:'${text("车辆维保记录")}', name:'vehicleMaintenance', index:'a.vehicle_maintenance', width:150, align:"left"},
+		{header:'${text("出险记录")}', name:'compensationRecord', index:'a.compensation_record', width:150, align:"left"},
+		{header:'${text("是否达到国家强制报废标准")}', name:'check1', index:'a.check1', width:150, align:"left"},
+		{header:'${text("是否为抵押期间或海关监管期间")}', name:'check2', index:'a.check2', width:150, align:"left"},
+		{header:'${text("是否为人民法院、检察院、行政执法等部门依法查封、扣押期间的车辆")}', name:'check3', index:'a.check3', width:150, align:"left"},
+		{header:'${text("是否为通过盗窃、抢劫、诈骗等违法犯罪手段获得的车辆")}', name:'check4', index:'a.check4', width:150, align:"left"},
+		{header:'${text("发动机号与机动车登记证书登记号码是否一致，且无凿改痕迹")}', name:'check5', index:'a.check5', width:150, align:"left"},
+		{header:'${text("车辆识别代号或车架号码与机动车登记证书登记号码是否一致，且无凿改痕迹")}', name:'check6', index:'a.check6', width:150, align:"left"},
+		{header:'${text("是否走私、非法拼组装车辆")}', name:'check7', index:'a.check7', width:150, align:"left"},
+		{header:'${text("是否法律法规禁止经营的车辆")}', name:'check8', index:'a.check8', width:150, align:"left"},
+		{header:'${text("是否可交易")}', name:'isTrade', index:'a.is_trade', width:150, align:"left"},
+		{header:'${text("是否事故车")}', name:'isAccident', index:'a.is_accident', width:150, align:"left"},
+		{header:'${text("归档时效性")}', name:'fileDuring', index:'a.file_during', width:150, align:"left"},
+		{header:'${text("状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
+		}},
+		{header:'${text("更新时间")}', name:'updateDate', index:'a.update_date', width:150, align:"center"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('aa:checkTradableVehicles:edit')){ %>
+				actions.push('<a href="${ctx}/aa/checkTradableVehicles/form?id='+row.id+'" class="btnList" title="${text("编辑检查可交易车辆")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/aa/checkTradableVehicles/delete?id='+row.id+'" class="btnList" title="${text("删除检查可交易车辆")}" data-confirm="${text("确认要删除该检查可交易车辆吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>
