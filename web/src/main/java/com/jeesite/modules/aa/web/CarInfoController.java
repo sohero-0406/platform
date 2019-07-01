@@ -3,17 +3,17 @@
  */
 package com.jeesite.modules.aa.web;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.jeesite.modules.aa.entity.DelegateUser;
-import com.jeesite.modules.aa.entity.PictureUser;
-import com.jeesite.modules.aa.service.DelegateUserService;
-import com.jeesite.modules.aa.service.PictureUserService;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.jeesite.common.config.Global;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.web.BaseController;
+import com.jeesite.modules.aa.entity.CarInfo;
+import com.jeesite.modules.aa.service.CarInfoService;
 import com.jeesite.modules.aa.vo.BaseInfoVO;
 import com.jeesite.modules.common.entity.CommonResult;
-import com.jeesite.modules.common.entity.Exam;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.jeesite.modules.sys.entity.DictData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,13 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jeesite.common.config.Global;
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.aa.entity.CarInfo;
-import com.jeesite.modules.aa.service.CarInfoService;
-
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 委托车辆信息Controller
@@ -42,11 +37,7 @@ public class CarInfoController extends BaseController {
 	//?todo 暂时写死
 	private final static  String EXAM_USER_ID = "11";
 	@Autowired
-	private DelegateUserService delegateUserService;
-	@Autowired
 	private CarInfoService carInfoService;
-	@Autowired
-	private PictureUserService pictureUserService;
 	
 	/**
 	 * 获取数据
@@ -122,9 +113,13 @@ public class CarInfoController extends BaseController {
 	 * @return
 	 */
 	@PostMapping(value = "getBaseInfo")
+	@ResponseBody
 	public CommonResult getBaseInfo(String[] pictureTypeIds){
 		CommonResult comRes = new CommonResult();
 		comRes.setData(carInfoService.getBaseInfo(EXAM_USER_ID, pictureTypeIds));
+
+//		SimplePropertyPreFilter filter = new SimplePropertyPreFilter(DictData.class, "dictValue,dictLabel");
+//		JSONObject.toJSONString( object ,filter);
 		return comRes;
 	}
 }

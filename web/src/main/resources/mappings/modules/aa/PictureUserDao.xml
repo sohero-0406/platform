@@ -12,13 +12,14 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="findListByExamUserId" resultType="PictureUser">
-		select id,url,picture_type_id,name
-		from aa_picture_user
+		select pictureUser.id,pictureUser.url,pictureType.id,pictureUser.name
+		from aa_picture_type as pictureType
+		left join aa_picture_user as pictureUser on pictureType.id=pictureUser.picture_type_id
 		<where>
 			exam_user_id = #{examUserId}
 			<if test="pictureTypeIds != null and pictureTypeIds.length > 0">
-			and picture_type_id in 
-			<foreach collection="pictureTypeIds" item="pictureTypeId" index="index">
+			and pictureType.id in
+			<foreach collection="pictureTypeIds" item="pictureTypeId" index="index" open="(" close=")" separator=",">
 				#{pictureTypeId}
 			</foreach>
 			</if>

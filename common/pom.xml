@@ -287,7 +287,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 		</dependency>
-		
+		<!-- 百度智能云-文字识别 -->
+		<dependency>
+			<groupId>com.baidu.aip</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>4.11.3</version>
+		</dependency>
 	</dependencies>
 	
 	<build>

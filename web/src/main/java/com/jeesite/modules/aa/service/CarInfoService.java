@@ -131,7 +131,17 @@ public class CarInfoService extends CrudService<CarInfoDao, CarInfo> {
 		if(delegateUsers != null && delegateUsers.size() > 0){
 			baseInfoVO.setDelegateUser(delegateUsers.get(0));
 		}
-//		List<DictData> entrustTypeList = DictUtils.getDictList("sys_job_event");
+		//加载委托书类型
+		List<DictData> entrustTypeList = DictUtils.getDictList("aa_entrust_file_type");
+		baseInfoVO.setEntrustTypeList(entrustTypeList);
+
+		//加载燃油种类
+		List<DictData> fuelTypeList = DictUtils.getDictList("aa_fuel_type");
+		baseInfoVO.setFuelTypeList(fuelTypeList);
+
+		//加载车身颜色
+		List<DictData> colorList = DictUtils.getDictList("aa_vehicle_color");
+		baseInfoVO.setColorList(colorList);
 
 		return baseInfoVO;
 	}
