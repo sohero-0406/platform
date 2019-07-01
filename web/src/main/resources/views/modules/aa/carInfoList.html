@@ -1,0 +1,333 @@
+<% layout('/layouts/default.html', {title: '委托车辆信息管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('委托车辆信息管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('aa:carInfo:edit')){ %>
+					<a href="${ctx}/aa/carInfo/form" class="btn btn-default btnTool" title="${text('新增委托车辆信息')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${carInfo}" action="${ctx}/aa/carInfo/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('外键id')}：</label>
+					<div class="control-inline">
+						<#form:input path="examUserId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('试卷id')}：</label>
+					<div class="control-inline">
+						<#form:input path="paperId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('外键id')}：</label>
+					<div class="control-inline">
+						<#form:input path="carOwnerId" maxlength="256" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车牌号')}：</label>
+					<div class="control-inline">
+						<#form:input path="licensePlateNum" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('vin码')}：</label>
+					<div class="control-inline">
+						<#form:input path="vinCode" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('品牌')}：</label>
+					<div class="control-inline">
+						<#form:input path="brand" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车系')}：</label>
+					<div class="control-inline">
+						<#form:input path="series" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车型')}：</label>
+					<div class="control-inline">
+						<#form:input path="model" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('行驶里程')}：</label>
+					<div class="control-inline">
+						<#form:input path="mileage" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车辆类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="vehicleType" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('厂牌型号')}：</label>
+					<div class="control-inline">
+						<#form:input path="labelType" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('使用用途')}：</label>
+					<div class="control-inline">
+						<#form:input path="usage" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('总质量')}：</label>
+					<div class="control-inline">
+						<#form:input path="totalQuality" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('座位')}：</label>
+					<div class="control-inline">
+						<#form:input path="sear" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('排量')}：</label>
+					<div class="control-inline">
+						<#form:input path="displacement" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('燃油种类')}：</label>
+					<div class="control-inline">
+						<#form:input path="fuelType" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('初次登记日期')}：</label>
+					<div class="control-inline">
+						<#form:input path="registerDate" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车身颜色')}：</label>
+					<div class="control-inline">
+						<#form:input path="color" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('已使用年限')}：</label>
+					<div class="control-inline">
+						<#form:input path="useYear" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('发动机大修次数')}：</label>
+					<div class="control-inline">
+						<#form:input path="engineOverhaulTimes" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('整车大修次数')}：</label>
+					<div class="control-inline">
+						<#form:input path="carOverhaulTimes" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('维修情况')}：</label>
+					<div class="control-inline">
+						<#form:input path="maintenanceSituation" maxlength="256" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('事故情况')}：</label>
+					<div class="control-inline">
+						<#form:input path="accident" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('购置日期')}：</label>
+					<div class="control-inline">
+						<#form:input path="purchaseDate" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('原始价格')}：</label>
+					<div class="control-inline">
+						<#form:input path="originalPrice" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('备注')}：</label>
+					<div class="control-inline">
+						<#form:input path="note" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('级别')}：</label>
+					<div class="control-inline">
+						<#form:input path="level" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('出厂日期')}：</label>
+					<div class="control-inline">
+						<#form:input path="manufactureDate" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('过户次数')}：</label>
+					<div class="control-inline">
+						<#form:input path="changeNum" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('环保标准')}：</label>
+					<div class="control-inline">
+						<#form:input path="environmentalStandard" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车身结构')}：</label>
+					<div class="control-inline">
+						<#form:input path="bodyStructure" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('整备质量')}：</label>
+					<div class="control-inline">
+						<#form:input path="curbWeight" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('发动机型号')}：</label>
+					<div class="control-inline">
+						<#form:input path="engineModel" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('发动机号码')}：</label>
+					<div class="control-inline">
+						<#form:input path="engineNum" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车身尺寸')}：</label>
+					<div class="control-inline">
+						<#form:input path="bodySize" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('年检到期')}：</label>
+					<div class="control-inline">
+						<#form:input path="yearCheckDue" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('保险到期')}：</label>
+					<div class="control-inline">
+						<#form:input path="insuranceDue" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('整车质保')}：</label>
+					<div class="control-inline">
+						<#form:input path="vehicleWarranty" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('备注信息')}：</label>
+					<div class="control-inline">
+						<#form:input path="remarks" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("外键id")}', name:'examUserId', index:'a.exam_user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/aa/carInfo/form?id='+row.id+'" class="btnList" data-title="${text("编辑委托车辆信息")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("试卷id")}', name:'paperId', index:'a.paper_id', width:150, align:"left"},
+		{header:'${text("外键id")}', name:'carOwnerId', index:'a.car_owner_id', width:150, align:"left"},
+		{header:'${text("车牌号")}', name:'licensePlateNum', index:'a.license_plate_num', width:150, align:"left"},
+		{header:'${text("vin码")}', name:'vinCode', index:'a.vin_code', width:150, align:"left"},
+		{header:'${text("品牌")}', name:'brand', index:'a.brand', width:150, align:"left"},
+		{header:'${text("车系")}', name:'series', index:'a.series', width:150, align:"left"},
+		{header:'${text("车型")}', name:'model', index:'a.model', width:150, align:"left"},
+		{header:'${text("行驶里程")}', name:'mileage', index:'a.mileage', width:150, align:"left"},
+		{header:'${text("车辆类型")}', name:'vehicleType', index:'a.vehicle_type', width:150, align:"left"},
+		{header:'${text("厂牌型号")}', name:'labelType', index:'a.label_type', width:150, align:"left"},
+		{header:'${text("使用用途")}', name:'usage', index:'a.usage', width:150, align:"left"},
+		{header:'${text("总质量")}', name:'totalQuality', index:'a.total_quality', width:150, align:"left"},
+		{header:'${text("座位")}', name:'sear', index:'a.sear', width:150, align:"left"},
+		{header:'${text("排量")}', name:'displacement', index:'a.displacement', width:150, align:"left"},
+		{header:'${text("燃油种类")}', name:'fuelType', index:'a.fuel_type', width:150, align:"left"},
+		{header:'${text("初次登记日期")}', name:'registerDate', index:'a.register_date', width:150, align:"left"},
+		{header:'${text("车身颜色")}', name:'color', index:'a.color', width:150, align:"left"},
+		{header:'${text("已使用年限")}', name:'useYear', index:'a.use_year', width:150, align:"left"},
+		{header:'${text("发动机大修次数")}', name:'engineOverhaulTimes', index:'a.engine_overhaul_times', width:150, align:"left"},
+		{header:'${text("整车大修次数")}', name:'carOverhaulTimes', index:'a.car_overhaul_times', width:150, align:"left"},
+		{header:'${text("维修情况")}', name:'maintenanceSituation', index:'a.maintenance_situation', width:150, align:"left"},
+		{header:'${text("事故情况")}', name:'accident', index:'a.accident', width:150, align:"left"},
+		{header:'${text("购置日期")}', name:'purchaseDate', index:'a.purchase_date', width:150, align:"left"},
+		{header:'${text("原始价格")}', name:'originalPrice', index:'a.original_price', width:150, align:"left"},
+		{header:'${text("备注")}', name:'note', index:'a.note', width:150, align:"left"},
+		{header:'${text("级别")}', name:'level', index:'a.level', width:150, align:"left"},
+		{header:'${text("出厂日期")}', name:'manufactureDate', index:'a.manufacture_date', width:150, align:"left"},
+		{header:'${text("过户次数")}', name:'changeNum', index:'a.change_num', width:150, align:"center"},
+		{header:'${text("环保标准")}', name:'environmentalStandard', index:'a.environmental_standard', width:150, align:"left"},
+		{header:'${text("车身结构")}', name:'bodyStructure', index:'a.body_structure', width:150, align:"left"},
+		{header:'${text("整备质量")}', name:'curbWeight', index:'a.curb_weight', width:150, align:"left"},
+		{header:'${text("发动机型号")}', name:'engineModel', index:'a.engine_model', width:150, align:"left"},
+		{header:'${text("发动机号码")}', name:'engineNum', index:'a.engine_num', width:150, align:"left"},
+		{header:'${text("车身尺寸")}', name:'bodySize', index:'a.body_size', width:150, align:"left"},
+		{header:'${text("年检到期")}', name:'yearCheckDue', index:'a.year_check_due', width:150, align:"left"},
+		{header:'${text("保险到期")}', name:'insuranceDue', index:'a.insurance_due', width:150, align:"left"},
+		{header:'${text("整车质保")}', name:'vehicleWarranty', index:'a.vehicle_warranty', width:150, align:"left"},
+		{header:'${text("状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
+		}},
+		{header:'${text("更新时间")}', name:'updateDate', index:'a.update_date', width:150, align:"center"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('aa:carInfo:edit')){ %>
+				actions.push('<a href="${ctx}/aa/carInfo/form?id='+row.id+'" class="btnList" title="${text("编辑委托车辆信息")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/aa/carInfo/delete?id='+row.id+'" class="btnList" title="${text("删除委托车辆信息")}" data-confirm="${text("确认要删除该委托车辆信息吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

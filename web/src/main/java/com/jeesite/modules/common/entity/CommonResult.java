@@ -14,7 +14,7 @@ public class CommonResult {
     /**
      * 返回信息
      */
-    private String msg;
+    private String msg = "请求成功";
 
     /**
      * 返回数据

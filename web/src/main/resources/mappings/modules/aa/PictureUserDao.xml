@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.aa.dao.PictureUserDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="PictureUser">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<select id="findListByExamUserId" resultType="PictureUser">
+		select id,url,picture_type_id,name
+		from aa_picture_user
+		<where>
+			exam_user_id = #{examUserId}
+			<if test="pictureTypeIds != null and pictureTypeIds.length > 0">
+			and picture_type_id in 
+			<foreach collection="pictureTypeIds" item="pictureTypeId" index="index">
+				#{pictureTypeId}
+			</foreach>
+			</if>
+		</where>
+	</select>
+</mapper>

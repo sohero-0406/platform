@@ -76,6 +76,7 @@ public class CalculateController extends BaseController {
     @GetMapping(value = "save")
     @ResponseBody
     public String save(@Validated Calculate calculate, HttpServletRequest request) {
+
         calculateService.save(calculate);
         return renderResult(Global.TRUE, text("保存计算车辆价值成功！"));
     }
