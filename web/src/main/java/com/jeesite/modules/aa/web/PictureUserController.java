@@ -3,11 +3,12 @@
  */
 package com.jeesite.modules.aa.web;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.jeesite.common.config.Global;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.web.BaseController;
+import com.jeesite.modules.aa.entity.PictureUser;
+import com.jeesite.modules.aa.service.PictureUserService;
 import com.jeesite.modules.common.entity.CommonResult;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,15 +17,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.jeesite.common.config.Global;
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.aa.entity.PictureUser;
-import com.jeesite.modules.aa.service.PictureUserService;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 用户图片表Controller
@@ -64,11 +62,25 @@ public class PictureUserController extends BaseController {
 	}
 
 	@PostMapping(value="findPictureLibraryList")
+	@ResponseBody
 	public CommonResult findPictureByParentTypeId(){
 		String[] parentTypeIds = new String[]{
 				"1143431479216775168","1143437059610071040","1143439093974253568",
 				"1143441175747194880","1143446339264172032"};
 		return pictureUserService.findPictureByParentTypeId(EXAM_USER_ID, parentTypeIds);
+	}
+
+	/**
+	 * 加载评估车辆拍照信息
+	 * @return
+	 */
+	@PostMapping(value = "findVehiclePicture")
+	@ResponseBody
+	public CommonResult findVehiclePicture(){
+		CommonResult comRes = new CommonResult();
+		List<PictureUser> pictureUserList = pictureUserService.findVehiclePicture(EXAM_USER_ID);
+		comRes.setData(pictureUserList);
+		return comRes;
 	}
 	/**
 	 * 查询列表

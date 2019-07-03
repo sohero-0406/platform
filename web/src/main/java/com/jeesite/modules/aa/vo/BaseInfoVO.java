@@ -20,6 +20,12 @@ public class BaseInfoVO {
     private List<DictData> fuelTypeList;
     //车身颜色
     private List<DictData> colorList;
+    //使用性质
+    private List<DictData> usageList;
+    //车辆级别
+    private List<DictData> levelList;
+    //环保标准
+    private List<DictData> environmentalStandardList;
 
     public CarInfo getCarInfo() {
         return carInfo;
@@ -67,5 +73,29 @@ public class BaseInfoVO {
 
     public void setColorList(List<DictData> colorList) {
         this.colorList = colorList;
+    }
+
+    public List<DictData> getUsageList() {
+        return usageList;
+    }
+
+    public void setUsageList(List<DictData> usageList) {
+        this.usageList = usageList;
+    }
+
+    public List<DictData> getLevelList() {
+        return levelList;
+    }
+
+    public void setLevelList(List<DictData> levelList) {
+        this.levelList = levelList;
+    }
+
+    public List<DictData> getEnvironmentalStandardList() {
+        return environmentalStandardList;
+    }
+
+    public void setEnvironmentalStandardList(List<DictData> environmentalStandardList) {
+        this.environmentalStandardList = environmentalStandardList;
     }
 }

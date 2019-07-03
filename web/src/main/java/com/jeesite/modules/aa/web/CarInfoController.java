@@ -118,8 +118,6 @@ public class CarInfoController extends BaseController {
 		CommonResult comRes = new CommonResult();
 		comRes.setData(carInfoService.getBaseInfo(EXAM_USER_ID, pictureTypeIds));
 
-//		SimplePropertyPreFilter filter = new SimplePropertyPreFilter(DictData.class, "dictValue,dictLabel");
-//		JSONObject.toJSONString( object ,filter);
 		return comRes;
 	}
 }

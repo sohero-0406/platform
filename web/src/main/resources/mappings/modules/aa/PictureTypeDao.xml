@@ -11,5 +11,17 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+	<select id="findListByIds" resultType="PictureType">
+		select id,sort,name
+		from aa_picture_type
+		<if test="ids != null and ids.length > 0">
+			<where>
+				id in
+				<foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+					#{id}
+				</foreach>
+			</where>
+		</if>
+		order by sort asc
+	</select>
 </mapper>
