@@ -80,4 +80,13 @@ public class CheckTradableVehiclesService extends CrudService<CheckTradableVehic
 	public CheckTradableVehicles getByEntity(CheckTradableVehicles checkTradableVehicles) {
 		return checkTradableVehiclesDao.getByEntity(checkTradableVehicles);
 	}
+
+	/**
+	 * 保存事故车判定信息
+	 * @param checkTradableVehicles
+	 */
+	@Transactional
+	public void saveIsAccident(CheckTradableVehicles checkTradableVehicles) {
+		checkTradableVehiclesDao.saveIsAccident(checkTradableVehicles);
+	}
 }

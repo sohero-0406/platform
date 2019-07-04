@@ -14,5 +14,6 @@ import com.jeesite.modules.aa.entity.CheckTradableVehicles;
  */
 @MyBatisDao
 public interface CheckTradableVehiclesDao extends CrudDao<CheckTradableVehicles> {
-	
+
+    void saveIsAccident(CheckTradableVehicles checkTradableVehicles);
 }

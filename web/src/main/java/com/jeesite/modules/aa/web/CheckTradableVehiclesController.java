@@ -116,4 +116,16 @@ public class CheckTradableVehiclesController extends BaseController {
 		result.setData(checkTradableVehicles);
 		return result;
 	}
+
+	/**
+	 * 保存事故车判定信息
+	 */
+	@PostMapping(value = "saveIsAccident")
+	@ResponseBody
+	public CommonResult saveIsAccident(@Validated CheckTradableVehicles checkTradableVehicles) {
+		ExamUser examUser = UserUtils.getExamUser();
+		checkTradableVehicles.setExamUserId(examUser.getId());
+		checkTradableVehiclesService.saveIsAccident(checkTradableVehicles);
+		return new CommonResult();
+	}
 }
