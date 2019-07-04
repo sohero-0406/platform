@@ -15,8 +15,8 @@ import com.jeesite.modules.aa.dao.CalculateDao;
 
 /**
  * 计算车辆价值Service
- * @author lvchangwei
- * @version 2019-06-25
+ * @author chenlitao
+ * @version 2019-07-04
  */
 @Service
 @Transactional(readOnly=true)

@@ -6,13 +6,17 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jeesite.modules.test.entity.TestData;
+import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.Exam;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
@@ -20,75 +24,95 @@ import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.aa.entity.Calculate;
 import com.jeesite.modules.aa.service.CalculateService;
 
+import java.util.List;
+
 /**
  * 计算车辆价值Controller
- *
- * @author lvchangwei
- * @version 2019-06-25
+ * @author chenlitao
+ * @version 2019-07-04
  */
 @Controller
 @RequestMapping(value = "${adminPath}/aa/calculate")
 public class CalculateController extends BaseController {
+	//?todo 暂时写死
+	private final static  String EXAM_USER_ID = "11";
+	@Autowired
+	private CalculateService calculateService;
+	
+	/**
+	 * 获取数据
+	 */
+	@ModelAttribute
+	public Calculate get(String id, boolean isNewRecord) {
+		return calculateService.get(id, isNewRecord);
+	}
+	
+	/**
+	 * 查询列表
+	 */
+	@RequestMapping(value = {"list", ""})
+	public String list(Calculate calculate, Model model) {
+		model.addAttribute("calculate", calculate);
+		return "modules/aa/calculateList";
+	}
+	
+	/**
+	 * 查询列表数据
+	 */
+	@RequestMapping(value = "listData")
+	@ResponseBody
+	public Page<Calculate> listData(Calculate calculate, HttpServletRequest request, HttpServletResponse response) {
+		calculate.setPage(new Page<>(request, response));
+		Page<Calculate> page = calculateService.findPage(calculate);
+		return page;
+	}
 
-    @Autowired
-    private CalculateService calculateService;
+	/**
+	 * 查看编辑表单
+	 */
+	@RequestMapping(value = "form")
+	public String form(Calculate calculate, Model model) {
+		model.addAttribute("calculate", calculate);
+		return "modules/aa/calculateForm";
+	}
 
-    /**
-     * 获取数据
-     */
-    @ModelAttribute
-    public Calculate get(String id, boolean isNewRecord) {
-        return calculateService.get(id, isNewRecord);
-    }
+	/**
+	 * 保存计算车辆价值
+	 */
+	@PostMapping(value = "save")
+	@ResponseBody
+	public String save(@Validated Calculate calculate) {
+		calculateService.save(calculate);
+		return renderResult(Global.TRUE, text("保存计算车辆价值成功！"));
+	}
+	
+	/**
+	 * 删除计算车辆价值
+	 */
+	@RequestMapping(value = "delete")
+	@ResponseBody
+	public String delete(Calculate calculate) {
+		calculateService.delete(calculate);
+		return renderResult(Global.TRUE, text("删除计算车辆价值成功！"));
+	}
 
-    /**
-     * 查询列表
-     */
-    @RequestMapping(value = {"list", ""})
-    public String list(Calculate calculate, Model model) {
-        model.addAttribute("calculate", calculate);
-        return "modules/aa/calculateList";
-    }
+	/**
+	 * 获取车辆评估价值算法
+	 * @return
+	 */
+	@PostMapping(value = "get")
+	@ResponseBody
+	public CommonResult get(String id){
+		CommonResult comRes = new CommonResult();
+		Calculate calculate = null;
+		if(id != null && id.trim().length() > 0){
+			calculate = calculateService.get(id);
+		}else{
+			calculate.setExamUserId(EXAM_USER_ID);
+			List<Calculate> calculateList = this.calculateService.findList(calculate);
+			calculate = calculateList.get(0);
+		}
 
-    /**
-     * 查询列表数据
-     */
-    @RequestMapping(value = "listData")
-    @ResponseBody
-    public Page<Calculate> listData(Calculate calculate, HttpServletRequest request, HttpServletResponse response) {
-        calculate.setPage(new Page<>(request, response));
-        Page<Calculate> page = calculateService.findPage(calculate);
-        return page;
-    }
-
-    /**
-     * 查看编辑表单
-     */
-    @RequestMapping(value = "form")
-    public String form(Calculate calculate, Model model) {
-        model.addAttribute("calculate", calculate);
-        return "modules/aa/calculateForm";
-    }
-
-    /**
-     * 保存计算车辆价值
-     */
-    @GetMapping(value = "save")
-    @ResponseBody
-    public String save(@Validated Calculate calculate, HttpServletRequest request) {
-
-        calculateService.save(calculate);
-        return renderResult(Global.TRUE, text("保存计算车辆价值成功！"));
-    }
-
-    /**
-     * 删除计算车辆价值
-     */
-    @RequestMapping(value = "delete")
-    @ResponseBody
-    public String delete(Calculate calculate) {
-        calculateService.delete(calculate);
-        return renderResult(Global.TRUE, text("删除计算车辆价值成功！"));
-    }
-
+		return comRes;
+	}
 }

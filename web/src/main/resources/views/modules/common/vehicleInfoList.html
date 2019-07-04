@@ -1,0 +1,1845 @@
+<% layout('/layouts/default.html', {title: '车辆配置全表管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('车辆配置全表管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('common:vehicleInfo:edit')){ %>
+					<a href="${ctx}/common/vehicleInfo/form" class="btn btn-default btnTool" title="${text('新增车辆配置全表')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${vehicleInfo}" action="${ctx}/common/vehicleInfo/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('shouzimu')}：</label>
+					<div class="control-inline">
+						<#form:input path="shouzimu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('pinpai')}：</label>
+					<div class="control-inline">
+						<#form:input path="pinpai" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('pinpai_id')}：</label>
+					<div class="control-inline">
+						<#form:input path="pinpaiId" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('pinpai_logo')}：</label>
+					<div class="control-inline">
+						<#form:input path="pinpaiLogo" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chexi')}：</label>
+					<div class="control-inline">
+						<#form:input path="chexi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chexi_id')}：</label>
+					<div class="control-inline">
+						<#form:input path="chexiId" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chexizhanshitu')}：</label>
+					<div class="control-inline">
+						<#form:input path="chexizhanshitu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chexingmingcheng')}：</label>
+					<div class="control-inline">
+						<#form:input path="chexingmingcheng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chexing_id')}：</label>
+					<div class="control-inline">
+						<#form:input path="chexingId" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xiaoshouzhuangtai')}：</label>
+					<div class="control-inline">
+						<#form:input path="xiaoshouzhuangtai" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('changshang')}：</label>
+					<div class="control-inline">
+						<#form:input path="changshang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('changshang_id')}：</label>
+					<div class="control-inline">
+						<#form:input path="changshangId" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('niankuan')}：</label>
+					<div class="control-inline">
+						<#form:input path="niankuan" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('gengxinshijian')}：</label>
+					<div class="control-inline">
+						<#form:input path="gengxinshijian" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shangshishijian')}：</label>
+					<div class="control-inline">
+						<#form:input path="shangshishijian" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('changshangzhidaojia')}：</label>
+					<div class="control-inline">
+						<#form:input path="changshangzhidaojia" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('changshangzhidaojia_yuan')}：</label>
+					<div class="control-inline">
+						<#form:input path="changshangzhidaojiaYuan" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('jibie')}：</label>
+					<div class="control-inline">
+						<#form:input path="jibie" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('nengyuanleixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="nengyuanleixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('gongxinbuchundianxuhanglicheng_km')}：</label>
+					<div class="control-inline">
+						<#form:input path="gongxinbuchundianxuhanglichengKm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('kuaichongshijian_xiaoshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="kuaichongshijianXiaoshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('manchongshijian_xiaoshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="manchongshijianXiaoshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('kuaichongdianliangbaifenbi')}：</label>
+					<div class="control-inline">
+						<#form:input path="kuaichongdianliangbaifenbi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuidagonglv_kw')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuidagonglvKw" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuidaniuju_n_m')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuidaniujuNM" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fadongji')}：</label>
+					<div class="control-inline">
+						<#form:input path="fadongji" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('biansuxiang')}：</label>
+					<div class="control-inline">
+						<#form:input path="biansuxiang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('changkuangao_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="changkuangaoMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('cheshenjiegou')}：</label>
+					<div class="control-inline">
+						<#form:input path="cheshenjiegou" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuigaochesu_km_h')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuigaochesuKmH" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('guanfang0_100km_h_jiasu_s')}：</label>
+					<div class="control-inline">
+						<#form:input path="guanfang0100kmHJiasuS" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shice0_100km_h_jiasu_s')}：</label>
+					<div class="control-inline">
+						<#form:input path="shice0100kmHJiasuS" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shice100_0km_h_zhidong_m')}：</label>
+					<div class="control-inline">
+						<#form:input path="shice1000kmHZhidongM" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shicexuhanglicheng_km')}：</label>
+					<div class="control-inline">
+						<#form:input path="shicexuhanglichengKm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('gongxinbuzongheyouhao_l_100km')}：</label>
+					<div class="control-inline">
+						<#form:input path="gongxinbuzongheyouhaoL100km" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shiceyouhao_l_100km')}：</label>
+					<div class="control-inline">
+						<#form:input path="shiceyouhaoL100km" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhengchezhibao')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhengchezhibao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('changdu_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="changduMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('kuandu_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="kuanduMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('gaodu_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="gaoduMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhouju_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhoujuMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qianlunju_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianlunjuMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houlunju_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="houlunjuMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuixiaolidijianxi_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuixiaolidijianxiMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chemenshu_ge')}：</label>
+					<div class="control-inline">
+						<#form:input path="chemenshuGe" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuoweishu_ge')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuoweishuGe" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('youxiangrongji_l')}：</label>
+					<div class="control-inline">
+						<#form:input path="youxiangrongjiL" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xinglixiangrongji_l')}：</label>
+					<div class="control-inline">
+						<#form:input path="xinglixiangrongjiL" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhengbeizhiliang_kg')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhengbeizhiliangKg" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fadongjixinghao')}：</label>
+					<div class="control-inline">
+						<#form:input path="fadongjixinghao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('pailiang_ml')}：</label>
+					<div class="control-inline">
+						<#form:input path="pailiangMl" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('pailiang_l')}：</label>
+					<div class="control-inline">
+						<#form:input path="pailiangL" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('jinqixingshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="jinqixingshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qigangpailiexingshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="qigangpailiexingshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qigangshu_ge')}：</label>
+					<div class="control-inline">
+						<#form:input path="qigangshuGe" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('meigangqimenshu_ge')}：</label>
+					<div class="control-inline">
+						<#form:input path="meigangqimenshuGe" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yasuobi')}：</label>
+					<div class="control-inline">
+						<#form:input path="yasuobi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('peiqijigou')}：</label>
+					<div class="control-inline">
+						<#form:input path="peiqijigou" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('gangjing_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="gangjingMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xingcheng_mm')}：</label>
+					<div class="control-inline">
+						<#form:input path="xingchengMm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuidamali_ps')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuidamaliPs" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuidagonglvzhuansu_rpm')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuidagonglvzhuansuRpm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuidaniujuzhuansu_rpm')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuidaniujuzhuansuRpm" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fadongjiteyoujishu')}：</label>
+					<div class="control-inline">
+						<#form:input path="fadongjiteyoujishu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ranliaoxingshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="ranliaoxingshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ranyoubiaohao')}：</label>
+					<div class="control-inline">
+						<#form:input path="ranyoubiaohao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('gongyoufangshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="gongyoufangshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ganggaicailiao')}：</label>
+					<div class="control-inline">
+						<#form:input path="ganggaicailiao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('gangticailiao')}：</label>
+					<div class="control-inline">
+						<#form:input path="gangticailiao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('huanbaobiaozhun')}：</label>
+					<div class="control-inline">
+						<#form:input path="huanbaobiaozhun" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dianjileixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="dianjileixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('diandongjizonggonglv_kw')}：</label>
+					<div class="control-inline">
+						<#form:input path="diandongjizonggonglvKw" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('diandongjizongniuju_n_m')}：</label>
+					<div class="control-inline">
+						<#form:input path="diandongjizongniujuNM" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qiandiandongjizuidagonglv_kw')}：</label>
+					<div class="control-inline">
+						<#form:input path="qiandiandongjizuidagonglvKw" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qiandiandongjizuidaniuju_n_m')}：</label>
+					<div class="control-inline">
+						<#form:input path="qiandiandongjizuidaniujuNM" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houdiandongjizuidagonglv_kw')}：</label>
+					<div class="control-inline">
+						<#form:input path="houdiandongjizuidagonglvKw" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houdiandongjizuidaniuju_n_m')}：</label>
+					<div class="control-inline">
+						<#form:input path="houdiandongjizuidaniujuNM" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xitongzonghegonglv_kw')}：</label>
+					<div class="control-inline">
+						<#form:input path="xitongzonghegonglvKw" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xitongzongheniuju_n_m')}：</label>
+					<div class="control-inline">
+						<#form:input path="xitongzongheniujuNM" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qudongdianjishu')}：</label>
+					<div class="control-inline">
+						<#form:input path="qudongdianjishu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dianjibuju')}：</label>
+					<div class="control-inline">
+						<#form:input path="dianjibuju" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dianchileixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="dianchileixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dianchirongliang_kwh')}：</label>
+					<div class="control-inline">
+						<#form:input path="dianchirongliangKwh" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('baigonglihaodianliang_kwh_100km')}：</label>
+					<div class="control-inline">
+						<#form:input path="baigonglihaodianliangKwh100km" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dianchizuzhibao')}：</label>
+					<div class="control-inline">
+						<#form:input path="dianchizuzhibao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('kuaichongdianliang')}：</label>
+					<div class="control-inline">
+						<#form:input path="kuaichongdianliang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dangweigeshu')}：</label>
+					<div class="control-inline">
+						<#form:input path="dangweigeshu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('biansuxiangleixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="biansuxiangleixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('jiancheng')}：</label>
+					<div class="control-inline">
+						<#form:input path="jiancheng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qudongfangshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="qudongfangshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qianxuanjialeixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianxuanjialeixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houxuanjialeixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="houxuanjialeixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhulileixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhulileixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chetijiegou')}：</label>
+					<div class="control-inline">
+						<#form:input path="chetijiegou" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qianzhidongqileixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianzhidongqileixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houzhidongqileixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="houzhidongqileixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhuchezhidongleixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhuchezhidongleixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qianluntaiguige')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianluntaiguige" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houluntaiguige')}：</label>
+					<div class="control-inline">
+						<#form:input path="houluntaiguige" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('beitaiguige')}：</label>
+					<div class="control-inline">
+						<#form:input path="beitaiguige" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhu_fujiashizuoanquanqinang')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhuFujiashizuoanquanqinang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qian_houpaiceqinang')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianHoupaiceqinang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qian_houpaitoubuqinang_qilian')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianHoupaitoubuqinangQilian" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xibuqinang')}：</label>
+					<div class="control-inline">
+						<#form:input path="xibuqinang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaianquandaishiqinang')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaianquandaishiqinang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaizhongyanganquanqinang')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaizhongyanganquanqinang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('beidongxingrenbaohu')}：</label>
+					<div class="control-inline">
+						<#form:input path="beidongxingrenbaohu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('taiyajiancegongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="taiyajiancegongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('lingtaiyajixuxingshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="lingtaiyajixuxingshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('anquandaiweixitixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="anquandaiweixitixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('isofixertongzuoyijiekou')}：</label>
+					<div class="control-inline">
+						<#form:input path="isofixertongzuoyijiekou" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('absfangbaosi')}：</label>
+					<div class="control-inline">
+						<#form:input path="absfangbaosi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhidonglifenpei_ebd_cbcdeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhidonglifenpeiEbdCbcdeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shachefuzhu_eba_bas_badeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="shachefuzhuEbaBasBadeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qianyinlikongzhi_asr_tcs_trcdeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianyinlikongzhiAsrTcsTrcdeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('cheshenwendingkongzhi_esc_esp_dscdeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="cheshenwendingkongzhiEscEspDscdeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('bingxianfuzhu')}：</label>
+					<div class="control-inline">
+						<#form:input path="bingxianfuzhu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chedaopianliyujingxitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="chedaopianliyujingxitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chedaobaochifuzhuxitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="chedaobaochifuzhuxitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('daolujiaotongbiaozhishibie')}：</label>
+					<div class="control-inline">
+						<#form:input path="daolujiaotongbiaozhishibie" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhudongshache_zhudonganquanxitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhudongshacheZhudonganquanxitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yeshixitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="yeshixitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('pilaojiashitishi')}：</label>
+					<div class="control-inline">
+						<#form:input path="pilaojiashitishi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qian_houzhucheleida')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianHouzhucheleida" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('jiashifuzhuyingxiang')}：</label>
+					<div class="control-inline">
+						<#form:input path="jiashifuzhuyingxiang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('daochecheceyujingxitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="daochecheceyujingxitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xunhangxitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="xunhangxitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('jiashimoshiqiehuan')}：</label>
+					<div class="control-inline">
+						<#form:input path="jiashimoshiqiehuan" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zidongbocheruwei')}：</label>
+					<div class="control-inline">
+						<#form:input path="zidongbocheruwei" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fadongjiqitingjishu')}：</label>
+					<div class="control-inline">
+						<#form:input path="fadongjiqitingjishu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zidongzhuche')}：</label>
+					<div class="control-inline">
+						<#form:input path="zidongzhuche" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shangpofuzhu')}：</label>
+					<div class="control-inline">
+						<#form:input path="shangpofuzhu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('doupohuanjiang')}：</label>
+					<div class="control-inline">
+						<#form:input path="doupohuanjiang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('kebianxuanjiagongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="kebianxuanjiagongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('kongqixuanjia')}：</label>
+					<div class="control-inline">
+						<#form:input path="kongqixuanjia" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dianciganyingxuanjia')}：</label>
+					<div class="control-inline">
+						<#form:input path="dianciganyingxuanjia" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('kebianzhuanxiangbi')}：</label>
+					<div class="control-inline">
+						<#form:input path="kebianzhuanxiangbi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhongyangchasuqisuozhigongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhongyangchasuqisuozhigongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhengtizhudongzhuanxiangxitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhengtizhudongzhuanxiangxitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xianhuachasuqi_chasusuo')}：</label>
+					<div class="control-inline">
+						<#form:input path="xianhuachasuqiChasusuo" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('sheshuiganyingxitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="sheshuiganyingxitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('tianchuangleixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="tianchuangleixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yundongwaiguantaojian')}：</label>
+					<div class="control-inline">
+						<#form:input path="yundongwaiguantaojian" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('lunquancaizhi')}：</label>
+					<div class="control-inline">
+						<#form:input path="lunquancaizhi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('diandongxihechemen')}：</label>
+					<div class="control-inline">
+						<#form:input path="diandongxihechemen" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('cehuamenxingshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="cehuamenxingshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('diandonghoubeixiang')}：</label>
+					<div class="control-inline">
+						<#form:input path="diandonghoubeixiang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ganyinghoubeixiang')}：</label>
+					<div class="control-inline">
+						<#form:input path="ganyinghoubeixiang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('diandonghoubeixiangweizhijiyi')}：</label>
+					<div class="control-inline">
+						<#form:input path="diandonghoubeixiangweizhijiyi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('weimenbolidulikaiqi')}：</label>
+					<div class="control-inline">
+						<#form:input path="weimenbolidulikaiqi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chedingxinglijia')}：</label>
+					<div class="control-inline">
+						<#form:input path="chedingxinglijia" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fadongjidianzifangdao')}：</label>
+					<div class="control-inline">
+						<#form:input path="fadongjidianzifangdao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('cheneizhongkongsuo')}：</label>
+					<div class="control-inline">
+						<#form:input path="cheneizhongkongsuo" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yaoshileixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="yaoshileixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('wuyaoshiqidongxitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="wuyaoshiqidongxitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('wuyaoshijinrugongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="wuyaoshijinrugongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhudongbiheshijinqigezha')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhudongbiheshijinqigezha" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yuanchengqidonggongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="yuanchengqidonggongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('checejiaotaban')}：</label>
+					<div class="control-inline">
+						<#form:input path="checejiaotaban" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fangxiangpancaizhi')}：</label>
+					<div class="control-inline">
+						<#form:input path="fangxiangpancaizhi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fangxiangpanweizhitiaojie')}：</label>
+					<div class="control-inline">
+						<#form:input path="fangxiangpanweizhitiaojie" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('duogongnengfangxiangpan')}：</label>
+					<div class="control-inline">
+						<#form:input path="duogongnengfangxiangpan" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fangxiangpanhuandang')}：</label>
+					<div class="control-inline">
+						<#form:input path="fangxiangpanhuandang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fangxiangpanjiare')}：</label>
+					<div class="control-inline">
+						<#form:input path="fangxiangpanjiare" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fangxiangpanjiyi')}：</label>
+					<div class="control-inline">
+						<#form:input path="fangxiangpanjiyi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xingchediannaoxianshipingmu')}：</label>
+					<div class="control-inline">
+						<#form:input path="xingchediannaoxianshipingmu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('quanyejingyibiaopan')}：</label>
+					<div class="control-inline">
+						<#form:input path="quanyejingyibiaopan" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yejingyibiaochicun')}：</label>
+					<div class="control-inline">
+						<#form:input path="yejingyibiaochicun" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('hudtaitoushuzixianshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="hudtaitoushuzixianshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('neizhixingchejiluyi')}：</label>
+					<div class="control-inline">
+						<#form:input path="neizhixingchejiluyi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhudongjiangzao')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhudongjiangzao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shoujiwuxianchongdiangongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="shoujiwuxianchongdiangongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('diandongketiaotaban')}：</label>
+					<div class="control-inline">
+						<#form:input path="diandongketiaotaban" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuoyicaizhi')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuoyicaizhi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yundongfenggezuoyi')}：</label>
+					<div class="control-inline">
+						<#form:input path="yundongfenggezuoyi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhuzuoyitiaojiefangshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhuzuoyitiaojiefangshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fuzuoyitiaojiefangshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="fuzuoyitiaojiefangshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhu_fujiashizuodiandongtiaojie')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhuFujiashizuodiandongtiaojie" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qianpaizuoyigongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianpaizuoyigongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('diandongzuoyijiyigongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="diandongzuoyijiyigongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fujiashiweihoupaiketiaojieanniu')}：</label>
+					<div class="control-inline">
+						<#form:input path="fujiashiweihoupaiketiaojieanniu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dierpaizuoyitiaojie')}：</label>
+					<div class="control-inline">
+						<#form:input path="dierpaizuoyitiaojie" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaizuoyidiandongtiaojie')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaizuoyidiandongtiaojie" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaizuoyigongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaizuoyigongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaixiaozhuoban')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaixiaozhuoban" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dierpaidulizuoyi')}：</label>
+					<div class="control-inline">
+						<#form:input path="dierpaidulizuoyi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zuoyibuju')}：</label>
+					<div class="control-inline">
+						<#form:input path="zuoyibuju" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaizuoyifangdaoxingshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaizuoyifangdaoxingshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaizuoyidiandongfangdao')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaizuoyidiandongfangdao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qian_houzhongyangfushou')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianHouzhongyangfushou" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaibeijia')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaibeijia" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('jiare_zhilengbeijia')}：</label>
+					<div class="control-inline">
+						<#form:input path="jiareZhilengbeijia" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhongkongcaiseyejingpingmu')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhongkongcaiseyejingpingmu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhongkongyejingpingchicun')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhongkongyejingpingchicun" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('gpsdaohangxitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="gpsdaohangxitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('daohanglukuangxinxixianshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="daohanglukuangxinxixianshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('daolujiuyuanhujiao')}：</label>
+					<div class="control-inline">
+						<#form:input path="daolujiuyuanhujiao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhongkongyejingpingfenpingxianshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhongkongyejingpingfenpingxianshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('lanya_chezaidianhua')}：</label>
+					<div class="control-inline">
+						<#form:input path="lanyaChezaidianhua" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shoujihulian_yingshe')}：</label>
+					<div class="control-inline">
+						<#form:input path="shoujihulianYingshe" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yuyinshibiekongzhixitong')}：</label>
+					<div class="control-inline">
+						<#form:input path="yuyinshibiekongzhixitong" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shoushikongzhi')}：</label>
+					<div class="control-inline">
+						<#form:input path="shoushikongzhi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chelianwang')}：</label>
+					<div class="control-inline">
+						<#form:input path="chelianwang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chezaidianshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="chezaidianshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaiyejingpingmu')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaiyejingpingmu" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaikongzhiduomeiti')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaikongzhiduomeiti" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('waijieyinyuanjiekouleixing')}：</label>
+					<div class="control-inline">
+						<#form:input path="waijieyinyuanjiekouleixing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('usb_type_cjiekoushuliang')}：</label>
+					<div class="control-inline">
+						<#form:input path="usbTypeCjiekoushuliang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chezaicd_dvd')}：</label>
+					<div class="control-inline">
+						<#form:input path="chezaicdDvd" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dianyuan_220v_230v')}：</label>
+					<div class="control-inline">
+						<#form:input path="dianyuan220v230v" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xinglixiang12vdianyuanjiekou')}：</label>
+					<div class="control-inline">
+						<#form:input path="xinglixiang12vdianyuanjiekou" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yangshengqipinpaimingcheng')}：</label>
+					<div class="control-inline">
+						<#form:input path="yangshengqipinpaimingcheng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yangshengqishuliang')}：</label>
+					<div class="control-inline">
+						<#form:input path="yangshengqishuliang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('jinguangdengguangyuan')}：</label>
+					<div class="control-inline">
+						<#form:input path="jinguangdengguangyuan" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('yuanguangdengguangyuan')}：</label>
+					<div class="control-inline">
+						<#form:input path="yuanguangdengguangyuan" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dengguangtesegongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="dengguangtesegongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ledrijianxingchedeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="ledrijianxingchedeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zishiyingyuanjinguang')}：</label>
+					<div class="control-inline">
+						<#form:input path="zishiyingyuanjinguang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zidongtoudeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="zidongtoudeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhuanxiangfuzhudeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhuanxiangfuzhudeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('zhuanxiangtoudeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="zhuanxiangtoudeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('cheqianwudeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="cheqianwudeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qiandadengyuwumoshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="qiandadengyuwumoshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dadenggaoduketiao')}：</label>
+					<div class="control-inline">
+						<#form:input path="dadenggaoduketiao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dadengqingxizhuangzhi')}：</label>
+					<div class="control-inline">
+						<#form:input path="dadengqingxizhuangzhi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dadengyanshiguanbi')}：</label>
+					<div class="control-inline">
+						<#form:input path="dadengyanshiguanbi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chumoshiyuedudeng')}：</label>
+					<div class="control-inline">
+						<#form:input path="chumoshiyuedudeng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('cheneihuanjingfenweideng')}：</label>
+					<div class="control-inline">
+						<#form:input path="cheneihuanjingfenweideng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qian_houdiandongchechuang')}：</label>
+					<div class="control-inline">
+						<#form:input path="qianHoudiandongchechuang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chechuangyijianshengjianggongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="chechuangyijianshengjianggongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chechuangfangjiashougongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="chechuangfangjiashougongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fangziwaixianboli')}：</label>
+					<div class="control-inline">
+						<#form:input path="fangziwaixianboli" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('duocenggeyinboli')}：</label>
+					<div class="control-inline">
+						<#form:input path="duocenggeyinboli" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('waihoushijinggongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="waihoushijinggongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('neihoushijinggongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="neihoushijinggongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houfengdangzheyanglian')}：</label>
+					<div class="control-inline">
+						<#form:input path="houfengdangzheyanglian" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaicechuangzheyanglian')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaicechuangzheyanglian" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaiceyinsiboli')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaiceyinsiboli" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('cheneihuazhuangjing')}：</label>
+					<div class="control-inline">
+						<#form:input path="cheneihuazhuangjing" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houyushua')}：</label>
+					<div class="control-inline">
+						<#form:input path="houyushua" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ganyingyushuagongneng')}：</label>
+					<div class="control-inline">
+						<#form:input path="ganyingyushuagongneng" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('kejiarepenshuizui')}：</label>
+					<div class="control-inline">
+						<#form:input path="kejiarepenshuizui" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('kongtiaowendukongzhifangshi')}：</label>
+					<div class="control-inline">
+						<#form:input path="kongtiaowendukongzhifangshi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houpaidulikongtiao')}：</label>
+					<div class="control-inline">
+						<#form:input path="houpaidulikongtiao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('houzuochufengkou')}：</label>
+					<div class="control-inline">
+						<#form:input path="houzuochufengkou" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('wendufenqukongzhi')}：</label>
+					<div class="control-inline">
+						<#form:input path="wendufenqukongzhi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chezaikongqijinghuaqi')}：</label>
+					<div class="control-inline">
+						<#form:input path="chezaikongqijinghuaqi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('cheneipm2_5guolvzhuangzhi')}：</label>
+					<div class="control-inline">
+						<#form:input path="cheneipm25guolvzhuangzhi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('fulizifashengqi')}：</label>
+					<div class="control-inline">
+						<#form:input path="fulizifashengqi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('cheneixiangfenzhuangzhi')}：</label>
+					<div class="control-inline">
+						<#form:input path="cheneixiangfenzhuangzhi" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('chezaibingxiang')}：</label>
+					<div class="control-inline">
+						<#form:input path="chezaibingxiang" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('xuanzhuangbao')}：</label>
+					<div class="control-inline">
+						<#form:input path="xuanzhuangbao" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('waiguanyanse')}：</label>
+					<div class="control-inline">
+						<#form:input path="waiguanyanse" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('neishiyanse')}：</label>
+					<div class="control-inline">
+						<#form:input path="neishiyanse" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('备注信息')}：</label>
+					<div class="control-inline">
+						<#form:input path="remarks" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("shouzimu")}', name:'shouzimu', index:'a.shouzimu', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/common/vehicleInfo/form?id='+row.id+'" class="btnList" data-title="${text("编辑车辆配置全表")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("pinpai")}', name:'pinpai', index:'a.pinpai', width:150, align:"left"},
+		{header:'${text("pinpai_id")}', name:'pinpaiId', index:'a.pinpai_id', width:150, align:"left"},
+		{header:'${text("pinpai_logo")}', name:'pinpaiLogo', index:'a.pinpai_logo', width:150, align:"left"},
+		{header:'${text("chexi")}', name:'chexi', index:'a.chexi', width:150, align:"left"},
+		{header:'${text("chexi_id")}', name:'chexiId', index:'a.chexi_id', width:150, align:"left"},
+		{header:'${text("chexizhanshitu")}', name:'chexizhanshitu', index:'a.chexizhanshitu', width:150, align:"left"},
+		{header:'${text("chexingmingcheng")}', name:'chexingmingcheng', index:'a.chexingmingcheng', width:150, align:"left"},
+		{header:'${text("chexing_id")}', name:'chexingId', index:'a.chexing_id', width:150, align:"left"},
+		{header:'${text("xiaoshouzhuangtai")}', name:'xiaoshouzhuangtai', index:'a.xiaoshouzhuangtai', width:150, align:"left"},
+		{header:'${text("changshang")}', name:'changshang', index:'a.changshang', width:150, align:"left"},
+		{header:'${text("changshang_id")}', name:'changshangId', index:'a.changshang_id', width:150, align:"left"},
+		{header:'${text("niankuan")}', name:'niankuan', index:'a.niankuan', width:150, align:"left"},
+		{header:'${text("gengxinshijian")}', name:'gengxinshijian', index:'a.gengxinshijian', width:150, align:"left"},
+		{header:'${text("shangshishijian")}', name:'shangshishijian', index:'a.shangshishijian', width:150, align:"left"},
+		{header:'${text("changshangzhidaojia")}', name:'changshangzhidaojia', index:'a.changshangzhidaojia', width:150, align:"left"},
+		{header:'${text("changshangzhidaojia_yuan")}', name:'changshangzhidaojiaYuan', index:'a.changshangzhidaojia_yuan', width:150, align:"left"},
+		{header:'${text("jibie")}', name:'jibie', index:'a.jibie', width:150, align:"left"},
+		{header:'${text("nengyuanleixing")}', name:'nengyuanleixing', index:'a.nengyuanleixing', width:150, align:"left"},
+		{header:'${text("gongxinbuchundianxuhanglicheng_km")}', name:'gongxinbuchundianxuhanglichengKm', index:'a.gongxinbuchundianxuhanglicheng_km', width:150, align:"left"},
+		{header:'${text("kuaichongshijian_xiaoshi")}', name:'kuaichongshijianXiaoshi', index:'a.kuaichongshijian_xiaoshi', width:150, align:"left"},
+		{header:'${text("manchongshijian_xiaoshi")}', name:'manchongshijianXiaoshi', index:'a.manchongshijian_xiaoshi', width:150, align:"left"},
+		{header:'${text("kuaichongdianliangbaifenbi")}', name:'kuaichongdianliangbaifenbi', index:'a.kuaichongdianliangbaifenbi', width:150, align:"left"},
+		{header:'${text("zuidagonglv_kw")}', name:'zuidagonglvKw', index:'a.zuidagonglv_kw', width:150, align:"left"},
+		{header:'${text("zuidaniuju_n_m")}', name:'zuidaniujuNM', index:'a.zuidaniuju_n_m', width:150, align:"left"},
+		{header:'${text("fadongji")}', name:'fadongji', index:'a.fadongji', width:150, align:"left"},
+		{header:'${text("biansuxiang")}', name:'biansuxiang', index:'a.biansuxiang', width:150, align:"left"},
+		{header:'${text("changkuangao_mm")}', name:'changkuangaoMm', index:'a.changkuangao_mm', width:150, align:"left"},
+		{header:'${text("cheshenjiegou")}', name:'cheshenjiegou', index:'a.cheshenjiegou', width:150, align:"left"},
+		{header:'${text("zuigaochesu_km_h")}', name:'zuigaochesuKmH', index:'a.zuigaochesu_km_h', width:150, align:"left"},
+		{header:'${text("guanfang0_100km_h_jiasu_s")}', name:'guanfang0100kmHJiasuS', index:'a.guanfang0_100km_h_jiasu_s', width:150, align:"left"},
+		{header:'${text("shice0_100km_h_jiasu_s")}', name:'shice0100kmHJiasuS', index:'a.shice0_100km_h_jiasu_s', width:150, align:"left"},
+		{header:'${text("shice100_0km_h_zhidong_m")}', name:'shice1000kmHZhidongM', index:'a.shice100_0km_h_zhidong_m', width:150, align:"left"},
+		{header:'${text("shicexuhanglicheng_km")}', name:'shicexuhanglichengKm', index:'a.shicexuhanglicheng_km', width:150, align:"left"},
+		{header:'${text("gongxinbuzongheyouhao_l_100km")}', name:'gongxinbuzongheyouhaoL100km', index:'a.gongxinbuzongheyouhao_l_100km', width:150, align:"left"},
+		{header:'${text("shiceyouhao_l_100km")}', name:'shiceyouhaoL100km', index:'a.shiceyouhao_l_100km', width:150, align:"left"},
+		{header:'${text("zhengchezhibao")}', name:'zhengchezhibao', index:'a.zhengchezhibao', width:150, align:"left"},
+		{header:'${text("changdu_mm")}', name:'changduMm', index:'a.changdu_mm', width:150, align:"left"},
+		{header:'${text("kuandu_mm")}', name:'kuanduMm', index:'a.kuandu_mm', width:150, align:"left"},
+		{header:'${text("gaodu_mm")}', name:'gaoduMm', index:'a.gaodu_mm', width:150, align:"left"},
+		{header:'${text("zhouju_mm")}', name:'zhoujuMm', index:'a.zhouju_mm', width:150, align:"left"},
+		{header:'${text("qianlunju_mm")}', name:'qianlunjuMm', index:'a.qianlunju_mm', width:150, align:"left"},
+		{header:'${text("houlunju_mm")}', name:'houlunjuMm', index:'a.houlunju_mm', width:150, align:"left"},
+		{header:'${text("zuixiaolidijianxi_mm")}', name:'zuixiaolidijianxiMm', index:'a.zuixiaolidijianxi_mm', width:150, align:"left"},
+		{header:'${text("chemenshu_ge")}', name:'chemenshuGe', index:'a.chemenshu_ge', width:150, align:"left"},
+		{header:'${text("zuoweishu_ge")}', name:'zuoweishuGe', index:'a.zuoweishu_ge', width:150, align:"left"},
+		{header:'${text("youxiangrongji_l")}', name:'youxiangrongjiL', index:'a.youxiangrongji_l', width:150, align:"left"},
+		{header:'${text("xinglixiangrongji_l")}', name:'xinglixiangrongjiL', index:'a.xinglixiangrongji_l', width:150, align:"left"},
+		{header:'${text("zhengbeizhiliang_kg")}', name:'zhengbeizhiliangKg', index:'a.zhengbeizhiliang_kg', width:150, align:"left"},
+		{header:'${text("fadongjixinghao")}', name:'fadongjixinghao', index:'a.fadongjixinghao', width:150, align:"left"},
+		{header:'${text("pailiang_ml")}', name:'pailiangMl', index:'a.pailiang_ml', width:150, align:"left"},
+		{header:'${text("pailiang_l")}', name:'pailiangL', index:'a.pailiang_l', width:150, align:"left"},
+		{header:'${text("jinqixingshi")}', name:'jinqixingshi', index:'a.jinqixingshi', width:150, align:"left"},
+		{header:'${text("qigangpailiexingshi")}', name:'qigangpailiexingshi', index:'a.qigangpailiexingshi', width:150, align:"left"},
+		{header:'${text("qigangshu_ge")}', name:'qigangshuGe', index:'a.qigangshu_ge', width:150, align:"left"},
+		{header:'${text("meigangqimenshu_ge")}', name:'meigangqimenshuGe', index:'a.meigangqimenshu_ge', width:150, align:"left"},
+		{header:'${text("yasuobi")}', name:'yasuobi', index:'a.yasuobi', width:150, align:"left"},
+		{header:'${text("peiqijigou")}', name:'peiqijigou', index:'a.peiqijigou', width:150, align:"left"},
+		{header:'${text("gangjing_mm")}', name:'gangjingMm', index:'a.gangjing_mm', width:150, align:"left"},
+		{header:'${text("xingcheng_mm")}', name:'xingchengMm', index:'a.xingcheng_mm', width:150, align:"left"},
+		{header:'${text("zuidamali_ps")}', name:'zuidamaliPs', index:'a.zuidamali_ps', width:150, align:"left"},
+		{header:'${text("zuidagonglvzhuansu_rpm")}', name:'zuidagonglvzhuansuRpm', index:'a.zuidagonglvzhuansu_rpm', width:150, align:"left"},
+		{header:'${text("zuidaniujuzhuansu_rpm")}', name:'zuidaniujuzhuansuRpm', index:'a.zuidaniujuzhuansu_rpm', width:150, align:"left"},
+		{header:'${text("fadongjiteyoujishu")}', name:'fadongjiteyoujishu', index:'a.fadongjiteyoujishu', width:150, align:"left"},
+		{header:'${text("ranliaoxingshi")}', name:'ranliaoxingshi', index:'a.ranliaoxingshi', width:150, align:"left"},
+		{header:'${text("ranyoubiaohao")}', name:'ranyoubiaohao', index:'a.ranyoubiaohao', width:150, align:"left"},
+		{header:'${text("gongyoufangshi")}', name:'gongyoufangshi', index:'a.gongyoufangshi', width:150, align:"left"},
+		{header:'${text("ganggaicailiao")}', name:'ganggaicailiao', index:'a.ganggaicailiao', width:150, align:"left"},
+		{header:'${text("gangticailiao")}', name:'gangticailiao', index:'a.gangticailiao', width:150, align:"left"},
+		{header:'${text("huanbaobiaozhun")}', name:'huanbaobiaozhun', index:'a.huanbaobiaozhun', width:150, align:"left"},
+		{header:'${text("dianjileixing")}', name:'dianjileixing', index:'a.dianjileixing', width:150, align:"left"},
+		{header:'${text("diandongjizonggonglv_kw")}', name:'diandongjizonggonglvKw', index:'a.diandongjizonggonglv_kw', width:150, align:"left"},
+		{header:'${text("diandongjizongniuju_n_m")}', name:'diandongjizongniujuNM', index:'a.diandongjizongniuju_n_m', width:150, align:"left"},
+		{header:'${text("qiandiandongjizuidagonglv_kw")}', name:'qiandiandongjizuidagonglvKw', index:'a.qiandiandongjizuidagonglv_kw', width:150, align:"left"},
+		{header:'${text("qiandiandongjizuidaniuju_n_m")}', name:'qiandiandongjizuidaniujuNM', index:'a.qiandiandongjizuidaniuju_n_m', width:150, align:"left"},
+		{header:'${text("houdiandongjizuidagonglv_kw")}', name:'houdiandongjizuidagonglvKw', index:'a.houdiandongjizuidagonglv_kw', width:150, align:"left"},
+		{header:'${text("houdiandongjizuidaniuju_n_m")}', name:'houdiandongjizuidaniujuNM', index:'a.houdiandongjizuidaniuju_n_m', width:150, align:"left"},
+		{header:'${text("xitongzonghegonglv_kw")}', name:'xitongzonghegonglvKw', index:'a.xitongzonghegonglv_kw', width:150, align:"left"},
+		{header:'${text("xitongzongheniuju_n_m")}', name:'xitongzongheniujuNM', index:'a.xitongzongheniuju_n_m', width:150, align:"left"},
+		{header:'${text("qudongdianjishu")}', name:'qudongdianjishu', index:'a.qudongdianjishu', width:150, align:"left"},
+		{header:'${text("dianjibuju")}', name:'dianjibuju', index:'a.dianjibuju', width:150, align:"left"},
+		{header:'${text("dianchileixing")}', name:'dianchileixing', index:'a.dianchileixing', width:150, align:"left"},
+		{header:'${text("dianchirongliang_kwh")}', name:'dianchirongliangKwh', index:'a.dianchirongliang_kwh', width:150, align:"left"},
+		{header:'${text("baigonglihaodianliang_kwh_100km")}', name:'baigonglihaodianliangKwh100km', index:'a.baigonglihaodianliang_kwh_100km', width:150, align:"left"},
+		{header:'${text("dianchizuzhibao")}', name:'dianchizuzhibao', index:'a.dianchizuzhibao', width:150, align:"left"},
+		{header:'${text("kuaichongdianliang")}', name:'kuaichongdianliang', index:'a.kuaichongdianliang', width:150, align:"left"},
+		{header:'${text("dangweigeshu")}', name:'dangweigeshu', index:'a.dangweigeshu', width:150, align:"left"},
+		{header:'${text("biansuxiangleixing")}', name:'biansuxiangleixing', index:'a.biansuxiangleixing', width:150, align:"left"},
+		{header:'${text("jiancheng")}', name:'jiancheng', index:'a.jiancheng', width:150, align:"left"},
+		{header:'${text("qudongfangshi")}', name:'qudongfangshi', index:'a.qudongfangshi', width:150, align:"left"},
+		{header:'${text("qianxuanjialeixing")}', name:'qianxuanjialeixing', index:'a.qianxuanjialeixing', width:150, align:"left"},
+		{header:'${text("houxuanjialeixing")}', name:'houxuanjialeixing', index:'a.houxuanjialeixing', width:150, align:"left"},
+		{header:'${text("zhulileixing")}', name:'zhulileixing', index:'a.zhulileixing', width:150, align:"left"},
+		{header:'${text("chetijiegou")}', name:'chetijiegou', index:'a.chetijiegou', width:150, align:"left"},
+		{header:'${text("qianzhidongqileixing")}', name:'qianzhidongqileixing', index:'a.qianzhidongqileixing', width:150, align:"left"},
+		{header:'${text("houzhidongqileixing")}', name:'houzhidongqileixing', index:'a.houzhidongqileixing', width:150, align:"left"},
+		{header:'${text("zhuchezhidongleixing")}', name:'zhuchezhidongleixing', index:'a.zhuchezhidongleixing', width:150, align:"left"},
+		{header:'${text("qianluntaiguige")}', name:'qianluntaiguige', index:'a.qianluntaiguige', width:150, align:"left"},
+		{header:'${text("houluntaiguige")}', name:'houluntaiguige', index:'a.houluntaiguige', width:150, align:"left"},
+		{header:'${text("beitaiguige")}', name:'beitaiguige', index:'a.beitaiguige', width:150, align:"left"},
+		{header:'${text("zhu_fujiashizuoanquanqinang")}', name:'zhuFujiashizuoanquanqinang', index:'a.zhu_fujiashizuoanquanqinang', width:150, align:"left"},
+		{header:'${text("qian_houpaiceqinang")}', name:'qianHoupaiceqinang', index:'a.qian_houpaiceqinang', width:150, align:"left"},
+		{header:'${text("qian_houpaitoubuqinang_qilian")}', name:'qianHoupaitoubuqinangQilian', index:'a.qian_houpaitoubuqinang_qilian', width:150, align:"left"},
+		{header:'${text("xibuqinang")}', name:'xibuqinang', index:'a.xibuqinang', width:150, align:"left"},
+		{header:'${text("houpaianquandaishiqinang")}', name:'houpaianquandaishiqinang', index:'a.houpaianquandaishiqinang', width:150, align:"left"},
+		{header:'${text("houpaizhongyanganquanqinang")}', name:'houpaizhongyanganquanqinang', index:'a.houpaizhongyanganquanqinang', width:150, align:"left"},
+		{header:'${text("beidongxingrenbaohu")}', name:'beidongxingrenbaohu', index:'a.beidongxingrenbaohu', width:150, align:"left"},
+		{header:'${text("taiyajiancegongneng")}', name:'taiyajiancegongneng', index:'a.taiyajiancegongneng', width:150, align:"left"},
+		{header:'${text("lingtaiyajixuxingshi")}', name:'lingtaiyajixuxingshi', index:'a.lingtaiyajixuxingshi', width:150, align:"left"},
+		{header:'${text("anquandaiweixitixing")}', name:'anquandaiweixitixing', index:'a.anquandaiweixitixing', width:150, align:"left"},
+		{header:'${text("isofixertongzuoyijiekou")}', name:'isofixertongzuoyijiekou', index:'a.isofixertongzuoyijiekou', width:150, align:"left"},
+		{header:'${text("absfangbaosi")}', name:'absfangbaosi', index:'a.absfangbaosi', width:150, align:"left"},
+		{header:'${text("zhidonglifenpei_ebd_cbcdeng")}', name:'zhidonglifenpeiEbdCbcdeng', index:'a.zhidonglifenpei_ebd_cbcdeng', width:150, align:"left"},
+		{header:'${text("shachefuzhu_eba_bas_badeng")}', name:'shachefuzhuEbaBasBadeng', index:'a.shachefuzhu_eba_bas_badeng', width:150, align:"left"},
+		{header:'${text("qianyinlikongzhi_asr_tcs_trcdeng")}', name:'qianyinlikongzhiAsrTcsTrcdeng', index:'a.qianyinlikongzhi_asr_tcs_trcdeng', width:150, align:"left"},
+		{header:'${text("cheshenwendingkongzhi_esc_esp_dscdeng")}', name:'cheshenwendingkongzhiEscEspDscdeng', index:'a.cheshenwendingkongzhi_esc_esp_dscdeng', width:150, align:"left"},
+		{header:'${text("bingxianfuzhu")}', name:'bingxianfuzhu', index:'a.bingxianfuzhu', width:150, align:"left"},
+		{header:'${text("chedaopianliyujingxitong")}', name:'chedaopianliyujingxitong', index:'a.chedaopianliyujingxitong', width:150, align:"left"},
+		{header:'${text("chedaobaochifuzhuxitong")}', name:'chedaobaochifuzhuxitong', index:'a.chedaobaochifuzhuxitong', width:150, align:"left"},
+		{header:'${text("daolujiaotongbiaozhishibie")}', name:'daolujiaotongbiaozhishibie', index:'a.daolujiaotongbiaozhishibie', width:150, align:"left"},
+		{header:'${text("zhudongshache_zhudonganquanxitong")}', name:'zhudongshacheZhudonganquanxitong', index:'a.zhudongshache_zhudonganquanxitong', width:150, align:"left"},
+		{header:'${text("yeshixitong")}', name:'yeshixitong', index:'a.yeshixitong', width:150, align:"left"},
+		{header:'${text("pilaojiashitishi")}', name:'pilaojiashitishi', index:'a.pilaojiashitishi', width:150, align:"left"},
+		{header:'${text("qian_houzhucheleida")}', name:'qianHouzhucheleida', index:'a.qian_houzhucheleida', width:150, align:"left"},
+		{header:'${text("jiashifuzhuyingxiang")}', name:'jiashifuzhuyingxiang', index:'a.jiashifuzhuyingxiang', width:150, align:"left"},
+		{header:'${text("daochecheceyujingxitong")}', name:'daochecheceyujingxitong', index:'a.daochecheceyujingxitong', width:150, align:"left"},
+		{header:'${text("xunhangxitong")}', name:'xunhangxitong', index:'a.xunhangxitong', width:150, align:"left"},
+		{header:'${text("jiashimoshiqiehuan")}', name:'jiashimoshiqiehuan', index:'a.jiashimoshiqiehuan', width:150, align:"left"},
+		{header:'${text("zidongbocheruwei")}', name:'zidongbocheruwei', index:'a.zidongbocheruwei', width:150, align:"left"},
+		{header:'${text("fadongjiqitingjishu")}', name:'fadongjiqitingjishu', index:'a.fadongjiqitingjishu', width:150, align:"left"},
+		{header:'${text("zidongzhuche")}', name:'zidongzhuche', index:'a.zidongzhuche', width:150, align:"left"},
+		{header:'${text("shangpofuzhu")}', name:'shangpofuzhu', index:'a.shangpofuzhu', width:150, align:"left"},
+		{header:'${text("doupohuanjiang")}', name:'doupohuanjiang', index:'a.doupohuanjiang', width:150, align:"left"},
+		{header:'${text("kebianxuanjiagongneng")}', name:'kebianxuanjiagongneng', index:'a.kebianxuanjiagongneng', width:150, align:"left"},
+		{header:'${text("kongqixuanjia")}', name:'kongqixuanjia', index:'a.kongqixuanjia', width:150, align:"left"},
+		{header:'${text("dianciganyingxuanjia")}', name:'dianciganyingxuanjia', index:'a.dianciganyingxuanjia', width:150, align:"left"},
+		{header:'${text("kebianzhuanxiangbi")}', name:'kebianzhuanxiangbi', index:'a.kebianzhuanxiangbi', width:150, align:"left"},
+		{header:'${text("zhongyangchasuqisuozhigongneng")}', name:'zhongyangchasuqisuozhigongneng', index:'a.zhongyangchasuqisuozhigongneng', width:150, align:"left"},
+		{header:'${text("zhengtizhudongzhuanxiangxitong")}', name:'zhengtizhudongzhuanxiangxitong', index:'a.zhengtizhudongzhuanxiangxitong', width:150, align:"left"},
+		{header:'${text("xianhuachasuqi_chasusuo")}', name:'xianhuachasuqiChasusuo', index:'a.xianhuachasuqi_chasusuo', width:150, align:"left"},
+		{header:'${text("sheshuiganyingxitong")}', name:'sheshuiganyingxitong', index:'a.sheshuiganyingxitong', width:150, align:"left"},
+		{header:'${text("tianchuangleixing")}', name:'tianchuangleixing', index:'a.tianchuangleixing', width:150, align:"left"},
+		{header:'${text("yundongwaiguantaojian")}', name:'yundongwaiguantaojian', index:'a.yundongwaiguantaojian', width:150, align:"left"},
+		{header:'${text("lunquancaizhi")}', name:'lunquancaizhi', index:'a.lunquancaizhi', width:150, align:"left"},
+		{header:'${text("diandongxihechemen")}', name:'diandongxihechemen', index:'a.diandongxihechemen', width:150, align:"left"},
+		{header:'${text("cehuamenxingshi")}', name:'cehuamenxingshi', index:'a.cehuamenxingshi', width:150, align:"left"},
+		{header:'${text("diandonghoubeixiang")}', name:'diandonghoubeixiang', index:'a.diandonghoubeixiang', width:150, align:"left"},
+		{header:'${text("ganyinghoubeixiang")}', name:'ganyinghoubeixiang', index:'a.ganyinghoubeixiang', width:150, align:"left"},
+		{header:'${text("diandonghoubeixiangweizhijiyi")}', name:'diandonghoubeixiangweizhijiyi', index:'a.diandonghoubeixiangweizhijiyi', width:150, align:"left"},
+		{header:'${text("weimenbolidulikaiqi")}', name:'weimenbolidulikaiqi', index:'a.weimenbolidulikaiqi', width:150, align:"left"},
+		{header:'${text("chedingxinglijia")}', name:'chedingxinglijia', index:'a.chedingxinglijia', width:150, align:"left"},
+		{header:'${text("fadongjidianzifangdao")}', name:'fadongjidianzifangdao', index:'a.fadongjidianzifangdao', width:150, align:"left"},
+		{header:'${text("cheneizhongkongsuo")}', name:'cheneizhongkongsuo', index:'a.cheneizhongkongsuo', width:150, align:"left"},
+		{header:'${text("yaoshileixing")}', name:'yaoshileixing', index:'a.yaoshileixing', width:150, align:"left"},
+		{header:'${text("wuyaoshiqidongxitong")}', name:'wuyaoshiqidongxitong', index:'a.wuyaoshiqidongxitong', width:150, align:"left"},
+		{header:'${text("wuyaoshijinrugongneng")}', name:'wuyaoshijinrugongneng', index:'a.wuyaoshijinrugongneng', width:150, align:"left"},
+		{header:'${text("zhudongbiheshijinqigezha")}', name:'zhudongbiheshijinqigezha', index:'a.zhudongbiheshijinqigezha', width:150, align:"left"},
+		{header:'${text("yuanchengqidonggongneng")}', name:'yuanchengqidonggongneng', index:'a.yuanchengqidonggongneng', width:150, align:"left"},
+		{header:'${text("checejiaotaban")}', name:'checejiaotaban', index:'a.checejiaotaban', width:150, align:"left"},
+		{header:'${text("fangxiangpancaizhi")}', name:'fangxiangpancaizhi', index:'a.fangxiangpancaizhi', width:150, align:"left"},
+		{header:'${text("fangxiangpanweizhitiaojie")}', name:'fangxiangpanweizhitiaojie', index:'a.fangxiangpanweizhitiaojie', width:150, align:"left"},
+		{header:'${text("duogongnengfangxiangpan")}', name:'duogongnengfangxiangpan', index:'a.duogongnengfangxiangpan', width:150, align:"left"},
+		{header:'${text("fangxiangpanhuandang")}', name:'fangxiangpanhuandang', index:'a.fangxiangpanhuandang', width:150, align:"left"},
+		{header:'${text("fangxiangpanjiare")}', name:'fangxiangpanjiare', index:'a.fangxiangpanjiare', width:150, align:"left"},
+		{header:'${text("fangxiangpanjiyi")}', name:'fangxiangpanjiyi', index:'a.fangxiangpanjiyi', width:150, align:"left"},
+		{header:'${text("xingchediannaoxianshipingmu")}', name:'xingchediannaoxianshipingmu', index:'a.xingchediannaoxianshipingmu', width:150, align:"left"},
+		{header:'${text("quanyejingyibiaopan")}', name:'quanyejingyibiaopan', index:'a.quanyejingyibiaopan', width:150, align:"left"},
+		{header:'${text("yejingyibiaochicun")}', name:'yejingyibiaochicun', index:'a.yejingyibiaochicun', width:150, align:"left"},
+		{header:'${text("hudtaitoushuzixianshi")}', name:'hudtaitoushuzixianshi', index:'a.hudtaitoushuzixianshi', width:150, align:"left"},
+		{header:'${text("neizhixingchejiluyi")}', name:'neizhixingchejiluyi', index:'a.neizhixingchejiluyi', width:150, align:"left"},
+		{header:'${text("zhudongjiangzao")}', name:'zhudongjiangzao', index:'a.zhudongjiangzao', width:150, align:"left"},
+		{header:'${text("shoujiwuxianchongdiangongneng")}', name:'shoujiwuxianchongdiangongneng', index:'a.shoujiwuxianchongdiangongneng', width:150, align:"left"},
+		{header:'${text("diandongketiaotaban")}', name:'diandongketiaotaban', index:'a.diandongketiaotaban', width:150, align:"left"},
+		{header:'${text("zuoyicaizhi")}', name:'zuoyicaizhi', index:'a.zuoyicaizhi', width:150, align:"left"},
+		{header:'${text("yundongfenggezuoyi")}', name:'yundongfenggezuoyi', index:'a.yundongfenggezuoyi', width:150, align:"left"},
+		{header:'${text("zhuzuoyitiaojiefangshi")}', name:'zhuzuoyitiaojiefangshi', index:'a.zhuzuoyitiaojiefangshi', width:150, align:"left"},
+		{header:'${text("fuzuoyitiaojiefangshi")}', name:'fuzuoyitiaojiefangshi', index:'a.fuzuoyitiaojiefangshi', width:150, align:"left"},
+		{header:'${text("zhu_fujiashizuodiandongtiaojie")}', name:'zhuFujiashizuodiandongtiaojie', index:'a.zhu_fujiashizuodiandongtiaojie', width:150, align:"left"},
+		{header:'${text("qianpaizuoyigongneng")}', name:'qianpaizuoyigongneng', index:'a.qianpaizuoyigongneng', width:150, align:"left"},
+		{header:'${text("diandongzuoyijiyigongneng")}', name:'diandongzuoyijiyigongneng', index:'a.diandongzuoyijiyigongneng', width:150, align:"left"},
+		{header:'${text("fujiashiweihoupaiketiaojieanniu")}', name:'fujiashiweihoupaiketiaojieanniu', index:'a.fujiashiweihoupaiketiaojieanniu', width:150, align:"left"},
+		{header:'${text("dierpaizuoyitiaojie")}', name:'dierpaizuoyitiaojie', index:'a.dierpaizuoyitiaojie', width:150, align:"left"},
+		{header:'${text("houpaizuoyidiandongtiaojie")}', name:'houpaizuoyidiandongtiaojie', index:'a.houpaizuoyidiandongtiaojie', width:150, align:"left"},
+		{header:'${text("houpaizuoyigongneng")}', name:'houpaizuoyigongneng', index:'a.houpaizuoyigongneng', width:150, align:"left"},
+		{header:'${text("houpaixiaozhuoban")}', name:'houpaixiaozhuoban', index:'a.houpaixiaozhuoban', width:150, align:"left"},
+		{header:'${text("dierpaidulizuoyi")}', name:'dierpaidulizuoyi', index:'a.dierpaidulizuoyi', width:150, align:"left"},
+		{header:'${text("zuoyibuju")}', name:'zuoyibuju', index:'a.zuoyibuju', width:150, align:"left"},
+		{header:'${text("houpaizuoyifangdaoxingshi")}', name:'houpaizuoyifangdaoxingshi', index:'a.houpaizuoyifangdaoxingshi', width:150, align:"left"},
+		{header:'${text("houpaizuoyidiandongfangdao")}', name:'houpaizuoyidiandongfangdao', index:'a.houpaizuoyidiandongfangdao', width:150, align:"left"},
+		{header:'${text("qian_houzhongyangfushou")}', name:'qianHouzhongyangfushou', index:'a.qian_houzhongyangfushou', width:150, align:"left"},
+		{header:'${text("houpaibeijia")}', name:'houpaibeijia', index:'a.houpaibeijia', width:150, align:"left"},
+		{header:'${text("jiare_zhilengbeijia")}', name:'jiareZhilengbeijia', index:'a.jiare_zhilengbeijia', width:150, align:"left"},
+		{header:'${text("zhongkongcaiseyejingpingmu")}', name:'zhongkongcaiseyejingpingmu', index:'a.zhongkongcaiseyejingpingmu', width:150, align:"left"},
+		{header:'${text("zhongkongyejingpingchicun")}', name:'zhongkongyejingpingchicun', index:'a.zhongkongyejingpingchicun', width:150, align:"left"},
+		{header:'${text("gpsdaohangxitong")}', name:'gpsdaohangxitong', index:'a.gpsdaohangxitong', width:150, align:"left"},
+		{header:'${text("daohanglukuangxinxixianshi")}', name:'daohanglukuangxinxixianshi', index:'a.daohanglukuangxinxixianshi', width:150, align:"left"},
+		{header:'${text("daolujiuyuanhujiao")}', name:'daolujiuyuanhujiao', index:'a.daolujiuyuanhujiao', width:150, align:"left"},
+		{header:'${text("zhongkongyejingpingfenpingxianshi")}', name:'zhongkongyejingpingfenpingxianshi', index:'a.zhongkongyejingpingfenpingxianshi', width:150, align:"left"},
+		{header:'${text("lanya_chezaidianhua")}', name:'lanyaChezaidianhua', index:'a.lanya_chezaidianhua', width:150, align:"left"},
+		{header:'${text("shoujihulian_yingshe")}', name:'shoujihulianYingshe', index:'a.shoujihulian_yingshe', width:150, align:"left"},
+		{header:'${text("yuyinshibiekongzhixitong")}', name:'yuyinshibiekongzhixitong', index:'a.yuyinshibiekongzhixitong', width:150, align:"left"},
+		{header:'${text("shoushikongzhi")}', name:'shoushikongzhi', index:'a.shoushikongzhi', width:150, align:"left"},
+		{header:'${text("chelianwang")}', name:'chelianwang', index:'a.chelianwang', width:150, align:"left"},
+		{header:'${text("chezaidianshi")}', name:'chezaidianshi', index:'a.chezaidianshi', width:150, align:"left"},
+		{header:'${text("houpaiyejingpingmu")}', name:'houpaiyejingpingmu', index:'a.houpaiyejingpingmu', width:150, align:"left"},
+		{header:'${text("houpaikongzhiduomeiti")}', name:'houpaikongzhiduomeiti', index:'a.houpaikongzhiduomeiti', width:150, align:"left"},
+		{header:'${text("waijieyinyuanjiekouleixing")}', name:'waijieyinyuanjiekouleixing', index:'a.waijieyinyuanjiekouleixing', width:150, align:"left"},
+		{header:'${text("usb_type_cjiekoushuliang")}', name:'usbTypeCjiekoushuliang', index:'a.usb_type_cjiekoushuliang', width:150, align:"left"},
+		{header:'${text("chezaicd_dvd")}', name:'chezaicdDvd', index:'a.chezaicd_dvd', width:150, align:"left"},
+		{header:'${text("dianyuan_220v_230v")}', name:'dianyuan220v230v', index:'a.dianyuan_220v_230v', width:150, align:"left"},
+		{header:'${text("xinglixiang12vdianyuanjiekou")}', name:'xinglixiang12vdianyuanjiekou', index:'a.xinglixiang12vdianyuanjiekou', width:150, align:"left"},
+		{header:'${text("yangshengqipinpaimingcheng")}', name:'yangshengqipinpaimingcheng', index:'a.yangshengqipinpaimingcheng', width:150, align:"left"},
+		{header:'${text("yangshengqishuliang")}', name:'yangshengqishuliang', index:'a.yangshengqishuliang', width:150, align:"left"},
+		{header:'${text("jinguangdengguangyuan")}', name:'jinguangdengguangyuan', index:'a.jinguangdengguangyuan', width:150, align:"left"},
+		{header:'${text("yuanguangdengguangyuan")}', name:'yuanguangdengguangyuan', index:'a.yuanguangdengguangyuan', width:150, align:"left"},
+		{header:'${text("dengguangtesegongneng")}', name:'dengguangtesegongneng', index:'a.dengguangtesegongneng', width:150, align:"left"},
+		{header:'${text("ledrijianxingchedeng")}', name:'ledrijianxingchedeng', index:'a.ledrijianxingchedeng', width:150, align:"left"},
+		{header:'${text("zishiyingyuanjinguang")}', name:'zishiyingyuanjinguang', index:'a.zishiyingyuanjinguang', width:150, align:"left"},
+		{header:'${text("zidongtoudeng")}', name:'zidongtoudeng', index:'a.zidongtoudeng', width:150, align:"left"},
+		{header:'${text("zhuanxiangfuzhudeng")}', name:'zhuanxiangfuzhudeng', index:'a.zhuanxiangfuzhudeng', width:150, align:"left"},
+		{header:'${text("zhuanxiangtoudeng")}', name:'zhuanxiangtoudeng', index:'a.zhuanxiangtoudeng', width:150, align:"left"},
+		{header:'${text("cheqianwudeng")}', name:'cheqianwudeng', index:'a.cheqianwudeng', width:150, align:"left"},
+		{header:'${text("qiandadengyuwumoshi")}', name:'qiandadengyuwumoshi', index:'a.qiandadengyuwumoshi', width:150, align:"left"},
+		{header:'${text("dadenggaoduketiao")}', name:'dadenggaoduketiao', index:'a.dadenggaoduketiao', width:150, align:"left"},
+		{header:'${text("dadengqingxizhuangzhi")}', name:'dadengqingxizhuangzhi', index:'a.dadengqingxizhuangzhi', width:150, align:"left"},
+		{header:'${text("dadengyanshiguanbi")}', name:'dadengyanshiguanbi', index:'a.dadengyanshiguanbi', width:150, align:"left"},
+		{header:'${text("chumoshiyuedudeng")}', name:'chumoshiyuedudeng', index:'a.chumoshiyuedudeng', width:150, align:"left"},
+		{header:'${text("cheneihuanjingfenweideng")}', name:'cheneihuanjingfenweideng', index:'a.cheneihuanjingfenweideng', width:150, align:"left"},
+		{header:'${text("qian_houdiandongchechuang")}', name:'qianHoudiandongchechuang', index:'a.qian_houdiandongchechuang', width:150, align:"left"},
+		{header:'${text("chechuangyijianshengjianggongneng")}', name:'chechuangyijianshengjianggongneng', index:'a.chechuangyijianshengjianggongneng', width:150, align:"left"},
+		{header:'${text("chechuangfangjiashougongneng")}', name:'chechuangfangjiashougongneng', index:'a.chechuangfangjiashougongneng', width:150, align:"left"},
+		{header:'${text("fangziwaixianboli")}', name:'fangziwaixianboli', index:'a.fangziwaixianboli', width:150, align:"left"},
+		{header:'${text("duocenggeyinboli")}', name:'duocenggeyinboli', index:'a.duocenggeyinboli', width:150, align:"left"},
+		{header:'${text("waihoushijinggongneng")}', name:'waihoushijinggongneng', index:'a.waihoushijinggongneng', width:150, align:"left"},
+		{header:'${text("neihoushijinggongneng")}', name:'neihoushijinggongneng', index:'a.neihoushijinggongneng', width:150, align:"left"},
+		{header:'${text("houfengdangzheyanglian")}', name:'houfengdangzheyanglian', index:'a.houfengdangzheyanglian', width:150, align:"left"},
+		{header:'${text("houpaicechuangzheyanglian")}', name:'houpaicechuangzheyanglian', index:'a.houpaicechuangzheyanglian', width:150, align:"left"},
+		{header:'${text("houpaiceyinsiboli")}', name:'houpaiceyinsiboli', index:'a.houpaiceyinsiboli', width:150, align:"left"},
+		{header:'${text("cheneihuazhuangjing")}', name:'cheneihuazhuangjing', index:'a.cheneihuazhuangjing', width:150, align:"left"},
+		{header:'${text("houyushua")}', name:'houyushua', index:'a.houyushua', width:150, align:"left"},
+		{header:'${text("ganyingyushuagongneng")}', name:'ganyingyushuagongneng', index:'a.ganyingyushuagongneng', width:150, align:"left"},
+		{header:'${text("kejiarepenshuizui")}', name:'kejiarepenshuizui', index:'a.kejiarepenshuizui', width:150, align:"left"},
+		{header:'${text("kongtiaowendukongzhifangshi")}', name:'kongtiaowendukongzhifangshi', index:'a.kongtiaowendukongzhifangshi', width:150, align:"left"},
+		{header:'${text("houpaidulikongtiao")}', name:'houpaidulikongtiao', index:'a.houpaidulikongtiao', width:150, align:"left"},
+		{header:'${text("houzuochufengkou")}', name:'houzuochufengkou', index:'a.houzuochufengkou', width:150, align:"left"},
+		{header:'${text("wendufenqukongzhi")}', name:'wendufenqukongzhi', index:'a.wendufenqukongzhi', width:150, align:"left"},
+		{header:'${text("chezaikongqijinghuaqi")}', name:'chezaikongqijinghuaqi', index:'a.chezaikongqijinghuaqi', width:150, align:"left"},
+		{header:'${text("cheneipm2_5guolvzhuangzhi")}', name:'cheneipm25guolvzhuangzhi', index:'a.cheneipm2_5guolvzhuangzhi', width:150, align:"left"},
+		{header:'${text("fulizifashengqi")}', name:'fulizifashengqi', index:'a.fulizifashengqi', width:150, align:"left"},
+		{header:'${text("cheneixiangfenzhuangzhi")}', name:'cheneixiangfenzhuangzhi', index:'a.cheneixiangfenzhuangzhi', width:150, align:"left"},
+		{header:'${text("chezaibingxiang")}', name:'chezaibingxiang', index:'a.chezaibingxiang', width:150, align:"left"},
+		{header:'${text("xuanzhuangbao")}', name:'xuanzhuangbao', index:'a.xuanzhuangbao', width:150, align:"left"},
+		{header:'${text("waiguanyanse")}', name:'waiguanyanse', index:'a.waiguanyanse', width:150, align:"left"},
+		{header:'${text("neishiyanse")}', name:'neishiyanse', index:'a.neishiyanse', width:150, align:"left"},
+		{header:'${text("状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
+		}},
+		{header:'${text("更新时间")}', name:'updateDate', index:'a.update_date', width:150, align:"center"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('common:vehicleInfo:edit')){ %>
+				actions.push('<a href="${ctx}/common/vehicleInfo/form?id='+row.id+'" class="btnList" title="${text("编辑车辆配置全表")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/common/vehicleInfo/delete?id='+row.id+'" class="btnList" title="${text("删除车辆配置全表")}" data-confirm="${text("确认要删除该车辆配置全表吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

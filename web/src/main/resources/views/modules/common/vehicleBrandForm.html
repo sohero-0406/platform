@@ -1,15 +1,15 @@
-<% layout('/layouts/default.html', {title: '计算车辆价值管理', libs: ['validate']}){ %>
+<% layout('/layouts/default.html', {title: '车辆品牌表管理', libs: ['validate']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header with-border">
 			<div class="box-title">
-				<i class="fa fa-list-alt"></i> ${text(calculate.isNewRecord ? '新增计算车辆价值' : '编辑计算车辆价值')}
+				<i class="fa fa-list-alt"></i> ${text(vehicleBrand.isNewRecord ? '新增车辆品牌表' : '编辑车辆品牌表')}
 			</div>
 			<div class="box-tools pull-right">
 				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 			</div>
 		</div>
-		<#form:form id="inputForm" model="${calculate}" action="${ctx}/aa/calculate/save" method="post" class="form-horizontal">
+		<#form:form id="inputForm" model="${vehicleBrand}" action="${ctx}/common/vehicleBrand/save" method="post" class="form-horizontal">
 			<div class="box-body">
 				<div class="form-unit">${text('基本信息')}</div>
 				<#form:hidden path="id"/>
@@ -17,38 +17,18 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('外键id')}：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> ${text('首字母')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="examUserId" maxlength="64" class="form-control"/>
+								<#form:input path="shouzimu" class="form-control"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('试卷id')}：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> ${text('品牌名称')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="paperId" maxlength="64" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('算法类型')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="type" maxlength="10" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('得分价格开始值')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="beginPrice" class="form-control number"/>
+								<#form:input path="pinpai" class="form-control"/>
 							</div>
 						</div>
 					</div>
@@ -57,9 +37,29 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('得分价格结束值')}：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> ${text('pinpai_id')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="endPrice" class="form-control number"/>
+								<#form:input path="pinpaiId" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('品牌logo路径')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="pinpaiLogo" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('更新时间')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="gengxinshijian" class="form-control"/>
 							</div>
 						</div>
 					</div>
@@ -79,7 +79,7 @@
 			<div class="box-footer">
 				<div class="row">
 					<div class="col-sm-offset-2 col-sm-10">
-						<% if (hasPermi('aa:calculate:edit')){ %>
+						<% if (hasPermi('common:vehicleBrand:edit')){ %>
 							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
 						<% } %>
 						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
