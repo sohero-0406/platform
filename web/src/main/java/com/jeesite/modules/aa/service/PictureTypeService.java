@@ -5,6 +5,7 @@ package com.jeesite.modules.aa.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,15 @@ import com.jeesite.modules.aa.dao.PictureTypeDao;
 @Service
 @Transactional(readOnly=true)
 public class PictureTypeService extends CrudService<PictureTypeDao, PictureType> {
-	
+	@Autowired
+	private PictureTypeDao pictureTypeDao;
+
+	public List<PictureType> findListByIds(String[] ids){
+		if(ids == null || ids.length <= 0){
+			return null;
+		}
+		return pictureTypeDao.findListByIds(ids);
+	}
 	/**
 	 * 获取单条数据
 	 * @param pictureType
@@ -31,7 +40,6 @@ public class PictureTypeService extends CrudService<PictureTypeDao, PictureType>
 	public PictureType get(PictureType pictureType) {
 		return super.get(pictureType);
 	}
-	
 	/**
 	 * 查询分页数据
 	 * @param pictureType 查询条件

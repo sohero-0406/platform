@@ -6,6 +6,7 @@ package com.jeesite.modules.aa.dao;
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.aa.entity.PictureUser;
+import com.jeesite.modules.aa.vo.PictureTypeAndUserVO;
 
 import java.util.List;
 
@@ -22,5 +23,21 @@ public interface PictureUserDao extends CrudDao<PictureUser> {
      * @param pictureTypeIds 图片类型代号
      * @return 如果examUserId为空，返回null，如果pictureTypeIds为空，返回所有类型的图片信息
      */
-	List<PictureUser> findListByExamUserId(String examUserId, String[] pictureTypeIds);
+	List<PictureUser> findListByExamUserIdAndTypeId(String examUserId, String[] pictureTypeIds);
+
+	/**
+	 * 根据考试id和父图片类型ids加载图片信息
+	 * @param examUserId
+	 * @param parentTypeIds
+	 * @return
+	 */
+	List<PictureTypeAndUserVO> findVoListByExamUserIdAndParentTypeId(String examUserId, String[] parentTypeIds);
+
+	/**
+	 * 根据考试id和父图片类型ids加载图片信息
+	 * @param examUserId
+	 * @param parentTypeIds
+	 * @return
+	 */
+	List<PictureUser> findListByExamUserIdAndParentTypeId(String examUserId, String[] parentTypeIds);
 }

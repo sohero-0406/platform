@@ -3,25 +3,24 @@
  */
 package com.jeesite.modules.aa.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.service.CrudService;
 import com.jeesite.common.utils.BaiDuAiUtil;
+import com.jeesite.modules.aa.dao.PictureUserDao;
 import com.jeesite.modules.aa.entity.PictureType;
+import com.jeesite.modules.aa.entity.PictureUser;
+import com.jeesite.modules.aa.vo.PictureTypeAndUserVO;
 import com.jeesite.modules.aa.vo.PictureUserVO;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.aa.entity.PictureUser;
-import com.jeesite.modules.aa.dao.PictureUserDao;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用户图片表Service
@@ -81,7 +80,7 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
 		pictureUser.setId(id);
 		pictureUser.setExamUserId(examUserId);
 		pictureUser.setPictureTypeId(pictureTypeId);
-		pictureUser.setUrl(filePath + fileName + fileType);
+		pictureUser.setUrl("exam/" + examUserId + "/" + fileName + fileType);
 		pictureUser.setName(fileName);
 		this.save(pictureUser);
 		//删除原图片（因为新图片的名字和老图片名字一致，不需要执行删除操作）
@@ -112,8 +111,48 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
      * @return
      */
 	public CommonResult findPictureByParentTypeId(String examUserId, String[] parentTypeIds){
-	    return new CommonResult();
+		if(parentTypeIds == null || parentTypeIds.length <= 0 || parentTypeIds == null || parentTypeIds.length <= 0) {
+			return new CommonResult();
+		}
+		List<PictureTypeAndUserVO> picTypeAndUserList = pictureUserDao.findVoListByExamUserIdAndParentTypeId(examUserId, parentTypeIds);
+		if(picTypeAndUserList == null){
+			picTypeAndUserList = new ArrayList<>();
+		}
+		List<PictureType> picTypeList = pictureTypeService.findListByIds(parentTypeIds);
+
+
+		List<PictureTypeAndUserVO> picTypeAndUserVOs = new ArrayList<>();
+		List<PictureUser> childPicUserList = null;
+		PictureTypeAndUserVO pictureTypeAndUserVO = null;
+		for(PictureType picType : picTypeList){
+			pictureTypeAndUserVO = new PictureTypeAndUserVO();
+			pictureTypeAndUserVO.setParentPictureType(picType);
+			childPicUserList = new ArrayList<>();
+			for(PictureTypeAndUserVO picTypeAndUser : picTypeAndUserList){
+				if(picTypeAndUser == null || picTypeAndUser.getPictureType() == null){
+					continue;
+				}
+				if(picType.getId().equals(picTypeAndUser.getPictureType().getParentId())){
+					childPicUserList.add(picTypeAndUser.getPictureUser());
+				}
+			}
+
+			pictureTypeAndUserVO.setChildren(childPicUserList);
+			picTypeAndUserVOs.add(pictureTypeAndUserVO);
+		}
+		CommonResult comRes = new CommonResult();
+		comRes.setData(picTypeAndUserVOs);
+		return comRes;
     }
+
+    public List<PictureUser> findVehiclePicture(String examUserId){
+		String [] parentTypeIds = new String[]{"1143439093974253568"};//记录车辆基本信息
+		List<PictureUser> pictureUserList = this.pictureUserDao.findListByExamUserIdAndParentTypeId(examUserId, parentTypeIds);
+
+		return pictureUserList;
+
+
+	}
 	/**
 	 * 加载图片列表
 	 * @param examUserId 考生用户id
@@ -124,7 +163,7 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
 		if (examUserId == null || examUserId.trim().length() <= 0){
 			return null;
 		}
-		return pictureUserDao.findListByExamUserId(examUserId, pictureTypeIds);
+		return pictureUserDao.findListByExamUserIdAndTypeId(examUserId, pictureTypeIds);
 	}
 	/**
 	 * 获取单条数据

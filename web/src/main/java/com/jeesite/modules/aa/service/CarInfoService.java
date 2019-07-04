@@ -139,10 +139,15 @@ public class CarInfoService extends CrudService<CarInfoDao, CarInfo> {
 		List<DictData> fuelTypeList = DictUtils.getDictList("aa_fuel_type");
 		baseInfoVO.setFuelTypeList(fuelTypeList);
 
-		//加载车身颜色
-		List<DictData> colorList = DictUtils.getDictList("aa_vehicle_color");
-		baseInfoVO.setColorList(colorList);
+		//加载使用类型
+		List<DictData> usageList = DictUtils.getDictList("aa_usage_type");
+		baseInfoVO.setUsageList(usageList);
 
+		List<DictData> levelList = DictUtils.getDictList("aa_vehicle_level");
+		baseInfoVO.setLevelList(levelList);
+
+		List<DictData> environmentalStandardList = DictUtils.getDictList("aa_environmental_standard");
+		baseInfoVO.setEnvironmentalStandardList(environmentalStandardList);
 		return baseInfoVO;
 	}
 }
