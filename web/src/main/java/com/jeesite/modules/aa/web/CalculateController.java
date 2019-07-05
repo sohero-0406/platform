@@ -6,6 +6,9 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.modules.aa.entity.*;
+import com.jeesite.modules.aa.service.*;
+import com.jeesite.modules.aa.vo.CalculateVO;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.Exam;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -21,8 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.aa.entity.Calculate;
-import com.jeesite.modules.aa.service.CalculateService;
 
 import java.util.List;
 
@@ -38,6 +39,14 @@ public class CalculateController extends BaseController {
 	private final static  String EXAM_USER_ID = "11";
 	@Autowired
 	private CalculateService calculateService;
+	@Autowired
+	private CalculateDepreciationService calculateDepreciationService;
+	@Autowired
+	private CalculateReplaceCostService calculateReplaceCostService;
+	@Autowired
+	private CalculateKmService calculateKmService;
+	@Autowired
+	private CalculateCurrentService calculateCurrentService;
 	
 	/**
 	 * 获取数据
@@ -104,15 +113,36 @@ public class CalculateController extends BaseController {
 	@ResponseBody
 	public CommonResult get(String id){
 		CommonResult comRes = new CommonResult();
+		CalculateVO calculateVO = new CalculateVO();
 		Calculate calculate = null;
 		if(id != null && id.trim().length() > 0){
 			calculate = calculateService.get(id);
-		}else{
-			calculate.setExamUserId(EXAM_USER_ID);
-			List<Calculate> calculateList = this.calculateService.findList(calculate);
-			calculate = calculateList.get(0);
-		}
 
+			switch (calculate.getType()){
+				case "1"://折旧率估值法
+					CalculateDepreciation cd = new CalculateDepreciation();
+					cd.setCalculateId(id);
+					calculateVO.setCalculateDepreciation(calculateDepreciationService.get(cd));
+					break;
+				case "2"://公里数估值法
+					CalculateKm calculateKm = new CalculateKm();
+					calculateKm.setCalculateId(id);
+					calculateVO.setCalculateKm(calculateKmService.get(calculateKm));
+					break;
+				case "3"://重置成本法
+					CalculateReplaceCost crc = new CalculateReplaceCost();
+					crc.setCalculateId(id);
+					calculateVO.setCalculateReplaceCost(calculateReplaceCostService.get(crc));
+					break;
+				case "4"://现行市价法
+					CalculateCurrent cc = new CalculateCurrent();
+					cc.setCalculateId(id);
+					calculateVO.setCalculateCurrent(calculateCurrentService.get(cc));
+					break;
+			}
+		}
+		calculateVO.setCalculate(calculate);
+		comRes.setData(calculateVO);
 		return comRes;
 	}
 }
