@@ -125,6 +125,7 @@ public class CheckTradableVehiclesController extends BaseController {
 	public CommonResult saveIsAccident(@Validated CheckTradableVehicles checkTradableVehicles) {
 		ExamUser examUser = UserUtils.getExamUser();
 		checkTradableVehicles.setExamUserId(examUser.getId());
+		checkTradableVehicles.setPaperId(examUser.getPaperId());
 		checkTradableVehiclesService.saveIsAccident(checkTradableVehicles);
 		return new CommonResult();
 	}

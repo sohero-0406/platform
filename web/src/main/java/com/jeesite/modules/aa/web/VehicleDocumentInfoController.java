@@ -84,9 +84,9 @@ public class VehicleDocumentInfoController extends BaseController {
      */
     @RequestMapping(value = "save")
     @ResponseBody
-    public CommonResult save(@Validated VehicleDocumentInfoVO vehicleDocumentInfoVO) {
+    public CommonResult save(@Validated String velicleDocumentJson) {
         ExamUser examUser = UserUtils.getExamUser();
-        vehicleDocumentInfoService.saveBatch(examUser, vehicleDocumentInfoVO);
+        vehicleDocumentInfoService.saveBatch(examUser, velicleDocumentJson);
         return new CommonResult();
     }
 

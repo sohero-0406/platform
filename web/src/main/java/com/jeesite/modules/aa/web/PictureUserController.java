@@ -9,6 +9,8 @@ import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.aa.entity.PictureUser;
 import com.jeesite.modules.aa.service.PictureUserService;
 import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.ExamUser;
+import com.jeesite.modules.common.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +34,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "${adminPath}/aa/pictureUser")
 public class PictureUserController extends BaseController {
-	//?todo 暂时写死
-	private final static  String EXAM_USER_ID = "11";
+
 	@Autowired
 	private PictureUserService pictureUserService;
 	
@@ -58,16 +59,18 @@ public class PictureUserController extends BaseController {
 	@PostMapping(value="uploadPicture")
 	@ResponseBody
 	public CommonResult uploadPicture(MultipartFile picFile, String id, String pictureTypeId, String needDiscern) throws IOException {
-		return  pictureUserService.saveAndDiscernPicture(EXAM_USER_ID, picFile, id, pictureTypeId, needDiscern);
+		ExamUser examUser = UserUtils.getExamUser();
+		return  pictureUserService.saveAndDiscernPicture(examUser, picFile, id, pictureTypeId, needDiscern);
 	}
 
 	@PostMapping(value="findPictureLibraryList")
 	@ResponseBody
 	public CommonResult findPictureByParentTypeId(){
+		ExamUser examUser = UserUtils.getExamUser();
 		String[] parentTypeIds = new String[]{
 				"1143431479216775168","1143437059610071040","1143439093974253568",
 				"1143441175747194880","1143446339264172032"};
-		return pictureUserService.findPictureByParentTypeId(EXAM_USER_ID, parentTypeIds);
+		return pictureUserService.findPictureByParentTypeId(examUser, parentTypeIds);
 	}
 
 	/**
@@ -77,8 +80,9 @@ public class PictureUserController extends BaseController {
 	@PostMapping(value = "findVehiclePicture")
 	@ResponseBody
 	public CommonResult findVehiclePicture(){
+		ExamUser examUser = UserUtils.getExamUser();
 		CommonResult comRes = new CommonResult();
-		List<PictureUser> pictureUserList = pictureUserService.findVehiclePicture(EXAM_USER_ID);
+		List<PictureUser> pictureUserList = pictureUserService.findVehiclePicture(examUser);
 		comRes.setData(pictureUserList);
 		return comRes;
 	}

@@ -17,7 +17,15 @@
 		(select dict_label from js_sys_dict_data where dict_type = 'aa_defect_status_code' and dict_value = cbk.state) as state,
 		(select name from aa_picture_type where id = cbk.technology_info_id) as projectName,
 		technology_info_id as project,description
-		FROM `aa_check_body_skeleton` cbk where cbk.exam_user_id = #{examUserId}
+		FROM `aa_check_body_skeleton` cbk
+		<where>
+			<if test="examUserId != null and examUserId != ''">
+				and cbk.exam_user_id = #{examUserId}
+			</if>
+			<if test="paperId != null and paperId != ''">
+				and cbk.paper_id = #{paperId}
+			</if>
+		</where>
 	</select>
 
 </mapper>

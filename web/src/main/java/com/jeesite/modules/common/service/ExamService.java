@@ -14,9 +14,9 @@ import com.jeesite.modules.common.entity.Exam;
 import com.jeesite.modules.common.dao.ExamDao;
 
 /**
- * examService
+ * common_examService
  * @author lvchangwei
- * @version 2019-06-20
+ * @version 2019-07-10
  */
 @Service
 @Transactional(readOnly=true)

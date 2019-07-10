@@ -16,9 +16,14 @@
 		from aa_picture_type as pictureType
 		left join aa_picture_user as pictureUser on pictureType.id=pictureUser.picture_type_id
 		<where>
-			exam_user_id = #{examUserId}
+			<if test="examUser.id != null and examUser.id != ''">
+				and exam_user_id = #{examUser.id}
+			</if>
+			<if test="examUser.paperId != null and examUser.paperId != ''">
+				and paper_id = #{examUser.paperId}
+			</if>
 			<if test="pictureTypeIds != null and pictureTypeIds.length > 0">
-			and pictureType.id in
+				and pictureType.id in
 			<foreach collection="pictureTypeIds" item="pictureTypeId" index="index" open="(" close=")" separator=",">
 				#{pictureTypeId}
 			</foreach>
@@ -33,7 +38,12 @@
 		from aa_picture_user as pictureUser
 		left join aa_picture_type as pictureType on pictureType.id=pictureUser.picture_type_id
 		<where>
-			pictureUser.exam_user_id = #{examUserId}
+			<if test="examUser.id != null and examUser.id != ''">
+				and pictureUser.exam_user_id = #{examUser.id}
+			</if>
+			<if test="examUser.paperId != null and examUser.paperId != ''">
+				and pictureUser.paper_id = #{examUser.paperId}
+			</if>
 			<if test="parentTypeIds != null and parentTypeIds.length > 0">
 				and pictureType.parent_id in
 				<foreach collection="parentTypeIds" item="parentTypeId" index="index" open="(" close=")" separator=",">
@@ -48,7 +58,12 @@
 		from aa_picture_user as pictureUser
 		left join aa_picture_type as pictureType on pictureType.id=pictureUser.picture_type_id
 		<where>
-			pictureUser.exam_user_id = #{examUserId}
+			<if test="examUser.id != null and examUser.id != ''">
+				and pictureUser.exam_user_id = #{examUser.id}
+			</if>
+			<if test="examUser.paperId != null and examUser.paperId != ''">
+				and pictureUser.paper_id = #{examUser.paperId}
+			</if>
 			<if test="parentTypeIds != null and parentTypeIds.length > 0">
 				and pictureType.parent_id in
 				<foreach collection="parentTypeIds" item="parentTypeId" index="index" open="(" close=")" separator=",">

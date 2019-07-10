@@ -32,7 +32,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="usage", attrName="usage", label="使用用途"),
 		@Column(name="total_quality", attrName="totalQuality", label="总质量", comment="总质量（kg）"),
 		@Column(name="sear", attrName="sear", label="座位"),
-		@Column(name="displacement", attrName="displacement", label="排量", comment="排量（L）"),
+		@Column(name="displacement", attrName="displacement", label="排量", comment="排量（ml）"),
 		@Column(name="fuel_type", attrName="fuelType", label="燃油种类"),
 		@Column(name="register_date", attrName="registerDate", label="初次登记日期"),
 		@Column(name="color", attrName="color", label="车身颜色"),
@@ -76,7 +76,7 @@ public class CarInfo extends PreEntity<CarInfo> {
 	private String usage;		// 使用用途
 	private String totalQuality;		// 总质量（kg）
 	private String sear;		// 座位
-	private String displacement;		// 排量（L）
+	private String displacement;		// 排量（ml）
 	private String fuelType;		// 燃油种类
 	private String registerDate;		// 初次登记日期
 	private String color;		// 车身颜色
@@ -244,7 +244,7 @@ public class CarInfo extends PreEntity<CarInfo> {
 		this.displacement = displacement;
 	}
 	
-	@Length(min=0, max=16, message="燃油种类长度不能超过 16 个字符")
+	@Length(min=0, max=10, message="燃油种类长度不能超过 10 个字符")
 	public String getFuelType() {
 		return fuelType;
 	}
@@ -262,7 +262,7 @@ public class CarInfo extends PreEntity<CarInfo> {
 		this.registerDate = registerDate;
 	}
 	
-	@Length(min=0, max=16, message="车身颜色长度不能超过 16 个字符")
+	@Length(min=0, max=32, message="车身颜色长度不能超过 32 个字符")
 	public String getColor() {
 		return color;
 	}
@@ -307,7 +307,7 @@ public class CarInfo extends PreEntity<CarInfo> {
 		this.maintenanceSituation = maintenanceSituation;
 	}
 	
-	@Length(min=0, max=255, message="事故情况长度不能超过 255 个字符")
+	@Length(min=0, max=1024, message="事故情况长度不能超过 1024 个字符")
 	public String getAccident() {
 		return accident;
 	}
@@ -334,7 +334,7 @@ public class CarInfo extends PreEntity<CarInfo> {
 		this.originalPrice = originalPrice;
 	}
 	
-	@Length(min=0, max=255, message="备注长度不能超过 255 个字符")
+	@Length(min=0, max=1024, message="备注长度不能超过 1024 个字符")
 	public String getNote() {
 		return note;
 	}

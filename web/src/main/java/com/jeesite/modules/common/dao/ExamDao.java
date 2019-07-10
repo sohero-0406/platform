@@ -8,9 +8,9 @@ import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.common.entity.Exam;
 
 /**
- * examDAO接口
+ * common_examDAO接口
  * @author lvchangwei
- * @version 2019-06-20
+ * @version 2019-07-10
  */
 @MyBatisDao
 public interface ExamDao extends CrudDao<Exam> {

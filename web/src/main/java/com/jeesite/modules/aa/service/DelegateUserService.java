@@ -72,5 +72,9 @@ public class DelegateUserService extends CrudService<DelegateUserDao, DelegateUs
 	public void delete(DelegateUser delegateUser) {
 		super.delete(delegateUser);
 	}
-	
+
+
+	public DelegateUser getByEntity(DelegateUser delegateUser) {
+		return dao.getByEntity(delegateUser);
+	}
 }

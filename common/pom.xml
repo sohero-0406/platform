@@ -293,6 +293,23 @@
 			<artifactId>java-sdk</artifactId>
 			<version>4.11.3</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.github.stuxuhai</groupId>
+			<artifactId>jpinyin</artifactId>
+			<version>1.1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>20.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.belerweb</groupId>
+			<artifactId>pinyin4j</artifactId>
+			<version>2.5.0</version>
+		</dependency>
 	</dependencies>
 	
 	<build>

@@ -13,6 +13,8 @@ import com.jeesite.modules.aa.entity.CarInfo;
 import com.jeesite.modules.aa.service.CarInfoService;
 import com.jeesite.modules.aa.vo.BaseInfoVO;
 import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.ExamUser;
+import com.jeesite.modules.common.utils.UserUtils;
 import com.jeesite.modules.sys.entity.DictData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,8 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping(value = "${adminPath}/aa/carInfo")
 public class CarInfoController extends BaseController {
-	//?todo 暂时写死
-	private final static  String EXAM_USER_ID = "11";
+
 	@Autowired
 	private CarInfoService carInfoService;
 	
@@ -103,9 +104,9 @@ public class CarInfoController extends BaseController {
 	@PostMapping(value = "saveBaseInfo")
 	@ResponseBody
 	public CommonResult saveBaseInfo(@Validated BaseInfoVO baseInfoVO){
-		carInfoService.saveBaseInfo(baseInfoVO, EXAM_USER_ID);
-
-		return  new CommonResult();
+		ExamUser examUser = UserUtils.getExamUser();
+		carInfoService.saveBaseInfo(baseInfoVO, examUser);
+		return new CommonResult();
 	}
 
 	/**
@@ -115,9 +116,9 @@ public class CarInfoController extends BaseController {
 	@PostMapping(value = "getBaseInfo")
 	@ResponseBody
 	public CommonResult getBaseInfo(String[] pictureTypeIds){
+		ExamUser examUser = UserUtils.getExamUser();
 		CommonResult comRes = new CommonResult();
-		comRes.setData(carInfoService.getBaseInfo(EXAM_USER_ID, pictureTypeIds));
-
+		comRes.setData(carInfoService.getBaseInfo(examUser, pictureTypeIds));
 		return comRes;
 	}
 }

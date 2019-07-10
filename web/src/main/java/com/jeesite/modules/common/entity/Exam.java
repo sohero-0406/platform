@@ -15,23 +15,28 @@ import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
 /**
- * examEntity
+ * common_examEntity
  * @author lvchangwei
- * @version 2019-06-20
+ * @version 2019-07-10
  */
 @Table(name="common_exam", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键", isPK=true),
+		@Column(name="score_id", attrName="scoreId", label="评分表id"),
+		@Column(name="paper_id", attrName="paperId", label="试卷id"),
 		@Column(name="name", attrName="name", label="考试名称", queryType=QueryType.LIKE),
 		@Column(name="duration", attrName="duration", label="考试时长", comment="考试时长(分钟)"),
 		@Column(name="start_time", attrName="startTime", label="开始时间"),
 		@Column(name="end_time", attrName="endTime", label="结束时间"),
 		@Column(name="state", attrName="state", label="状态"),
 		@Column(name="type", attrName="type", label="考试类型"),
-	}, orderBy="a.id DESC"
+		@Column(includeEntity=DataEntity.class),
+	}, orderBy="a.update_date DESC"
 )
 public class Exam extends DataEntity<Exam> {
 	
 	private static final long serialVersionUID = 1L;
+	private String scoreId;		// 评分表id
+	private String paperId;		// 试卷id
 	private String name;		// 考试名称
 	private Integer duration;		// 考试时长(分钟)
 	private Date startTime;		// 开始时间
@@ -45,6 +50,24 @@ public class Exam extends DataEntity<Exam> {
 
 	public Exam(String id){
 		super(id);
+	}
+	
+	@Length(min=0, max=64, message="评分表id长度不能超过 64 个字符")
+	public String getScoreId() {
+		return scoreId;
+	}
+
+	public void setScoreId(String scoreId) {
+		this.scoreId = scoreId;
+	}
+	
+	@Length(min=0, max=64, message="试卷id长度不能超过 64 个字符")
+	public String getPaperId() {
+		return paperId;
+	}
+
+	public void setPaperId(String paperId) {
+		this.paperId = paperId;
 	}
 	
 	@Length(min=0, max=32, message="考试名称长度不能超过 32 个字符")

@@ -15,7 +15,13 @@
     <update id="saveIsAccident">
 		update `aa_check_tradable_vehicles` set
 		is_accident = #{isAccident}
-		where exam_user_id = #{examUserId}
+		<where>
+			<if test="examUserId != null and examUserId != ''">
+				and exam_user_id = #{examUserId}
+			</if>
+			<if test="paperId != null and paperId != ''">
+				and paper_id = #{paperId}
+			</if>
+		</where>
 	</update>
-
 </mapper>

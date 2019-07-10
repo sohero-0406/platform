@@ -5,7 +5,7 @@ package com.jeesite.modules.common.entity;
  * @author lvchangwei
  * @version 2019-06-27
  */
-public class CommonResult {
+public class CommonResult<T> {
     /**
      * 返回编码
      */
@@ -19,7 +19,7 @@ public class CommonResult {
     /**
      * 返回数据
      */
-    private Object data;
+    private T data;
 
     public CommonResult() {
 
@@ -46,11 +46,11 @@ public class CommonResult {
         this.msg = msg;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 }

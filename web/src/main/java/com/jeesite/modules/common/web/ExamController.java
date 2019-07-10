@@ -23,9 +23,9 @@ import com.jeesite.modules.common.entity.Exam;
 import com.jeesite.modules.common.service.ExamService;
 
 /**
- * examController
+ * common_examController
  * @author lvchangwei
- * @version 2019-06-20
+ * @version 2019-07-10
  */
 @Controller
 @RequestMapping(value = "${adminPath}/common/exam")
@@ -75,25 +75,25 @@ public class ExamController extends BaseController {
 	}
 
 	/**
-	 * 保存exam
+	 * 保存common_exam
 	 */
 	@RequiresPermissions("common:exam:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated Exam exam) {
 		examService.save(exam);
-		return renderResult(Global.TRUE, text("保存exam成功！"));
+		return renderResult(Global.TRUE, text("保存common_exam成功！"));
 	}
 	
 	/**
-	 * 删除exam
+	 * 删除common_exam
 	 */
 	@RequiresPermissions("common:exam:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(Exam exam) {
 		examService.delete(exam);
-		return renderResult(Global.TRUE, text("删除exam成功！"));
+		return renderResult(Global.TRUE, text("删除common_exam成功！"));
 	}
 	
 }

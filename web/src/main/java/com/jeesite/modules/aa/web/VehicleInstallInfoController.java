@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSONArray;
 import com.jeesite.modules.aa.vo.VehicleInstallVO;
 import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.ExamUser;
+import com.jeesite.modules.common.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,8 +37,6 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "${adminPath}/aa/vehicleInstallInfo")
 public class VehicleInstallInfoController extends BaseController {
-	//?todo 暂时写死
-	private final static  String EXAM_USER_ID = "11";
 	@Autowired
 	private VehicleInstallInfoService vehicleInstallInfoService;
 	
@@ -83,11 +83,12 @@ public class VehicleInstallInfoController extends BaseController {
 	@PostMapping(value = "save")
 	@ResponseBody
 	public CommonResult save(String itemJson) {
+		ExamUser examUser = UserUtils.getExamUser();
 		List<VehicleInstallVO> vehicleInstallVOList = null;
 		if(itemJson != null && itemJson.trim().length() > 0){
 			vehicleInstallVOList = JSONArray.parseArray(itemJson, VehicleInstallVO.class);
 		}
-		return vehicleInstallInfoService.saveAndDelete(EXAM_USER_ID, vehicleInstallVOList);
+		return vehicleInstallInfoService.saveAndDelete(examUser, vehicleInstallVOList);
 	}
 
 	/**
@@ -97,7 +98,8 @@ public class VehicleInstallInfoController extends BaseController {
 	@PostMapping(value="findList")
 	@ResponseBody
 	public CommonResult findList(){
-		return vehicleInstallInfoService.findList(EXAM_USER_ID);
+		ExamUser examUser = UserUtils.getExamUser();
+		return vehicleInstallInfoService.findList(examUser.getId());
 	}
 
 	/**

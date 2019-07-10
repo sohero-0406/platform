@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.jeesite.modules.aa.entity.CheckBodySkeleton;
 import com.jeesite.modules.aa.vo.VehicleDocumentInfoVO;
 import com.jeesite.modules.common.entity.ExamUser;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.aa.entity.VehicleDocumentInfo;
 import com.jeesite.modules.aa.dao.VehicleDocumentInfoDao;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 车辆单证信息Service
@@ -89,21 +93,23 @@ public class VehicleDocumentInfoService extends CrudService<VehicleDocumentInfoD
      * 批量插入
      *
      * @param examUser
-     * @param vehicleDocumentInfoVO
+     * @param velicleDocumentJson
      */
     @Transactional
-    public void saveBatch(ExamUser examUser, VehicleDocumentInfoVO vehicleDocumentInfoVO) {
-        String[] projects = vehicleDocumentInfoVO.getProject();
-        String[] states = vehicleDocumentInfoVO.getState();
-        Date[] validitys = vehicleDocumentInfoVO.getValidity();
-        Stream.iterate(0, i -> i + 1).limit(projects.length).forEach(i -> {
-            VehicleDocumentInfo info = new VehicleDocumentInfo(); 
-            info.setExamUserId(examUser.getId());
-            info.setPaperId(examUser.getPaperId());
-            info.setProject(projects[i]);
-            info.setState(states[i]);
-            info.setValidity(validitys[i]);
-            super.save(info);
-        });
+    public void saveBatch(ExamUser examUser, String velicleDocumentJson) {
+        JSONArray jsonArray = JSONObject.parseArray(velicleDocumentJson);
+        if (!CollectionUtils.isEmpty(jsonArray)) {
+            for (Object o : jsonArray) {
+                JSONObject object = (JSONObject) o;
+                VehicleDocumentInfo info = new VehicleDocumentInfo();
+                info.setExamUserId(examUser.getId());
+                info.setPaperId(examUser.getPaperId());
+                info.setId(object.getString("id"));
+                info.setProject(object.getString("project"));
+                info.setState(object.getString("state"));
+                info.setValidity(object.getDate("validity"));
+                super.save(info);
+            }
+        }
     }
 }

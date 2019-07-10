@@ -14,6 +14,7 @@ import java.util.Date;
 
 public class VehicleDocumentInfoVO {
 
+
     private String[] project;        // 单证项目
     private String[] state;        // 状态
     private Date[] validity;        // 有效期

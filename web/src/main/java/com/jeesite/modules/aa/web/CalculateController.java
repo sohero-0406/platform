@@ -35,8 +35,6 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "${adminPath}/aa/calculate")
 public class CalculateController extends BaseController {
-	//?todo 暂时写死
-	private final static  String EXAM_USER_ID = "11";
 	@Autowired
 	private CalculateService calculateService;
 	@Autowired

@@ -7,7 +7,6 @@ import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.aa.entity.CheckBodySkeleton;
-import com.jeesite.modules.aa.entity.VehicleDocumentInfo;
 import com.jeesite.modules.aa.service.CheckBodySkeletonService;
 import com.jeesite.modules.aa.vo.CheckBodySkeletonVO;
 import com.jeesite.modules.common.entity.CommonResult;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * 检查车体骨架Controller
@@ -103,11 +101,9 @@ public class CheckBodySkeletonController extends BaseController {
 	@ResponseBody
 	public CommonResult findList() {
 		ExamUser examUser = UserUtils.getExamUser();
-		CheckBodySkeleton checkBodySkeleton = new CheckBodySkeleton();
-		checkBodySkeleton.setExamUserId(examUser.getId());
-		List<CheckBodySkeleton> list = checkBodySkeletonService.findList(checkBodySkeleton);
+		CheckBodySkeletonVO vo = checkBodySkeletonService.findBodySkeleton(examUser);
 		CommonResult result = new CommonResult();
-		result.setData(list);
+		result.setData(vo);
 		return result;
 	}
 
@@ -118,9 +114,7 @@ public class CheckBodySkeletonController extends BaseController {
 	@ResponseBody
 	public CommonResult findAccidentVehicle() {
 		ExamUser examUser = UserUtils.getExamUser();
-		CheckBodySkeleton checkBodySkeleton = new CheckBodySkeleton();
-		checkBodySkeleton.setExamUserId(examUser.getId());
-		CheckBodySkeletonVO vo = checkBodySkeletonService.findAccidentVehicle(checkBodySkeleton);
+		CheckBodySkeletonVO vo = checkBodySkeletonService.findAccidentVehicle(examUser);
 		CommonResult result = new CommonResult();
 		result.setData(vo);
 		return result;

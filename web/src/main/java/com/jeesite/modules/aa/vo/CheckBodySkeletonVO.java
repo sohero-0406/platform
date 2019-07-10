@@ -1,19 +1,22 @@
 package com.jeesite.modules.aa.vo;
 
 import com.jeesite.modules.aa.entity.CheckBodySkeleton;
+import com.jeesite.modules.aa.entity.CheckTradableVehicles;
+import com.jeesite.modules.aa.entity.ExamDetail;
 
 import java.util.List;
 
 /**
  * 检查车体骨架VO
+ *
  * @author lvchangwei
  * @version 2019-07-02
  */
 public class CheckBodySkeletonVO {
 
     private List<CheckBodySkeleton> skeletonList;
-    private String isAccident;
-    private String enableAccidentVehicle;
+    private CheckTradableVehicles checkTradableVehicles;
+    private ExamDetail examDetail;
 
     public List<CheckBodySkeleton> getSkeletonList() {
         return skeletonList;
@@ -23,19 +26,19 @@ public class CheckBodySkeletonVO {
         this.skeletonList = skeletonList;
     }
 
-    public String getIsAccident() {
-        return isAccident;
+    public CheckTradableVehicles getCheckTradableVehicles() {
+        return checkTradableVehicles;
     }
 
-    public void setIsAccident(String isAccident) {
-        this.isAccident = isAccident;
+    public void setCheckTradableVehicles(CheckTradableVehicles checkTradableVehicles) {
+        this.checkTradableVehicles = checkTradableVehicles;
     }
 
-    public String getEnableAccidentVehicle() {
-        return enableAccidentVehicle;
+    public ExamDetail getExamDetail() {
+        return examDetail;
     }
 
-    public void setEnableAccidentVehicle(String enableAccidentVehicle) {
-        this.enableAccidentVehicle = enableAccidentVehicle;
+    public void setExamDetail(ExamDetail examDetail) {
+        this.examDetail = examDetail;
     }
 }

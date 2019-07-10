@@ -4,6 +4,7 @@
 package com.jeesite.modules.aa.service;
 
 import com.jeesite.common.entity.Page;
+import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.common.utils.BaiDuAiUtil;
 import com.jeesite.modules.aa.dao.PictureUserDao;
@@ -12,6 +13,7 @@ import com.jeesite.modules.aa.entity.PictureUser;
 import com.jeesite.modules.aa.vo.PictureTypeAndUserVO;
 import com.jeesite.modules.aa.vo.PictureUserVO;
 import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.ExamUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +40,7 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
 	/**
 	 * 上传图片并保存和识别图片信息
 	 * <p>图片默认上传至D:/appraisalPic/exam/考试用户id/</p>
-	 * @param examUserId 考试用户id
+	 * @param examUser 考试用户
 	 * @param picFile 图片文件
 	 * @param pictureTypeId 图片类型id
 	 * @param id 原图片id
@@ -48,19 +50,25 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
 	 * @return
 	 */
 	@Transactional
-	public CommonResult saveAndDiscernPicture(String examUserId, MultipartFile picFile, String id, String pictureTypeId, String needDiscern) throws IOException {
+	public CommonResult saveAndDiscernPicture(ExamUser examUser, MultipartFile picFile, String id, String pictureTypeId, String needDiscern) throws IOException {
+		String examUserId = examUser.getId();
+		String paperId = examUser.getPaperId();
+		String url = examUserId;
+		if(StringUtils.isBlank(examUserId)){
+			url = paperId;
+		}
 		if(picFile == null || picFile.isEmpty()){
 			return new CommonResult("1003", "上传失败，请选择文件！");
 		}
 		//图片默认存储路径
-		String filePath = "D:/appraisalPic/exam/" + examUserId + "/";
+		String filePath = "D:/appraisalPic/exam/" + url + "/";
 		PictureType pictureType = pictureTypeService.get(pictureTypeId);
 		String fileName = pictureType.getName();
 		String originFileName = picFile.getOriginalFilename();
 		String fileType = originFileName.substring(originFileName.length() - 4);
 		File destFile = new File(filePath + fileName + fileType);
         if(!destFile.getParentFile().exists()){
-            destFile.getParentFile().mkdir();
+            destFile.getParentFile().mkdirs();
         }
 		//执行上传
 		picFile.transferTo(destFile);
@@ -79,8 +87,9 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
 //		}
 		pictureUser.setId(id);
 		pictureUser.setExamUserId(examUserId);
+		pictureUser.setPaperId(paperId);
 		pictureUser.setPictureTypeId(pictureTypeId);
-		pictureUser.setUrl("exam/" + examUserId + "/" + fileName + fileType);
+		pictureUser.setUrl("exam/" + url + "/" + fileName + fileType);
 		pictureUser.setName(fileName);
 		this.save(pictureUser);
 		//删除原图片（因为新图片的名字和老图片名字一致，不需要执行删除操作）
@@ -106,15 +115,15 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
 
     /**
      * 根据考生id和图片父类型id加载图片数据
-     * @param examUserId 考生id
+     * @param examUser 用户
      * @param parentTypeIds 图片父类型ids
      * @return
      */
-	public CommonResult findPictureByParentTypeId(String examUserId, String[] parentTypeIds){
-		if(parentTypeIds == null || parentTypeIds.length <= 0 || parentTypeIds == null || parentTypeIds.length <= 0) {
+	public CommonResult findPictureByParentTypeId(ExamUser examUser, String[] parentTypeIds){
+		if(parentTypeIds == null || parentTypeIds.length <= 0) {
 			return new CommonResult();
 		}
-		List<PictureTypeAndUserVO> picTypeAndUserList = pictureUserDao.findVoListByExamUserIdAndParentTypeId(examUserId, parentTypeIds);
+		List<PictureTypeAndUserVO> picTypeAndUserList = pictureUserDao.findVoListByExamUserIdAndParentTypeId(examUser, parentTypeIds);
 		if(picTypeAndUserList == null){
 			picTypeAndUserList = new ArrayList<>();
 		}
@@ -145,25 +154,20 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
 		return comRes;
     }
 
-    public List<PictureUser> findVehiclePicture(String examUserId){
+    public List<PictureUser> findVehiclePicture(ExamUser examUser){
 		String [] parentTypeIds = new String[]{"1143439093974253568"};//记录车辆基本信息
-		List<PictureUser> pictureUserList = this.pictureUserDao.findListByExamUserIdAndParentTypeId(examUserId, parentTypeIds);
-
-		return pictureUserList;
+		return this.pictureUserDao.findListByExamUserIdAndParentTypeId(examUser, parentTypeIds);
 
 
 	}
 	/**
 	 * 加载图片列表
-	 * @param examUserId 考生用户id
+	 * @param examUser 考生用户
 	 * @param pictureTypeIds 图片类型id
 	 * @return 如果examUserId为空，返回null，如果pictureTypeIds为空，返回所有类型的图片信息
 	 */
-	public List<PictureUser> findList(String examUserId, String[] pictureTypeIds){
-		if (examUserId == null || examUserId.trim().length() <= 0){
-			return null;
-		}
-		return pictureUserDao.findListByExamUserIdAndTypeId(examUserId, pictureTypeIds);
+	public List<PictureUser> findList(ExamUser examUser, String[] pictureTypeIds){
+		return pictureUserDao.findListByExamUserIdAndTypeId(examUser, pictureTypeIds);
 	}
 	/**
 	 * 获取单条数据

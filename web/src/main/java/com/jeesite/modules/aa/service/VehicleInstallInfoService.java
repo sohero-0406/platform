@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.jeesite.modules.aa.vo.VehicleInstallVO;
 import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.ExamUser;
 import com.jeesite.modules.sys.entity.DictData;
 import com.jeesite.modules.sys.utils.DictUtils;
 import org.springframework.stereotype.Service;
@@ -63,39 +64,39 @@ public class VehicleInstallInfoService extends CrudService<VehicleInstallInfoDao
 
 	/**
 	 * 保存加装信息
-	 * @param examUserId 考生id
+	 * @param examUser
 	 * @param vehicleInstallVOList 待保存的加装信息
 	 * @return
 	 */
 	@Transactional
-	public CommonResult saveAndDelete(String examUserId, List<VehicleInstallVO> vehicleInstallVOList){
+	public CommonResult saveAndDelete(ExamUser examUser, List<VehicleInstallVO> vehicleInstallVOList){
 		VehicleInstallInfo vehicleInstallInfo = new VehicleInstallInfo();
-		vehicleInstallInfo.setExamUserId(examUserId);
-		List<VehicleInstallInfo> vehicleInstallInfoList = this. findList(vehicleInstallInfo);
+		vehicleInstallInfo.setExamUserId(examUser.getId());
+		List<VehicleInstallInfo> vehicleInstallInfoList = this.findList(vehicleInstallInfo);
 		if(vehicleInstallVOList == null){
 			vehicleInstallVOList = new ArrayList<>();
 		}
 		//执行删除和更新
-		if(vehicleInstallInfoList != null && vehicleInstallInfoList.size() > 0){
-			for(VehicleInstallInfo vii : vehicleInstallInfoList){
-				boolean isNeedDelete = true;
-				for(VehicleInstallVO vivo : vehicleInstallVOList){
-					if(vii.getId().equals(vivo.getVehicleInstallId())){
-						vii.setProject(vivo.getProject());
-						this.save(vii);
-						isNeedDelete = false;
-						break;
-					}
+		for(VehicleInstallInfo vii : vehicleInstallInfoList){
+			boolean isNeedDelete = true;
+			for(VehicleInstallVO vivo : vehicleInstallVOList){
+				if(vii.getId().equals(vivo.getVehicleInstallId())){
+					vii.setExamUserId(examUser.getId());
+					vii.setProject(vivo.getProject());
+					this.save(vii);
+					isNeedDelete = false;
+					break;
 				}
-				if(isNeedDelete){
-					this.delete(vii);
-				}
+			}
+			if(isNeedDelete){
+				this.delete(vii);
 			}
 		}
 		//执行新增
 		for(VehicleInstallVO vivo : vehicleInstallVOList){
 			if(vivo.getVehicleInstallId() == null || vivo.getVehicleInstallId().trim().length() <= 0){
 				VehicleInstallInfo vii = new VehicleInstallInfo();
+				vii.setExamUserId(examUser.getId());
 				vii.setProject(vivo.getProject());
 				this.save(vii);
 			}

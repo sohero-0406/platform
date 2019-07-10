@@ -5,14 +5,17 @@ import com.jeesite.modules.aa.entity.DelegateUser;
 import com.jeesite.modules.aa.entity.PictureUser;
 import com.jeesite.modules.sys.entity.DictData;
 
+import javax.validation.Valid;
 import java.util.List;
 
 public class BaseInfoVO {
     //用户图片列表
     private List<PictureUser> picList;
     //车辆基本信息
+    @Valid
     private CarInfo carInfo;
     //委托方基本信息
+    @Valid
     private DelegateUser delegateUser;
     //委托书类型列表
     private List<DictData> entrustTypeList;
