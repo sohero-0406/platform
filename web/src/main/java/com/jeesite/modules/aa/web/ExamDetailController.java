@@ -6,7 +6,6 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +44,6 @@ public class ExamDetailController extends BaseController {
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("aa:examDetail:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(ExamDetail examDetail, Model model) {
 		model.addAttribute("examDetail", examDetail);
@@ -55,7 +53,6 @@ public class ExamDetailController extends BaseController {
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("aa:examDetail:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<ExamDetail> listData(ExamDetail examDetail, HttpServletRequest request, HttpServletResponse response) {
@@ -67,7 +64,6 @@ public class ExamDetailController extends BaseController {
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("aa:examDetail:view")
 	@RequestMapping(value = "form")
 	public String form(ExamDetail examDetail, Model model) {
 		model.addAttribute("examDetail", examDetail);
@@ -77,7 +73,6 @@ public class ExamDetailController extends BaseController {
 	/**
 	 * 保存考试详情表
 	 */
-	@RequiresPermissions("aa:examDetail:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated ExamDetail examDetail) {
@@ -88,7 +83,6 @@ public class ExamDetailController extends BaseController {
 	/**
 	 * 删除考试详情表
 	 */
-	@RequiresPermissions("aa:examDetail:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(ExamDetail examDetail) {

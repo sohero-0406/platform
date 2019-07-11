@@ -6,7 +6,6 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +44,6 @@ public class CalculateDepreciationController extends BaseController {
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("aa:calculateDepreciation:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CalculateDepreciation calculateDepreciation, Model model) {
 		model.addAttribute("calculateDepreciation", calculateDepreciation);
@@ -55,7 +53,6 @@ public class CalculateDepreciationController extends BaseController {
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("aa:calculateDepreciation:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<CalculateDepreciation> listData(CalculateDepreciation calculateDepreciation, HttpServletRequest request, HttpServletResponse response) {
@@ -67,7 +64,6 @@ public class CalculateDepreciationController extends BaseController {
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("aa:calculateDepreciation:view")
 	@RequestMapping(value = "form")
 	public String form(CalculateDepreciation calculateDepreciation, Model model) {
 		model.addAttribute("calculateDepreciation", calculateDepreciation);
@@ -77,7 +73,6 @@ public class CalculateDepreciationController extends BaseController {
 	/**
 	 * 保存折旧率估值法
 	 */
-	@RequiresPermissions("aa:calculateDepreciation:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated CalculateDepreciation calculateDepreciation) {
@@ -88,7 +83,6 @@ public class CalculateDepreciationController extends BaseController {
 	/**
 	 * 删除折旧率估值法
 	 */
-	@RequiresPermissions("aa:calculateDepreciation:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(CalculateDepreciation calculateDepreciation) {

@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.modules.common.entity.CommonResult;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -80,7 +79,6 @@ public class VehicleInfoController extends BaseController {
 	/**
 	 * 保存车辆配置全表
 	 */
-	@RequiresPermissions("common:vehicleInfo:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated VehicleInfo vehicleInfo) {

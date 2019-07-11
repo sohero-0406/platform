@@ -6,7 +6,6 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +44,6 @@ public class CalculateCurrentController extends BaseController {
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("aa:calculateCurrent:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CalculateCurrent calculateCurrent, Model model) {
 		model.addAttribute("calculateCurrent", calculateCurrent);
@@ -55,7 +53,6 @@ public class CalculateCurrentController extends BaseController {
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("aa:calculateCurrent:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<CalculateCurrent> listData(CalculateCurrent calculateCurrent, HttpServletRequest request, HttpServletResponse response) {
@@ -67,7 +64,6 @@ public class CalculateCurrentController extends BaseController {
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("aa:calculateCurrent:view")
 	@RequestMapping(value = "form")
 	public String form(CalculateCurrent calculateCurrent, Model model) {
 		model.addAttribute("calculateCurrent", calculateCurrent);
@@ -77,7 +73,6 @@ public class CalculateCurrentController extends BaseController {
 	/**
 	 * 保存现行市价法
 	 */
-	@RequiresPermissions("aa:calculateCurrent:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated CalculateCurrent calculateCurrent) {
@@ -88,7 +83,6 @@ public class CalculateCurrentController extends BaseController {
 	/**
 	 * 删除现行市价法
 	 */
-	@RequiresPermissions("aa:calculateCurrent:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(CalculateCurrent calculateCurrent) {

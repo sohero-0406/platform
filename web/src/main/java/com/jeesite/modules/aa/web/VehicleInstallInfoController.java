@@ -11,7 +11,6 @@ import com.jeesite.modules.aa.vo.VehicleInstallVO;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.ExamUser;
 import com.jeesite.modules.common.utils.UserUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -99,7 +98,7 @@ public class VehicleInstallInfoController extends BaseController {
 	@ResponseBody
 	public CommonResult findList(){
 		ExamUser examUser = UserUtils.getExamUser();
-		return vehicleInstallInfoService.findList(examUser.getId());
+		return vehicleInstallInfoService.findList(examUser);
 	}
 
 	/**

@@ -6,7 +6,6 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +44,6 @@ public class ExamUserController extends BaseController {
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("common:examUser:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(ExamUser examUser, Model model) {
 		model.addAttribute("examUser", examUser);
@@ -55,7 +53,6 @@ public class ExamUserController extends BaseController {
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("common:examUser:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<ExamUser> listData(ExamUser examUser, HttpServletRequest request, HttpServletResponse response) {
@@ -67,7 +64,6 @@ public class ExamUserController extends BaseController {
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("common:examUser:view")
 	@RequestMapping(value = "form")
 	public String form(ExamUser examUser, Model model) {
 		model.addAttribute("examUser", examUser);
@@ -77,7 +73,6 @@ public class ExamUserController extends BaseController {
 	/**
 	 * 保存common_exam_user
 	 */
-	@RequiresPermissions("common:examUser:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated ExamUser examUser) {
@@ -88,7 +83,6 @@ public class ExamUserController extends BaseController {
 	/**
 	 * 删除common_exam_user
 	 */
-	@RequiresPermissions("common:examUser:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(ExamUser examUser) {

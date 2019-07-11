@@ -6,7 +6,6 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +44,6 @@ public class CalculateKmController extends BaseController {
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("aa:calculateKm:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CalculateKm calculateKm, Model model) {
 		model.addAttribute("calculateKm", calculateKm);
@@ -55,7 +53,6 @@ public class CalculateKmController extends BaseController {
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("aa:calculateKm:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<CalculateKm> listData(CalculateKm calculateKm, HttpServletRequest request, HttpServletResponse response) {
@@ -67,7 +64,6 @@ public class CalculateKmController extends BaseController {
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("aa:calculateKm:view")
 	@RequestMapping(value = "form")
 	public String form(CalculateKm calculateKm, Model model) {
 		model.addAttribute("calculateKm", calculateKm);
@@ -77,7 +73,6 @@ public class CalculateKmController extends BaseController {
 	/**
 	 * 保存公里数估值法
 	 */
-	@RequiresPermissions("aa:calculateKm:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated CalculateKm calculateKm) {
@@ -88,7 +83,6 @@ public class CalculateKmController extends BaseController {
 	/**
 	 * 删除公里数估值法
 	 */
-	@RequiresPermissions("aa:calculateKm:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(CalculateKm calculateKm) {

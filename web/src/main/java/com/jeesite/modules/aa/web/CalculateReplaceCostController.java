@@ -6,7 +6,6 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +44,6 @@ public class CalculateReplaceCostController extends BaseController {
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("aa:calculateReplaceCost:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CalculateReplaceCost calculateReplaceCost, Model model) {
 		model.addAttribute("calculateReplaceCost", calculateReplaceCost);
@@ -55,7 +53,6 @@ public class CalculateReplaceCostController extends BaseController {
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("aa:calculateReplaceCost:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<CalculateReplaceCost> listData(CalculateReplaceCost calculateReplaceCost, HttpServletRequest request, HttpServletResponse response) {
@@ -67,7 +64,6 @@ public class CalculateReplaceCostController extends BaseController {
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("aa:calculateReplaceCost:view")
 	@RequestMapping(value = "form")
 	public String form(CalculateReplaceCost calculateReplaceCost, Model model) {
 		model.addAttribute("calculateReplaceCost", calculateReplaceCost);
@@ -77,7 +73,6 @@ public class CalculateReplaceCostController extends BaseController {
 	/**
 	 * 保存重置成本法
 	 */
-	@RequiresPermissions("aa:calculateReplaceCost:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated CalculateReplaceCost calculateReplaceCost) {
@@ -88,7 +83,6 @@ public class CalculateReplaceCostController extends BaseController {
 	/**
 	 * 删除重置成本法
 	 */
-	@RequiresPermissions("aa:calculateReplaceCost:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(CalculateReplaceCost calculateReplaceCost) {

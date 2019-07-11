@@ -30,16 +30,17 @@ public class VehicleInstallInfoService extends CrudService<VehicleInstallInfoDao
 
 	/**
 	 * 根据考生id加载车辆加装信息
-	 * @param examUserId 考生id
+	 * @param examUser 考生
 	 * @return
 	 */
-	public CommonResult findList(String examUserId){
+	public CommonResult findList(ExamUser examUser){
 		List<DictData> ddList = DictUtils.getDictList("aa_vehicle_install_type");
 		VehicleInstallInfo vehicleInstallInfo = new VehicleInstallInfo();
-		vehicleInstallInfo.setExamUserId(examUserId);
-		List<VehicleInstallInfo> vehicleInstallInfoList = this. findList(vehicleInstallInfo);
+		vehicleInstallInfo.setExamUserId(examUser.getId());
+		vehicleInstallInfo.setPaperId(examUser.getPaperId());
+		List<VehicleInstallInfo> vehicleInstallInfoList = this.findList(vehicleInstallInfo);
 		List<VehicleInstallVO> vehicleInstallVOList = new ArrayList<>();
-		VehicleInstallVO vehicleInstallVO = null;
+		VehicleInstallVO vehicleInstallVO;
 		for(DictData dd : ddList){
 			vehicleInstallVO = new VehicleInstallVO();
 			vehicleInstallVO.setProjectName(dd.getDictLabel());
@@ -72,6 +73,7 @@ public class VehicleInstallInfoService extends CrudService<VehicleInstallInfoDao
 	public CommonResult saveAndDelete(ExamUser examUser, List<VehicleInstallVO> vehicleInstallVOList){
 		VehicleInstallInfo vehicleInstallInfo = new VehicleInstallInfo();
 		vehicleInstallInfo.setExamUserId(examUser.getId());
+		vehicleInstallInfo.setPaperId(examUser.getPaperId());
 		List<VehicleInstallInfo> vehicleInstallInfoList = this.findList(vehicleInstallInfo);
 		if(vehicleInstallVOList == null){
 			vehicleInstallVOList = new ArrayList<>();
@@ -82,6 +84,7 @@ public class VehicleInstallInfoService extends CrudService<VehicleInstallInfoDao
 			for(VehicleInstallVO vivo : vehicleInstallVOList){
 				if(vii.getId().equals(vivo.getVehicleInstallId())){
 					vii.setExamUserId(examUser.getId());
+					vii.setPaperId(examUser.getPaperId());
 					vii.setProject(vivo.getProject());
 					this.save(vii);
 					isNeedDelete = false;
@@ -97,6 +100,7 @@ public class VehicleInstallInfoService extends CrudService<VehicleInstallInfoDao
 			if(vivo.getVehicleInstallId() == null || vivo.getVehicleInstallId().trim().length() <= 0){
 				VehicleInstallInfo vii = new VehicleInstallInfo();
 				vii.setExamUserId(examUser.getId());
+				vii.setPaperId(examUser.getPaperId());
 				vii.setProject(vivo.getProject());
 				this.save(vii);
 			}
