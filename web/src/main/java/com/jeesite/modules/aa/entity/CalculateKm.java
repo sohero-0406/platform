@@ -20,7 +20,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="id", attrName="id", label="主键，公里数估值法", isPK=true),
 		@Column(name="sale_price", attrName="salePrice", label="车辆销售价格"),
 		@Column(name="calculate_id", attrName="calculateId", label="外键id"),
-		@Column(name="driving_mileage", attrName="drivingMileage", label="车辆行驶里程"),
 		@Column(name="price", attrName="price", label="评估价格"),
 	}, orderBy="a.id DESC"
 )
@@ -29,7 +28,6 @@ public class CalculateKm extends PreEntity<CalculateKm> {
 	private static final long serialVersionUID = 1L;
 	private Double salePrice;		// 车辆销售价格
 	private String calculateId;		// 外键id
-	private String drivingMileage;		// 车辆行驶里程
 	private Double price;		// 评估价格
 	
 	public CalculateKm() {
@@ -56,16 +54,7 @@ public class CalculateKm extends PreEntity<CalculateKm> {
 	public void setCalculateId(String calculateId) {
 		this.calculateId = calculateId;
 	}
-	
-	@Length(min=0, max=10, message="车辆行驶里程长度不能超过 10 个字符")
-	public String getDrivingMileage() {
-		return drivingMileage;
-	}
 
-	public void setDrivingMileage(String drivingMileage) {
-		this.drivingMileage = drivingMileage;
-	}
-	
 	public Double getPrice() {
 		return price;
 	}

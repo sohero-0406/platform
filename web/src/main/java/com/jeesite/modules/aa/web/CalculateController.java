@@ -11,6 +11,8 @@ import com.jeesite.modules.aa.service.*;
 import com.jeesite.modules.aa.vo.CalculateVO;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.Exam;
+import com.jeesite.modules.common.entity.ExamUser;
+import com.jeesite.modules.common.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,15 +38,7 @@ import java.util.List;
 public class CalculateController extends BaseController {
 	@Autowired
 	private CalculateService calculateService;
-	@Autowired
-	private CalculateDepreciationService calculateDepreciationService;
-	@Autowired
-	private CalculateReplaceCostService calculateReplaceCostService;
-	@Autowired
-	private CalculateKmService calculateKmService;
-	@Autowired
-	private CalculateCurrentService calculateCurrentService;
-	
+
 	/**
 	 * 获取数据
 	 */
@@ -106,39 +100,12 @@ public class CalculateController extends BaseController {
 	 * 获取车辆评估价值算法
 	 * @return
 	 */
-	@PostMapping(value = "get")
+	@PostMapping(value = "getCalculate")
 	@ResponseBody
-	public CommonResult get(String id){
+	public CommonResult getCalculate(){
 		CommonResult comRes = new CommonResult();
-		CalculateVO calculateVO = new CalculateVO();
-		Calculate calculate = null;
-		if(id != null && id.trim().length() > 0){
-			calculate = calculateService.get(id);
-
-			switch (calculate.getType()){
-				case "1"://折旧率估值法
-					CalculateDepreciation cd = new CalculateDepreciation();
-					cd.setCalculateId(id);
-					calculateVO.setCalculateDepreciation(calculateDepreciationService.get(cd));
-					break;
-				case "2"://公里数估值法
-					CalculateKm calculateKm = new CalculateKm();
-					calculateKm.setCalculateId(id);
-					calculateVO.setCalculateKm(calculateKmService.get(calculateKm));
-					break;
-				case "3"://重置成本法
-					CalculateReplaceCost crc = new CalculateReplaceCost();
-					crc.setCalculateId(id);
-					calculateVO.setCalculateReplaceCost(calculateReplaceCostService.get(crc));
-					break;
-				case "4"://现行市价法
-					CalculateCurrent cc = new CalculateCurrent();
-					cc.setCalculateId(id);
-					calculateVO.setCalculateCurrent(calculateCurrentService.get(cc));
-					break;
-			}
-		}
-		calculateVO.setCalculate(calculate);
+		ExamUser examUser = UserUtils.getExamUser();
+		CalculateVO calculateVO = calculateService.getCalculate(examUser);
 		comRes.setData(calculateVO);
 		return comRes;
 	}

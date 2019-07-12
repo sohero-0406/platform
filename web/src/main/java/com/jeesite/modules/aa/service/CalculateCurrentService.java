@@ -72,5 +72,8 @@ public class CalculateCurrentService extends CrudService<CalculateCurrentDao, Ca
 	public void delete(CalculateCurrent calculateCurrent) {
 		super.delete(calculateCurrent);
 	}
-	
+
+    public CalculateCurrent getByEntity(CalculateCurrent calculateCurrent) {
+		return dao.getByEntity(calculateCurrent);
+    }
 }

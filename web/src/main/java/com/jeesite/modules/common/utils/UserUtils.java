@@ -15,7 +15,7 @@ public class UserUtils {
     public static ExamUser getExamUser() {
         HttpServletRequest request = ServletUtils.getRequest();
         ExamUser examUser = (ExamUser) request.getSession().getAttribute("examUser");
-        //学生
+//        学生
         if (null == examUser) {
             examUser = new ExamUser();
             examUser.setId("1");

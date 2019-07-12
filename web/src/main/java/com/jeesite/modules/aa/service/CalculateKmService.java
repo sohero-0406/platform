@@ -72,5 +72,8 @@ public class CalculateKmService extends CrudService<CalculateKmDao, CalculateKm>
 	public void delete(CalculateKm calculateKm) {
 		super.delete(calculateKm);
 	}
-	
+
+	public CalculateKm getByEntity(CalculateKm calculateKm) {
+		return dao.getByEntity(calculateKm);
+	}
 }

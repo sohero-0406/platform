@@ -72,5 +72,8 @@ public class CalculateDepreciationService extends CrudService<CalculateDepreciat
 	public void delete(CalculateDepreciation calculateDepreciation) {
 		super.delete(calculateDepreciation);
 	}
-	
+
+	public CalculateDepreciation getByEntity(CalculateDepreciation calculateDepreciation) {
+		return dao.getByEntity(calculateDepreciation);
+	}
 }

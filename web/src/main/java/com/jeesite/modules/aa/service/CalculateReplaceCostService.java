@@ -72,5 +72,8 @@ public class CalculateReplaceCostService extends CrudService<CalculateReplaceCos
 	public void delete(CalculateReplaceCost calculateReplaceCost) {
 		super.delete(calculateReplaceCost);
 	}
-	
+
+    public CalculateReplaceCost getByEntity(CalculateReplaceCost calculateReplaceCost) {
+		return dao.getByEntity(calculateReplaceCost);
+    }
 }

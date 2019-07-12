@@ -5,6 +5,10 @@ package com.jeesite.modules.aa.service;
 
 import java.util.List;
 
+import com.jeesite.modules.aa.vo.VehicleGradeAssessVO;
+import com.jeesite.modules.common.entity.ExamUser;
+import com.jeesite.modules.sys.entity.DictData;
+import com.jeesite.modules.sys.utils.DictUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,5 +76,27 @@ public class VehicleGradeAssessService extends CrudService<VehicleGradeAssessDao
 	public void delete(VehicleGradeAssess vehicleGradeAssess) {
 		super.delete(vehicleGradeAssess);
 	}
-	
+
+	/**
+	 * 查询车辆等级评定
+	 * @param examUser
+	 * @return
+	 */
+    public VehicleGradeAssessVO getDetail(ExamUser examUser) {
+		VehicleGradeAssessVO vo = new VehicleGradeAssessVO();
+		VehicleGradeAssess vehicleGradeAssess = new VehicleGradeAssess();
+		vehicleGradeAssess.setExamUserId(examUser.getId());
+		vehicleGradeAssess.setPaperId(examUser.getPaperId());
+		vehicleGradeAssess = this.getByEntity(vehicleGradeAssess);
+		vo.setVehicleGradeAssess(vehicleGradeAssess);
+
+		//加载技术状况
+		List<DictData> technicalStatusList = DictUtils.getDictList("aa_technical_status");
+		vo.setTechnicalStatusList(technicalStatusList);
+		return vo;
+    }
+
+	private VehicleGradeAssess getByEntity(VehicleGradeAssess vehicleGradeAssess) {
+    	return dao.getByEntity(vehicleGradeAssess);
+	}
 }

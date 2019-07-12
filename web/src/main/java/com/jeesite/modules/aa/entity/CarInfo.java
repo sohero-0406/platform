@@ -36,7 +36,8 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="fuel_type", attrName="fuelType", label="燃油种类"),
 		@Column(name="register_date", attrName="registerDate", label="初次登记日期"),
 		@Column(name="color", attrName="color", label="车身颜色"),
-		@Column(name="use_year", attrName="useYear", label="已使用年限"),
+		@Column(name="use_year", attrName="useYear", label="已使用年限-年"),
+		@Column(name="use_month", attrName="useMonth", label="已使用年限-月"),
 		@Column(name="engine_overhaul_times", attrName="engineOverhaulTimes", label="发动机大修次数"),
 		@Column(name="car_overhaul_times", attrName="carOverhaulTimes", label="整车大修次数"),
 		@Column(name="maintenance_situation", attrName="maintenanceSituation", label="维修情况"),
@@ -80,7 +81,8 @@ public class CarInfo extends PreEntity<CarInfo> {
 	private String fuelType;		// 燃油种类
 	private String registerDate;		// 初次登记日期
 	private String color;		// 车身颜色
-	private String useYear;		// 已使用年限
+	private Integer useYear;		// 已使用年限-年
+	private Integer useMonth;		// 已使用年限-月
 	private String engineOverhaulTimes;		// 发动机大修次数
 	private String carOverhaulTimes;		// 整车大修次数
 	private String maintenanceSituation;		// 维修情况
@@ -271,15 +273,24 @@ public class CarInfo extends PreEntity<CarInfo> {
 		this.color = color;
 	}
 	
-	@Length(min=0, max=16, message="已使用年限长度不能超过 16 个字符")
-	public String getUseYear() {
+	@Length(min=0, max=10, message="已使用年限（年）长度不能超过 10 个字符")
+	public Integer getUseYear() {
 		return useYear;
 	}
 
-	public void setUseYear(String useYear) {
+	public void setUseYear(Integer useYear) {
 		this.useYear = useYear;
 	}
-	
+
+	@Length(min=0, max=10, message="已使用年限（月）长度不能超过 10 个字符")
+	public Integer getUseMonth() {
+		return useMonth;
+	}
+
+	public void setUseMonth(Integer useMonth) {
+		this.useMonth = useMonth;
+	}
+
 	@Length(min=0, max=10, message="发动机大修次数长度不能超过 10 个字符")
 	public String getEngineOverhaulTimes() {
 		return engineOverhaulTimes;

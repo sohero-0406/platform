@@ -6,6 +6,10 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.modules.aa.vo.VehicleGradeAssessVO;
+import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.ExamUser;
+import com.jeesite.modules.common.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,9 +79,12 @@ public class VehicleGradeAssessController extends BaseController {
 	 */
 	@PostMapping(value = "save")
 	@ResponseBody
-	public String save(@Validated VehicleGradeAssess vehicleGradeAssess) {
+	public CommonResult save(@Validated VehicleGradeAssess vehicleGradeAssess) {
+		ExamUser examUser = UserUtils.getExamUser();
+		vehicleGradeAssess.setExamUserId(examUser.getId());
+		vehicleGradeAssess.setPaperId(examUser.getPaperId());
 		vehicleGradeAssessService.save(vehicleGradeAssess);
-		return renderResult(Global.TRUE, text("保存车辆等级评定成功！"));
+		return new CommonResult();
 	}
 	
 	/**
@@ -89,5 +96,17 @@ public class VehicleGradeAssessController extends BaseController {
 		vehicleGradeAssessService.delete(vehicleGradeAssess);
 		return renderResult(Global.TRUE, text("删除车辆等级评定成功！"));
 	}
-	
+
+	/**
+	 * 查询车辆等级评定
+	 */
+	@RequestMapping(value = "getDetail")
+	@ResponseBody
+	public CommonResult getDetail() {
+		ExamUser examUser = UserUtils.getExamUser();
+		VehicleGradeAssessVO vo = vehicleGradeAssessService.getDetail(examUser);
+		CommonResult result = new CommonResult();
+		result.setData(vo);
+		return result;
+	}
 }
