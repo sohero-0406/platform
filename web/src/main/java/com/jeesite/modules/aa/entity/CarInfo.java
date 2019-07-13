@@ -273,7 +273,6 @@ public class CarInfo extends PreEntity<CarInfo> {
 		this.color = color;
 	}
 	
-	@Length(min=0, max=10, message="已使用年限（年）长度不能超过 10 个字符")
 	public Integer getUseYear() {
 		return useYear;
 	}
@@ -282,7 +281,6 @@ public class CarInfo extends PreEntity<CarInfo> {
 		this.useYear = useYear;
 	}
 
-	@Length(min=0, max=10, message="已使用年限（月）长度不能超过 10 个字符")
 	public Integer getUseMonth() {
 		return useMonth;
 	}
