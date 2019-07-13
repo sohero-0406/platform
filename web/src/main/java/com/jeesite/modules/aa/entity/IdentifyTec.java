@@ -40,6 +40,7 @@ public class IdentifyTec extends PreEntity<IdentifyTec> {
 
 	//非数据库字段
 	private List<IdentifyTecDetail> itemList;
+	//学生或教师已作答的题目
 	private Map<String,IdentifyTecDetail> itemMap;
 	private ExamDetail examDetail;
 

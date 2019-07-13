@@ -92,6 +92,7 @@ public class IdentifyTecService extends CrudService<IdentifyTecDao, IdentifyTec>
 		identifyTec.setPaperId(examUser.getPaperId());
 		//业务开始
     	JSONObject object = JSONObject.parseObject(itemJson);
+		identifyTec.setId(object.getString("id"));
     	identifyTec.setType(object.getString("type"));
     	identifyTec.setTotalDeduct(object.getString("totalDeduct"));
     	identifyTec.setDescription(object.getString("description"));
@@ -101,6 +102,7 @@ public class IdentifyTecService extends CrudService<IdentifyTecDao, IdentifyTec>
 			for (Object o : itemList) {
 				JSONObject item = (JSONObject) o;
 				IdentifyTecDetail detail = new IdentifyTecDetail();
+				detail.setId(item.getString("id"));
 				detail.setTechnologyInfoId(item.getString("type"));
 				detail.setCode(item.getString("code"));
 				detail.setDeductNum(item.getString("deductNum"));

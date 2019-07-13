@@ -11,6 +11,7 @@ import java.util.Map;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.modules.aa.entity.ExamDetail;
 import com.jeesite.modules.aa.entity.IdentifyTec;
+import com.jeesite.modules.aa.entity.TechnologyInfo;
 import com.jeesite.modules.common.entity.Exam;
 import com.jeesite.modules.common.entity.ExamUser;
 import com.jeesite.modules.common.service.ExamService;
@@ -41,6 +42,9 @@ public class IdentifyTecDetailService extends CrudService<IdentifyTecDetailDao, 
 
     @Autowired
     private ExamService examService;
+
+    @Autowired
+    private TechnologyInfoService technologyInfoService;
 
     /**
      * 获取单条数据
@@ -101,15 +105,14 @@ public class IdentifyTecDetailService extends CrudService<IdentifyTecDetailDao, 
     public IdentifyTec findData(IdentifyTec identifyTec, ExamUser examUser) {
         String type = identifyTec.getType();
 
+        //查询启用项
+        ExamDetail examDetail = new ExamDetail();
         //路试项
         if ("7".equals(type)) {
-            //查询启用项
-            ExamDetail examDetail = new ExamDetail();
             //考生
             if (StringUtils.isNotBlank(examUser.getExamId())) {
                 examDetail.setExamId(examUser.getExamId());
                 examDetail = examDetailService.getByEntity(examDetail);
-                identifyTec.setExamDetail(examDetail);
                 //未查到或者为启用，均查询学生答案，否则查询正确答案
                 if (null == examDetail || "1".equals(examDetail.getEnableCheckBodySkeleton())) {
                     identifyTec.setExamUserId(examUser.getId());
@@ -128,10 +131,11 @@ public class IdentifyTecDetailService extends CrudService<IdentifyTecDetailDao, 
             identifyTec.setPaperId(examUser.getPaperId());
         }
 
+        //查询考生或教师已作答过的题目
         identifyTec = identifyTecDetailDao.findData(identifyTec);
+        Map<String, IdentifyTecDetail> map = new HashMap<>();
         if (null != identifyTec) {
             List<IdentifyTecDetail> detailList = identifyTec.getItemList();
-            Map<String, IdentifyTecDetail> map = new HashMap<>();
             for (IdentifyTecDetail detail : detailList) {
                 if ("正常".equals(detail.getCode()) || "无".equals(detail.getCode()) || "是".equals(detail.getCode())) {
                     detail.setCheckRes("正常");
@@ -142,19 +146,25 @@ public class IdentifyTecDetailService extends CrudService<IdentifyTecDetailDao, 
             }
             //外包接口需要、有点傻逼
             identifyTec.setItemList(null);
-            identifyTec.setItemMap(map);
         } else {
             identifyTec = new IdentifyTec();
         }
-        //启用路试项
-        if ("7".equals(type)) {
-            ExamDetail examDetail = new ExamDetail();
-            if (StringUtils.isNotBlank(examUser.getExamId())) {
-                examDetail.setExamId(examUser.getExamId());
-                examDetail = examDetailService.getByEntity(examDetail);
+        identifyTec.setExamDetail(examDetail);
+
+        //查询全部节点的id及对应名字
+        TechnologyInfo technologyInfo = new TechnologyInfo();
+        technologyInfo.setType(type);
+        List<TechnologyInfo> infoList = technologyInfoService.findList(technologyInfo);
+        for (TechnologyInfo info : infoList) {
+            String key = info.getName();
+            if (!map.containsKey(key)) {
+                IdentifyTecDetail detail = new IdentifyTecDetail();
+                detail.setTechnologyInfoId(info.getId());
+                detail.setTypeName(info.getName());
+                map.put(info.getName(), detail);
             }
-            identifyTec.setExamDetail(examDetail);
         }
+        identifyTec.setItemMap(map);
         return identifyTec;
     }
 }
