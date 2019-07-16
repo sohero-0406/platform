@@ -103,7 +103,7 @@ public class IdentifyTecService extends CrudService<IdentifyTecDao, IdentifyTec>
 				JSONObject item = (JSONObject) o;
 				IdentifyTecDetail detail = new IdentifyTecDetail();
 				detail.setId(item.getString("id"));
-				detail.setTechnologyInfoId(item.getString("type"));
+				detail.setTechnologyInfoId(item.getString("technologyInfoId"));
 				detail.setCode(item.getString("code"));
 				detail.setDeductNum(item.getString("deductNum"));
 				detail.setDegree(item.getString("degree"));

@@ -43,7 +43,9 @@ public class Exam extends DataEntity<Exam> {
 	private Date endTime;		// 结束时间
 	private String state;		// 状态
 	private String type;		// 考试类型
-	
+
+	private String paperName; //考试名称
+
 	public Exam() {
 		this(null);
 	}
@@ -122,5 +124,12 @@ public class Exam extends DataEntity<Exam> {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
+	public String getPaperName() {
+		return paperName;
+	}
+
+	public void setPaperName(String paperName) {
+		this.paperName = paperName;
+	}
 }

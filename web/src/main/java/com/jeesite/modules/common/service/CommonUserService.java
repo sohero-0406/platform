@@ -72,5 +72,15 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
 	public void delete(CommonUser commonUser) {
 		super.delete(commonUser);
 	}
+
+	/**
+	 *  依据用户名查找用户信息 getByEntity
+	 */
+	@Transactional(readOnly=false)
+	public CommonUser getByEntityUserName(String userName) {
+		CommonUser commonUser = new CommonUser();
+		commonUser.setUserName(userName);
+		return  dao.getByEntity(commonUser);
+	}
 	
 }

@@ -6,6 +6,7 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,17 +46,15 @@ public class CommonUserController extends BaseController {
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("common:commonUser:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CommonUser commonUser, Model model) {
 		model.addAttribute("commonUser", commonUser);
 		return "modules/common/commonUserList";
 	}
-	
+
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("common:commonUser:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<CommonUser> listData(CommonUser commonUser, HttpServletRequest request, HttpServletResponse response) {
@@ -67,7 +66,6 @@ public class CommonUserController extends BaseController {
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("common:commonUser:view")
 	@RequestMapping(value = "form")
 	public String form(CommonUser commonUser, Model model) {
 		model.addAttribute("commonUser", commonUser);
@@ -77,7 +75,6 @@ public class CommonUserController extends BaseController {
 	/**
 	 * 保存common_user
 	 */
-	@RequiresPermissions("common:commonUser:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated CommonUser commonUser) {
@@ -88,12 +85,48 @@ public class CommonUserController extends BaseController {
 	/**
 	 * 删除common_user
 	 */
-	@RequiresPermissions("common:commonUser:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(CommonUser commonUser) {
 		commonUserService.delete(commonUser);
 		return renderResult(Global.TRUE, text("删除common_user成功！"));
 	}
-	
+
+	/**
+	 * 用户登录功能
+	 */
+
+	/**
+	 * 删除common_user
+	 */
+	@RequestMapping(value = "login")
+	@ResponseBody
+	public CommonResult login(CommonUser commonUser) {
+		CommonResult comRes = new CommonResult();
+		//用户名
+		String userName = commonUser.getUserName();
+		//密码
+		String password = commonUser.getPassword();
+		//判断是否输入用户名
+		if(null==userName || "".equals(userName)){
+			comRes.setMsg("请求失败");
+			comRes.setData("请输入用户名");
+			return comRes;
+		}
+		//判断密码是否为空
+		if(null==password || "".equals(password)){
+			comRes.setMsg("请求失败");
+			comRes.setData("请输入密码");
+			return comRes;
+		}
+		//根据用户名查找用户信息
+		CommonUser user = commonUserService.getByEntityUserName(userName);
+		if(null==user.getUserName()){
+
+		}
+
+
+		return comRes;
+	}
+
 }

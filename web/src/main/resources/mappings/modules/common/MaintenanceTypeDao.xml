@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jeesite.modules.common.dao.ExamDao">
+<mapper namespace="com.jeesite.modules.common.dao.MaintenanceTypeDao">
 	
 	<!-- 查询数据
-	<select id="findList" resultType="Exam">
+	<select id="findList" resultType="MaintenanceType">
 		SELECT ${sqlMap.column.toSql()}
 		FROM ${sqlMap.table.toSql()}
 		<where>
@@ -11,10 +11,5 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-
-	<select id="getExamInfo" resultType="Exam">
-
-
-	</select>
-
+	
 </mapper>

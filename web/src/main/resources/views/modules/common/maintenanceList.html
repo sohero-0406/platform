@@ -1,0 +1,204 @@
+<% layout('/layouts/default.html', {title: '车辆维保记录管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('车辆维保记录管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('common:maintenance:edit')){ %>
+					<a href="${ctx}/common/maintenance/form" class="btn btn-default btnTool" title="${text('新增车辆维保记录')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${maintenance}" action="${ctx}/common/maintenance/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('二级编码')}：</label>
+					<div class="control-inline">
+						<#form:input path="resultCode" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('二级编码描述')}：</label>
+					<div class="control-inline">
+						<#form:input path="resultMsg" maxlength="128" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('品牌')}：</label>
+					<div class="control-inline">
+						<#form:input path="brand" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车型')}：</label>
+					<div class="control-inline">
+						<#form:input path="modelName" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车系')}：</label>
+					<div class="control-inline">
+						<#form:input path="seriesName" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('vin码')}：</label>
+					<div class="control-inline">
+						<#form:input path="vin" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('生产厂商')}：</label>
+					<div class="control-inline">
+						<#form:input path="manufacturer" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('生产年份')}：</label>
+					<div class="control-inline">
+						<#form:input path="makeDate" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('变速箱类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="transmissionType" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('排量')}：</label>
+					<div class="control-inline">
+						<#form:input path="displacement" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('排放标准')}：</label>
+					<div class="control-inline">
+						<#form:input path="effluentStandard" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否火烧，否，是')}：</label>
+					<div class="control-inline">
+						<#form:input path="carFireFlag" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否水泡')}：</label>
+					<div class="control-inline">
+						<#form:input path="carWaterFlag" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('重要组成部件是否有维修')}：</label>
+					<div class="control-inline">
+						<#form:input path="carComponentRecordsFlag" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('结构件是否有维修')}：</label>
+					<div class="control-inline">
+						<#form:input path="carConstructRecordsFlag" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('外观覆盖件是否有维修，否；是')}：</label>
+					<div class="control-inline">
+						<#form:input path="carOutsideRecordsFlag" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('公里数是否正常')}：</label>
+					<div class="control-inline">
+						<#form:input path="mileageIsNormalFlag" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('预估公里数，0表示为估出')}：</label>
+					<div class="control-inline">
+						<#form:input path="mileageEstimate" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('最后一次保养时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="lastMainTainTime" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('每年保养次数')}：</label>
+					<div class="control-inline">
+						<#form:input path="mainTainTimes" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('最后一次维修时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="lastRepairTime" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('每年行驶公里数')}：</label>
+					<div class="control-inline">
+						<#form:input path="mileageEveryYear" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("二级编码")}', name:'resultCode', index:'a.result_code', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/common/maintenance/form?id='+row.id+'" class="btnList" data-title="${text("编辑车辆维保记录")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("二级编码描述")}', name:'resultMsg', index:'a.result_msg', width:150, align:"left"},
+		{header:'${text("品牌")}', name:'brand', index:'a.brand', width:150, align:"left"},
+		{header:'${text("车型")}', name:'modelName', index:'a.model_name', width:150, align:"left"},
+		{header:'${text("车系")}', name:'seriesName', index:'a.series_name', width:150, align:"left"},
+		{header:'${text("vin码")}', name:'vin', index:'a.vin', width:150, align:"left"},
+		{header:'${text("生产厂商")}', name:'manufacturer', index:'a.manufacturer', width:150, align:"left"},
+		{header:'${text("生产年份")}', name:'makeDate', index:'a.make_date', width:150, align:"left"},
+		{header:'${text("变速箱类型")}', name:'transmissionType', index:'a.transmission_type', width:150, align:"left"},
+		{header:'${text("排量")}', name:'displacement', index:'a.displacement', width:150, align:"left"},
+		{header:'${text("排放标准")}', name:'effluentStandard', index:'a.effluent_standard', width:150, align:"left"},
+		{header:'${text("是否火烧，否，是")}', name:'carFireFlag', index:'a.car_fire_flag', width:150, align:"left"},
+		{header:'${text("是否水泡")}', name:'carWaterFlag', index:'a.car_water_flag', width:150, align:"left"},
+		{header:'${text("重要组成部件是否有维修")}', name:'carComponentRecordsFlag', index:'a.car_component_records_flag', width:150, align:"left"},
+		{header:'${text("结构件是否有维修")}', name:'carConstructRecordsFlag', index:'a.car_construct_records_flag', width:150, align:"left"},
+		{header:'${text("外观覆盖件是否有维修，否；是")}', name:'carOutsideRecordsFlag', index:'a.car_outside_records_flag', width:150, align:"left"},
+		{header:'${text("公里数是否正常")}', name:'mileageIsNormalFlag', index:'a.mileage_is_normal_flag', width:150, align:"left"},
+		{header:'${text("预估公里数，0表示为估出")}', name:'mileageEstimate', index:'a.mileage_estimate', width:150, align:"left"},
+		{header:'${text("最后一次保养时间")}', name:'lastMainTainTime', index:'a.last_main_tain_time', width:150, align:"left"},
+		{header:'${text("每年保养次数")}', name:'mainTainTimes', index:'a.main_tain_times', width:150, align:"left"},
+		{header:'${text("最后一次维修时间")}', name:'lastRepairTime', index:'a.last_repair_time', width:150, align:"left"},
+		{header:'${text("每年行驶公里数")}', name:'mileageEveryYear', index:'a.mileage_every_year', width:150, align:"left"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('common:maintenance:edit')){ %>
+				actions.push('<a href="${ctx}/common/maintenance/form?id='+row.id+'" class="btnList" title="${text("编辑车辆维保记录")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/common/maintenance/delete?id='+row.id+'" class="btnList" title="${text("删除车辆维保记录")}" data-confirm="${text("确认要删除该车辆维保记录吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

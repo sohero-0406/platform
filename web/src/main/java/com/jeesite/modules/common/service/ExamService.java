@@ -72,5 +72,13 @@ public class ExamService extends CrudService<ExamDao, Exam> {
 	public void delete(Exam exam) {
 		super.delete(exam);
 	}
+
+	/**
+	 *  获取考试信息
+	 */
+	@Transactional(readOnly=false)
+	public List<Exam> getExamInfo() {
+		return dao.getExamInfo();
+	}
 	
 }
