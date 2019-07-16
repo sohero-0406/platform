@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.aa.dao.PaperDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="Paper">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+
+	<!-- 查询试卷列表 -->
+	<select id="getPaperList" resultType="Paper">
+		SELECT a.*,b.license_plate_num as "carInfo.licensePlateNum",b.vin_code as "carInfo.vinCode"
+		FROM aa_paper as a
+		LEFT JOIN aa_car_info as b on a.id = b.paper_id
+		where a.status = '0'
+	</select>
+	
+</mapper>
