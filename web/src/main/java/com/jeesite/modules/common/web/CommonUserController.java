@@ -6,6 +6,7 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,23 +110,30 @@ public class CommonUserController extends BaseController {
 		String password = commonUser.getPassword();
 		//判断是否输入用户名
 		if(null==userName || "".equals(userName)){
-			comRes.setMsg("请求失败");
-			comRes.setData("请输入用户名");
+			comRes.setCode(CodeConstant.INCORRECT_USER_NAME_OR_PASSWORD);
+			comRes.setMsg("请输入用户名");
 			return comRes;
 		}
 		//判断密码是否为空
 		if(null==password || "".equals(password)){
-			comRes.setMsg("请求失败");
-			comRes.setData("请输入密码");
+			comRes.setCode(CodeConstant.INCORRECT_USER_NAME_OR_PASSWORD);
+			comRes.setMsg("请输入密码");
 			return comRes;
 		}
 		//根据用户名查找用户信息
 		CommonUser user = commonUserService.getByEntityUserName(userName);
-		if(null==user.getUserName()){
-
+		if(null==user){
+			comRes.setCode(CodeConstant.INCORRECT_USER_NAME_OR_PASSWORD);
+			comRes.setMsg("用户名不存在");
+			return comRes;
 		}
-
-
+		//判断密码是否正确
+		if(!(password.equals(user.getPassword()))){
+			comRes.setCode(CodeConstant.INCORRECT_USER_NAME_OR_PASSWORD);
+			comRes.setMsg("您所输入的密码不正确");
+			return comRes;
+		}
+		comRes.setData("登录成功");
 		return comRes;
 	}
 
