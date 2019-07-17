@@ -111,13 +111,13 @@ public class CommonUserController extends BaseController {
 		//密码
 		String password = commonUser.getPassword();
 		//判断是否输入用户名
-		if(null==userName || "".equals(userName)){
+		if(StringUtils.isBlank(userName)){
 			comRes.setCode(CodeConstant.INCORRECT_USER_NAME_OR_PASSWORD);
 			comRes.setMsg("请输入用户名");
 			return comRes;
 		}
 		//判断密码是否为空
-		if(null==password || "".equals(password)){
+		if(StringUtils.isBlank(password)){
 			comRes.setCode(CodeConstant.INCORRECT_USER_NAME_OR_PASSWORD);
 			comRes.setMsg("请输入密码");
 			return comRes;
@@ -130,12 +130,12 @@ public class CommonUserController extends BaseController {
 			return comRes;
 		}
 		//判断密码是否正确
-		if(!(password.equals(user.getPassword()))){
+		if(!password.equals(user.getPassword())){
 			comRes.setCode(CodeConstant.INCORRECT_USER_NAME_OR_PASSWORD);
 			comRes.setMsg("您所输入的密码不正确");
 			return comRes;
 		}
-		comRes.setData("登录成功");
+		comRes.setMsg("登录成功");
 		return comRes;
 	}
 

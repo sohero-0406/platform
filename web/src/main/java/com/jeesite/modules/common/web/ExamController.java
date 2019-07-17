@@ -6,6 +6,7 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.common.idgen.IdWorker;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,8 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.entity.Exam;
 import com.jeesite.modules.common.service.ExamService;
+
+import java.util.List;
 
 /**
  * common_examController
@@ -99,9 +102,11 @@ public class ExamController extends BaseController {
     @ResponseBody
     public CommonResult getExamInfo() {
         CommonResult comRes = new CommonResult();
-        comRes.setData(examService.getExamInfo());
+        List<Exam> examList = examService.getExamInfo();
+        comRes.setData(examList);
         return comRes;
     }
+
 
 
 }
