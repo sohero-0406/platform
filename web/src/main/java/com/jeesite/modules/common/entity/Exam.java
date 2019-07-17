@@ -32,7 +32,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
-public class Exam extends DataEntity<Exam> {
+public class Exam extends PreEntity<Exam> {
 	
 	private static final long serialVersionUID = 1L;
 	private String scoreId;		// 评分表id

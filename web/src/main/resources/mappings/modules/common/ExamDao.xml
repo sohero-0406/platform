@@ -13,7 +13,17 @@
 	</select> -->
 
 	<select id="getExamInfo" resultType="Exam">
-
+		select
+		exam.id,
+		exam.name,
+		exam.duration,
+		paper.name as paperName,
+		exam.create_date,
+		exam.state,
+		exam.paper_id
+		from common_Exam as exam
+		left join aa_paper paper on exam.paper_id = paper.id
+		where exam.status = '0'
 
 	</select>
 

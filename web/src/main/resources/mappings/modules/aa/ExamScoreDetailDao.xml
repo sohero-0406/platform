@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.aa.dao.ExamScoreDetailDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="ExamScoreDetail">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+
+
+
+	<resultMap id="findDataMap" type="ExamScoreClassify">
+		<id property="id" column="id"></id>
+		<result property="examId" column="exam_id"></result>
+		<result property="totalDeduct" column="total_deduct"></result>
+		<result property="score" column="score"></result>
+		<result property="examScoreInfoId" column="exam_score_info_id"></result>
+		<collection property="itemList" ofType="ExamScoreDetail">
+			<id property="id" column="examScoreDetailId"></id>
+			<result property="technologyInfoId" column="technology_info_id"></result>
+			<result property="infoName" column="name"></result>
+			<result property="scoreInfoId" column="score_info_id"></result>
+		</collection>
+	</resultMap>
+
+	<select id="findData" resultMap="findDataMap">
+		select
+		  class.id,
+		  class.exam_id,
+		  class.score,
+		  class.exam_score_info_id,
+		  detail.score_info_id,
+		  detail.id as examScoreDetailId,
+		  detail.score_info_id,
+		  detail.score as oneScore,
+		  info.name
+		FROM
+		aa_exam_score_detail as detail
+		left join aa_exam_score_classify as class on class.id = detail.score_classify_id
+		left join aa_exam_score_info as info on info.id = detail.score_info_id
+
+	</select>
+
+
+</mapper>
