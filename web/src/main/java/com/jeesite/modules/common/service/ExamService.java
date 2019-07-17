@@ -80,5 +80,15 @@ public class ExamService extends CrudService<ExamDao, Exam> {
 	public List<Exam> getExamInfo() {
 		return dao.getExamInfo();
 	}
-	
+
+	/**
+	 *  新建考试功能
+	 */
+	@Transactional(readOnly=false)
+	public void saveExamInfo() {
+
+	}
+
+
+
 }

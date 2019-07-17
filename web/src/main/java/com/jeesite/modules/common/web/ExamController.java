@@ -107,6 +107,19 @@ public class ExamController extends BaseController {
         return comRes;
     }
 
+    /**
+     * 新建考试功能
+     */
+    @RequestMapping(value = "saveExamInfo")
+    @ResponseBody
+    public CommonResult saveExamInfo() {
+        CommonResult comRes = new CommonResult();
+        List<Exam> examList = examService.getExamInfo();
+
+        comRes.setData(examList);
+        return comRes;
+    }
+
 
 
 }

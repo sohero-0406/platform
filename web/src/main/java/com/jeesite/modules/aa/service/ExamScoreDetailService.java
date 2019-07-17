@@ -5,7 +5,11 @@ package com.jeesite.modules.aa.service;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.modules.aa.entity.ExamScoreClassify;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +26,9 @@ import com.jeesite.modules.aa.dao.ExamScoreDetailDao;
 @Service
 @Transactional(readOnly=true)
 public class ExamScoreDetailService extends CrudService<ExamScoreDetailDao, ExamScoreDetail> {
-	
+
+	@Autowired
+	private ExamScoreClassifyService examScoreClassifyService;
 	/**
 	 * 获取单条数据
 	 * @param examScoreDetail
@@ -79,5 +85,31 @@ public class ExamScoreDetailService extends CrudService<ExamScoreDetailDao, Exam
 		return  dao.findData();
 	}
 
-	
+	/**
+	 * 保存评分项
+	 */
+	@Transactional(readOnly=false)
+	public void saveExamScoreInfo(String examScoreJson) {
+		JSONObject obj = JSONObject.parseObject(examScoreJson);
+		JSONArray recordsArray = obj.getJSONArray("data");
+		//判断非空
+		if(CollectionUtils.isNotEmpty(recordsArray)){
+			for(Object examScoreClassifyJson:recordsArray){
+				if(examScoreClassifyJson!=null){
+					//得到json数据转换为对应的实体类 保存到哦数据库内
+					ExamScoreClassify examScoreClassify = JSONObject.parseObject(examScoreClassifyJson.toString(),ExamScoreClassify.class);
+					examScoreClassifyService.save(examScoreClassify);
+					//循环分类下 评分项
+					List<ExamScoreDetail> examScoreDetailList = examScoreClassify.getItemList();
+					if(CollectionUtils.isNotEmpty(examScoreDetailList)){  //非空判断
+						for(ExamScoreDetail examScoreDetail:examScoreDetailList){
+							//保存关联外键
+							examScoreDetail.setScoreClassifyId(examScoreClassify.getId());
+							this.save(examScoreDetail);
+						}
+					}
+				}
+			}
+		}
+	}
 }

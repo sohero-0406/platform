@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.modules.aa.entity.ExamScoreClassify;
 import com.jeesite.modules.common.entity.CommonResult;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -106,6 +105,18 @@ public class ExamScoreDetailController extends BaseController {
 		comRes.setData(ExamScoreClassify);
 		return comRes;
 	}
+
+	/**
+	 * 新建评分项分值
+	 */
+	@RequestMapping(value = "saveExamScoreInfo")
+	@ResponseBody
+	public CommonResult saveExamScoreInfo(String examScoreJson) {
+		CommonResult comRes = new CommonResult();
+		examScoreDetailService.saveExamScoreInfo(examScoreJson);
+		return comRes;
+	}
+
 
 
 }

@@ -25,6 +25,7 @@
 			<result property="technologyInfoId" column="technology_info_id"></result>
 			<result property="infoName" column="name"></result>
 			<result property="scoreInfoId" column="score_info_id"></result>
+			<result property="score" column="oneScore"></result>
 		</collection>
 	</resultMap>
 
