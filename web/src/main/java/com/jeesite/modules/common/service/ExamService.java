@@ -5,6 +5,12 @@ package com.jeesite.modules.common.service;
 
 import java.util.List;
 
+import com.jeesite.modules.aa.entity.ExamDetail;
+import com.jeesite.modules.aa.service.ExamDetailService;
+import com.jeesite.modules.aa.service.ExamScoreClassifyService;
+import com.jeesite.modules.aa.service.ExamScoreDetailService;
+import com.jeesite.modules.aa.vo.ExamVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +27,13 @@ import com.jeesite.modules.common.dao.ExamDao;
 @Service
 @Transactional(readOnly=true)
 public class ExamService extends CrudService<ExamDao, Exam> {
-	
+
+
+	@Autowired
+	private ExamScoreDetailService examScoreDetailService;
+	@Autowired
+	private ExamDetailService examDetailService;
+
 	/**
 	 * 获取单条数据
 	 * @param exam
@@ -85,7 +97,15 @@ public class ExamService extends CrudService<ExamDao, Exam> {
 	 *  新建考试功能
 	 */
 	@Transactional(readOnly=false)
-	public void saveExamInfo() {
+	public void saveExamInfo(ExamVO examVO, String examScoreJson) {
+
+		super.save(examVO.getExam());
+		//获取考试id
+		String examId = examVO.getExam().getId();
+		//保存--分值设定
+		examScoreDetailService.saveExamScoreInfo(examScoreJson,examId);
+		//保存--内容模块选择
+		examDetailService.saveExamInfoDetail(examId,examVO.getExamDetail());
 
 	}
 

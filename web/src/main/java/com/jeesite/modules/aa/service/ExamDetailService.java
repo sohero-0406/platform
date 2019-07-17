@@ -76,4 +76,14 @@ public class ExamDetailService extends CrudService<ExamDetailDao, ExamDetail> {
     public ExamDetail getByEntity(ExamDetail examDetail) {
 		return dao.getByEntity(examDetail);
     }
+
+	/**\
+	 *  （后台）新建考试 --- 模块选择项
+	 */
+	@Transactional(readOnly=false)
+	public void saveExamInfoDetail(String examId,ExamDetail examDetail) {
+		//保存考试id
+		examDetail.setExamId(examId);
+		super.save(examDetail);
+	}
 }

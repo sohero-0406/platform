@@ -89,7 +89,7 @@ public class ExamScoreDetailService extends CrudService<ExamScoreDetailDao, Exam
 	 * 保存评分项
 	 */
 	@Transactional(readOnly=false)
-	public void saveExamScoreInfo(String examScoreJson) {
+	public void saveExamScoreInfo(String examScoreJson,String examId) {
 		JSONObject obj = JSONObject.parseObject(examScoreJson);
 		JSONArray recordsArray = obj.getJSONArray("data");
 		//判断非空
@@ -98,6 +98,7 @@ public class ExamScoreDetailService extends CrudService<ExamScoreDetailDao, Exam
 				if(examScoreClassifyJson!=null){
 					//得到json数据转换为对应的实体类 保存到哦数据库内
 					ExamScoreClassify examScoreClassify = JSONObject.parseObject(examScoreClassifyJson.toString(),ExamScoreClassify.class);
+					examScoreClassify.setExamId(examId);
 					examScoreClassifyService.save(examScoreClassify);
 					//循环分类下 评分项
 					List<ExamScoreDetail> examScoreDetailList = examScoreClassify.getItemList();

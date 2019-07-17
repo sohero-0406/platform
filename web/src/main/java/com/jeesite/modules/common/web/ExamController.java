@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.common.idgen.IdWorker;
+import com.jeesite.modules.aa.entity.ExamDetail;
+import com.jeesite.modules.aa.vo.ExamVO;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -112,11 +114,9 @@ public class ExamController extends BaseController {
      */
     @RequestMapping(value = "saveExamInfo")
     @ResponseBody
-    public CommonResult saveExamInfo() {
+    public CommonResult saveExamInfo(ExamVO examVO, String examScoreJson) {
         CommonResult comRes = new CommonResult();
-        List<Exam> examList = examService.getExamInfo();
-
-        comRes.setData(examList);
+        examService.saveExamInfo(examVO,examScoreJson);
         return comRes;
     }
 

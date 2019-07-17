@@ -113,7 +113,7 @@ public class ExamScoreDetailController extends BaseController {
 	@ResponseBody
 	public CommonResult saveExamScoreInfo(String examScoreJson) {
 		CommonResult comRes = new CommonResult();
-		examScoreDetailService.saveExamScoreInfo(examScoreJson);
+//		examScoreDetailService.saveExamScoreInfo(examScoreJson);
 		return comRes;
 	}
 
