@@ -1,0 +1,202 @@
+<% layout('/layouts/default.html', {title: '参照物表管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('参照物表管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('aa:reference:edit')){ %>
+					<a href="${ctx}/aa/reference/form" class="btn btn-default btnTool" title="${text('新增参照物表')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${reference}" action="${ctx}/aa/reference/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('id')}：</label>
+					<div class="control-inline">
+						<#form:input path="id" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车型id')}：</label>
+					<div class="control-inline">
+						<#form:input path="model" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('车辆配置类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="configurationType" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('发动机类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="engineType" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('发动机排量')}：</label>
+					<div class="control-inline">
+						<#form:input path="engineCapacity" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('变速箱类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="transmissionType" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('尾气排放标准')}：</label>
+					<div class="control-inline">
+						<#form:input path="exhaustEmissionStandard" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('销售条件')}：</label>
+					<div class="control-inline">
+						<#form:input path="saleConditions" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('交易时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="tradeTime" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('已使用年限-年')}：</label>
+					<div class="control-inline">
+						<#form:input path="useYear" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('已使用时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="usedTime" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('技术鉴定分值')}：</label>
+					<div class="control-inline">
+						<#form:input path="appraisalScore" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('成新率')}：</label>
+					<div class="control-inline">
+						<#form:input path="newRate" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('交易数量')}：</label>
+					<div class="control-inline">
+						<#form:input path="tradeNumber" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('付款方式')}：</label>
+					<div class="control-inline">
+						<#form:input path="paymentType" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('二手车交易地点')}：</label>
+					<div class="control-inline">
+						<#form:input path="tradePlace" maxlength="128" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('物价指数')}：</label>
+					<div class="control-inline">
+						<#form:input path="priceIndex" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('二手车交易价格')}：</label>
+					<div class="control-inline">
+						<#form:input path="carPrice" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('初登记年月')}：</label>
+					<div class="control-inline">
+						<#form:input path="newRegistration" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('备注信息')}：</label>
+					<div class="control-inline">
+						<#form:input path="remarks" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("id")}', name:'id', index:'a.id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/aa/reference/form?id='+row.id+'" class="btnList" data-title="${text("编辑参照物表")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("车型id")}', name:'model', index:'a.model', width:150, align:"left"},
+		{header:'${text("车辆配置类型")}', name:'configurationType', index:'a.configuration_type', width:150, align:"left"},
+		{header:'${text("发动机类型")}', name:'engineType', index:'a.engine_type', width:150, align:"left"},
+		{header:'${text("发动机排量")}', name:'engineCapacity', index:'a.engine_capacity', width:150, align:"center"},
+		{header:'${text("变速箱类型")}', name:'transmissionType', index:'a.transmission_type', width:150, align:"left"},
+		{header:'${text("尾气排放标准")}', name:'exhaustEmissionStandard', index:'a.exhaust_emission_standard', width:150, align:"left"},
+		{header:'${text("销售条件")}', name:'saleConditions', index:'a.sale_conditions', width:150, align:"left"},
+		{header:'${text("交易时间")}', name:'tradeTime', index:'a.trade_time', width:150, align:"left"},
+		{header:'${text("已使用年限-年")}', name:'useYear', index:'a.use_year', width:150, align:"center"},
+		{header:'${text("已使用时间")}', name:'usedTime', index:'a.used_time', width:150, align:"left"},
+		{header:'${text("技术鉴定分值")}', name:'appraisalScore', index:'a.appraisal_score', width:150, align:"left"},
+		{header:'${text("成新率")}', name:'newRate', index:'a.new_rate', width:150, align:"left"},
+		{header:'${text("交易数量")}', name:'tradeNumber', index:'a.trade_number', width:150, align:"center"},
+		{header:'${text("付款方式")}', name:'paymentType', index:'a.payment_type', width:150, align:"left"},
+		{header:'${text("二手车交易地点")}', name:'tradePlace', index:'a.trade_place', width:150, align:"left"},
+		{header:'${text("物价指数")}', name:'priceIndex', index:'a.price_index', width:150, align:"left"},
+		{header:'${text("二手车交易价格")}', name:'carPrice', index:'a.car_price', width:150, align:"right", formatter: function(val, obj, row, act){
+			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
+		}},
+		{header:'${text("初登记年月")}', name:'newRegistration', index:'a.new_registration', width:150, align:"left"},
+		{header:'${text("状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
+		}},
+		{header:'${text("更新时间")}', name:'updateDate', index:'a.update_date', width:150, align:"center"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('aa:reference:edit')){ %>
+				actions.push('<a href="${ctx}/aa/reference/form?id='+row.id+'" class="btnList" title="${text("编辑参照物表")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/aa/reference/delete?id='+row.id+'" class="btnList" title="${text("删除参照物表")}" data-confirm="${text("确认要删除该参照物表吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>
