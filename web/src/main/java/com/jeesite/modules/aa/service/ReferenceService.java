@@ -76,11 +76,4 @@ public class ReferenceService extends CrudService<ReferenceDao, Reference> {
 		super.delete(reference);
 	}
 
-	/**
-	 * 查询列表数据
-	 */
-	public List<Reference> getReferenceList() {
-		return referenceDao.getReferenceList();
-	}
-
 }

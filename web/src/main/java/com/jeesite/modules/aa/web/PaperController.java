@@ -114,7 +114,7 @@ public class PaperController extends BaseController {
 	 */
 	@RequestMapping(value = "deletePaper")
 	@ResponseBody
-	public CommonResult deletePaper(Paper paper) {
+	public CommonResult deletePaper(@Validated Paper paper) {
 		paperService.delete(paper);
 		return new CommonResult();
 	}

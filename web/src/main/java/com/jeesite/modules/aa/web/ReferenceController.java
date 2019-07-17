@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  * 参照物表Controller
+ *
  * @author lvchangwei
  * @version 2019-07-16
  */
@@ -34,106 +35,95 @@ import java.util.List;
 @RequestMapping(value = "${adminPath}/aa/reference")
 public class ReferenceController extends BaseController {
 
-	@Autowired
-	private ReferenceService referenceService;
-	
-	/**
-	 * 获取数据
-	 */
-	@ModelAttribute
-	public Reference get(String id, boolean isNewRecord) {
-		return referenceService.get(id, isNewRecord);
-	}
-	
-	/**
-	 * 查询列表
-	 */
-	@RequestMapping(value = {"list", ""})
-	public String list(Reference reference, Model model) {
-		model.addAttribute("reference", reference);
-		return "modules/aa/referenceList";
-	}
-	
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "listData")
-	@ResponseBody
-	public Page<Reference> listData(Reference reference, HttpServletRequest request, HttpServletResponse response) {
-		reference.setPage(new Page<>(request, response));
-		Page<Reference> page = referenceService.findPage(reference);
-		return page;
-	}
+    @Autowired
+    private ReferenceService referenceService;
 
-	/**
-	 * 查看编辑表单
-	 */
-	@RequestMapping(value = "form")
-	public String form(Reference reference, Model model) {
-		model.addAttribute("reference", reference);
-		return "modules/aa/referenceForm";
-	}
+    /**
+     * 获取数据
+     */
+    @ModelAttribute
+    public Reference get(String id, boolean isNewRecord) {
+        return referenceService.get(id, isNewRecord);
+    }
 
-	/**
-	 * 保存参照物表
-	 */
-	@PostMapping(value = "save")
-	@ResponseBody
-	public String save(@Validated Reference reference) {
-		referenceService.save(reference);
-		return renderResult(Global.TRUE, text("保存参照物表成功！"));
-	}
-	
-	/**
-	 * 删除参照物表
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public String delete(Reference reference) {
-		referenceService.delete(reference);
-		return renderResult(Global.TRUE, text("删除参照物表成功！"));
-	}
+    /**
+     * 查询列表
+     */
+    @RequestMapping(value = {"list", ""})
+    public String list(Reference reference, Model model) {
+        model.addAttribute("reference", reference);
+        return "modules/aa/referenceList";
+    }
+
+    /**
+     * 查询列表数据
+     */
+    @RequestMapping(value = "listData")
+    @ResponseBody
+    public Page<Reference> listData(Reference reference, HttpServletRequest request, HttpServletResponse response) {
+        reference.setPage(new Page<>(request, response));
+        Page<Reference> page = referenceService.findPage(reference);
+        return page;
+    }
+
+    /**
+     * 查看编辑表单
+     */
+    @RequestMapping(value = "form")
+    public String form(Reference reference, Model model) {
+        model.addAttribute("reference", reference);
+        return "modules/aa/referenceForm";
+    }
+
+    /**
+     * 保存参照物表
+     */
+    @PostMapping(value = "save")
+    @ResponseBody
+    public String save(@Validated Reference reference) {
+        referenceService.save(reference);
+        return renderResult(Global.TRUE, text("保存参照物表成功！"));
+    }
+
+    /**
+     * 删除参照物表
+     */
+    @RequestMapping(value = "delete")
+    @ResponseBody
+    public String delete(Reference reference) {
+        referenceService.delete(reference);
+        return renderResult(Global.TRUE, text("删除参照物表成功！"));
+    }
 
 
-	/**
-	 * 新增参照物
-	 */
-	@PostMapping(value = "addReference")
-	@ResponseBody
-	public CommonResult addReference(@Validated Reference reference) {
-		referenceService.save(reference);
-		return new CommonResult();
-	}
+    /**
+     * 新增参照物
+     */
+    @RequestMapping(value = "saveReference")
+    @ResponseBody
+    public CommonResult saveReference(@Validated Reference reference) {
+        referenceService.save(reference);
+        return new CommonResult();
+    }
 
-	/**
-	 * 更新参照物
-	 */
-	@PostMapping(value = "updateReference")
-	@ResponseBody
-	public CommonResult updateReference(@Validated Reference reference) {
-		referenceService.save(reference);
-		return new CommonResult();
-	}
+    /**
+     * 删除参照物表
+     */
+    @RequestMapping(value = "deleteReference")
+    @ResponseBody
+    public CommonResult deleteReference(@Validated Reference reference) {
+        referenceService.delete(reference);
+        return new CommonResult();
+    }
 
-	/**
-	 * 删除参照物表
-	 */
-	@RequestMapping(value = "deleteReference")
-	@ResponseBody
-	public CommonResult deleteReference(Reference reference) {
-		referenceService.delete(reference);
-		return new CommonResult();
-	}
-
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "getReferenceList")
-	@ResponseBody
-	public CommonResult getReferenceList() {
-		CommonResult comRes = new CommonResult();
-		List<Reference> result = referenceService.getReferenceList();
-		comRes.setData(result);
-		return comRes;
-	}
+    /**
+     * 查询列表数据
+     */
+    @RequestMapping(value = "getReferenceList")
+    @ResponseBody
+    public CommonResult getReferenceList() {
+        CommonResult comRes = new CommonResult();
+        comRes.setData(referenceService.findList(new Reference()));
+        return comRes;
+    }
 }

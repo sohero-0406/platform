@@ -6,6 +6,10 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.modules.aa.entity.CalculateDepreciation;
+import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.ExamUser;
+import com.jeesite.modules.common.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,5 +93,17 @@ public class CalculateKmController extends BaseController {
 		calculateKmService.delete(calculateKm);
 		return renderResult(Global.TRUE, text("删除公里数估值法成功！"));
 	}
-	
+
+	/**
+	 * 计算
+	 */
+	@RequestMapping(value = "calculate")
+	@ResponseBody
+	public CommonResult calculate(CalculateKm calculateKm) {
+		ExamUser examUser = UserUtils.getExamUser();
+		calculateKm = calculateKmService.calculate(calculateKm, examUser);
+		CommonResult result = new CommonResult();
+		result.setData(calculateKm);
+		return result;
+	}
 }

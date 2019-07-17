@@ -1,5 +1,7 @@
 package com.jeesite.modules.common.entity;
 
+import com.jeesite.common.constant.CodeConstant;
+
 /**
  * 公共返回结果
  * @author lvchangwei
@@ -9,7 +11,7 @@ public class CommonResult<T> {
     /**
      * 返回编码
      */
-    private String code = "1000";
+    private String code = CodeConstant.REQUEST_SUCCESSFUL;
 
     /**
      * 返回信息

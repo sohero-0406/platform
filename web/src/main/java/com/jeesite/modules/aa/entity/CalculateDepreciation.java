@@ -31,6 +31,9 @@ public class CalculateDepreciation extends PreEntity<CalculateDepreciation> {
 	private String depreciationRate;		// 年限折旧率之和
 	private Double price;		// 评估价格
 	private String calculateId;		// 外键id
+
+	//非数据库字段
+	private int useYear;		//使用年限
 	
 	public CalculateDepreciation() {
 		this(null);
@@ -73,5 +76,12 @@ public class CalculateDepreciation extends PreEntity<CalculateDepreciation> {
 	public void setCalculateId(String calculateId) {
 		this.calculateId = calculateId;
 	}
-	
+
+	public int getUseYear() {
+		return useYear;
+	}
+
+	public void setUseYear(int useYear) {
+		this.useYear = useYear;
+	}
 }

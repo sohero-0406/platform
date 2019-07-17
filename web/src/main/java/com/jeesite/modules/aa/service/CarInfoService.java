@@ -175,7 +175,7 @@ public class CarInfoService extends CrudService<CarInfoDao, CarInfo> {
         return baseInfoVO;
     }
 
-    private CarInfo getByEntity(CarInfo carInfo) {
+    public CarInfo getByEntity(CarInfo carInfo) {
         return dao.getByEntity(carInfo);
     }
 }

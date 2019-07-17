@@ -24,7 +24,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
-public class ExamUser extends DataEntity<ExamUser> {
+public class ExamUser extends PreEntity<ExamUser> {
 	
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户id

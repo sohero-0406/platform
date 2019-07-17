@@ -29,6 +29,9 @@ public class CalculateKm extends PreEntity<CalculateKm> {
 	private Double salePrice;		// 车辆销售价格
 	private String calculateId;		// 外键id
 	private Double price;		// 评估价格
+
+	//非数据库字段
+	private String mileage;		//行驶里程(km)
 	
 	public CalculateKm() {
 		this(null);
@@ -62,5 +65,12 @@ public class CalculateKm extends PreEntity<CalculateKm> {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-	
+
+	public String getMileage() {
+		return mileage;
+	}
+
+	public void setMileage(String mileage) {
+		this.mileage = mileage;
+	}
 }

@@ -17,6 +17,4 @@ import java.util.List;
 @MyBatisDao
 public interface ReferenceDao extends CrudDao<Reference> {
 
-    List<Reference> getReferenceList();
-
 }
