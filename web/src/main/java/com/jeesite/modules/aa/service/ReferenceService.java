@@ -22,8 +22,6 @@ import java.util.List;
 @Transactional(readOnly=true)
 public class ReferenceService extends CrudService<ReferenceDao, Reference> {
 
-	@Autowired
-	private ReferenceDao referenceDao;
 	
 	/**
 	 * 获取单条数据
@@ -38,7 +36,6 @@ public class ReferenceService extends CrudService<ReferenceDao, Reference> {
 	/**
 	 * 查询分页数据
 	 * @param reference 查询条件
-	 * @param reference.page 分页对象
 	 * @return
 	 */
 	@Override
@@ -75,5 +72,6 @@ public class ReferenceService extends CrudService<ReferenceDao, Reference> {
 	public void delete(Reference reference) {
 		super.delete(reference);
 	}
+
 
 }

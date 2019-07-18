@@ -101,9 +101,9 @@ public class PaperController extends BaseController {
 	 */
 	@RequestMapping(value = "getPaperList")
 	@ResponseBody
-	public CommonResult getPaperList() {
+	public CommonResult findPaper() {
 		CommonResult comRes = new CommonResult();
-		List<Paper> paperList = paperService.getPaperList();
+		List<Paper> paperList = paperService.findPaper();
 		comRes.setData(paperList);
 		return comRes;
 	}
@@ -114,7 +114,13 @@ public class PaperController extends BaseController {
 	 */
 	@RequestMapping(value = "deletePaper")
 	@ResponseBody
-	public CommonResult deletePaper(@Validated Paper paper) {
+	public CommonResult deletePaper(Paper paper) {
+		if(paper.getId().isEmpty()){
+			CommonResult comRes = new CommonResult();
+			comRes.setCode("1010");
+			comRes.setMsg("未传入ID");
+			return comRes;
+		}
 		paperService.delete(paper);
 		return new CommonResult();
 	}

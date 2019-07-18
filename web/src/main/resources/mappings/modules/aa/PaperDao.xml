@@ -13,7 +13,7 @@
 	</select> -->
 
 	<!-- 查询试卷列表 -->
-	<select id="getPaperList" resultType="Paper">
+	<select id="findPaper" resultType="Paper">
 		SELECT a.*,b.license_plate_num as "carInfo.licensePlateNum",b.vin_code as "carInfo.vinCode"
 		FROM aa_paper as a
 		LEFT JOIN aa_car_info as b on a.id = b.paper_id

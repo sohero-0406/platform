@@ -36,8 +36,9 @@ public class CommonResult<T> {
         return code;
     }
 
-    public void setCode(String code) {
+    public CommonResult setCode(String code) {
         this.code = code;
+        return null;
     }
 
     public String getMsg() {
