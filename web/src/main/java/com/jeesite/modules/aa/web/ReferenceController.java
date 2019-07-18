@@ -122,6 +122,17 @@ public class ReferenceController extends BaseController {
 	}
 
 	/**
+	 * 查询单个参照物
+	 */
+	@RequestMapping(value = "findReference")
+	@ResponseBody
+	public CommonResult findReference(@Validated Reference reference) {
+		CommonResult comRes = new CommonResult();
+		comRes.setData(referenceService.get(reference));
+		return comRes;
+	}
+
+	/**
 	 * 查询参照物列表
 	 */
 	@RequestMapping(value = "findReference")
@@ -129,6 +140,18 @@ public class ReferenceController extends BaseController {
 	public CommonResult findReference() {
 		CommonResult comRes = new CommonResult();
 		comRes.setData(referenceService.findList(new Reference()));
+		return comRes;
+	}
+
+
+	/**
+	 * 初始化参照物
+	 */
+	@RequestMapping(value = "initReference")
+	@ResponseBody
+	public CommonResult initReference(@Validated Reference reference) {
+		CommonResult comRes = new CommonResult();
+		comRes.setData(referenceService.initReference(reference));
 		return comRes;
 	}
 }

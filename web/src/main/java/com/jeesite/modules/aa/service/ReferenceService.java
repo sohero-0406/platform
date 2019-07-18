@@ -7,6 +7,9 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.aa.dao.ReferenceDao;
 import com.jeesite.modules.aa.entity.Reference;
+import com.jeesite.modules.aa.vo.ReferenceVO;
+import com.jeesite.modules.sys.entity.DictData;
+import com.jeesite.modules.sys.utils.DictUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,5 +76,34 @@ public class ReferenceService extends CrudService<ReferenceDao, Reference> {
 		super.delete(reference);
 	}
 
+	/**
+	 * 初始化参照物
+	 */
+	public ReferenceVO initReference(Reference reference) {
 
+		ReferenceVO referenceVO = new ReferenceVO();
+		//加载车辆配置类型
+		List<DictData> vehicleConfigurationTypeList = DictUtils.getDictList("aa_vehicle_configuration_type");
+		referenceVO.setVehicleConfigurationTypeList(vehicleConfigurationTypeList);
+
+		//加载发动机类型
+		List<DictData> engineTypeList = DictUtils.getDictList("aa_engine_type");
+		referenceVO.setEngineTypeList(engineTypeList);
+
+		//加载变速箱类型
+		List<DictData> gearboxTypeList = DictUtils.getDictList("aa_gearbox_type");
+		referenceVO.setGearboxTypeList(gearboxTypeList);
+
+		//加载环保标准
+		List<DictData> environmentalStandardList = DictUtils.getDictList("aa_environmental_standard");
+		referenceVO.setEnvironmentalStandardList(environmentalStandardList);
+
+		//加载付款方式
+		List<DictData> paymentMethodList = DictUtils.getDictList("aa_payment_method");
+		referenceVO.setPaymentMethodList(paymentMethodList);
+
+		referenceVO.setReference(this.get(reference));
+		return referenceVO;
+
+	}
 }
