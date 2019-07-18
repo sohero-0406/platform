@@ -124,9 +124,9 @@ public class ReferenceController extends BaseController {
 	/**
 	 * 查询单个参照物
 	 */
-	@RequestMapping(value = "findReference")
+	@RequestMapping(value = "findReferenceList")
 	@ResponseBody
-	public CommonResult findReference(@Validated Reference reference) {
+	public CommonResult findReferenceList(@Validated Reference reference) {
 		CommonResult comRes = new CommonResult();
 		comRes.setData(referenceService.get(reference));
 		return comRes;
