@@ -21,6 +21,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="exam_id", attrName="examId", label="考试id"),
 		@Column(name="user_num", attrName="userNum", label="用户名"),
 		@Column(name="password", attrName="password", label="密码"),
+		@Column(name="score", attrName="score", label="分数"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -33,6 +34,7 @@ public class ExamUser extends PreEntity<ExamUser> {
 	private String password;		// 密码
 
 	private String paperId;		//试卷id
+	private String score;		// 密码
 
 	public ExamUser() {
 		this(null);
@@ -76,6 +78,15 @@ public class ExamUser extends PreEntity<ExamUser> {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Length(min=0, max=10, message="分数长度不能超过 10 个字符")
+	public String getScore() {
+		return score;
+	}
+
+	public void setScore(String score) {
+		this.score = score;
 	}
 
 	public String getPaperId() {

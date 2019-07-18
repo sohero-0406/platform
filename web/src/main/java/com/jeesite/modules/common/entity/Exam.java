@@ -29,6 +29,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="end_time", attrName="endTime", label="结束时间"),
 		@Column(name="state", attrName="state", label="状态"),
 		@Column(name="type", attrName="type", label="考试类型"),
+		@Column(name="exam_type", attrName="examType", label="考试计时", comment="考试计时（1、倒计时 2、倒计时）"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -43,7 +44,7 @@ public class Exam extends PreEntity<Exam> {
 	private Date endTime;		// 结束时间
 	private String state;		// 状态
 	private String type;		// 考试类型
-
+	private String examType;		// 考试计时（1、倒计时 2、倒计时）
 	private String paperName; //考试名称
 
 	public Exam() {
@@ -131,5 +132,14 @@ public class Exam extends PreEntity<Exam> {
 
 	public void setPaperName(String paperName) {
 		this.paperName = paperName;
+	}
+
+	@Length(min=0, max=10, message="考试计时长度不能超过 10 个字符")
+	public String getExamType() {
+		return examType;
+	}
+
+	public void setExamType(String examType) {
+		this.examType = examType;
 	}
 }

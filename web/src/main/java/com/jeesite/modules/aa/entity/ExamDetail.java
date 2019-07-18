@@ -3,6 +3,7 @@
  */
 package com.jeesite.modules.aa.entity;
 
+import com.jeesite.modules.common.entity.PreEntity;
 import org.hibernate.validator.constraints.Length;
 
 import com.jeesite.common.entity.DataEntity;
@@ -24,7 +25,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
-public class ExamDetail extends DataEntity<ExamDetail> {
+public class ExamDetail extends PreEntity<ExamDetail> {
 	
 	private static final long serialVersionUID = 1L;
 	private String examId;		// 考试id
