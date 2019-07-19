@@ -17,5 +17,5 @@ import java.util.List;
 @MyBatisDao
 public interface PaperDao extends CrudDao<Paper> {
 
-    List<Paper> getPaperList();
+    List<Paper> findPaper();
 }

@@ -11,4 +11,6 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
+
+	<!-- 查询参照物 -->
 </mapper>
