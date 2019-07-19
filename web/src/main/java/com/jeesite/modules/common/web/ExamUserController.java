@@ -6,6 +6,7 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.modules.common.entity.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,8 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.entity.ExamUser;
 import com.jeesite.modules.common.service.ExamUserService;
+
+import java.util.Map;
 
 /**
  * common_exam_userController
@@ -89,5 +92,28 @@ public class ExamUserController extends BaseController {
 		examUserService.delete(examUser);
 		return renderResult(Global.TRUE, text("删除common_exam_user成功！"));
 	}
-	
+
+	/**
+	 *  判考试成绩
+	 */
+	@RequestMapping(value = "getExamScoreInfo")
+	@ResponseBody
+	public CommonResult getExamScoreInfo(ExamUser examUser) {
+		CommonResult comRes = new CommonResult();
+
+		comRes.setData(examUserService.getExamScoreInfo());
+		return comRes;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

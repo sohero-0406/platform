@@ -7,6 +7,7 @@ import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.aa.entity.ExamScoreClassify;
 import com.jeesite.modules.aa.entity.ExamScoreDetail;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +19,6 @@ import java.util.List;
 @MyBatisDao
 public interface ExamScoreDetailDao extends CrudDao<ExamScoreDetail> {
 
-    List<ExamScoreClassify> findData();
+    //根据考试id 获取所有考试分值项
+    List<ExamScoreClassify> findData(@Param("examId") String examId);
 }

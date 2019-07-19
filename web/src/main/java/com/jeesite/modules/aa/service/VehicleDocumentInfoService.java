@@ -112,4 +112,9 @@ public class VehicleDocumentInfoService extends CrudService<VehicleDocumentInfoD
             }
         }
     }
+
+    @Transactional(readOnly = false)
+    public List<VehicleDocumentInfo> findList(VehicleDocumentInfo vehicleDocumentInfo) {
+        return dao.findList(vehicleDocumentInfo);
+    }
 }

@@ -99,9 +99,9 @@ public class ExamScoreDetailController extends BaseController {
 	 */
 	@RequestMapping(value = "findData")
 	@ResponseBody
-	public CommonResult findData() {
+	public CommonResult findData(String examId) {
 		CommonResult comRes = new CommonResult();
-		List<ExamScoreClassify> ExamScoreClassify =  examScoreDetailService.findData();
+		List<ExamScoreClassify> ExamScoreClassify =  examScoreDetailService.findData(examId);
 		comRes.setData(ExamScoreClassify);
 		return comRes;
 	}

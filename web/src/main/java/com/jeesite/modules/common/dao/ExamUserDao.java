@@ -6,6 +6,10 @@ package com.jeesite.modules.common.dao;
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.common.entity.ExamUser;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * common_exam_userDAO接口
@@ -14,5 +18,6 @@ import com.jeesite.modules.common.entity.ExamUser;
  */
 @MyBatisDao
 public interface ExamUserDao extends CrudDao<ExamUser> {
-	
+
+
 }

@@ -4,6 +4,7 @@
 package com.jeesite.modules.aa.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,5 +73,12 @@ public class ExamScoreClassifyService extends CrudService<ExamScoreClassifyDao, 
 	public void delete(ExamScoreClassify examScoreClassify) {
 		super.delete(examScoreClassify);
 	}
-	
+
+	/**
+	 *  依据考试id 获取试卷评分项
+	 */
+	@Transactional(readOnly=false)
+	public List<Map<String,Object>> getExamScoreInfo(String examId) {
+		return dao.getExamScoreInfo();
+	}
 }
