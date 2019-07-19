@@ -6,6 +6,10 @@ package com.jeesite.modules.aa.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.modules.aa.entity.CalculateKm;
+import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.ExamUser;
+import com.jeesite.modules.common.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,5 +93,17 @@ public class CalculateReplaceCostController extends BaseController {
 		calculateReplaceCostService.delete(calculateReplaceCost);
 		return renderResult(Global.TRUE, text("删除重置成本法成功！"));
 	}
-	
+
+	/**
+	 * 计算
+	 */
+	@RequestMapping(value = "calculate")
+	@ResponseBody
+	public CommonResult calculate(CalculateReplaceCost cost) {
+		ExamUser examUser = UserUtils.getExamUser();
+		cost = calculateReplaceCostService.calculate(cost, examUser);
+		CommonResult result = new CommonResult();
+		result.setData(cost);
+		return result;
+	}
 }

@@ -1,15 +1,13 @@
 package com.jeesite.common.utils.word;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBookmark;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -31,13 +29,13 @@ public class BookMarks {
 	 * 构造函数，用以分析文档，解析出所有的标签
 	 * @param document  Word OOXML document instance. 
 	 */
-	public BookMarks(XWPFDocument document) {
+	public BookMarks(CustomXWPFDocument document) {
 
 		//初始化标签缓存
 		this._bookmarks = new HashMap<String, BookMark>();
 
 		// 首先解析文档普通段落中的标签 
-		this.procParaList(document.getParagraphs());
+		this.procParaList(document.getParagraphs(),document);
 
 		//利用繁琐的方法，从所有的表格中得到得到标签，处理比较原始和简单
 		List<XWPFTable> tableList = document.getTables();
@@ -162,12 +160,28 @@ public class BookMarks {
 	 * 解析普通段落中的标签
 	 * @param paragraphList  传入的段落
 	 */
-	private void procParaList(List<XWPFParagraph> paragraphList) {
+	private void procParaList(List<XWPFParagraph> paragraphList,CustomXWPFDocument document){
 		for (XWPFParagraph paragraph : paragraphList) {
 			List<CTBookmark> bookmarkList = paragraph.getCTP().getBookmarkStartList();
 			//循环加入标签
 			for (CTBookmark bookmark : bookmarkList) {
-				this._bookmarks.put(bookmark.getName(), new BookMark(bookmark, paragraph));
+				if(OfficeForPOIUtil.checkImgMatcher(bookmark.getName()).find()){
+					System.out.println(bookmark.getName());
+					File pic = new File("E:/picture/21.jpg");
+					if (pic.exists()) {
+						try {
+							FileInputStream is = new FileInputStream(pic);
+							document.addPictureData(is, Document.PICTURE_TYPE_PNG);
+						}catch (Exception e){
+							e.printStackTrace();
+						}
+						//此处图片的宽度和高度是写死的
+						document.createPicture(document.getAllPictures().size() - 1, 100, 50, paragraph);
+					}
+					this._bookmarks.put("", new BookMark(bookmark, paragraph));
+				}else {
+					this._bookmarks.put(bookmark.getName(), new BookMark(bookmark, paragraph));
+				}
 			}
 		}
 	}

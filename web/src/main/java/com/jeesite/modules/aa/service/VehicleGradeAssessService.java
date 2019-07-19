@@ -96,7 +96,7 @@ public class VehicleGradeAssessService extends CrudService<VehicleGradeAssessDao
 		return vo;
     }
 
-	private VehicleGradeAssess getByEntity(VehicleGradeAssess vehicleGradeAssess) {
+	public VehicleGradeAssess getByEntity(VehicleGradeAssess vehicleGradeAssess) {
     	return dao.getByEntity(vehicleGradeAssess);
 	}
 }

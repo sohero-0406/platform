@@ -117,7 +117,6 @@ public class BookMark {
 		if (this._isCell) {
 			this.handleBookmarkedCells(bookmarkValue, where);
 		} else {
-
 			//普通标签，直接创建一个元素
 			XWPFRun run = this._para.createRun();
 			run.setText(bookmarkValue);

@@ -72,5 +72,8 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 	public void delete(ExamUser examUser) {
 		super.delete(examUser);
 	}
-	
+
+    public ExamUser getByEntity(ExamUser examUser) {
+		return dao.getByEntity(examUser);
+    }
 }

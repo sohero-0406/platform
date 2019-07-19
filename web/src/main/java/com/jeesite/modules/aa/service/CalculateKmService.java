@@ -120,10 +120,11 @@ public class CalculateKmService extends CrudService<CalculateKmDao, CalculateKm>
                 for (int i = 0; i < para; i++) {
                     valueRatio = valueRatio.add(new BigDecimal(valueRatios[i]));
                 }
-                //计算占用比例
-                valueRatio = valueRatio.divide(new BigDecimal(15), 4, BigDecimal.ROUND_HALF_UP);
+                //计算剩余里程分别消耗车辆价值率之和
+                valueRatio = new BigDecimal(15).subtract(valueRatio);
                 BigDecimal salePrice = new BigDecimal(calculateKm.getSalePrice());
-                BigDecimal price = salePrice.multiply(new BigDecimal(1).subtract(valueRatio))
+                BigDecimal price = salePrice.multiply(valueRatio)
+                        .divide(new BigDecimal(15),2,BigDecimal.ROUND_HALF_UP)
                         .setScale(2, BigDecimal.ROUND_HALF_UP);
                 calculateKm.setPrice(price.doubleValue());
             }
