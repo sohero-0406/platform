@@ -29,6 +29,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="year_new_rate_coefficient", attrName="yearNewRateCoefficient", label="年限成新率系数"),
 		@Column(name="year_new_rate", attrName="yearNewRate", label="年限成新率"),
 		@Column(name="all_new_rate", attrName="allNewRate", label="综合成新率"),
+		@Column(name="process", attrName="process", label="计算过程"),
 		@Column(name="price", attrName="price", label="评估价格"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
@@ -47,6 +48,7 @@ public class CalculateReplaceCost extends PreEntity<CalculateReplaceCost> {
 	private String yearNewRateCoefficient;		// 年限成新率系数
 	private String yearNewRate;		// 年限成新率
 	private String allNewRate;		// 综合成新率
+	private String process;		//计算过程
 	private Double price;		// 评估价格
 	
 	public CalculateReplaceCost() {
@@ -150,6 +152,15 @@ public class CalculateReplaceCost extends PreEntity<CalculateReplaceCost> {
 
 	public void setAllNewRate(String allNewRate) {
 		this.allNewRate = allNewRate;
+	}
+
+	@Length(min=0, max=2048, message="计算过程长度不能超过 2048 个字符")
+	public String getProcess() {
+		return process;
+	}
+
+	public void setProcess(String process) {
+		this.process = process;
 	}
 	
 	public Double getPrice() {

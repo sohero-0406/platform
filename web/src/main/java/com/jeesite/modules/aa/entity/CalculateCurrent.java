@@ -36,9 +36,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="p2_k3", attrName="p2K3", label="参照物2的k3"),
 		@Column(name="p2_k4", attrName="p2K4", label="参照物2的k4"),
 		@Column(name="p2_price", attrName="p2Price", label="参照物2的评估值"),
+		@Column(name="process", attrName="process", label="计算过程"),
 		@Column(name="price", attrName="price", label="评估价格"),
 		@Column(name="calculate_id", attrName="calculateId", label="外键id"),
-	}, orderBy="a.id DESC"
+	}, orderBy="a.update_date DESC"
 )
 public class CalculateCurrent extends PreEntity<CalculateCurrent> {
 	
@@ -61,6 +62,7 @@ public class CalculateCurrent extends PreEntity<CalculateCurrent> {
 	private Double p2K3;		// 参照物2的k3
 	private Double p2K4;		// 参照物2的k4
 	private Double p2Price;		// 参照物2的评估值
+	private String process;		//计算过程
 	private Double price;		// 评估价格
 	private String calculateId;		// 外键id
 	
@@ -221,7 +223,16 @@ public class CalculateCurrent extends PreEntity<CalculateCurrent> {
 	public void setP2Price(Double p2Price) {
 		this.p2Price = p2Price;
 	}
-	
+
+	@Length(min=0, max=512, message="计算过程长度不能超过 512 个字符")
+	public String getProcess() {
+		return process;
+	}
+
+	public void setProcess(String process) {
+		this.process = process;
+	}
+
 	public Double getPrice() {
 		return price;
 	}

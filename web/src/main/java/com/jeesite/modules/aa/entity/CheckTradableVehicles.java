@@ -31,6 +31,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="check7", attrName="check7", label="是否走私、非法拼组装车辆"),
 		@Column(name="check8", attrName="check8", label="是否法律法规禁止经营的车辆"),
 		@Column(name="is_trade", attrName="isTrade", label="是否可交易"),
+		@Column(name="traffic_illegal_record", attrName="trafficIllegalRecord", label="有无交通违法记录（1有 0无）"),
 		@Column(name="is_accident", attrName="isAccident", label="是否事故车", comment="是否事故车（正常车，事故车）"),
 		@Column(name="file_during", attrName="fileDuring", label="归档时效性"),
 		@Column(includeEntity=DataEntity.class),
@@ -52,6 +53,7 @@ public class CheckTradableVehicles extends PreEntity<CheckTradableVehicles> {
 	private String check7;		// 是否走私、非法拼组装车辆
 	private String check8;		// 是否法律法规禁止经营的车辆
 	private String isTrade;		// 是否可交易
+	private String trafficIllegalRecord;		//有无交通违法记录(1有 0无)
 	private String isAccident;		// 是否事故车（正常车，事故车）
 	private String fileDuring;		// 归档时效性
 	
@@ -179,7 +181,16 @@ public class CheckTradableVehicles extends PreEntity<CheckTradableVehicles> {
 	public void setIsTrade(String isTrade) {
 		this.isTrade = isTrade;
 	}
-	
+
+	@Length(min=0, max=10, message="有无交通违法记录不能超过 10 个字符")
+	public String getTrafficIllegalRecord() {
+		return trafficIllegalRecord;
+	}
+
+	public void setTrafficIllegalRecord(String trafficIllegalRecord) {
+		this.trafficIllegalRecord = trafficIllegalRecord;
+	}
+
 	@Length(min=0, max=10, message="是否事故车长度不能超过 10 个字符")
 	public String getIsAccident() {
 		return isAccident;

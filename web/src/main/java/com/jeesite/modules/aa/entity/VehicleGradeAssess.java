@@ -26,6 +26,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="description", attrName="description", label="综合评论"),
 		@Column(name="start_score", attrName="startScore", label="得分区间开始值"),
 		@Column(name="end_score", attrName="endScore", label="得分区间结束值"),
+		@Column(name="identify_date", attrName="identifyDate", label="鉴定日期"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -40,6 +41,7 @@ public class VehicleGradeAssess extends PreEntity<VehicleGradeAssess> {
 	private String description;		// 综合评论
 	private String startScore;		// 得分区间开始值
 	private String endScore;		// 得分区间结束值
+	private String identifyDate;		//鉴定日期
 	
 	public VehicleGradeAssess() {
 		this(null);
@@ -120,5 +122,13 @@ public class VehicleGradeAssess extends PreEntity<VehicleGradeAssess> {
 	public void setEndScore(String endScore) {
 		this.endScore = endScore;
 	}
-	
+
+	@Length(min=0, max=32, message="鉴定日期长度不能超过 32 个字符")
+	public String getIdentifyDate() {
+		return identifyDate;
+	}
+
+	public void setIdentifyDate(String identifyDate) {
+		this.identifyDate = identifyDate;
+	}
 }
