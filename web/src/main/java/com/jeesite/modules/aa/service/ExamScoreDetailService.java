@@ -81,8 +81,8 @@ public class ExamScoreDetailService extends CrudService<ExamScoreDetailDao, Exam
 	}
 
 	@Transactional(readOnly=false)
-	public List<ExamScoreClassify> findData() {
-		return  dao.findData();
+	public List<ExamScoreClassify> findData(String examId) {
+		return  dao.findData(examId);
 	}
 
 	/**
