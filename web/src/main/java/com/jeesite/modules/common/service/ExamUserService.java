@@ -52,6 +52,12 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 	//鉴定技术情况
 	@Autowired
 	private VehicleGradeAssessService vehicleGradeAssessService;
+	//计算车辆价值Service
+	@Autowired
+	private CalculateService calculateService;
+	//二手车鉴定评估报告Service
+	@Autowired
+	private AppraisalReportService appraisalReportService;
 
 
 	/**
@@ -132,6 +138,9 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		CheckTradableVehicles checkTradableVehiclesTec = new CheckTradableVehicles(); //检查可交易车辆
 		VehicleInstallInfo vehicleInstallInfoTec = new VehicleInstallInfo(); //车辆加装信息
 		VehicleGradeAssess vehicleGradeAssessTec = new VehicleGradeAssess();
+		Calculate calculateTec = new Calculate();//计算车辆价值
+		AppraisalReport appraisalReportTec = new AppraisalReport();
+
 
 		delegateUserTec.setPaperId(paperId);
 		carInfoTec.setPaperId(paperId);
@@ -139,6 +148,9 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		checkTradableVehiclesTec.setPaperId(paperId);
 		vehicleInstallInfoTec.setPaperId(paperId);
 		vehicleGradeAssessTec.setPaperId(paperId);
+		calculateTec.setPaperId(paperId);
+		appraisalReportTec.setPaperId(paperId);
+
 
 		//试卷 答案(老师)
 		//一、委托方
@@ -152,9 +164,9 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		//四、
 		//五、鉴定技术状况
 		VehicleGradeAssess vehicleGradeAssessT = vehicleGradeAssessService.getByEntity(vehicleGradeAssessTec);
-
-
-
+		//六、估算汽车价值
+		Calculate calculateT = calculateService.getByEntity(calculateTec);
+		AppraisalReport appraisalReportT = appraisalReportService.getByEntity(appraisalReportTec);
 
 
 
@@ -175,6 +187,10 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 
 		//五、鉴定技术状况
 		VehicleGradeAssess vehicleGradeAssessStu = new VehicleGradeAssess();
+		//六、估算价值
+		Calculate calculateStu = new Calculate();//计算车辆价值
+		AppraisalReport appraisalReportStu = new AppraisalReport();
+
 
 
 
@@ -204,7 +220,11 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 			vehicleGradeAssessStu.setExamUserId(user.getId());
 			VehicleGradeAssess vehicleGradeAssessS = vehicleGradeAssessService.getByEntity(vehicleGradeAssessStu);
 			BigDecimal identificationCount = getIdentification(vehicleGradeAssessT,vehicleGradeAssessS,examScoreMap);
-			//
+			//六、估算价值
+			appraisalReportStu.setExamUserId(user.getId());
+			AppraisalReport appraisalReportS = appraisalReportService.getByEntity(appraisalReportStu);
+			BigDecimal calculateCount = getCalculate(calculateT,user,examScoreMap,checkTradableVehiclesT,checkTradableVehiclesS,appraisalReportT,appraisalReportS);
+
 
 
 			BigDecimal count = delegateCount.add(vehicleDocumentCount.add(carInfoCount.add(accidentCount.add(identificationCount))));
@@ -214,23 +234,56 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		return null;
 	}
 
+	//六、估算价值
+	/**
+	 *
+	 * @param calculateT 教师 计算车辆价值
+	 * @param user 考生信息
+	 * @param examScoreMap 评分项分数
+	 * @return
+	 */
+	public BigDecimal getCalculate(Calculate calculateT,ExamUser user,Map<String,BigDecimal> examScoreMap,
+								   CheckTradableVehicles checkTradableVehiclesT,CheckTradableVehicles checkTradableVehiclesS,
+								   AppraisalReport appraisalReportT,AppraisalReport appraisalReportS){
+		BigDecimal calculateCount = new BigDecimal("0");
+		//学生估算方式
+		if(calculateT.getBeginPrice()!=null && calculateT.getEndPrice()!=null){
+			if(judgeStringBetween(String.valueOf(calculateT.getBeginPrice()),String.valueOf(calculateT.getEndPrice()),calculateService.getEstimateByType(user.getId()).get("price"))){
+				calculateCount = calculateCount.add(examScoreMap.get("1151013343665733999"));
+			}
+		}
+		//是否查封、抵押车辆
+		if(StringUtils.isNotBlank(checkTradableVehiclesT.getCheck3())&& checkTradableVehiclesT.getCheck3().equals(checkTradableVehiclesS.getCheck3()) ){
+			calculateCount = calculateCount.add(examScoreMap.get("1151013343663128577"));
+		}
+		//未接受处理的交通违法记录：
+		if(StringUtils.isNotBlank(checkTradableVehiclesT.getTrafficIllegalRecord())&& checkTradableVehiclesT.getTrafficIllegalRecord().equals(checkTradableVehiclesS.getTrafficIllegalRecord())){
+			calculateCount = calculateCount.add(examScoreMap.get("1151013343662706689"));
+		}
+		//车辆鉴定评估价值为人民币（元）  1151028180615860225
+//		if(){
+//              未定
+//		}
+		//自鉴定评估基准日至（日）
+		if(StringUtils.isNotEmpty(appraisalReportT.getBaseDateEnd())&& appraisalReportT.getBaseDateEnd().equals(appraisalReportS.getBaseDateEnd()) ){
+			calculateCount = calculateCount.add(examScoreMap.get("1151028180615860225"));
+		}
+		//归档
+
+
+
+		return calculateCount;
+	}
+
+
+
+
 	//五、鉴定技术状况
 	public BigDecimal getIdentification(VehicleGradeAssess vehicleGradeAssessT,VehicleGradeAssess vehicleGradeAssessS,Map<String,BigDecimal> examScoreMap){
 		BigDecimal identificationCount = new BigDecimal(0);
 		//老师答案不为空
-		if(StringUtils.isNotBlank(vehicleGradeAssessT.getStartScore()) && StringUtils.isNotBlank(vehicleGradeAssessT.getEndScore()) ){
-			//学生答案不为空
-			if(StringUtils.isNotBlank(vehicleGradeAssessS.getScore())){
-				//老师答案
-				BigDecimal startScore = new BigDecimal(vehicleGradeAssessT.getStartScore());
-				BigDecimal endScore = new BigDecimal(vehicleGradeAssessT.getEndScore());
-				//学生答案
-				BigDecimal score = new BigDecimal(vehicleGradeAssessS.getScore());
-				//学生分数大于等于开始分数 小于等于结束分数
-				if( (score.compareTo(startScore)>-1) && (score.compareTo(endScore)<1)){
-					identificationCount = identificationCount.add(examScoreMap.get("1151028180616400897")); //车辆鉴定得分值（区间值）
-				}
-			}
+		if(this.judgeStringBetween(vehicleGradeAssessT.getStartScore(),vehicleGradeAssessT.getEndScore(),vehicleGradeAssessS.getScore())){
+			identificationCount = identificationCount.add(examScoreMap.get("1151028180616400897")); //车辆鉴定得分值（区间值）
 		}
 		//鉴定日期
 //        if(StringUtils.isNotBlank(vehicleGradeAssessT.get) )
@@ -238,6 +291,20 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 	}
 
 
+
+	//判断 某字符串类型 在某字符串类型区间 并判断是或否为空
+	//中间值 大于等于开始值 小于等于结束值
+	public Boolean judgeStringBetween(String begin,String end,String middle){
+		if(StringUtils.isNotBlank(begin)&&StringUtils.isNotBlank(end)&&StringUtils.isNotBlank(middle)){
+			BigDecimal middleNumber = new BigDecimal(middle);
+			BigDecimal beginNumber = new BigDecimal(begin);
+			BigDecimal endNumber = new BigDecimal(end);
+			if(middleNumber.compareTo(beginNumber)>-1 && middleNumber.compareTo(endNumber)<1){
+				return true;
+			}
+		}
+		return false;
+	}
 
 
 	//四、判别事故车

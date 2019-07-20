@@ -3,7 +3,9 @@
  */
 package com.jeesite.modules.aa.service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import com.jeesite.modules.aa.entity.*;
 import com.jeesite.modules.aa.vo.CalculateVO;
@@ -134,5 +136,10 @@ public class CalculateService extends CrudService<CalculateDao, Calculate> {
 
     public Calculate getByEntity(Calculate calculate) {
         return dao.getByEntity(calculate);
+    }
+
+    //依据学生的估算方式查找对应的估算值
+    public Map<String, String> getEstimateByType(String examUserId){
+        return dao.getEstimateByType(examUserId);
     }
 }

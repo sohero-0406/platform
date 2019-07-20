@@ -7,6 +7,9 @@ import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.aa.entity.Calculate;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 /**
  * 计算车辆价值DAO接口
  * @author chenlitao
@@ -14,5 +17,7 @@ import com.jeesite.modules.aa.entity.Calculate;
  */
 @MyBatisDao
 public interface CalculateDao extends CrudDao<Calculate> {
+
+    Map<String, String> getEstimateByType(String examUserId);
 	
 }
