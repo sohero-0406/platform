@@ -22,4 +22,7 @@ public interface VehicleInfoDao extends CrudDao<VehicleInfo> {
      * @return
      */
 	List<VehicleInfo> findVehicleName(String chexiId);
+
+    VehicleInfo getCarModel(String chexing_id);
+
 }

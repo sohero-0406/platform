@@ -3,14 +3,15 @@
  */
 package com.jeesite.modules.aa.service;
 
-import java.util.List;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.StringUtils;
+import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.aa.dao.CheckBodySkeletonDao;
+import com.jeesite.modules.aa.entity.CheckBodySkeleton;
 import com.jeesite.modules.aa.entity.CheckTradableVehicles;
 import com.jeesite.modules.aa.entity.ExamDetail;
-import com.jeesite.modules.aa.entity.VehicleDocumentInfo;
 import com.jeesite.modules.aa.vo.CheckBodySkeletonVO;
 import com.jeesite.modules.common.entity.Exam;
 import com.jeesite.modules.common.entity.ExamUser;
@@ -18,12 +19,9 @@ import com.jeesite.modules.common.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.aa.entity.CheckBodySkeleton;
-import com.jeesite.modules.aa.dao.CheckBodySkeletonDao;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * 检查车体骨架Service
@@ -62,7 +60,6 @@ public class CheckBodySkeletonService extends CrudService<CheckBodySkeletonDao, 
      * 查询分页数据
      *
      * @param checkBodySkeleton      查询条件
-     * @param checkBodySkeleton.page 分页对象
      * @return
      */
     @Override
@@ -191,4 +188,6 @@ public class CheckBodySkeletonService extends CrudService<CheckBodySkeletonDao, 
         vo.setSkeletonList(findList(checkBodySkeleton));
         return vo;
     }
+
+    public CheckBodySkeleton getByEntity(CheckBodySkeleton checkBodySkeleton){ return  dao.getByEntity(checkBodySkeleton); }
 }

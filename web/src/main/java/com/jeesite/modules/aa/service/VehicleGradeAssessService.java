@@ -39,7 +39,6 @@ public class VehicleGradeAssessService extends CrudService<VehicleGradeAssessDao
 	/**
 	 * 查询分页数据
 	 * @param vehicleGradeAssess 查询条件
-	 * @param vehicleGradeAssess.page 分页对象
 	 * @return
 	 */
 	@Override

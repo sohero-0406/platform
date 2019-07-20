@@ -3,20 +3,17 @@
  */
 package com.jeesite.modules.aa.service;
 
-import java.util.List;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.aa.dao.IdentifyTecDao;
+import com.jeesite.modules.aa.entity.IdentifyTec;
 import com.jeesite.modules.aa.entity.IdentifyTecDetail;
 import com.jeesite.modules.common.entity.ExamUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.aa.entity.IdentifyTec;
-import com.jeesite.modules.aa.dao.IdentifyTecDao;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -44,7 +41,6 @@ public class IdentifyTecService extends CrudService<IdentifyTecDao, IdentifyTec>
 	/**
 	 * 查询分页数据
 	 * @param identifyTec 查询条件
-	 * @param identifyTec.page 分页对象
 	 * @return
 	 */
 	@Override
@@ -112,4 +108,6 @@ public class IdentifyTecService extends CrudService<IdentifyTecDao, IdentifyTec>
 			}
 		}
     }
+
+    public IdentifyTec getByEntity(IdentifyTec identifyTec){ return dao.getByEntity(identifyTec); }
 }

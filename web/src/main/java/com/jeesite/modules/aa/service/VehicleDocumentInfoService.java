@@ -48,7 +48,6 @@ public class VehicleDocumentInfoService extends CrudService<VehicleDocumentInfoD
      * 查询分页数据
      *
      * @param vehicleDocumentInfo      查询条件
-     * @param vehicleDocumentInfo.page 分页对象
      * @return
      */
     @Override
@@ -107,7 +106,7 @@ public class VehicleDocumentInfoService extends CrudService<VehicleDocumentInfoD
                 info.setId(object.getString("id"));
                 info.setProject(object.getString("project"));
                 info.setState(object.getString("state"));
-                info.setValidity(object.getDate("validity"));
+                info.setValidity(object.getString("validity"));
                 super.save(info);
             }
         }
@@ -117,4 +116,6 @@ public class VehicleDocumentInfoService extends CrudService<VehicleDocumentInfoD
     public List<VehicleDocumentInfo> findList(VehicleDocumentInfo vehicleDocumentInfo) {
         return dao.findList(vehicleDocumentInfo);
     }
+
+    public VehicleDocumentInfo getByEntity(VehicleDocumentInfo vehicleDocumentInfo){ return dao.getByEntity(vehicleDocumentInfo); }
 }

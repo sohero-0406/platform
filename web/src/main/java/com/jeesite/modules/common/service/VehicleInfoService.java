@@ -3,17 +3,15 @@
  */
 package com.jeesite.modules.common.service;
 
-import java.util.List;
-
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.common.dao.VehicleInfoDao;
+import com.jeesite.modules.common.entity.VehicleInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.common.entity.VehicleInfo;
-import com.jeesite.modules.common.dao.VehicleInfoDao;
+import java.util.List;
 
 /**
  * 车辆配置全表Service
@@ -38,7 +36,6 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 	/**
 	 * 查询分页数据
 	 * @param vehicleInfo 查询条件
-	 * @param vehicleInfo.page 分页对象
 	 * @return
 	 */
 	@Override
@@ -82,4 +79,14 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		}
 		return vehicleInfoDao.findVehicleName(chexiId);
 	}
+
+	public VehicleInfo getByEntity(VehicleInfo vehicleInfo){ return dao.getByEntity(vehicleInfo); }
+
+	/**
+	 * 查询车型
+	 */
+	public VehicleInfo getCarModel(VehicleInfo vehicleInfo){
+		return vehicleInfoDao.getCarModel(vehicleInfo.getChexingId());
+	}
+
 }

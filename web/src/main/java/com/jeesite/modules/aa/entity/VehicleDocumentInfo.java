@@ -3,17 +3,11 @@
  */
 package com.jeesite.modules.aa.entity;
 
-import com.jeesite.modules.common.entity.PreEntity;
-import org.hibernate.validator.constraints.Length;
-import java.util.Date;
-import com.jeesite.common.mybatis.annotation.JoinTable;
-import com.jeesite.common.mybatis.annotation.JoinTable.Type;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
-import com.jeesite.common.mybatis.mapper.query.QueryType;
+import com.jeesite.modules.common.entity.PreEntity;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 车辆单证信息Entity
@@ -37,7 +31,7 @@ public class VehicleDocumentInfo extends PreEntity<VehicleDocumentInfo> {
 	private String paperId;		// 试卷id
 	private String project;		// 单证项目
 	private String state;		// 状态
-	private Date validity;		// 有效期
+	private String validity;		// 有效期
 	
 	public VehicleDocumentInfo() {
 		this(null);
@@ -82,14 +76,13 @@ public class VehicleDocumentInfo extends PreEntity<VehicleDocumentInfo> {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getValidity() {
+
+	@Length(min=0, max=64, message="单证项目长度不能超过 64 个字符")
+	public String getValidity() {
 		return validity;
 	}
 
-	public void setValidity(Date validity) {
+	public void setValidity(String validity) {
 		this.validity = validity;
 	}
-	
 }

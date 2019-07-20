@@ -182,7 +182,6 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
 	/**
 	 * 查询分页数据
 	 * @param pictureUser 查询条件
-	 * @param pictureUser.page 分页对象
 	 * @return
 	 */
 	@Override
@@ -219,5 +218,9 @@ public class PictureUserService extends CrudService<PictureUserDao, PictureUser>
 	public void delete(PictureUser pictureUser) {
 		super.delete(pictureUser);
 	}
-	
+
+	public PictureUser getByEntity(PictureUser pictureUser) {
+		return dao.getByEntity(pictureUser);
+	}
+
 }

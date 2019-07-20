@@ -3,22 +3,21 @@
  */
 package com.jeesite.modules.common.service;
 
-import java.util.List;
-
-
-import java.math.BigDecimal;
-import java.util.*;
-import com.jeesite.common.lang.StringUtils;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.aa.entity.*;
 import com.jeesite.modules.aa.service.*;
+import com.jeesite.modules.common.dao.ExamUserDao;
+import com.jeesite.modules.common.entity.ExamUser;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.common.entity.ExamUser;
-import com.jeesite.modules.common.dao.ExamUserDao;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * common_exam_userService
@@ -54,7 +53,7 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 	@Autowired
 	private VehicleGradeAssessService vehicleGradeAssessService;
 
-	
+
 	/**
 	 * 获取单条数据
 	 * @param examUser
@@ -68,7 +67,6 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 	/**
 	 * 查询分页数据
 	 * @param examUser 查询条件
-	 * @param examUser.page 分页对象
 	 * @return
 	 */
 	@Override
@@ -474,9 +472,5 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		//盖章
 		return delegateCount;
 	}
-
-
-
-
 
 }
