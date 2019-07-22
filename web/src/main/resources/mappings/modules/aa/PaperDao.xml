@@ -19,5 +19,24 @@
 		LEFT JOIN aa_car_info as b on a.id = b.paper_id
 		where a.status = '0'
 	</select>
+
+	<!-- 加载首页界面(教师端) -->
+	<select id="findPaperBySortTea" resultType="CarInfo" parameterType="java.util.Map">
+		SELECT aa_car_info.* FROM aa_paper
+		LEFT JOIN aa_car_info ON aa_paper.id = aa_car_info.paper_id
+		<where>
+			<if test="queryCriteria != null and queryCriteria != ''" >
+				license_plate_num like CONCAT('%',#{queryCriteria},'%') or vin_code like CONCAT('%',#{queryCriteria},'%')
+			</if>
+		</where>
+		<if test="sort != null and sort != ''">
+			<if test="sort == 1">
+				ORDER BY create_date asc
+			</if>
+			<if test="sort == 2">
+				ORDER BY create_date desc
+			</if>
+		</if>
+	</select>
 	
 </mapper>

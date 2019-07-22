@@ -7,6 +7,8 @@ import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.aa.entity.CarInfo;
 
+import java.util.Map;
+
 /**
  * 委托车辆信息DAO接口
  * @author chenlitao
@@ -14,5 +16,8 @@ import com.jeesite.modules.aa.entity.CarInfo;
  */
 @MyBatisDao
 public interface CarInfoDao extends CrudDao<CarInfo> {
-	
+
+    CarInfo findCarInfoBySortStu(Map<String,String> hs);
+
+
 }

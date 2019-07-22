@@ -3,16 +3,19 @@
  */
 package com.jeesite.modules.aa.service;
 
-import java.util.List;
-
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.aa.dao.PaperDao;
+import com.jeesite.modules.aa.entity.CarInfo;
+import com.jeesite.modules.aa.entity.Paper;
+import com.jeesite.modules.aa.vo.HomePageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.aa.entity.Paper;
-import com.jeesite.modules.aa.dao.PaperDao;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 试卷Service
@@ -84,4 +87,13 @@ public class PaperService extends CrudService<PaperDao, Paper> {
 		return paperDao.findPaper();
 	}
 
+	/**
+	 * 加载首页界面(教师端)
+	 */
+	public List<CarInfo> loadHomePageTea(HomePageVO homePageVO) {
+		Map<String,String> hs = new HashMap<>();
+		hs.put("queryCriteria",homePageVO.getQueryCriteria());
+		hs.put("sort",homePageVO.getSort());
+		return paperDao.findPaperBySortTea(hs);
+	}
 }

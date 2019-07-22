@@ -3,28 +3,24 @@
  */
 package com.jeesite.modules.aa.service;
 
-import java.beans.Transient;
-import java.util.List;
-
-import com.jeesite.modules.aa.dao.DelegateUserDao;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.aa.dao.CarInfoDao;
+import com.jeesite.modules.aa.entity.CarInfo;
 import com.jeesite.modules.aa.entity.DelegateUser;
 import com.jeesite.modules.aa.entity.PictureUser;
 import com.jeesite.modules.aa.vo.BaseInfoVO;
-import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.aa.vo.HomePageVO;
 import com.jeesite.modules.common.entity.ExamUser;
 import com.jeesite.modules.sys.entity.DictData;
-import com.jeesite.modules.sys.service.DictDataService;
 import com.jeesite.modules.sys.utils.DictUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.aa.entity.CarInfo;
-import com.jeesite.modules.aa.dao.CarInfoDao;
-
-import javax.security.auth.callback.Callback;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 委托车辆信息Service
@@ -39,6 +35,8 @@ public class CarInfoService extends CrudService<CarInfoDao, CarInfo> {
     private DelegateUserService delegateUserService;
     @Autowired
     private PictureUserService pictureUserService;
+    @Autowired
+    private CarInfoDao carInfoDao;
 
     /**
      * 获取单条数据
@@ -55,7 +53,6 @@ public class CarInfoService extends CrudService<CarInfoDao, CarInfo> {
      * 查询分页数据
      *
      * @param carInfo      查询条件
-     * @param carInfo.page 分页对象
      * @return
      */
     @Override
@@ -177,5 +174,18 @@ public class CarInfoService extends CrudService<CarInfoDao, CarInfo> {
 
     public CarInfo getByEntity(CarInfo carInfo) {
         return dao.getByEntity(carInfo);
+    }
+
+    /**
+     * 根据排序规则（正序或者倒序）返回列表
+     * @param homePageVO
+     * @return
+     */
+    public CarInfo findCarInfoBySortStu(HomePageVO homePageVO) {
+        Map<String,String> hs = new HashMap<>();
+        hs.put("examUserId",homePageVO.getCarInfo().getExamUserId());
+        hs.put("queryCriteria",homePageVO.getQueryCriteria());
+        hs.put("sort",homePageVO.getSort());
+        return carInfoDao.findCarInfoBySortStu(hs);
     }
 }

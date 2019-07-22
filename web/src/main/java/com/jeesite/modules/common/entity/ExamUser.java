@@ -3,12 +3,11 @@
  */
 package com.jeesite.modules.common.entity;
 
-import org.hibernate.validator.constraints.Length;
-
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
-import com.jeesite.common.mybatis.mapper.query.QueryType;
+import org.hibernate.validator.constraints.Length;
+
 
 /**
  * common_exam_userEntity
@@ -22,6 +21,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="user_num", attrName="userNum", label="用户名"),
 		@Column(name="password", attrName="password", label="密码"),
 		@Column(name="score", attrName="score", label="分数"),
+		@Column(name="start_time", attrName="startTime", label="考试开始时间"),
+		@Column(name="end_time", attrName="endTime", label="考试结束时间"),
+		@Column(name="state", attrName="state", label="考试状态"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -35,6 +37,10 @@ public class ExamUser extends PreEntity<ExamUser> {
 
 	private String paperId;		//试卷id
 	private String score;		// 密码
+
+	private String startTime;		//考试开始时间
+	private String endTime;		//考试结束时间
+	private Integer state;		//考试状态
 
 	public ExamUser() {
 		this(null);
@@ -95,5 +101,29 @@ public class ExamUser extends PreEntity<ExamUser> {
 
 	public void setPaperId(String paperId) {
 		this.paperId = paperId;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
 	}
 }

@@ -19,7 +19,7 @@
 
 	<!-- 查询车型 -->
 	<select id="getCarModel" resultType="VehicleInfo">
-		SELECT id,chexingmingcheng FROM common_vehicle_info where chexing_id = #{chexing_id}
+		SELECT id,chexingmingcheng FROM common_vehicle_info where chexing_id = #{chexingId}
 	</select>
 
 </mapper>
