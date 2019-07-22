@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.Exam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -82,7 +83,7 @@ public class ExamUserController extends BaseController {
 		examUserService.save(examUser);
 		return renderResult(Global.TRUE, text("保存common_exam_user成功！"));
 	}
-	
+
 	/**
 	 * 删除common_exam_user
 	 */
@@ -96,14 +97,16 @@ public class ExamUserController extends BaseController {
 	/**
 	 *  判考试成绩
 	 */
-	@RequestMapping(value = "getExamScoreInfo")
+	@RequestMapping(value = "gradePapers")
 	@ResponseBody
-	public CommonResult getExamScoreInfo(ExamUser examUser) {
+	public CommonResult gradePapers(ExamUser examUser) {
 		CommonResult comRes = new CommonResult();
 
-		comRes.setData(examUserService.getExamScoreInfo());
+		comRes.setData(examUserService.gradePapers());
 		return comRes;
 	}
+
+
 }
 
 
