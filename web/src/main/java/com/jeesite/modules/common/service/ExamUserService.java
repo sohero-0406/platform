@@ -58,6 +58,9 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 	//二手车鉴定评估报告Service
 	@Autowired
 	private AppraisalReportService appraisalReportService;
+	//归档
+	@Autowired
+	private PlaceFileService placeFileService;
 
 
 	/**
@@ -115,10 +118,10 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
     }
 
 	/**
-	 * 获取考试成绩
+	 *  判卷
 	 */
 	@Transactional(readOnly = false)
-	public Object getExamScoreInfo() {
+	public Object gradePapers() {
 		//页面获取考试id  examId
 		String examId = "1151435216635924480";
 		String paperId = "1151374360001810432"; //页面获取数据
@@ -140,6 +143,7 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		VehicleGradeAssess vehicleGradeAssessTec = new VehicleGradeAssess();
 		Calculate calculateTec = new Calculate();//计算车辆价值
 		AppraisalReport appraisalReportTec = new AppraisalReport();
+		PlaceFile placeFileTec = new PlaceFile();
 
 
 		delegateUserTec.setPaperId(paperId);
@@ -150,6 +154,7 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		vehicleGradeAssessTec.setPaperId(paperId);
 		calculateTec.setPaperId(paperId);
 		appraisalReportTec.setPaperId(paperId);
+		placeFileTec.setPaperId(paperId);
 
 
 		//试卷 答案(老师)
@@ -167,6 +172,7 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		//六、估算汽车价值
 		Calculate calculateT = calculateService.getByEntity(calculateTec);
 		AppraisalReport appraisalReportT = appraisalReportService.getByEntity(appraisalReportTec);
+		List<PlaceFile> placeFileListT = placeFileService.findList(placeFileTec); //归档
 
 
 
@@ -190,6 +196,7 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		//六、估算价值
 		Calculate calculateStu = new Calculate();//计算车辆价值
 		AppraisalReport appraisalReportStu = new AppraisalReport();
+		PlaceFile placeFileStu = new PlaceFile();
 
 
 
@@ -223,11 +230,10 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 			//六、估算价值
 			appraisalReportStu.setExamUserId(user.getId());
 			AppraisalReport appraisalReportS = appraisalReportService.getByEntity(appraisalReportStu);
-			BigDecimal calculateCount = getCalculate(calculateT,user,examScoreMap,checkTradableVehiclesT,checkTradableVehiclesS,appraisalReportT,appraisalReportS);
+			List<PlaceFile> placeFileListS =  placeFileService.findList(placeFileStu);
+			BigDecimal calculateCount = getCalculate(calculateT,user,examScoreMap,checkTradableVehiclesT,checkTradableVehiclesS,appraisalReportT,appraisalReportS,placeFileListT,placeFileListS);
 
-
-
-			BigDecimal count = delegateCount.add(vehicleDocumentCount.add(carInfoCount.add(accidentCount.add(identificationCount))));
+			BigDecimal count = delegateCount.add(vehicleDocumentCount.add(carInfoCount.add(accidentCount.add(identificationCount.add(calculateCount)))));
 			user.setScore(String.valueOf(count));
 			super.save(user);
 		}
@@ -237,14 +243,21 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 	//六、估算价值
 	/**
 	 *
-	 * @param calculateT 教师 计算车辆价值
-	 * @param user 考生信息
-	 * @param examScoreMap 评分项分数
+	 * @param calculateT  老师-估算价值
+	 * @param user     考生
+	 * @param examScoreMap  评分分数项
+	 * @param checkTradableVehiclesT  检查可交易车辆-老师
+	 * @param checkTradableVehiclesS  检查可交易车辆-学生
+	 * @param appraisalReportT  二手车鉴定评估报告-老师
+	 * @param appraisalReportS  二手车鉴定评估报告-学生
+	 * @param placeFileListT 归档-老师
+	 * @param placeFileListS 归档-学生
 	 * @return
 	 */
 	public BigDecimal getCalculate(Calculate calculateT,ExamUser user,Map<String,BigDecimal> examScoreMap,
 								   CheckTradableVehicles checkTradableVehiclesT,CheckTradableVehicles checkTradableVehiclesS,
-								   AppraisalReport appraisalReportT,AppraisalReport appraisalReportS){
+								   AppraisalReport appraisalReportT,AppraisalReport appraisalReportS,
+								   List<PlaceFile> placeFileListT,List<PlaceFile> placeFileListS){
 		BigDecimal calculateCount = new BigDecimal("0");
 		//学生估算方式
 		if(calculateT.getBeginPrice()!=null && calculateT.getEndPrice()!=null){
@@ -539,5 +552,9 @@ public class ExamUserService extends CrudService<ExamUserDao, ExamUser> {
 		//盖章
 		return delegateCount;
 	}
+
+	//获取考试成绩列表
+
+
 
 }
