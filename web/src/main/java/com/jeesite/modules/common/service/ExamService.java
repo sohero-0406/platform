@@ -110,5 +110,10 @@ public class ExamService extends CrudService<ExamDao, Exam> {
 	}
 
 
+	@Transactional(readOnly=false)
+	public Exam getByEntity(Exam exam) {
+		return dao.getByEntity(exam);
+	}
+
 
 }
