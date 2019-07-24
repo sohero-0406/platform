@@ -3,23 +3,17 @@
  */
 package com.jeesite.modules.common.service;
 
-import java.util.List;
-
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.service.CrudService;
 import com.jeesite.common.web.http.ServletUtils;
-import com.jeesite.modules.aa.vo.LoginVO;
+import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.CommonResult;
-import com.jeesite.modules.common.entity.ExamUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.jeesite.modules.common.entity.CommonUser;
+import com.jeesite.modules.common.vo.LoginVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.common.entity.CommonUser;
-import com.jeesite.modules.common.dao.CommonUserDao;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -31,9 +25,6 @@ import javax.servlet.http.HttpSession;
 @Service
 @Transactional(readOnly = true)
 public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
-
-    @Autowired
-    private ExamUserService examUserService;
 
     /**
      * 获取单条数据

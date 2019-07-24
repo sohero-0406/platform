@@ -3,29 +3,24 @@
  */
 package com.jeesite.modules.common.web;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.jeesite.common.constant.CodeConstant;
-import com.jeesite.common.lang.StringUtils;
-import com.jeesite.modules.aa.vo.LoginVO;
+import com.jeesite.common.config.Global;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.entity.CommonResult;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.jeesite.modules.common.entity.CommonUser;
+import com.jeesite.modules.common.service.CommonUserService;
+import com.jeesite.modules.common.vo.LoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jeesite.common.config.Global;
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.common.entity.CommonUser;
-import com.jeesite.modules.common.service.CommonUserService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * common_userController

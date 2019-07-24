@@ -1,12 +1,4 @@
-package com.jeesite.modules.aa.vo;
-
-import com.jeesite.modules.aa.entity.CarInfo;
-import com.jeesite.modules.aa.entity.DelegateUser;
-import com.jeesite.modules.aa.entity.PictureUser;
-import com.jeesite.modules.sys.entity.DictData;
-
-import javax.validation.Valid;
-import java.util.List;
+package com.jeesite.modules.common.vo;
 
 public class LoginVO {
 
