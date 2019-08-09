@@ -11,5 +11,48 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
+
+	<select id="findCommonUserById" resultType="CommonUser">
+		selet * from common_user where id = #{commonUserId}
+	</select>
+
+	<select id="findAssessmentStu" resultType="CommonUser">
+		select cu.*, castu.id as commonAssessmentStuId from common_user as cu, common_assessment_stu as castu
+		where cu.id = castu.common_user_id and cu.id in (select common_user_id from common_assessment_stu as cas
+						where cas.school_id = #{schoolId} and cu.status = 0
+						 <if test="assessmentId!=null">
+							 and cas.assessment_id = #{assessmentId}
+						 </if>
+						 <if test="assessmentDate!=null">
+							 and cas.assessment_date = #{assessmentDate}
+						 </if>
+						<if test="assessmentTime!=null">
+							and cas.assessment_time = #{assessmentTime}
+						</if>
+						 )
+	</select>
+
+	<select id="findNormalStu" resultType="CommonUser">
+		select * from common_user as cu where cu.school_id = #{schoolId} and cu.status = 0 and cu.role_id = '3'
+	</select>
+
+	<select id="findStuByIdsWithSchoolName" resultType="CommonUser">
+		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc where cu.school_id = sc.id and cu.id in
+		<foreach collection="list" open="(" separator="," close=")" item="id">
+			#{id}
+		</foreach>
+	</select>
+
+	<select id="findStuByUserNamesWithSchoolName" resultType="CommonUser">
+		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc where cu.school_id = sc.id and cu.user_name in
+		<foreach collection="list" open="(" separator="," close=")" item="userName">
+			#{userName}
+		</foreach>
+	</select>
+
+	<select id="findByUserName" resultType="CommonUser">
+		select * from common_user where user_name = #{userName}
+	</select>
+
 	
 </mapper>

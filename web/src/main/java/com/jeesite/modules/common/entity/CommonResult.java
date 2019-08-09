@@ -27,9 +27,24 @@ public class CommonResult<T> {
 
     }
 
+    public CommonResult(String code ) {
+        this.code = code;
+    }
+
+    public CommonResult(String code, T data ) {
+        this.code = code;
+        this.data = data;
+    }
+
     public CommonResult(String code, String msg) {
         this.code = code;
         this.msg = msg;
+    }
+
+    public CommonResult(String code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
     }
 
     public String getCode() {

@@ -1,0 +1,109 @@
+<% layout('/layouts/default.html', {title: '考核表管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('考核表管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('common:commonAssessment:edit')){ %>
+					<a href="${ctx}/common/commonAssessment/form" class="btn btn-default btnTool" title="${text('新增考核表')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${commonAssessment}" action="${ctx}/common/commonAssessment/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('assessment_name')}：</label>
+					<div class="control-inline">
+						<#form:input path="assessmentName" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('assessment_scheme_id')}：</label>
+					<div class="control-inline">
+						<#form:input path="assessmentSchemeId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('start_date')}：</label>
+					<div class="control-inline">
+						<#form:input path="startDate" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('end_date')}：</label>
+					<div class="control-inline">
+						<#form:input path="endDate" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('school_id')}：</label>
+					<div class="control-inline">
+						<#form:input path="schoolId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('school_name')}：</label>
+					<div class="control-inline">
+						<#form:input path="schoolName" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('remarks')}：</label>
+					<div class="control-inline">
+						<#form:input path="remarks" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("assessment_name")}', name:'assessmentName', index:'a.assessment_name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/common/commonAssessment/form?id='+row.id+'" class="btnList" data-title="${text("编辑考核表")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("assessment_scheme_id")}', name:'assessmentSchemeId', index:'a.assessment_scheme_id', width:150, align:"left"},
+		{header:'${text("start_date")}', name:'startDate', index:'a.start_date', width:150, align:"left"},
+		{header:'${text("end_date")}', name:'endDate', index:'a.end_date', width:150, align:"left"},
+		{header:'${text("school_id")}', name:'schoolId', index:'a.school_id', width:150, align:"left"},
+		{header:'${text("school_name")}', name:'schoolName', index:'a.school_name', width:150, align:"left"},
+		{header:'${text("update_date")}', name:'updateDate', index:'a.update_date', width:150, align:"center"},
+		{header:'${text("remarks")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
+		{header:'${text("状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
+		}},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('common:commonAssessment:edit')){ %>
+				actions.push('<a href="${ctx}/common/commonAssessment/form?id='+row.id+'" class="btnList" title="${text("编辑考核表")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/common/commonAssessment/delete?id='+row.id+'" class="btnList" title="${text("删除考核表")}" data-confirm="${text("确认要删除该考核表吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

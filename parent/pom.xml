@@ -58,6 +58,8 @@
 		<maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version><!-- 降级到该版本，新版本可能会出现VM崩溃 -->
 		<eclipse-plugin-download-sources>false</eclipse-plugin-download-sources>
 		<eclipse-plugin-download-javadocs>false</eclipse-plugin-download-javadocs>
+
+		<jsonwebtoken.version>0.9.0</jsonwebtoken.version>
 		
 	</properties>
 	

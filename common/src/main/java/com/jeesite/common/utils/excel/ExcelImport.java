@@ -344,7 +344,7 @@ public class ExcelImport implements Closeable {
 	/**
 	 * 获取导入数据列表
 	 * @param cls 导入对象类型
-	 * @param isThrowException 遇见错误是否抛出异常
+	 * @param exceptionCallback 遇见错误是否抛出异常
 	 * @param groups 导入分组
 	 */
 	public <E> List<E> getDataList(Class<E> cls, MethodCallback exceptionCallback, String... groups) throws InstantiationException, IllegalAccessException{
