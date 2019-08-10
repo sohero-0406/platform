@@ -6,6 +6,7 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 /**
  * 车辆配置全表Controller
+ *
  * @author chenlitao
  * @version 2019-07-04
  */
@@ -36,91 +38,112 @@ import java.util.Map;
 @RequestMapping(value = "${adminPath}/common/vehicleInfo")
 public class VehicleInfoController extends BaseController {
 
-	@Autowired
-	private VehicleInfoService vehicleInfoService;
-	
-	/**
-	 * 获取数据
-	 */
-	@ModelAttribute
-	public VehicleInfo get(String id, boolean isNewRecord) {
-		return vehicleInfoService.get(id, isNewRecord);
-	}
-	
-	/**
-	 * 查询列表
-	 */
-	@RequestMapping(value = {"list", ""})
-	public String list(VehicleInfo vehicleInfo, Model model) {
-		model.addAttribute("vehicleInfo", vehicleInfo);
-		return "modules/common/vehicleInfoList";
-	}
-	
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "listData")
-	@ResponseBody
-	public Page<VehicleInfo> listData(VehicleInfo vehicleInfo, HttpServletRequest request, HttpServletResponse response) {
-		vehicleInfo.setPage(new Page<>(request, response));
-		Page<VehicleInfo> page = vehicleInfoService.findPage(vehicleInfo);
-		return page;
-	}
+    @Autowired
+    private VehicleInfoService vehicleInfoService;
 
-	/**
-	 * 查看编辑表单
-	 */
-	@RequestMapping(value = "form")
-	public String form(VehicleInfo vehicleInfo, Model model) {
-		model.addAttribute("vehicleInfo", vehicleInfo);
-		return "modules/common/vehicleInfoForm";
-	}
+    /**
+     * 获取数据
+     */
+    @ModelAttribute
+    public VehicleInfo get(String id, boolean isNewRecord) {
+        return vehicleInfoService.get(id, isNewRecord);
+    }
 
-	/**
-	 * 保存车辆配置全表
-	 */
-	@PostMapping(value = "save")
-	@ResponseBody
-	public String save(@Validated VehicleInfo vehicleInfo) {
-		vehicleInfoService.save(vehicleInfo);
-		return renderResult(Global.TRUE, text("保存车辆配置全表成功！"));
-	}
-	
-	/**
-	 * 删除车辆配置全表
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public String delete(VehicleInfo vehicleInfo) {
-		vehicleInfoService.delete(vehicleInfo);
-		return renderResult(Global.TRUE, text("删除车辆配置全表成功！"));
-	}
-	@PostMapping(value = "findList")
-	@ResponseBody
-	public CommonResult findList(String chexiId){
-		CommonResult comRes = new CommonResult();
-		if(chexiId == null || chexiId.trim().length() <= 0){
-			comRes.setCode("1010");
-			comRes.setMsg("未按照接口要求进行数据查询！");
-			return comRes;
-		}
-		List<VehicleInfo> vehicleInfoList = vehicleInfoService.findVehicleName(chexiId);
+    /**
+     * 查询列表
+     */
+    @RequestMapping(value = {"list", ""})
+    public String list(VehicleInfo vehicleInfo, Model model) {
+        model.addAttribute("vehicleInfo", vehicleInfo);
+        return "modules/common/vehicleInfoList";
+    }
 
-		Map<String, List<VehicleInfo>> map = new HashMap<>();
-		List<VehicleInfo> values = null;
-		for(VehicleInfo vi : vehicleInfoList){
-			String key = vi.getNiankuan();
-			if(map.containsKey(key)){
-				values = map.get(key);
-			}else {
-				values = new ArrayList<>();
-			}
-			values.add(vi);
+    /**
+     * 查询列表数据
+     */
+    @RequestMapping(value = "listData")
+    @ResponseBody
+    public Page<VehicleInfo> listData(VehicleInfo vehicleInfo, HttpServletRequest request, HttpServletResponse response) {
+        vehicleInfo.setPage(new Page<>(request, response));
+        Page<VehicleInfo> page = vehicleInfoService.findPage(vehicleInfo);
+        return page;
+    }
 
-			map.put(key, values);
-		}
-		comRes.setData(map);
+    /**
+     * 查看编辑表单
+     */
+    @RequestMapping(value = "form")
+    public String form(VehicleInfo vehicleInfo, Model model) {
+        model.addAttribute("vehicleInfo", vehicleInfo);
+        return "modules/common/vehicleInfoForm";
+    }
 
-		return comRes;
-	}
+    /**
+     * 保存车辆配置全表
+     */
+    @PostMapping(value = "save")
+    @ResponseBody
+    public String save(@Validated VehicleInfo vehicleInfo) {
+        vehicleInfoService.save(vehicleInfo);
+        return renderResult(Global.TRUE, text("保存车辆配置全表成功！"));
+    }
+
+    /**
+     * 删除车辆配置全表
+     */
+    @RequestMapping(value = "delete")
+    @ResponseBody
+    public String delete(VehicleInfo vehicleInfo) {
+        vehicleInfoService.delete(vehicleInfo);
+        return renderResult(Global.TRUE, text("删除车辆配置全表成功！"));
+    }
+
+    @PostMapping(value = "findList")
+    @ResponseBody
+    public CommonResult findList(String chexiId) {
+        CommonResult comRes = new CommonResult();
+        if (chexiId == null || chexiId.trim().length() <= 0) {
+            comRes.setCode("1010");
+            comRes.setMsg("未按照接口要求进行数据查询！");
+            return comRes;
+        }
+        List<VehicleInfo> vehicleInfoList = vehicleInfoService.findVehicleName(chexiId);
+
+        Map<String, List<VehicleInfo>> map = new HashMap<>();
+        List<VehicleInfo> values = null;
+        for (VehicleInfo vi : vehicleInfoList) {
+            String key = vi.getNiankuan();
+            if (map.containsKey(key)) {
+                values = map.get(key);
+            } else {
+                values = new ArrayList<>();
+            }
+            values.add(vi);
+
+            map.put(key, values);
+        }
+        comRes.setData(map);
+
+        return comRes;
+    }
+
+    /**
+     * 根据车型id查部分常用属性
+     */
+    @RequestMapping(value = "getCarModel")
+    @ResponseBody
+    public CommonResult getCarModel(String chexingId) {
+        VehicleInfo vehicleInfo = vehicleInfoService.getCarModel(chexingId);
+        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, vehicleInfo);
+    }
+
+    /**
+     * 根据车型id查部分常用属性
+     */
+    @RequestMapping(value = "getByEntity")
+    @ResponseBody
+    public CommonResult getByEntity(VehicleInfo vehicleInfo) {
+        vehicleInfo = vehicleInfoService.getByEntity(vehicleInfo);
+        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, vehicleInfo);
+    }
 }
