@@ -34,8 +34,7 @@ public class CommonRoleService extends CrudService<CommonRoleDao, CommonRole> {
 	
 	/**
 	 * 查询分页数据
-	 * @param commonRole 查询条件
-	 * @param commonRole.page 分页对象
+	 * @param commonRole 查询条件 commonRole.page 分页对象
 	 * @return
 	 */
 	@Override

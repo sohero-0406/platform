@@ -168,6 +168,8 @@ spring:
         maxIdle: 8
         # 最大活动连接数
         maxActive: 20
+  aop:
+    proxy-target-class: true
 
 #  # 缓存配置
 #  cache:

@@ -76,7 +76,7 @@ public class ExcelImport implements Closeable {
 	
 	/**
 	 * 构造函数
-	 * @param path 导入文件对象，读取第一个工作表
+	 * @param file 导入文件对象，读取第一个工作表
 	 * @throws InvalidFormatException 
 	 * @throws IOException 
 	 */
@@ -86,7 +86,7 @@ public class ExcelImport implements Closeable {
 	
 	/**
 	 * 构造函数
-	 * @param path 导入文件对象，读取第一个工作表
+	 * @param file 导入文件对象，读取第一个工作表
 	 * @param headerNum 标题行数，数据行号=标题行数+1
 	 * @throws InvalidFormatException 
 	 * @throws IOException 
@@ -98,7 +98,7 @@ public class ExcelImport implements Closeable {
 
 	/**
 	 * 构造函数
-	 * @param path 导入文件对象
+	 * @param file 导入文件对象
 	 * @param headerNum 标题行数，数据行号=标题行数+1
 	 * @param sheetIndexOrName 工作表编号或名称，从0开始
 	 * @throws InvalidFormatException 
@@ -111,7 +111,7 @@ public class ExcelImport implements Closeable {
 	
 	/**
 	 * 构造函数
-	 * @param file 导入文件对象
+	 * @param multipartFile 导入文件对象
 	 * @param headerNum 标题行数，数据行号=标题行数+1
 	 * @param sheetIndexOrName 工作表编号或名称，从0开始
 	 * @throws InvalidFormatException 
@@ -124,7 +124,7 @@ public class ExcelImport implements Closeable {
 
 	/**
 	 * 构造函数
-	 * @param path 导入文件对象
+	 * @param fileName 导入文件对象
 	 * @param headerNum 标题行数，数据行号=标题行数+1
 	 * @param sheetIndexOrName 工作表编号或名称
 	 * @throws InvalidFormatException 
@@ -193,6 +193,10 @@ public class ExcelImport implements Closeable {
 			throw new ExcelException("没有找到‘"+sheetIndexOrName+"’工作表!");
 		}
 		this.headerNum = headerNum;
+	}
+
+	public String getSheetName(){
+		return this.sheet.getSheetName();
 	}
 
 	/**

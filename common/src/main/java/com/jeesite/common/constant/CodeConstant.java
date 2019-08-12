@@ -37,4 +37,7 @@ public class CodeConstant {
     // 数据不能更改
     public static final String DATA_LOCK = "8010";
 
+    // excel的数据无法成功解析
+    public static final String EXCEL_WRONG_DATA = "8011";
+
 }

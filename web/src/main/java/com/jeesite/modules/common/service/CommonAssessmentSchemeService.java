@@ -31,7 +31,7 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 
 
 	@Autowired
-	private CommonUserDao commonUserDao;
+	private CommonUserService commonUserService;
 
 
 	/**
@@ -69,9 +69,7 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 	@Transactional(readOnly=false)
 	public CommonResult saveCommonAssessmentScheme(CommonAssessmentScheme commonAssessmentScheme) {
 		String loginUserId = PreEntity.getUserIdByToken();
-		CommonUser con = new CommonUser();
-		con.setId(loginUserId);
-		CommonUser loginUser = commonUserDao.getByEntity(con);
+		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(CommonUserUtil.isHaveExamRight(loginUser)){
 			super.save(commonAssessmentScheme);
 			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
@@ -95,15 +93,14 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 	@Transactional(readOnly=false)
 	public CommonResult updateCommonAssessmentSchemeStatus(CommonAssessmentScheme commonAssessmentScheme) {
 		String loginUserId = PreEntity.getUserIdByToken();
-		CommonUser con = new CommonUser();
-		con.setId(loginUserId);
-		CommonUser loginUser = commonUserDao.getByEntity(con);
+		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(loginUser.getRoleId().equals("1")){
 			super.updateStatus(commonAssessmentScheme);
 			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 		}
 		if(loginUser.getRoleId().equals("2")&&loginUser.getIsExamRight()==1){
-			CommonUser createOne = commonUserDao.getByEntity(new CommonUser(commonAssessmentScheme.getCreateBy()));
+			//CommonUser createOne = commonUserDao.getByEntity(new CommonUser(commonAssessmentScheme.getCreateBy()));
+			CommonUser createOne = commonUserService.get(commonAssessmentScheme.getCreateBy());
 			if(loginUser.getSchoolId().equals(createOne.getSchoolId())){
 				super.updateStatus(commonAssessmentScheme);
 				return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
@@ -125,15 +122,13 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 	@Transactional(readOnly=false)
 	public CommonResult deleteCommonAssessmentScheme(CommonAssessmentScheme commonAssessmentScheme) {
 		String loginUserId = PreEntity.getUserIdByToken();
-		CommonUser con = new CommonUser();
-		con.setId(loginUserId);
-		CommonUser loginUser = commonUserDao.getByEntity(con);
+		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(CommonUserUtil.isHaveExamRight(loginUser)){
 			if(loginUser.getRoleId().equals("1")){
 				super.delete(commonAssessmentScheme);
 				return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 			}else{
-				CommonUser createOne = commonUserDao.getByEntity(new CommonUser(commonAssessmentScheme.getCreateBy()));
+				CommonUser createOne = commonUserService.get(commonAssessmentScheme.getCreateBy());
 				if(loginUser.getSchoolId().equals(createOne.getSchoolId())){
 					super.delete(commonAssessmentScheme);
 					return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);

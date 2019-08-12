@@ -35,6 +35,8 @@ public class CommonAssessment extends PreEntity<CommonAssessment> {
 	private String endDate;		// end_date
 	private String schoolId;		// school_id
 	private String schoolName;		// school_name
+
+	// status 0 初始状态可以修改和删除，1 是逻辑删除状态  2 是 考核处于开始状态   3是 考核处于结束状态 4 是 评分表上传后并解析成功状态 5 是统分成功状态
 	
 	public CommonAssessment() {
 		this(null);

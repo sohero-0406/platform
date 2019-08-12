@@ -13,6 +13,7 @@ import com.jeesite.common.utils.excel.ExcelImport;
 import com.jeesite.common.utils.excel.annotation.ExcelField;
 import com.jeesite.common.utils.test.Test;
 import com.jeesite.common.web.BaseController;
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.CommonUser;
 import com.jeesite.modules.common.entity.TestUser;
@@ -50,10 +51,10 @@ public class CommonUserController extends BaseController {
     /**
      * 获取数据
      */
-    @ModelAttribute
-    public CommonUser get(String id, boolean isNewRecord) {
-        return commonUserService.get(id, isNewRecord);
-    }
+//    @ModelAttribute
+//    public CommonUser get(String id, boolean isNewRecord) {
+//        return commonUserService.get(id, isNewRecord);
+//    }
 
     /**
      * 查询列表
@@ -129,6 +130,7 @@ public class CommonUserController extends BaseController {
     }
 
 
+
     @RequestMapping(value = "listCommonUser")
     @ResponseBody
     public CommonResult listCommonUser(CommonUser commonUser) {
@@ -161,13 +163,18 @@ public class CommonUserController extends BaseController {
     /**
      * 删除common_user
      */
+    @Log(operationName = "登录")
     @RequestMapping(value = "login")
     @ResponseBody
     public CommonResult login(LoginVO vo) {
         return commonUserService.login(vo);
     }
 
-
+    @RequestMapping(value = "loadUserByToken")
+    @ResponseBody
+    public CommonResult loadUserByToken() {
+        return commonUserService.loadUserByToken();
+    }
 
 
     @RequestMapping(value = "teacherSideLogin")

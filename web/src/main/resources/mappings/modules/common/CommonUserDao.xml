@@ -54,5 +54,39 @@
 		select * from common_user where user_name = #{userName}
 	</select>
 
+	<select id="findCommonUserWithSchoolName" resultType="CommonUser">
+		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc where cu.school_id = sc.id
+		<if test="userName!=null">
+			and cu.user_name like "%"#{userName}"%"
+		</if>
+		<if test="trueName!=null">
+			and cu.true_name like "%"#{trueName}"%"
+		</if>
+		<if test="phoneNum!=null">
+			and cu.phone_num like "%"#{phoneNum}"%"
+		</if>
+		<if test="majorName!=null">
+			and cu.major_name like "%"#{majorName}"%"
+		</if>
+		<if test="className!=null">
+			and cu.class_name like "%"#{className}"%"
+		</if>
+		<if test="schoolName!=null">
+			and sc.school_name like "%"#{schoolName}"%"
+		</if>
+		<if test="gender!=null">
+			and cu.gender like "%"#{gender}"%"
+		</if>
+		<if test="roleId!=null">
+			and cu.role_id = #{roleId}
+		</if>
+		<if test="schoolId!=null">
+			and cu.school_id = #{schoolId}
+		</if>
+		and cu.status = "0"
+
+
+
+	</select>
 	
 </mapper>

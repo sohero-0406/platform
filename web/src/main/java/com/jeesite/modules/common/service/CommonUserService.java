@@ -12,6 +12,7 @@ import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.common.utils.jwt.JwtUtils;
 import com.jeesite.modules.common.dao.CommonRoleDao;
+import com.jeesite.modules.common.dao.CommonSchoolDao;
 import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.vo.LoginVO;
@@ -21,9 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * common_userService
@@ -35,10 +34,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
 
+
     @Autowired
-    private CommonUserDao commonUserDao;
+    private CommonRoleService commonRoleService;
     @Autowired
-    private CommonRoleDao commonRoleDao;
+    private CommonSchoolDao commonSchoolDao;
 
     /**
      * 获取单条数据
@@ -60,7 +60,41 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
      */
     @Override
     public Page<CommonUser> findPage(CommonUser commonUser) {
-        return super.findPage(commonUser);
+//        Page<CommonUser> page = super.findPage(commonUser);
+//        List<CommonUser> list = page.getList();
+//        String schoolIds = "";
+//        for (int i = 0; i < list.size(); i++) {
+//            if(i==0){
+//                schoolIds = list.get(i).getSchoolId();
+//            }else{
+//                if(schoolIds.indexOf(list.get(i).getSchoolId())==-1){
+//                    schoolIds += ","+list.get(i).getSchoolId();
+//                }
+//            }
+//        }
+//        CommonSchool schoolCon = new CommonSchool();
+//        schoolCon.setId_in(schoolIds.split(","));
+//        List<CommonSchool> schoolList = commonSchoolDao.findList(schoolCon);
+//        for (int i = 0; i < list.size(); i++) {
+//            CommonUser u = list.get(i);
+//            for (int j = 0; j < schoolList.size(); j++) {
+//                CommonSchool school = schoolList.get(j);
+//                if(school.getId().equals(u.getSchoolId())){
+//                    u.setSchoolName(school.getSchoolName());
+//                    break;
+//                }
+//            }
+//            list.set(i, u);
+//        }
+//        page.setList(list);
+        String loginUserId = PreEntity.getUserIdByToken();
+        CommonUser loginUser = super.get(loginUserId);
+        if(loginUser.getRoleId().equals("2")){
+            commonUser.setSchoolId(loginUser.getSchoolId());
+        }
+        Page page = commonUser.getPage();
+        page.setList(dao.findCommonUserWithSchoolName(commonUser));
+        return page;
     }
 
     /**
@@ -218,7 +252,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         CommonResult result = new CommonResult();
         String userName = vo.getUserName();
         String password = vo.getPassword();
-        CommonUser user = commonUserDao.findByUserName(userName);
+        CommonUser user = dao.findByUserName(userName);
         if(user==null){
             return new CommonResult(CodeConstant.INCORRECT_USER_NAME_OR_PASSWORD, "用户名或密码不正确");
         }else{
@@ -259,7 +293,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
 //
 //        user.setUserName(userName);
 
-        CommonUser user = commonUserDao.findByUserName(userName);
+        CommonUser user = dao.findByUserName(userName);
 
         if (null == user || !password.equals(user.getPassword())) {
             result.setCode(CodeConstant.INCORRECT_USER_NAME_OR_PASSWORD);
@@ -271,9 +305,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
        // session.setAttribute("flag", flag);
         result.setCode(CodeConstant.REQUEST_SUCCESSFUL);
 
-        CommonRole crCon = new CommonRole();
-        crCon.setId(user.getRoleId());;
-        CommonRole cr = commonRoleDao.getByEntity(crCon);
+        CommonRole cr = commonRoleService.get(user.getRoleId());
 
         user.setRoleArray(cr.getRightArray());
         user.setToken(JwtUtils.generateToken(user.getId()));
@@ -282,17 +314,23 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return result;
     }
 
+    public CommonResult loadUserByToken(){
+        String loginUserId = PreEntity.getUserIdByToken();
+        CommonUser user = super.get(loginUserId);
+        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, user);
+    }
+
     public CommonResult loadStuListInPlatform(StuSearchVO vo){
         CommonResult result = new CommonResult();
         if(vo.getCommonUserId()!=null&&vo.getExamOrPractice()!=null){
             CommonUser commonUser = super.get(vo.getCommonUserId());
             if(vo.getExamOrPractice().equals("exam")){
-                List<CommonUser> commonUserList = commonUserDao.findAssessmentStu(commonUser.getSchoolId(),
+                List<CommonUser> commonUserList = dao.findAssessmentStu(commonUser.getSchoolId(),
                         vo.getAssessmentId(), vo.getAssessmentDate(), vo.getAssessmentTime());
                 result.setCode(CodeConstant.REQUEST_SUCCESSFUL);
                 result.setData(commonUserList);
             }else{
-                List<CommonUser> commonUserList = commonUserDao.findNormalStu(commonUser.getSchoolId());
+                List<CommonUser> commonUserList = dao.findNormalStu(commonUser.getSchoolId());
                 result.setCode(CodeConstant.REQUEST_SUCCESSFUL);
                 result.setData(commonUserList);
             }
@@ -308,7 +346,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         List<String> idList = Arrays.asList(isArray);
 //        CommonUser con = new CommonUser();
 //        con.setId_in(isArray);
-        List<CommonUser> list = this.commonUserDao.findStuByIdsWithSchoolName(idList);
+        List<CommonUser> list = dao.findStuByIdsWithSchoolName(idList);
 
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
     }
@@ -318,7 +356,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         for (UserCondition userCondition:userConditionList ) {
             userNameList.add(userCondition.getUserName());
         }
-        List<CommonUser> userList = this.commonUserDao.findStuByUserNamesWithSchoolName(userNameList);
+        List<CommonUser> userList = dao.findStuByUserNamesWithSchoolName(userNameList);
         if(ListUtils.isEmpty(userList)){
             return new CommonResult(CodeConstant.EXCEL_NO_DATA, "没有查询到任何数据");
         }

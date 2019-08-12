@@ -24,6 +24,7 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.entity.CommonAssessment;
 import com.jeesite.modules.common.service.CommonAssessmentService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 考核表Controller
@@ -125,11 +126,25 @@ public class CommonAssessmentController extends BaseController {
 		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 *
+	 * @param commonAssessment 要更新的对象
+	 * @param file 上传的评分表文件
+	 * @return
+	 */
+	@RequestMapping(value = "updateCommonAssessmentStatus")
+	@ResponseBody
+	public CommonResult updateCommonAssessmentStatus(CommonAssessment commonAssessment, MultipartFile file) throws Exception {
+
+		return commonAssessmentService.updateCommonAssessmentStatus(commonAssessment, file);
+		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
+	}
+
 	@RequestMapping(value = "uploadScores")
 	@ResponseBody
-	public CommonResult uploadScores(){
+	public CommonResult uploadScores(String scoreInfo){
 
-		return null;
+		return commonAssessmentService.parseScoreInfo(scoreInfo);
 	}
 
 	

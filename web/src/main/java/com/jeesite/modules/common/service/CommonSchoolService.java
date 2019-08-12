@@ -34,8 +34,7 @@ public class CommonSchoolService extends CrudService<CommonSchoolDao, CommonScho
 	
 	/**
 	 * 查询分页数据
-	 * @param commonSchool 查询条件
-	 * @param commonSchool.page 分页对象
+	 * @param commonSchool 查询条件 commonSchool.page 分页对象
 	 * @return
 	 */
 	@Override

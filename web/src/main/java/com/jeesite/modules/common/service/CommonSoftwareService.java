@@ -34,8 +34,8 @@ public class CommonSoftwareService extends CrudService<CommonSoftwareDao, Common
 	
 	/**
 	 * 查询分页数据
-	 * @param commonSoftware 查询条件
-	 * @param commonSoftware.page 分页对象
+	 * @param commonSoftware 查询条件 commonSoftware.page 分页对象
+	 * @param
 	 * @return
 	 */
 	@Override

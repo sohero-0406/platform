@@ -6,6 +6,8 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.common.utils.excel.ExcelExport;
+import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -89,6 +91,19 @@ public class CommonAssessmentStuController extends BaseController {
 	public String delete(CommonAssessmentStu commonAssessmentStu) {
 		commonAssessmentStuService.delete(commonAssessmentStu);
 		return renderResult(Global.TRUE, text("删除考核学生表成功！"));
+	}
+
+
+	@RequestMapping(value = "searchStuScore")
+	@ResponseBody
+	public CommonResult searchStuScore(CommonAssessmentStu commonAssessmentStu){
+		return commonAssessmentStuService.findPageByCondition(commonAssessmentStu);
+	}
+
+	@RequestMapping(value = "exportStuScore")
+	public void exportStuScore(HttpServletResponse response,CommonAssessmentStu commonAssessmentStu){
+		ExcelExport ee = commonAssessmentStuService.exportStuScore(commonAssessmentStu);
+		ee.write(response, "testx.xlsx").close();
 	}
 	
 }

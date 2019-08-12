@@ -28,6 +28,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="assessment_date", attrName="assessmentDate", label="考核日期"),
 		@Column(name="assessment_time", attrName="assessmentTime", label="考核时间"),
 		@Column(name="total_score", attrName="totalScore", label="总分"),
+		@Column(name="score_details", attrName="scoreDetails", label="得分详情"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -45,6 +46,11 @@ public class CommonAssessmentStu extends PreEntity<CommonAssessmentStu> {
 	private String assessmentDate;		// 考核日期
 	private String assessmentTime;		// 考核时间
 	private String totalScore;		// 总分
+	private String scoreDetails; // 得分详情
+
+	//非数据库字段
+	private String assessmentName;
+
 	
 	public CommonAssessmentStu() {
 		this(null);
@@ -152,5 +158,20 @@ public class CommonAssessmentStu extends PreEntity<CommonAssessmentStu> {
 	public void setTotalScore(String totalScore) {
 		this.totalScore = totalScore;
 	}
-	
+
+	public String getScoreDetails() {
+		return scoreDetails;
+	}
+
+	public void setScoreDetails(String scoreDetails) {
+		this.scoreDetails = scoreDetails;
+	}
+
+	public String getAssessmentName() {
+		return assessmentName;
+	}
+
+	public void setAssessmentName(String assessmentName) {
+		this.assessmentName = assessmentName;
+	}
 }

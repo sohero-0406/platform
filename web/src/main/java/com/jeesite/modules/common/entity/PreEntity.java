@@ -25,7 +25,13 @@ public class PreEntity<T extends DataEntity<?>> extends DataEntity<T> {
         if (StringUtils.isEmpty(token)) {
             token = request.getParameter(JwtUtils.getHeader());
         }
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
         Claims claims = JwtUtils.getClaimByToken(token);
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
         return claims.getSubject();
     }
 

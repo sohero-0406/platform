@@ -29,5 +29,7 @@ public interface CommonUserDao extends CrudDao<CommonUser> {
 
     List<CommonUser> findStuByUserNamesWithSchoolName(List<String> list);
 
+    List<CommonUser> findCommonUserWithSchoolName(CommonUser commonUser);
+
 }
 
