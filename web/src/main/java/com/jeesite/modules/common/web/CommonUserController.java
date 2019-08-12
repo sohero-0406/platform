@@ -55,6 +55,12 @@ public class CommonUserController extends BaseController {
         return commonUserService.get(id, isNewRecord);
     }
 
+    @RequestMapping(value = "hello")
+    @ResponseBody
+    public CommonResult hello() {
+        return new CommonResult();
+    }
+
     /**
      * 查询列表
      */
