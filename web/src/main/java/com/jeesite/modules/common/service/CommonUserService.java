@@ -16,6 +16,7 @@ import com.jeesite.modules.common.dao.CommonSchoolDao;
 import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
+import com.jeesite.modules.common.util.PageUtils;
 import com.jeesite.modules.common.vo.LoginVO;
 import com.jeesite.modules.common.vo.StuSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,9 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
      */
     @Override
     public Page<CommonUser> findPage(CommonUser commonUser) {
+//        if(!PageUtils.checkPageParams(vehicleInfo)){
+//            return new CommonResult(CodeConstant.PARA_MUST_NEED, "您未传入分页数据");
+//        }
 //        Page<CommonUser> page = super.findPage(commonUser);
 //        List<CommonUser> list = page.getList();
 //        String schoolIds = "";

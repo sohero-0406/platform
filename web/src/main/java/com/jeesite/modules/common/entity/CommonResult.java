@@ -1,6 +1,7 @@
 package com.jeesite.modules.common.entity;
 
 import com.jeesite.common.constant.CodeConstant;
+import org.aspectj.apache.bcel.classfile.Code;
 
 /**
  * 公共返回结果
@@ -24,7 +25,7 @@ public class CommonResult<T> {
     private T data;
 
     public CommonResult() {
-
+        this.code = CodeConstant.REQUEST_SUCCESSFUL;
     }
 
     public CommonResult(String code ) {

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.common.codec.EncodeUtils;
+import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.utils.excel.ExcelImport;
 import com.jeesite.modules.common.entity.CommonAccessory;
 import com.jeesite.modules.common.entity.CommonAssessment;
@@ -125,7 +126,6 @@ public class CommonAccessoryCategoryController extends BaseController {
 		return commonAccessoryCategoryService.deleteCommonAccessoryCategory(commonAccessoryCategory);
 	}
 
-
 	@RequestMapping(value = "saveCommonAccessoryAndCategory")
 	@ResponseBody
 	public CommonResult saveCommonAccessoryAndCategory(CommonAccessoryCategory commonAccessoryCategory) {
@@ -134,6 +134,7 @@ public class CommonAccessoryCategoryController extends BaseController {
 	}
 
 	@RequestMapping(value = "downTemplate", produces = "application/octet-stream")
+	//@RequestMapping(value = "downTemplate")
     @ResponseBody
 	public void downTemplate(HttpServletResponse response){
 		File file = new File(FilePathUtil.getFileSavePath("template")+"配件基础信息表.xlsx");
@@ -158,6 +159,8 @@ public class CommonAccessoryCategoryController extends BaseController {
 		} catch (IOException ex) {
 			//log.error(ex.getMessage(), ex);
 		}
+
+		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
 

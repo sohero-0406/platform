@@ -8,25 +8,28 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.io.FileUtils;
 import com.jeesite.common.utils.excel.ExcelExport;
+import com.jeesite.common.utils.excel.ExcelImport;
 import com.jeesite.common.utils.excel.annotation.ExcelField;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.CommonUser;
+import com.jeesite.modules.common.util.FilePathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.entity.VehicleInfo;
 import com.jeesite.modules.common.service.VehicleInfoService;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,10 +51,10 @@ public class VehicleInfoController extends BaseController {
     /**
      * 获取数据
      */
-    @ModelAttribute
-    public VehicleInfo get(String id, boolean isNewRecord) {
-        return vehicleInfoService.get(id, isNewRecord);
-    }
+//    @ModelAttribute
+//    public VehicleInfo get(String id, boolean isNewRecord) {
+//        return vehicleInfoService.get(id, isNewRecord);
+//    }
 
     /**
      * 查询列表
@@ -166,11 +169,45 @@ public class VehicleInfoController extends BaseController {
     public void downTemplate(HttpServletResponse response){
         try {
             String fileName = "车型配置表.xlsx";
-            List<CommonUser> list = Lists.newArrayList();
-            list.add(new CommonUser());
+            List<VehicleInfo> list = Lists.newArrayList();
+            list.add(new VehicleInfo());
             new ExcelExport(null, VehicleInfo.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
         } catch (Exception e) {
             // addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "importVehicleInfos", method= RequestMethod.POST)
+    @ResponseBody
+    public CommonResult importVehicleInfos(MultipartFile file){
+        try {
+            ExcelImport ei = new ExcelImport(file, 2, 0);
+            List<VehicleInfo> vehicleInfoList = ei.getDataList(VehicleInfo.class);
+            ei.close();
+            return vehicleInfoService.saveVehicleList(vehicleInfoList);
+        } catch (Exception e) {
+
+        }
+        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
+    }
+
+    @RequestMapping(value = "deleteVehicle")
+    @ResponseBody
+    public CommonResult deleteVehicle(String json){
+
+        return vehicleInfoService.deleteVehicle(json);
+    }
+
+    @RequestMapping(value = "importVehicleImage", method= RequestMethod.POST)
+    @ResponseBody
+    public CommonResult importVehicleImage(MultipartFile image, String vehicleInfoId) throws IOException {
+        System.out.println(image.getContentType());
+        String end = FileUtils.getFileExtension(image.getOriginalFilename());
+        if(!end.equals("jpg")&&end.equals("png")){
+            return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
+        }
+        File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage)"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
+        image.transferTo(x);
+        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
     }
 }

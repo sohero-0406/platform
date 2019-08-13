@@ -17,8 +17,8 @@
 	</select>
 
 	<select id="findAssessmentStu" resultType="CommonUser">
-		select cu.*, castu.id as commonAssessmentStuId from common_user as cu, common_assessment_stu as castu
-		where cu.id = castu.common_user_id and cu.id in (select common_user_id from common_assessment_stu as cas
+		select cu.*, castu.id as commonAssessmentStuId, sc.school_name as schoolName from common_user as cu, common_assessment_stu as castu, common_school as sc
+		where cu.id = castu.common_user_id and cu.school_id = sc.id and cu.id in (select common_user_id from common_assessment_stu as cas
 						where cas.school_id = #{schoolId} and cu.status = 0
 						 <if test="assessmentId!=null">
 							 and cas.assessment_id = #{assessmentId}
@@ -33,7 +33,8 @@
 	</select>
 
 	<select id="findNormalStu" resultType="CommonUser">
-		select * from common_user as cu where cu.school_id = #{schoolId} and cu.status = 0 and cu.role_id = '3'
+		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc
+		where cu.school_id = #{schoolId} and cu.school_id = sc.id and cu.status = 0 and cu.role_id = '3'
 		<if test="majorName!=null">
 			and cu.major_name = #{majorName}
 		</if>
