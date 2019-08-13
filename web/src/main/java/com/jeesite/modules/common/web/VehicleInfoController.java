@@ -6,8 +6,12 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.collect.Lists;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.utils.excel.ExcelExport;
+import com.jeesite.common.utils.excel.annotation.ExcelField;
 import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.CommonUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -145,5 +149,28 @@ public class VehicleInfoController extends BaseController {
     public CommonResult getByEntity(VehicleInfo vehicleInfo) {
         vehicleInfo = vehicleInfoService.getByEntity(vehicleInfo);
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, vehicleInfo);
+    }
+
+
+
+    // 下面是马玉虎写的代码
+
+    @RequestMapping(value = "listVehicleInfo")
+    @ResponseBody
+    public CommonResult listVehicleInfo(VehicleInfo vehicleInfo){
+        return vehicleInfoService.findPageByCondition(vehicleInfo);
+    }
+
+    @RequestMapping(value = "downTemplate" , produces = "application/octet-stream")
+    @ResponseBody
+    public void downTemplate(HttpServletResponse response){
+        try {
+            String fileName = "车型配置表.xlsx";
+            List<CommonUser> list = Lists.newArrayList();
+            list.add(new CommonUser());
+            new ExcelExport(null, VehicleInfo.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
+        } catch (Exception e) {
+            // addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+        }
     }
 }

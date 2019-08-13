@@ -8,6 +8,7 @@ import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
+import com.jeesite.common.utils.excel.annotation.ExcelField;
 
 /**
  * 车辆配置全表Entity
@@ -538,7 +539,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public VehicleInfo(String id){
 		super(id);
 	}
-	
+
+	@ExcelField(title="首字母", align = ExcelField.Align.CENTER, sort = 1)
 	public String getShouzimu() {
 		return shouzimu;
 	}
@@ -546,7 +548,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShouzimu(String shouzimu) {
 		this.shouzimu = shouzimu;
 	}
-	
+
+	@ExcelField(title="品牌", align = ExcelField.Align.CENTER, sort = 2)
 	public String getPinpai() {
 		return pinpai;
 	}
@@ -562,7 +565,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setPinpaiId(String pinpaiId) {
 		this.pinpaiId = pinpaiId;
 	}
-	
+
+	@ExcelField(title="品牌logo", align = ExcelField.Align.CENTER, sort = 3)
 	public String getPinpaiLogo() {
 		return pinpaiLogo;
 	}
@@ -570,7 +574,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setPinpaiLogo(String pinpaiLogo) {
 		this.pinpaiLogo = pinpaiLogo;
 	}
-	
+
+	@ExcelField(title="车系", align = ExcelField.Align.CENTER, sort = 4)
 	public String getChexi() {
 		return chexi;
 	}
@@ -586,7 +591,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChexiId(String chexiId) {
 		this.chexiId = chexiId;
 	}
-	
+
+	@ExcelField(title="车系展示图", align = ExcelField.Align.CENTER, sort = 5)
 	public String getChexizhanshitu() {
 		return chexizhanshitu;
 	}
@@ -594,7 +600,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChexizhanshitu(String chexizhanshitu) {
 		this.chexizhanshitu = chexizhanshitu;
 	}
-	
+
+	@ExcelField(title="车型名称", align = ExcelField.Align.CENTER, sort = 6)
 	public String getChexingmingcheng() {
 		return chexingmingcheng;
 	}
@@ -610,7 +617,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChexingId(String chexingId) {
 		this.chexingId = chexingId;
 	}
-	
+
+	@ExcelField(title="销售状态", align = ExcelField.Align.CENTER, sort = 7)
 	public String getXiaoshouzhuangtai() {
 		return xiaoshouzhuangtai;
 	}
@@ -618,7 +626,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXiaoshouzhuangtai(String xiaoshouzhuangtai) {
 		this.xiaoshouzhuangtai = xiaoshouzhuangtai;
 	}
-	
+
+	@ExcelField(title="厂商", align = ExcelField.Align.CENTER, sort = 8)
 	public String getChangshang() {
 		return changshang;
 	}
@@ -634,7 +643,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChangshangId(String changshangId) {
 		this.changshangId = changshangId;
 	}
-	
+
+	@ExcelField(title="年款", align = ExcelField.Align.CENTER, sort = 9)
 	public String getNiankuan() {
 		return niankuan;
 	}
@@ -642,7 +652,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setNiankuan(String niankuan) {
 		this.niankuan = niankuan;
 	}
-	
+
+	@ExcelField(title="更新时间", align = ExcelField.Align.CENTER, sort = 10)
 	public String getGengxinshijian() {
 		return gengxinshijian;
 	}
@@ -650,7 +661,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGengxinshijian(String gengxinshijian) {
 		this.gengxinshijian = gengxinshijian;
 	}
-	
+
+	@ExcelField(title="上市时间", align = ExcelField.Align.CENTER, sort = 11)
 	public String getShangshishijian() {
 		return shangshishijian;
 	}
@@ -658,7 +670,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShangshishijian(String shangshishijian) {
 		this.shangshishijian = shangshishijian;
 	}
-	
+
+	@ExcelField(title="厂商指导价(元)", align = ExcelField.Align.CENTER, sort = 12)
 	public String getChangshangzhidaojia() {
 		return changshangzhidaojia;
 	}
@@ -666,7 +679,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChangshangzhidaojia(String changshangzhidaojia) {
 		this.changshangzhidaojia = changshangzhidaojia;
 	}
-	
+
+	@ExcelField(title="厂商指导价(万元)", align = ExcelField.Align.CENTER, sort = 13)
 	public String getChangshangzhidaojiaYuan() {
 		return changshangzhidaojiaYuan;
 	}
@@ -674,7 +688,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChangshangzhidaojiaYuan(String changshangzhidaojiaYuan) {
 		this.changshangzhidaojiaYuan = changshangzhidaojiaYuan;
 	}
-	
+
+	@ExcelField(title="级别", align = ExcelField.Align.CENTER, sort = 14)
 	public String getJibie() {
 		return jibie;
 	}
@@ -682,7 +697,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setJibie(String jibie) {
 		this.jibie = jibie;
 	}
-	
+
+	@ExcelField(title="能源类型", align = ExcelField.Align.CENTER, sort = 15)
 	public String getNengyuanleixing() {
 		return nengyuanleixing;
 	}
@@ -690,7 +706,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setNengyuanleixing(String nengyuanleixing) {
 		this.nengyuanleixing = nengyuanleixing;
 	}
-	
+
+	@ExcelField(title="工信部纯电续航里程(KM)", align = ExcelField.Align.CENTER, sort = 16)
 	public String getGongxinbuchundianxuhanglichengKm() {
 		return gongxinbuchundianxuhanglichengKm;
 	}
@@ -698,7 +715,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGongxinbuchundianxuhanglichengKm(String gongxinbuchundianxuhanglichengKm) {
 		this.gongxinbuchundianxuhanglichengKm = gongxinbuchundianxuhanglichengKm;
 	}
-	
+
+	@ExcelField(title="快充时间", align = ExcelField.Align.CENTER, sort = 17)
 	public String getKuaichongshijianXiaoshi() {
 		return kuaichongshijianXiaoshi;
 	}
@@ -706,7 +724,9 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setKuaichongshijianXiaoshi(String kuaichongshijianXiaoshi) {
 		this.kuaichongshijianXiaoshi = kuaichongshijianXiaoshi;
 	}
-	
+
+
+	@ExcelField(title="慢充时间(小时)", align = ExcelField.Align.CENTER, sort = 18)
 	public String getManchongshijianXiaoshi() {
 		return manchongshijianXiaoshi;
 	}
@@ -714,7 +734,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setManchongshijianXiaoshi(String manchongshijianXiaoshi) {
 		this.manchongshijianXiaoshi = manchongshijianXiaoshi;
 	}
-	
+
+	@ExcelField(title="快充电量百分比", align = ExcelField.Align.CENTER, sort = 19)
 	public String getKuaichongdianliangbaifenbi() {
 		return kuaichongdianliangbaifenbi;
 	}
@@ -722,7 +743,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setKuaichongdianliangbaifenbi(String kuaichongdianliangbaifenbi) {
 		this.kuaichongdianliangbaifenbi = kuaichongdianliangbaifenbi;
 	}
-	
+
+	@ExcelField(title="最大功率(KM)", align = ExcelField.Align.CENTER, sort = 20)
 	public String getZuidagonglvKw() {
 		return zuidagonglvKw;
 	}
@@ -730,7 +752,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuidagonglvKw(String zuidagonglvKw) {
 		this.zuidagonglvKw = zuidagonglvKw;
 	}
-	
+
+	@ExcelField(title="最大扭矩(NM)", align = ExcelField.Align.CENTER, sort = 21)
 	public String getZuidaniujuNM() {
 		return zuidaniujuNM;
 	}
@@ -738,7 +761,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuidaniujuNM(String zuidaniujuNM) {
 		this.zuidaniujuNM = zuidaniujuNM;
 	}
-	
+
+	@ExcelField(title="发动机", align = ExcelField.Align.CENTER, sort = 22)
 	public String getFadongji() {
 		return fadongji;
 	}
@@ -746,7 +770,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFadongji(String fadongji) {
 		this.fadongji = fadongji;
 	}
-	
+
+	@ExcelField(title="变速箱", align = ExcelField.Align.CENTER, sort = 23)
 	public String getBiansuxiang() {
 		return biansuxiang;
 	}
@@ -754,7 +779,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setBiansuxiang(String biansuxiang) {
 		this.biansuxiang = biansuxiang;
 	}
-	
+
+	@ExcelField(title="长宽高(mm)", align = ExcelField.Align.CENTER, sort = 24)
 	public String getChangkuangaoMm() {
 		return changkuangaoMm;
 	}
@@ -762,7 +788,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChangkuangaoMm(String changkuangaoMm) {
 		this.changkuangaoMm = changkuangaoMm;
 	}
-	
+
+	@ExcelField(title="车身结构", align = ExcelField.Align.CENTER, sort = 25)
 	public String getCheshenjiegou() {
 		return cheshenjiegou;
 	}
@@ -770,7 +797,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setCheshenjiegou(String cheshenjiegou) {
 		this.cheshenjiegou = cheshenjiegou;
 	}
-	
+
+	@ExcelField(title="最高车速(Km/H)", align = ExcelField.Align.CENTER, sort = 26)
 	public String getZuigaochesuKmH() {
 		return zuigaochesuKmH;
 	}
@@ -778,7 +806,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuigaochesuKmH(String zuigaochesuKmH) {
 		this.zuigaochesuKmH = zuigaochesuKmH;
 	}
-	
+
+	@ExcelField(title="官方0-100Km/h加速(秒)", align = ExcelField.Align.CENTER, sort = 27)
 	public String getGuanfang0100kmHJiasuS() {
 		return guanfang0100kmHJiasuS;
 	}
@@ -786,7 +815,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGuanfang0100kmHJiasuS(String guanfang0100kmHJiasuS) {
 		this.guanfang0100kmHJiasuS = guanfang0100kmHJiasuS;
 	}
-	
+
+	@ExcelField(title="实测0-100Km/H加速(秒)", align = ExcelField.Align.CENTER, sort = 28)
 	public String getShice0100kmHJiasuS() {
 		return shice0100kmHJiasuS;
 	}
@@ -794,7 +824,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShice0100kmHJiasuS(String shice0100kmHJiasuS) {
 		this.shice0100kmHJiasuS = shice0100kmHJiasuS;
 	}
-	
+
+	@ExcelField(title="实测100-0Km/H制动(米)", align = ExcelField.Align.CENTER, sort = 29)
 	public String getShice1000kmHZhidongM() {
 		return shice1000kmHZhidongM;
 	}
@@ -802,7 +833,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShice1000kmHZhidongM(String shice1000kmHZhidongM) {
 		this.shice1000kmHZhidongM = shice1000kmHZhidongM;
 	}
-	
+
+	@ExcelField(title="实测续航里程(Km)", align = ExcelField.Align.CENTER, sort = 30)
 	public String getShicexuhanglichengKm() {
 		return shicexuhanglichengKm;
 	}
@@ -810,7 +842,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShicexuhanglichengKm(String shicexuhanglichengKm) {
 		this.shicexuhanglichengKm = shicexuhanglichengKm;
 	}
-	
+
+	@ExcelField(title="工信部综合油耗(L/100Km)", align = ExcelField.Align.CENTER, sort = 31)
 	public String getGongxinbuzongheyouhaoL100km() {
 		return gongxinbuzongheyouhaoL100km;
 	}
@@ -818,7 +851,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGongxinbuzongheyouhaoL100km(String gongxinbuzongheyouhaoL100km) {
 		this.gongxinbuzongheyouhaoL100km = gongxinbuzongheyouhaoL100km;
 	}
-	
+
+	@ExcelField(title="实测油耗(L/100Km)", align = ExcelField.Align.CENTER, sort = 32)
 	public String getShiceyouhaoL100km() {
 		return shiceyouhaoL100km;
 	}
@@ -826,7 +860,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShiceyouhaoL100km(String shiceyouhaoL100km) {
 		this.shiceyouhaoL100km = shiceyouhaoL100km;
 	}
-	
+
+	@ExcelField(title="整车质保", align = ExcelField.Align.CENTER, sort = 33)
 	public String getZhengchezhibao() {
 		return zhengchezhibao;
 	}
@@ -834,7 +869,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhengchezhibao(String zhengchezhibao) {
 		this.zhengchezhibao = zhengchezhibao;
 	}
-	
+
+	@ExcelField(title="长度(毫米)", align = ExcelField.Align.CENTER, sort = 34)
 	public String getChangduMm() {
 		return changduMm;
 	}
@@ -842,7 +878,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChangduMm(String changduMm) {
 		this.changduMm = changduMm;
 	}
-	
+
+	@ExcelField(title="宽度(毫米)", align = ExcelField.Align.CENTER, sort = 35)
 	public String getKuanduMm() {
 		return kuanduMm;
 	}
@@ -850,7 +887,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setKuanduMm(String kuanduMm) {
 		this.kuanduMm = kuanduMm;
 	}
-	
+
+	@ExcelField(title="高度(毫米)", align = ExcelField.Align.CENTER, sort = 36)
 	public String getGaoduMm() {
 		return gaoduMm;
 	}
@@ -858,7 +896,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGaoduMm(String gaoduMm) {
 		this.gaoduMm = gaoduMm;
 	}
-	
+
+	@ExcelField(title="轴距(毫米)", align = ExcelField.Align.CENTER, sort = 37)
 	public String getZhoujuMm() {
 		return zhoujuMm;
 	}
@@ -866,7 +905,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhoujuMm(String zhoujuMm) {
 		this.zhoujuMm = zhoujuMm;
 	}
-	
+
+	@ExcelField(title="前轮距(毫米)", align = ExcelField.Align.CENTER, sort = 38)
 	public String getQianlunjuMm() {
 		return qianlunjuMm;
 	}
@@ -874,7 +914,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianlunjuMm(String qianlunjuMm) {
 		this.qianlunjuMm = qianlunjuMm;
 	}
-	
+
+	@ExcelField(title="后轮距(毫米)", align = ExcelField.Align.CENTER, sort = 39)
 	public String getHoulunjuMm() {
 		return houlunjuMm;
 	}
@@ -882,7 +923,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoulunjuMm(String houlunjuMm) {
 		this.houlunjuMm = houlunjuMm;
 	}
-	
+
+	@ExcelField(title="最小离地间隙(毫米)", align = ExcelField.Align.CENTER, sort = 40)
 	public String getZuixiaolidijianxiMm() {
 		return zuixiaolidijianxiMm;
 	}
@@ -890,7 +932,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuixiaolidijianxiMm(String zuixiaolidijianxiMm) {
 		this.zuixiaolidijianxiMm = zuixiaolidijianxiMm;
 	}
-	
+
+	@ExcelField(title="车门数(个)", align = ExcelField.Align.CENTER, sort = 41)
 	public String getChemenshuGe() {
 		return chemenshuGe;
 	}
@@ -898,7 +941,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChemenshuGe(String chemenshuGe) {
 		this.chemenshuGe = chemenshuGe;
 	}
-	
+
+	@ExcelField(title="座位数(个)", align = ExcelField.Align.CENTER, sort = 4)
 	public String getZuoweishuGe() {
 		return zuoweishuGe;
 	}
@@ -906,7 +950,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuoweishuGe(String zuoweishuGe) {
 		this.zuoweishuGe = zuoweishuGe;
 	}
-	
+
+	@ExcelField(title="邮箱容积(升)", align = ExcelField.Align.CENTER, sort = 43)
 	public String getYouxiangrongjiL() {
 		return youxiangrongjiL;
 	}
@@ -914,7 +959,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYouxiangrongjiL(String youxiangrongjiL) {
 		this.youxiangrongjiL = youxiangrongjiL;
 	}
-	
+
+	@ExcelField(title="行李箱容积(升)", align = ExcelField.Align.CENTER, sort = 44)
 	public String getXinglixiangrongjiL() {
 		return xinglixiangrongjiL;
 	}
@@ -922,7 +968,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXinglixiangrongjiL(String xinglixiangrongjiL) {
 		this.xinglixiangrongjiL = xinglixiangrongjiL;
 	}
-	
+
+	@ExcelField(title="整备质量(千克)", align = ExcelField.Align.CENTER, sort = 45)
 	public String getZhengbeizhiliangKg() {
 		return zhengbeizhiliangKg;
 	}
@@ -930,7 +977,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhengbeizhiliangKg(String zhengbeizhiliangKg) {
 		this.zhengbeizhiliangKg = zhengbeizhiliangKg;
 	}
-	
+
+	@ExcelField(title="发动机型号", align = ExcelField.Align.CENTER, sort = 46)
 	public String getFadongjixinghao() {
 		return fadongjixinghao;
 	}
@@ -938,7 +986,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFadongjixinghao(String fadongjixinghao) {
 		this.fadongjixinghao = fadongjixinghao;
 	}
-	
+
+	@ExcelField(title="排量(毫升)", align = ExcelField.Align.CENTER, sort = 47)
 	public String getPailiangMl() {
 		return pailiangMl;
 	}
@@ -946,7 +995,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setPailiangMl(String pailiangMl) {
 		this.pailiangMl = pailiangMl;
 	}
-	
+
+	@ExcelField(title="排量(升)", align = ExcelField.Align.CENTER, sort = 48)
 	public String getPailiangL() {
 		return pailiangL;
 	}
@@ -954,7 +1004,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setPailiangL(String pailiangL) {
 		this.pailiangL = pailiangL;
 	}
-	
+
+	@ExcelField(title="进气形式", align = ExcelField.Align.CENTER, sort = 49)
 	public String getJinqixingshi() {
 		return jinqixingshi;
 	}
@@ -962,7 +1013,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setJinqixingshi(String jinqixingshi) {
 		this.jinqixingshi = jinqixingshi;
 	}
-	
+
+	@ExcelField(title="气缸排列形式", align = ExcelField.Align.CENTER, sort = 50)
 	public String getQigangpailiexingshi() {
 		return qigangpailiexingshi;
 	}
@@ -970,7 +1022,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQigangpailiexingshi(String qigangpailiexingshi) {
 		this.qigangpailiexingshi = qigangpailiexingshi;
 	}
-	
+
+	@ExcelField(title="气缸数(个)", align = ExcelField.Align.CENTER, sort = 51)
 	public String getQigangshuGe() {
 		return qigangshuGe;
 	}
@@ -978,7 +1031,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQigangshuGe(String qigangshuGe) {
 		this.qigangshuGe = qigangshuGe;
 	}
-	
+
+	@ExcelField(title="每缸气门数(个)", align = ExcelField.Align.CENTER, sort = 52)
 	public String getMeigangqimenshuGe() {
 		return meigangqimenshuGe;
 	}
@@ -986,7 +1040,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setMeigangqimenshuGe(String meigangqimenshuGe) {
 		this.meigangqimenshuGe = meigangqimenshuGe;
 	}
-	
+
+	@ExcelField(title="压缩比", align = ExcelField.Align.CENTER, sort = 53)
 	public String getYasuobi() {
 		return yasuobi;
 	}
@@ -994,7 +1049,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYasuobi(String yasuobi) {
 		this.yasuobi = yasuobi;
 	}
-	
+
+	@ExcelField(title="排气形式", align = ExcelField.Align.CENTER, sort = 54)
 	public String getPeiqijigou() {
 		return peiqijigou;
 	}
@@ -1002,7 +1058,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setPeiqijigou(String peiqijigou) {
 		this.peiqijigou = peiqijigou;
 	}
-	
+
+	@ExcelField(title="缸径(毫米)", align = ExcelField.Align.CENTER, sort = 55)
 	public String getGangjingMm() {
 		return gangjingMm;
 	}
@@ -1010,7 +1067,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGangjingMm(String gangjingMm) {
 		this.gangjingMm = gangjingMm;
 	}
-	
+
+	@ExcelField(title="行程(毫米)", align = ExcelField.Align.CENTER, sort = 56)
 	public String getXingchengMm() {
 		return xingchengMm;
 	}
@@ -1018,7 +1076,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXingchengMm(String xingchengMm) {
 		this.xingchengMm = xingchengMm;
 	}
-	
+
+	@ExcelField(title="最大马力(Ps)", align = ExcelField.Align.CENTER, sort = 57)
 	public String getZuidamaliPs() {
 		return zuidamaliPs;
 	}
@@ -1026,7 +1085,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuidamaliPs(String zuidamaliPs) {
 		this.zuidamaliPs = zuidamaliPs;
 	}
-	
+
+	@ExcelField(title="最大功率转数(rpm)", align = ExcelField.Align.CENTER, sort = 58)
 	public String getZuidagonglvzhuansuRpm() {
 		return zuidagonglvzhuansuRpm;
 	}
@@ -1034,7 +1094,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuidagonglvzhuansuRpm(String zuidagonglvzhuansuRpm) {
 		this.zuidagonglvzhuansuRpm = zuidagonglvzhuansuRpm;
 	}
-	
+
+	@ExcelField(title="最大扭矩转数(rpm)", align = ExcelField.Align.CENTER, sort = 59)
 	public String getZuidaniujuzhuansuRpm() {
 		return zuidaniujuzhuansuRpm;
 	}
@@ -1042,7 +1103,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuidaniujuzhuansuRpm(String zuidaniujuzhuansuRpm) {
 		this.zuidaniujuzhuansuRpm = zuidaniujuzhuansuRpm;
 	}
-	
+
+	@ExcelField(title="发动机特有技术", align = ExcelField.Align.CENTER, sort = 60)
 	public String getFadongjiteyoujishu() {
 		return fadongjiteyoujishu;
 	}
@@ -1050,7 +1112,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFadongjiteyoujishu(String fadongjiteyoujishu) {
 		this.fadongjiteyoujishu = fadongjiteyoujishu;
 	}
-	
+
+	@ExcelField(title="燃料形式", align = ExcelField.Align.CENTER, sort = 61)
 	public String getRanliaoxingshi() {
 		return ranliaoxingshi;
 	}
@@ -1058,7 +1121,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setRanliaoxingshi(String ranliaoxingshi) {
 		this.ranliaoxingshi = ranliaoxingshi;
 	}
-	
+
+	@ExcelField(title="燃油标号", align = ExcelField.Align.CENTER, sort = 2)
 	public String getRanyoubiaohao() {
 		return ranyoubiaohao;
 	}
@@ -1066,7 +1130,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setRanyoubiaohao(String ranyoubiaohao) {
 		this.ranyoubiaohao = ranyoubiaohao;
 	}
-	
+
+	@ExcelField(title="供油方式", align = ExcelField.Align.CENTER, sort = 62)
 	public String getGongyoufangshi() {
 		return gongyoufangshi;
 	}
@@ -1074,7 +1139,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGongyoufangshi(String gongyoufangshi) {
 		this.gongyoufangshi = gongyoufangshi;
 	}
-	
+
+	@ExcelField(title="缸盖材料", align = ExcelField.Align.CENTER, sort = 63)
 	public String getGanggaicailiao() {
 		return ganggaicailiao;
 	}
@@ -1082,7 +1148,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGanggaicailiao(String ganggaicailiao) {
 		this.ganggaicailiao = ganggaicailiao;
 	}
-	
+
+	@ExcelField(title="缸体材料", align = ExcelField.Align.CENTER, sort = 64)
 	public String getGangticailiao() {
 		return gangticailiao;
 	}
@@ -1090,7 +1157,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGangticailiao(String gangticailiao) {
 		this.gangticailiao = gangticailiao;
 	}
-	
+
+	@ExcelField(title="环保标准", align = ExcelField.Align.CENTER, sort = 65)
 	public String getHuanbaobiaozhun() {
 		return huanbaobiaozhun;
 	}
@@ -1098,7 +1166,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHuanbaobiaozhun(String huanbaobiaozhun) {
 		this.huanbaobiaozhun = huanbaobiaozhun;
 	}
-	
+
+	@ExcelField(title="电机类型", align = ExcelField.Align.CENTER, sort = 66)
 	public String getDianjileixing() {
 		return dianjileixing;
 	}
@@ -1106,7 +1175,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDianjileixing(String dianjileixing) {
 		this.dianjileixing = dianjileixing;
 	}
-	
+
+	@ExcelField(title="电动机总功率(KW)", align = ExcelField.Align.CENTER, sort = 67)
 	public String getDiandongjizonggonglvKw() {
 		return diandongjizonggonglvKw;
 	}
@@ -1114,7 +1184,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDiandongjizonggonglvKw(String diandongjizonggonglvKw) {
 		this.diandongjizonggonglvKw = diandongjizonggonglvKw;
 	}
-	
+
+	@ExcelField(title="电动机总扭矩(牛米)", align = ExcelField.Align.CENTER, sort = 68)
 	public String getDiandongjizongniujuNM() {
 		return diandongjizongniujuNM;
 	}
@@ -1122,7 +1193,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDiandongjizongniujuNM(String diandongjizongniujuNM) {
 		this.diandongjizongniujuNM = diandongjizongniujuNM;
 	}
-	
+
+	@ExcelField(title="前电动机总功率(KW)", align = ExcelField.Align.CENTER, sort = 69)
 	public String getQiandiandongjizuidagonglvKw() {
 		return qiandiandongjizuidagonglvKw;
 	}
@@ -1130,7 +1202,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQiandiandongjizuidagonglvKw(String qiandiandongjizuidagonglvKw) {
 		this.qiandiandongjizuidagonglvKw = qiandiandongjizuidagonglvKw;
 	}
-	
+
+	@ExcelField(title="前电动机最大扭矩(牛米)", align = ExcelField.Align.CENTER, sort = 70)
 	public String getQiandiandongjizuidaniujuNM() {
 		return qiandiandongjizuidaniujuNM;
 	}
@@ -1138,7 +1211,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQiandiandongjizuidaniujuNM(String qiandiandongjizuidaniujuNM) {
 		this.qiandiandongjizuidaniujuNM = qiandiandongjizuidaniujuNM;
 	}
-	
+
+	@ExcelField(title="后电动机最大功率(KW)", align = ExcelField.Align.CENTER, sort = 71)
 	public String getHoudiandongjizuidagonglvKw() {
 		return houdiandongjizuidagonglvKw;
 	}
@@ -1146,7 +1220,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoudiandongjizuidagonglvKw(String houdiandongjizuidagonglvKw) {
 		this.houdiandongjizuidagonglvKw = houdiandongjizuidagonglvKw;
 	}
-	
+
+	@ExcelField(title="后电动机最大扭矩(牛米)", align = ExcelField.Align.CENTER, sort = 72)
 	public String getHoudiandongjizuidaniujuNM() {
 		return houdiandongjizuidaniujuNM;
 	}
@@ -1154,7 +1229,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoudiandongjizuidaniujuNM(String houdiandongjizuidaniujuNM) {
 		this.houdiandongjizuidaniujuNM = houdiandongjizuidaniujuNM;
 	}
-	
+
+	@ExcelField(title="系统总功率(KW)", align = ExcelField.Align.CENTER, sort = 73)
 	public String getXitongzonghegonglvKw() {
 		return xitongzonghegonglvKw;
 	}
@@ -1162,7 +1238,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXitongzonghegonglvKw(String xitongzonghegonglvKw) {
 		this.xitongzonghegonglvKw = xitongzonghegonglvKw;
 	}
-	
+
+	@ExcelField(title="系统总扭矩(牛米)", align = ExcelField.Align.CENTER, sort = 74)
 	public String getXitongzongheniujuNM() {
 		return xitongzongheniujuNM;
 	}
@@ -1170,7 +1247,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXitongzongheniujuNM(String xitongzongheniujuNM) {
 		this.xitongzongheniujuNM = xitongzongheniujuNM;
 	}
-	
+
+	@ExcelField(title="驱动电机数", align = ExcelField.Align.CENTER, sort = 75)
 	public String getQudongdianjishu() {
 		return qudongdianjishu;
 	}
@@ -1178,7 +1256,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQudongdianjishu(String qudongdianjishu) {
 		this.qudongdianjishu = qudongdianjishu;
 	}
-	
+
+	@ExcelField(title="电机布局", align = ExcelField.Align.CENTER, sort = 76)
 	public String getDianjibuju() {
 		return dianjibuju;
 	}
@@ -1186,7 +1265,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDianjibuju(String dianjibuju) {
 		this.dianjibuju = dianjibuju;
 	}
-	
+
+	@ExcelField(title="电池类型", align = ExcelField.Align.CENTER, sort = 77)
 	public String getDianchileixing() {
 		return dianchileixing;
 	}
@@ -1194,7 +1274,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDianchileixing(String dianchileixing) {
 		this.dianchileixing = dianchileixing;
 	}
-	
+
+	@ExcelField(title="电池容量(千瓦时)", align = ExcelField.Align.CENTER, sort = 78)
 	public String getDianchirongliangKwh() {
 		return dianchirongliangKwh;
 	}
@@ -1202,7 +1283,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDianchirongliangKwh(String dianchirongliangKwh) {
 		this.dianchirongliangKwh = dianchirongliangKwh;
 	}
-	
+
+	@ExcelField(title="百公里耗电量(千瓦时/100Km)", align = ExcelField.Align.CENTER, sort = 79)
 	public String getBaigonglihaodianliangKwh100km() {
 		return baigonglihaodianliangKwh100km;
 	}
@@ -1210,7 +1292,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setBaigonglihaodianliangKwh100km(String baigonglihaodianliangKwh100km) {
 		this.baigonglihaodianliangKwh100km = baigonglihaodianliangKwh100km;
 	}
-	
+
+	@ExcelField(title="电池组质保", align = ExcelField.Align.CENTER, sort = 80)
 	public String getDianchizuzhibao() {
 		return dianchizuzhibao;
 	}
@@ -1218,7 +1301,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDianchizuzhibao(String dianchizuzhibao) {
 		this.dianchizuzhibao = dianchizuzhibao;
 	}
-	
+
+	@ExcelField(title="快充电量", align = ExcelField.Align.CENTER, sort = 81)
 	public String getKuaichongdianliang() {
 		return kuaichongdianliang;
 	}
@@ -1226,7 +1310,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setKuaichongdianliang(String kuaichongdianliang) {
 		this.kuaichongdianliang = kuaichongdianliang;
 	}
-	
+
+	@ExcelField(title="档位个数", align = ExcelField.Align.CENTER, sort = 82)
 	public String getDangweigeshu() {
 		return dangweigeshu;
 	}
@@ -1234,7 +1319,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDangweigeshu(String dangweigeshu) {
 		this.dangweigeshu = dangweigeshu;
 	}
-	
+
+	@ExcelField(title="变速箱类型", align = ExcelField.Align.CENTER, sort = 83)
 	public String getBiansuxiangleixing() {
 		return biansuxiangleixing;
 	}
@@ -1242,7 +1328,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setBiansuxiangleixing(String biansuxiangleixing) {
 		this.biansuxiangleixing = biansuxiangleixing;
 	}
-	
+
+	@ExcelField(title="简称", align = ExcelField.Align.CENTER, sort = 84)
 	public String getJiancheng() {
 		return jiancheng;
 	}
@@ -1250,7 +1337,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setJiancheng(String jiancheng) {
 		this.jiancheng = jiancheng;
 	}
-	
+
+	@ExcelField(title="驱动方式", align = ExcelField.Align.CENTER, sort = 85)
 	public String getQudongfangshi() {
 		return qudongfangshi;
 	}
@@ -1258,7 +1346,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQudongfangshi(String qudongfangshi) {
 		this.qudongfangshi = qudongfangshi;
 	}
-	
+
+	@ExcelField(title="前悬架类型", align = ExcelField.Align.CENTER, sort = 86)
 	public String getQianxuanjialeixing() {
 		return qianxuanjialeixing;
 	}
@@ -1266,7 +1355,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianxuanjialeixing(String qianxuanjialeixing) {
 		this.qianxuanjialeixing = qianxuanjialeixing;
 	}
-	
+
+	@ExcelField(title="后悬架类型", align = ExcelField.Align.CENTER, sort = 87)
 	public String getHouxuanjialeixing() {
 		return houxuanjialeixing;
 	}
@@ -1274,7 +1364,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHouxuanjialeixing(String houxuanjialeixing) {
 		this.houxuanjialeixing = houxuanjialeixing;
 	}
-	
+
+	@ExcelField(title="助力类型", align = ExcelField.Align.CENTER, sort = 88)
 	public String getZhulileixing() {
 		return zhulileixing;
 	}
@@ -1282,7 +1373,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhulileixing(String zhulileixing) {
 		this.zhulileixing = zhulileixing;
 	}
-	
+
+	@ExcelField(title="车体结构", align = ExcelField.Align.CENTER, sort = 89)
 	public String getChetijiegou() {
 		return chetijiegou;
 	}
@@ -1290,7 +1382,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChetijiegou(String chetijiegou) {
 		this.chetijiegou = chetijiegou;
 	}
-	
+
+	@ExcelField(title="前制动器类型", align = ExcelField.Align.CENTER, sort = 90)
 	public String getQianzhidongqileixing() {
 		return qianzhidongqileixing;
 	}
@@ -1298,7 +1391,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianzhidongqileixing(String qianzhidongqileixing) {
 		this.qianzhidongqileixing = qianzhidongqileixing;
 	}
-	
+
+	@ExcelField(title="后制动器类型", align = ExcelField.Align.CENTER, sort = 91)
 	public String getHouzhidongqileixing() {
 		return houzhidongqileixing;
 	}
@@ -1306,7 +1400,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHouzhidongqileixing(String houzhidongqileixing) {
 		this.houzhidongqileixing = houzhidongqileixing;
 	}
-	
+
+	@ExcelField(title="驻车制动类型", align = ExcelField.Align.CENTER, sort = 92)
 	public String getZhuchezhidongleixing() {
 		return zhuchezhidongleixing;
 	}
@@ -1314,7 +1409,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhuchezhidongleixing(String zhuchezhidongleixing) {
 		this.zhuchezhidongleixing = zhuchezhidongleixing;
 	}
-	
+
+	@ExcelField(title="前轮胎规格", align = ExcelField.Align.CENTER, sort = 93)
 	public String getQianluntaiguige() {
 		return qianluntaiguige;
 	}
@@ -1322,7 +1418,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianluntaiguige(String qianluntaiguige) {
 		this.qianluntaiguige = qianluntaiguige;
 	}
-	
+
+	@ExcelField(title="后轮胎规格", align = ExcelField.Align.CENTER, sort = 94)
 	public String getHouluntaiguige() {
 		return houluntaiguige;
 	}
@@ -1330,7 +1427,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHouluntaiguige(String houluntaiguige) {
 		this.houluntaiguige = houluntaiguige;
 	}
-	
+
+	@ExcelField(title="备胎规格", align = ExcelField.Align.CENTER, sort = 95)
 	public String getBeitaiguige() {
 		return beitaiguige;
 	}
@@ -1338,7 +1436,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setBeitaiguige(String beitaiguige) {
 		this.beitaiguige = beitaiguige;
 	}
-	
+
+	@ExcelField(title="主副驾驶座安全气囊", align = ExcelField.Align.CENTER, sort = 96)
 	public String getZhuFujiashizuoanquanqinang() {
 		return zhuFujiashizuoanquanqinang;
 	}
@@ -1346,7 +1445,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhuFujiashizuoanquanqinang(String zhuFujiashizuoanquanqinang) {
 		this.zhuFujiashizuoanquanqinang = zhuFujiashizuoanquanqinang;
 	}
-	
+
+	@ExcelField(title="前后排侧气囊", align = ExcelField.Align.CENTER, sort = 97)
 	public String getQianHoupaiceqinang() {
 		return qianHoupaiceqinang;
 	}
@@ -1354,7 +1454,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianHoupaiceqinang(String qianHoupaiceqinang) {
 		this.qianHoupaiceqinang = qianHoupaiceqinang;
 	}
-	
+
+	@ExcelField(title="前后排头部气囊气帘", align = ExcelField.Align.CENTER, sort = 98)
 	public String getQianHoupaitoubuqinangQilian() {
 		return qianHoupaitoubuqinangQilian;
 	}
@@ -1362,7 +1463,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianHoupaitoubuqinangQilian(String qianHoupaitoubuqinangQilian) {
 		this.qianHoupaitoubuqinangQilian = qianHoupaitoubuqinangQilian;
 	}
-	
+
+	@ExcelField(title="膝部气囊", align = ExcelField.Align.CENTER, sort = 99)
 	public String getXibuqinang() {
 		return xibuqinang;
 	}
@@ -1370,7 +1472,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXibuqinang(String xibuqinang) {
 		this.xibuqinang = xibuqinang;
 	}
-	
+
+	@ExcelField(title="后排安全带式气囊", align = ExcelField.Align.CENTER, sort = 100)
 	public String getHoupaianquandaishiqinang() {
 		return houpaianquandaishiqinang;
 	}
@@ -1378,7 +1481,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaianquandaishiqinang(String houpaianquandaishiqinang) {
 		this.houpaianquandaishiqinang = houpaianquandaishiqinang;
 	}
-	
+
+	@ExcelField(title="后排中央安全气囊", align = ExcelField.Align.CENTER, sort = 101)
 	public String getHoupaizhongyanganquanqinang() {
 		return houpaizhongyanganquanqinang;
 	}
@@ -1386,7 +1490,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaizhongyanganquanqinang(String houpaizhongyanganquanqinang) {
 		this.houpaizhongyanganquanqinang = houpaizhongyanganquanqinang;
 	}
-	
+
+	@ExcelField(title="被动行人保护", align = ExcelField.Align.CENTER, sort = 102)
 	public String getBeidongxingrenbaohu() {
 		return beidongxingrenbaohu;
 	}
@@ -1394,7 +1499,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setBeidongxingrenbaohu(String beidongxingrenbaohu) {
 		this.beidongxingrenbaohu = beidongxingrenbaohu;
 	}
-	
+
+	@ExcelField(title="胎压监测功能", align = ExcelField.Align.CENTER, sort = 103)
 	public String getTaiyajiancegongneng() {
 		return taiyajiancegongneng;
 	}
@@ -1402,7 +1508,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setTaiyajiancegongneng(String taiyajiancegongneng) {
 		this.taiyajiancegongneng = taiyajiancegongneng;
 	}
-	
+
+	@ExcelField(title="零胎压继续行驶", align = ExcelField.Align.CENTER, sort = 104)
 	public String getLingtaiyajixuxingshi() {
 		return lingtaiyajixuxingshi;
 	}
@@ -1410,7 +1517,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setLingtaiyajixuxingshi(String lingtaiyajixuxingshi) {
 		this.lingtaiyajixuxingshi = lingtaiyajixuxingshi;
 	}
-	
+
+	@ExcelField(title="安全带未系提醒", align = ExcelField.Align.CENTER, sort = 105)
 	public String getAnquandaiweixitixing() {
 		return anquandaiweixitixing;
 	}
@@ -1418,7 +1526,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setAnquandaiweixitixing(String anquandaiweixitixing) {
 		this.anquandaiweixitixing = anquandaiweixitixing;
 	}
-	
+
+	@ExcelField(title="ISOFIX儿童座机接口", align = ExcelField.Align.CENTER, sort = 106)
 	public String getIsofixertongzuoyijiekou() {
 		return isofixertongzuoyijiekou;
 	}
@@ -1426,7 +1535,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setIsofixertongzuoyijiekou(String isofixertongzuoyijiekou) {
 		this.isofixertongzuoyijiekou = isofixertongzuoyijiekou;
 	}
-	
+
+	@ExcelField(title="ABS防抱死", align = ExcelField.Align.CENTER, sort = 107)
 	public String getAbsfangbaosi() {
 		return absfangbaosi;
 	}
@@ -1434,7 +1544,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setAbsfangbaosi(String absfangbaosi) {
 		this.absfangbaosi = absfangbaosi;
 	}
-	
+
+	@ExcelField(title="制动力分配EBDCBDENG", align = ExcelField.Align.CENTER, sort = 108)
 	public String getZhidonglifenpeiEbdCbcdeng() {
 		return zhidonglifenpeiEbdCbcdeng;
 	}
@@ -1442,7 +1553,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhidonglifenpeiEbdCbcdeng(String zhidonglifenpeiEbdCbcdeng) {
 		this.zhidonglifenpeiEbdCbcdeng = zhidonglifenpeiEbdCbcdeng;
 	}
-	
+
+	@ExcelField(title="刹车辅助EbaBasBadeng", align = ExcelField.Align.CENTER, sort = 109)
 	public String getShachefuzhuEbaBasBadeng() {
 		return shachefuzhuEbaBasBadeng;
 	}
@@ -1450,7 +1562,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShachefuzhuEbaBasBadeng(String shachefuzhuEbaBasBadeng) {
 		this.shachefuzhuEbaBasBadeng = shachefuzhuEbaBasBadeng;
 	}
-	
+
+	@ExcelField(title="牵引力控制AsrTcsTrcdeng", align = ExcelField.Align.CENTER, sort = 110)
 	public String getQianyinlikongzhiAsrTcsTrcdeng() {
 		return qianyinlikongzhiAsrTcsTrcdeng;
 	}
@@ -1458,7 +1571,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianyinlikongzhiAsrTcsTrcdeng(String qianyinlikongzhiAsrTcsTrcdeng) {
 		this.qianyinlikongzhiAsrTcsTrcdeng = qianyinlikongzhiAsrTcsTrcdeng;
 	}
-	
+
+	@ExcelField(title="车身稳定控制EscEspDscdeng", align = ExcelField.Align.CENTER, sort = 111)
 	public String getCheshenwendingkongzhiEscEspDscdeng() {
 		return cheshenwendingkongzhiEscEspDscdeng;
 	}
@@ -1466,7 +1580,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setCheshenwendingkongzhiEscEspDscdeng(String cheshenwendingkongzhiEscEspDscdeng) {
 		this.cheshenwendingkongzhiEscEspDscdeng = cheshenwendingkongzhiEscEspDscdeng;
 	}
-	
+
+	@ExcelField(title="并线辅助", align = ExcelField.Align.CENTER, sort = 112)
 	public String getBingxianfuzhu() {
 		return bingxianfuzhu;
 	}
@@ -1474,7 +1589,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setBingxianfuzhu(String bingxianfuzhu) {
 		this.bingxianfuzhu = bingxianfuzhu;
 	}
-	
+
+	@ExcelField(title="车道偏离预警系统", align = ExcelField.Align.CENTER, sort = 113)
 	public String getChedaopianliyujingxitong() {
 		return chedaopianliyujingxitong;
 	}
@@ -1482,7 +1598,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChedaopianliyujingxitong(String chedaopianliyujingxitong) {
 		this.chedaopianliyujingxitong = chedaopianliyujingxitong;
 	}
-	
+
+	@ExcelField(title="车道保持辅助系统", align = ExcelField.Align.CENTER, sort = 114)
 	public String getChedaobaochifuzhuxitong() {
 		return chedaobaochifuzhuxitong;
 	}
@@ -1490,7 +1607,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChedaobaochifuzhuxitong(String chedaobaochifuzhuxitong) {
 		this.chedaobaochifuzhuxitong = chedaobaochifuzhuxitong;
 	}
-	
+
+	@ExcelField(title="道路箭筒标志识别", align = ExcelField.Align.CENTER, sort = 115)
 	public String getDaolujiaotongbiaozhishibie() {
 		return daolujiaotongbiaozhishibie;
 	}
@@ -1498,7 +1616,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDaolujiaotongbiaozhishibie(String daolujiaotongbiaozhishibie) {
 		this.daolujiaotongbiaozhishibie = daolujiaotongbiaozhishibie;
 	}
-	
+
+	@ExcelField(title="主动刹车主动安全系统", align = ExcelField.Align.CENTER, sort = 116)
 	public String getZhudongshacheZhudonganquanxitong() {
 		return zhudongshacheZhudonganquanxitong;
 	}
@@ -1506,7 +1625,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhudongshacheZhudonganquanxitong(String zhudongshacheZhudonganquanxitong) {
 		this.zhudongshacheZhudonganquanxitong = zhudongshacheZhudonganquanxitong;
 	}
-	
+
+	@ExcelField(title="夜视系统", align = ExcelField.Align.CENTER, sort = 117)
 	public String getYeshixitong() {
 		return yeshixitong;
 	}
@@ -1514,7 +1634,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYeshixitong(String yeshixitong) {
 		this.yeshixitong = yeshixitong;
 	}
-	
+
+	@ExcelField(title="疲劳驾驶提示", align = ExcelField.Align.CENTER, sort = 118)
 	public String getPilaojiashitishi() {
 		return pilaojiashitishi;
 	}
@@ -1522,7 +1643,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setPilaojiashitishi(String pilaojiashitishi) {
 		this.pilaojiashitishi = pilaojiashitishi;
 	}
-	
+
+	@ExcelField(title="前后驻车雷达", align = ExcelField.Align.CENTER, sort = 119)
 	public String getQianHouzhucheleida() {
 		return qianHouzhucheleida;
 	}
@@ -1530,7 +1652,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianHouzhucheleida(String qianHouzhucheleida) {
 		this.qianHouzhucheleida = qianHouzhucheleida;
 	}
-	
+
+	@ExcelField(title="驾驶辅助影像", align = ExcelField.Align.CENTER, sort = 120)
 	public String getJiashifuzhuyingxiang() {
 		return jiashifuzhuyingxiang;
 	}
@@ -1538,7 +1661,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setJiashifuzhuyingxiang(String jiashifuzhuyingxiang) {
 		this.jiashifuzhuyingxiang = jiashifuzhuyingxiang;
 	}
-	
+
+	@ExcelField(title="倒车车侧预警系统", align = ExcelField.Align.CENTER, sort = 121)
 	public String getDaochecheceyujingxitong() {
 		return daochecheceyujingxitong;
 	}
@@ -1546,7 +1670,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDaochecheceyujingxitong(String daochecheceyujingxitong) {
 		this.daochecheceyujingxitong = daochecheceyujingxitong;
 	}
-	
+
+	@ExcelField(title="巡航系统", align = ExcelField.Align.CENTER, sort = 122)
 	public String getXunhangxitong() {
 		return xunhangxitong;
 	}
@@ -1554,7 +1679,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXunhangxitong(String xunhangxitong) {
 		this.xunhangxitong = xunhangxitong;
 	}
-	
+
+	@ExcelField(title="驾驶模式切换", align = ExcelField.Align.CENTER, sort = 123)
 	public String getJiashimoshiqiehuan() {
 		return jiashimoshiqiehuan;
 	}
@@ -1562,7 +1688,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setJiashimoshiqiehuan(String jiashimoshiqiehuan) {
 		this.jiashimoshiqiehuan = jiashimoshiqiehuan;
 	}
-	
+
+	@ExcelField(title="自动泊车入位", align = ExcelField.Align.CENTER, sort = 124)
 	public String getZidongbocheruwei() {
 		return zidongbocheruwei;
 	}
@@ -1570,7 +1697,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZidongbocheruwei(String zidongbocheruwei) {
 		this.zidongbocheruwei = zidongbocheruwei;
 	}
-	
+
+	@ExcelField(title="发动机启停技术", align = ExcelField.Align.CENTER, sort = 125)
 	public String getFadongjiqitingjishu() {
 		return fadongjiqitingjishu;
 	}
@@ -1578,7 +1706,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFadongjiqitingjishu(String fadongjiqitingjishu) {
 		this.fadongjiqitingjishu = fadongjiqitingjishu;
 	}
-	
+
+	@ExcelField(title="自动驻车", align = ExcelField.Align.CENTER, sort = 126)
 	public String getZidongzhuche() {
 		return zidongzhuche;
 	}
@@ -1586,7 +1715,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZidongzhuche(String zidongzhuche) {
 		this.zidongzhuche = zidongzhuche;
 	}
-	
+
+	@ExcelField(title="上坡辅助", align = ExcelField.Align.CENTER, sort = 128)
 	public String getShangpofuzhu() {
 		return shangpofuzhu;
 	}
@@ -1594,7 +1724,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShangpofuzhu(String shangpofuzhu) {
 		this.shangpofuzhu = shangpofuzhu;
 	}
-	
+
+	@ExcelField(title="陡坡缓降", align = ExcelField.Align.CENTER, sort = 129)
 	public String getDoupohuanjiang() {
 		return doupohuanjiang;
 	}
@@ -1602,7 +1733,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDoupohuanjiang(String doupohuanjiang) {
 		this.doupohuanjiang = doupohuanjiang;
 	}
-	
+
+	@ExcelField(title="可变悬架功能", align = ExcelField.Align.CENTER, sort = 130)
 	public String getKebianxuanjiagongneng() {
 		return kebianxuanjiagongneng;
 	}
@@ -1610,7 +1742,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setKebianxuanjiagongneng(String kebianxuanjiagongneng) {
 		this.kebianxuanjiagongneng = kebianxuanjiagongneng;
 	}
-	
+
+	@ExcelField(title="空气悬架", align = ExcelField.Align.CENTER, sort = 131)
 	public String getKongqixuanjia() {
 		return kongqixuanjia;
 	}
@@ -1618,7 +1751,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setKongqixuanjia(String kongqixuanjia) {
 		this.kongqixuanjia = kongqixuanjia;
 	}
-	
+
+	@ExcelField(title="电磁感应悬架", align = ExcelField.Align.CENTER, sort = 132)
 	public String getDianciganyingxuanjia() {
 		return dianciganyingxuanjia;
 	}
@@ -1626,7 +1760,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDianciganyingxuanjia(String dianciganyingxuanjia) {
 		this.dianciganyingxuanjia = dianciganyingxuanjia;
 	}
-	
+
+	@ExcelField(title="可变转向比", align = ExcelField.Align.CENTER, sort = 133)
 	public String getKebianzhuanxiangbi() {
 		return kebianzhuanxiangbi;
 	}
@@ -1634,7 +1769,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setKebianzhuanxiangbi(String kebianzhuanxiangbi) {
 		this.kebianzhuanxiangbi = kebianzhuanxiangbi;
 	}
-	
+
+	@ExcelField(title="中央差速器锁止功能", align = ExcelField.Align.CENTER, sort = 134)
 	public String getZhongyangchasuqisuozhigongneng() {
 		return zhongyangchasuqisuozhigongneng;
 	}
@@ -1642,7 +1778,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhongyangchasuqisuozhigongneng(String zhongyangchasuqisuozhigongneng) {
 		this.zhongyangchasuqisuozhigongneng = zhongyangchasuqisuozhigongneng;
 	}
-	
+
+	@ExcelField(title="整体主动转向系统", align = ExcelField.Align.CENTER, sort = 135)
 	public String getZhengtizhudongzhuanxiangxitong() {
 		return zhengtizhudongzhuanxiangxitong;
 	}
@@ -1650,7 +1787,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhengtizhudongzhuanxiangxitong(String zhengtizhudongzhuanxiangxitong) {
 		this.zhengtizhudongzhuanxiangxitong = zhengtizhudongzhuanxiangxitong;
 	}
-	
+
+	@ExcelField(title="限滑差速器差速锁", align = ExcelField.Align.CENTER, sort = 136)
 	public String getXianhuachasuqiChasusuo() {
 		return xianhuachasuqiChasusuo;
 	}
@@ -1658,7 +1796,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXianhuachasuqiChasusuo(String xianhuachasuqiChasusuo) {
 		this.xianhuachasuqiChasusuo = xianhuachasuqiChasusuo;
 	}
-	
+
+	@ExcelField(title="涉水感应系统", align = ExcelField.Align.CENTER, sort = 137)
 	public String getSheshuiganyingxitong() {
 		return sheshuiganyingxitong;
 	}
@@ -1666,7 +1805,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setSheshuiganyingxitong(String sheshuiganyingxitong) {
 		this.sheshuiganyingxitong = sheshuiganyingxitong;
 	}
-	
+
+	@ExcelField(title="天窗类型", align = ExcelField.Align.CENTER, sort = 138)
 	public String getTianchuangleixing() {
 		return tianchuangleixing;
 	}
@@ -1674,7 +1814,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setTianchuangleixing(String tianchuangleixing) {
 		this.tianchuangleixing = tianchuangleixing;
 	}
-	
+
+	@ExcelField(title="运动外观套件", align = ExcelField.Align.CENTER, sort = 139)
 	public String getYundongwaiguantaojian() {
 		return yundongwaiguantaojian;
 	}
@@ -1682,7 +1823,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYundongwaiguantaojian(String yundongwaiguantaojian) {
 		this.yundongwaiguantaojian = yundongwaiguantaojian;
 	}
-	
+
+	@ExcelField(title="轮圈材质", align = ExcelField.Align.CENTER, sort = 140)
 	public String getLunquancaizhi() {
 		return lunquancaizhi;
 	}
@@ -1690,7 +1832,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setLunquancaizhi(String lunquancaizhi) {
 		this.lunquancaizhi = lunquancaizhi;
 	}
-	
+
+	@ExcelField(title="电动吸合车门", align = ExcelField.Align.CENTER, sort = 141)
 	public String getDiandongxihechemen() {
 		return diandongxihechemen;
 	}
@@ -1698,7 +1841,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDiandongxihechemen(String diandongxihechemen) {
 		this.diandongxihechemen = diandongxihechemen;
 	}
-	
+
+	@ExcelField(title="侧滑门形式", align = ExcelField.Align.CENTER, sort = 142)
 	public String getCehuamenxingshi() {
 		return cehuamenxingshi;
 	}
@@ -1706,7 +1850,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setCehuamenxingshi(String cehuamenxingshi) {
 		this.cehuamenxingshi = cehuamenxingshi;
 	}
-	
+
+	@ExcelField(title="电动后备箱", align = ExcelField.Align.CENTER, sort = 143)
 	public String getDiandonghoubeixiang() {
 		return diandonghoubeixiang;
 	}
@@ -1714,7 +1859,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDiandonghoubeixiang(String diandonghoubeixiang) {
 		this.diandonghoubeixiang = diandonghoubeixiang;
 	}
-	
+
+	@ExcelField(title="感应后备箱", align = ExcelField.Align.CENTER, sort = 144)
 	public String getGanyinghoubeixiang() {
 		return ganyinghoubeixiang;
 	}
@@ -1722,7 +1868,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGanyinghoubeixiang(String ganyinghoubeixiang) {
 		this.ganyinghoubeixiang = ganyinghoubeixiang;
 	}
-	
+
+	@ExcelField(title="电动后备厢位置记忆", align = ExcelField.Align.CENTER, sort = 145)
 	public String getDiandonghoubeixiangweizhijiyi() {
 		return diandonghoubeixiangweizhijiyi;
 	}
@@ -1730,7 +1877,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDiandonghoubeixiangweizhijiyi(String diandonghoubeixiangweizhijiyi) {
 		this.diandonghoubeixiangweizhijiyi = diandonghoubeixiangweizhijiyi;
 	}
-	
+
+	@ExcelField(title="尾门玻璃独立开启", align = ExcelField.Align.CENTER, sort = 146)
 	public String getWeimenbolidulikaiqi() {
 		return weimenbolidulikaiqi;
 	}
@@ -1738,7 +1886,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setWeimenbolidulikaiqi(String weimenbolidulikaiqi) {
 		this.weimenbolidulikaiqi = weimenbolidulikaiqi;
 	}
-	
+
+	@ExcelField(title="车顶行李架", align = ExcelField.Align.CENTER, sort = 147)
 	public String getChedingxinglijia() {
 		return chedingxinglijia;
 	}
@@ -1746,7 +1895,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChedingxinglijia(String chedingxinglijia) {
 		this.chedingxinglijia = chedingxinglijia;
 	}
-	
+
+	@ExcelField(title="发动机电子防盗", align = ExcelField.Align.CENTER, sort = 148)
 	public String getFadongjidianzifangdao() {
 		return fadongjidianzifangdao;
 	}
@@ -1754,7 +1904,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFadongjidianzifangdao(String fadongjidianzifangdao) {
 		this.fadongjidianzifangdao = fadongjidianzifangdao;
 	}
-	
+
+	@ExcelField(title="车内中控锁", align = ExcelField.Align.CENTER, sort = 149)
 	public String getCheneizhongkongsuo() {
 		return cheneizhongkongsuo;
 	}
@@ -1762,7 +1913,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setCheneizhongkongsuo(String cheneizhongkongsuo) {
 		this.cheneizhongkongsuo = cheneizhongkongsuo;
 	}
-	
+
+	@ExcelField(title="要是类型", align = ExcelField.Align.CENTER, sort = 150)
 	public String getYaoshileixing() {
 		return yaoshileixing;
 	}
@@ -1770,7 +1922,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYaoshileixing(String yaoshileixing) {
 		this.yaoshileixing = yaoshileixing;
 	}
-	
+
+	@ExcelField(title="无钥匙启动系统", align = ExcelField.Align.CENTER, sort = 151)
 	public String getWuyaoshiqidongxitong() {
 		return wuyaoshiqidongxitong;
 	}
@@ -1778,7 +1931,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setWuyaoshiqidongxitong(String wuyaoshiqidongxitong) {
 		this.wuyaoshiqidongxitong = wuyaoshiqidongxitong;
 	}
-	
+
+	@ExcelField(title="无钥匙进入功能", align = ExcelField.Align.CENTER, sort = 152)
 	public String getWuyaoshijinrugongneng() {
 		return wuyaoshijinrugongneng;
 	}
@@ -1786,7 +1940,9 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setWuyaoshijinrugongneng(String wuyaoshijinrugongneng) {
 		this.wuyaoshijinrugongneng = wuyaoshijinrugongneng;
 	}
-	
+
+	// 这个不知道是什么
+	@ExcelField(title="主动闭合式进气格栅", align = ExcelField.Align.CENTER, sort = 153)
 	public String getZhudongbiheshijinqigezha() {
 		return zhudongbiheshijinqigezha;
 	}
@@ -1794,7 +1950,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhudongbiheshijinqigezha(String zhudongbiheshijinqigezha) {
 		this.zhudongbiheshijinqigezha = zhudongbiheshijinqigezha;
 	}
-	
+
+	@ExcelField(title="远程启动功能", align = ExcelField.Align.CENTER, sort = 154)
 	public String getYuanchengqidonggongneng() {
 		return yuanchengqidonggongneng;
 	}
@@ -1802,7 +1959,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYuanchengqidonggongneng(String yuanchengqidonggongneng) {
 		this.yuanchengqidonggongneng = yuanchengqidonggongneng;
 	}
-	
+
+	@ExcelField(title="车侧脚踏板", align = ExcelField.Align.CENTER, sort = 155)
 	public String getChecejiaotaban() {
 		return checejiaotaban;
 	}
@@ -1810,7 +1968,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChecejiaotaban(String checejiaotaban) {
 		this.checejiaotaban = checejiaotaban;
 	}
-	
+
+	@ExcelField(title="方向盘材质", align = ExcelField.Align.CENTER, sort = 156)
 	public String getFangxiangpancaizhi() {
 		return fangxiangpancaizhi;
 	}
@@ -1818,7 +1977,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFangxiangpancaizhi(String fangxiangpancaizhi) {
 		this.fangxiangpancaizhi = fangxiangpancaizhi;
 	}
-	
+
+	@ExcelField(title="方向盘位置调节", align = ExcelField.Align.CENTER, sort = 157)
 	public String getFangxiangpanweizhitiaojie() {
 		return fangxiangpanweizhitiaojie;
 	}
@@ -1826,7 +1986,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFangxiangpanweizhitiaojie(String fangxiangpanweizhitiaojie) {
 		this.fangxiangpanweizhitiaojie = fangxiangpanweizhitiaojie;
 	}
-	
+
+	@ExcelField(title="多功能方向盘", align = ExcelField.Align.CENTER, sort = 158)
 	public String getDuogongnengfangxiangpan() {
 		return duogongnengfangxiangpan;
 	}
@@ -1834,7 +1995,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDuogongnengfangxiangpan(String duogongnengfangxiangpan) {
 		this.duogongnengfangxiangpan = duogongnengfangxiangpan;
 	}
-	
+
+	@ExcelField(title="方向盘换挡", align = ExcelField.Align.CENTER, sort = 159)
 	public String getFangxiangpanhuandang() {
 		return fangxiangpanhuandang;
 	}
@@ -1842,7 +2004,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFangxiangpanhuandang(String fangxiangpanhuandang) {
 		this.fangxiangpanhuandang = fangxiangpanhuandang;
 	}
-	
+
+	@ExcelField(title="方向盘加热", align = ExcelField.Align.CENTER, sort = 160)
 	public String getFangxiangpanjiare() {
 		return fangxiangpanjiare;
 	}
@@ -1850,7 +2013,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFangxiangpanjiare(String fangxiangpanjiare) {
 		this.fangxiangpanjiare = fangxiangpanjiare;
 	}
-	
+
+	@ExcelField(title="方向盘记忆", align = ExcelField.Align.CENTER, sort = 161)
 	public String getFangxiangpanjiyi() {
 		return fangxiangpanjiyi;
 	}
@@ -1858,7 +2022,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFangxiangpanjiyi(String fangxiangpanjiyi) {
 		this.fangxiangpanjiyi = fangxiangpanjiyi;
 	}
-	
+
+	@ExcelField(title="行车电脑显示屏幕", align = ExcelField.Align.CENTER, sort = 162)
 	public String getXingchediannaoxianshipingmu() {
 		return xingchediannaoxianshipingmu;
 	}
@@ -1866,7 +2031,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXingchediannaoxianshipingmu(String xingchediannaoxianshipingmu) {
 		this.xingchediannaoxianshipingmu = xingchediannaoxianshipingmu;
 	}
-	
+
+	@ExcelField(title="全液晶仪表盘", align = ExcelField.Align.CENTER, sort = 162)
 	public String getQuanyejingyibiaopan() {
 		return quanyejingyibiaopan;
 	}
@@ -1874,7 +2040,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQuanyejingyibiaopan(String quanyejingyibiaopan) {
 		this.quanyejingyibiaopan = quanyejingyibiaopan;
 	}
-	
+
+	@ExcelField(title="液晶仪表(寸)", align = ExcelField.Align.CENTER, sort = 163)
 	public String getYejingyibiaochicun() {
 		return yejingyibiaochicun;
 	}
@@ -1882,7 +2049,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYejingyibiaochicun(String yejingyibiaochicun) {
 		this.yejingyibiaochicun = yejingyibiaochicun;
 	}
-	
+
+	@ExcelField(title="hud抬头数字显示", align = ExcelField.Align.CENTER, sort = 164)
 	public String getHudtaitoushuzixianshi() {
 		return hudtaitoushuzixianshi;
 	}
@@ -1890,7 +2058,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHudtaitoushuzixianshi(String hudtaitoushuzixianshi) {
 		this.hudtaitoushuzixianshi = hudtaitoushuzixianshi;
 	}
-	
+
+	@ExcelField(title="内置行车记录仪", align = ExcelField.Align.CENTER, sort = 165)
 	public String getNeizhixingchejiluyi() {
 		return neizhixingchejiluyi;
 	}
@@ -1898,7 +2067,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setNeizhixingchejiluyi(String neizhixingchejiluyi) {
 		this.neizhixingchejiluyi = neizhixingchejiluyi;
 	}
-	
+
+	@ExcelField(title="主动降噪", align = ExcelField.Align.CENTER, sort = 166)
 	public String getZhudongjiangzao() {
 		return zhudongjiangzao;
 	}
@@ -1906,7 +2076,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhudongjiangzao(String zhudongjiangzao) {
 		this.zhudongjiangzao = zhudongjiangzao;
 	}
-	
+
+	@ExcelField(title="手机无线充电功能", align = ExcelField.Align.CENTER, sort = 167)
 	public String getShoujiwuxianchongdiangongneng() {
 		return shoujiwuxianchongdiangongneng;
 	}
@@ -1914,7 +2085,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShoujiwuxianchongdiangongneng(String shoujiwuxianchongdiangongneng) {
 		this.shoujiwuxianchongdiangongneng = shoujiwuxianchongdiangongneng;
 	}
-	
+
+	@ExcelField(title="电动可调踏板", align = ExcelField.Align.CENTER, sort = 168)
 	public String getDiandongketiaotaban() {
 		return diandongketiaotaban;
 	}
@@ -1922,7 +2094,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDiandongketiaotaban(String diandongketiaotaban) {
 		this.diandongketiaotaban = diandongketiaotaban;
 	}
-	
+
+	@ExcelField(title="座椅材质", align = ExcelField.Align.CENTER, sort = 169)
 	public String getZuoyicaizhi() {
 		return zuoyicaizhi;
 	}
@@ -1930,7 +2103,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuoyicaizhi(String zuoyicaizhi) {
 		this.zuoyicaizhi = zuoyicaizhi;
 	}
-	
+
+	@ExcelField(title="运动风格座椅", align = ExcelField.Align.CENTER, sort = 170)
 	public String getYundongfenggezuoyi() {
 		return yundongfenggezuoyi;
 	}
@@ -1938,7 +2112,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYundongfenggezuoyi(String yundongfenggezuoyi) {
 		this.yundongfenggezuoyi = yundongfenggezuoyi;
 	}
-	
+
+	@ExcelField(title="主座椅调节方式", align = ExcelField.Align.CENTER, sort = 171)
 	public String getZhuzuoyitiaojiefangshi() {
 		return zhuzuoyitiaojiefangshi;
 	}
@@ -1946,7 +2121,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhuzuoyitiaojiefangshi(String zhuzuoyitiaojiefangshi) {
 		this.zhuzuoyitiaojiefangshi = zhuzuoyitiaojiefangshi;
 	}
-	
+
+	@ExcelField(title="辅座椅调节方式", align = ExcelField.Align.CENTER, sort = 172)
 	public String getFuzuoyitiaojiefangshi() {
 		return fuzuoyitiaojiefangshi;
 	}
@@ -1954,7 +2130,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFuzuoyitiaojiefangshi(String fuzuoyitiaojiefangshi) {
 		this.fuzuoyitiaojiefangshi = fuzuoyitiaojiefangshi;
 	}
-	
+
+	@ExcelField(title="主副驾驶座椅电动调节", align = ExcelField.Align.CENTER, sort = 173)
 	public String getZhuFujiashizuodiandongtiaojie() {
 		return zhuFujiashizuodiandongtiaojie;
 	}
@@ -1962,7 +2139,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhuFujiashizuodiandongtiaojie(String zhuFujiashizuodiandongtiaojie) {
 		this.zhuFujiashizuodiandongtiaojie = zhuFujiashizuodiandongtiaojie;
 	}
-	
+
+	@ExcelField(title="前排座椅功能", align = ExcelField.Align.CENTER, sort = 174)
 	public String getQianpaizuoyigongneng() {
 		return qianpaizuoyigongneng;
 	}
@@ -1970,7 +2148,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianpaizuoyigongneng(String qianpaizuoyigongneng) {
 		this.qianpaizuoyigongneng = qianpaizuoyigongneng;
 	}
-	
+
+	@ExcelField(title="电动座椅记忆功能", align = ExcelField.Align.CENTER, sort = 175)
 	public String getDiandongzuoyijiyigongneng() {
 		return diandongzuoyijiyigongneng;
 	}
@@ -1978,7 +2157,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDiandongzuoyijiyigongneng(String diandongzuoyijiyigongneng) {
 		this.diandongzuoyijiyigongneng = diandongzuoyijiyigongneng;
 	}
-	
+
+	@ExcelField(title="副驾驶位后排可调节按钮", align = ExcelField.Align.CENTER, sort = 176)
 	public String getFujiashiweihoupaiketiaojieanniu() {
 		return fujiashiweihoupaiketiaojieanniu;
 	}
@@ -1986,7 +2166,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFujiashiweihoupaiketiaojieanniu(String fujiashiweihoupaiketiaojieanniu) {
 		this.fujiashiweihoupaiketiaojieanniu = fujiashiweihoupaiketiaojieanniu;
 	}
-	
+
+	@ExcelField(title="第二排座椅调解", align = ExcelField.Align.CENTER, sort = 177)
 	public String getDierpaizuoyitiaojie() {
 		return dierpaizuoyitiaojie;
 	}
@@ -1994,7 +2175,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDierpaizuoyitiaojie(String dierpaizuoyitiaojie) {
 		this.dierpaizuoyitiaojie = dierpaizuoyitiaojie;
 	}
-	
+
+	@ExcelField(title="后排座椅电动调节", align = ExcelField.Align.CENTER, sort = 178)
 	public String getHoupaizuoyidiandongtiaojie() {
 		return houpaizuoyidiandongtiaojie;
 	}
@@ -2002,7 +2184,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaizuoyidiandongtiaojie(String houpaizuoyidiandongtiaojie) {
 		this.houpaizuoyidiandongtiaojie = houpaizuoyidiandongtiaojie;
 	}
-	
+
+	@ExcelField(title="后排座椅功能", align = ExcelField.Align.CENTER, sort = 179)
 	public String getHoupaizuoyigongneng() {
 		return houpaizuoyigongneng;
 	}
@@ -2010,7 +2193,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaizuoyigongneng(String houpaizuoyigongneng) {
 		this.houpaizuoyigongneng = houpaizuoyigongneng;
 	}
-	
+
+	@ExcelField(title="后排小桌板", align = ExcelField.Align.CENTER, sort = 180)
 	public String getHoupaixiaozhuoban() {
 		return houpaixiaozhuoban;
 	}
@@ -2018,7 +2202,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaixiaozhuoban(String houpaixiaozhuoban) {
 		this.houpaixiaozhuoban = houpaixiaozhuoban;
 	}
-	
+
+	@ExcelField(title="第二排独立座椅", align = ExcelField.Align.CENTER, sort = 2)
 	public String getDierpaidulizuoyi() {
 		return dierpaidulizuoyi;
 	}
@@ -2026,7 +2211,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDierpaidulizuoyi(String dierpaidulizuoyi) {
 		this.dierpaidulizuoyi = dierpaidulizuoyi;
 	}
-	
+
+	@ExcelField(title="座椅布局", align = ExcelField.Align.CENTER, sort = 2)
 	public String getZuoyibuju() {
 		return zuoyibuju;
 	}
@@ -2034,7 +2220,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZuoyibuju(String zuoyibuju) {
 		this.zuoyibuju = zuoyibuju;
 	}
-	
+
+	@ExcelField(title="后排座椅放倒形式", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHoupaizuoyifangdaoxingshi() {
 		return houpaizuoyifangdaoxingshi;
 	}
@@ -2042,7 +2229,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaizuoyifangdaoxingshi(String houpaizuoyifangdaoxingshi) {
 		this.houpaizuoyifangdaoxingshi = houpaizuoyifangdaoxingshi;
 	}
-	
+
+	@ExcelField(title="后排座椅电动放倒", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHoupaizuoyidiandongfangdao() {
 		return houpaizuoyidiandongfangdao;
 	}
@@ -2050,7 +2238,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaizuoyidiandongfangdao(String houpaizuoyidiandongfangdao) {
 		this.houpaizuoyidiandongfangdao = houpaizuoyidiandongfangdao;
 	}
-	
+
+	@ExcelField(title="前后中央负数", align = ExcelField.Align.CENTER, sort = 2)
 	public String getQianHouzhongyangfushou() {
 		return qianHouzhongyangfushou;
 	}
@@ -2058,7 +2247,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianHouzhongyangfushou(String qianHouzhongyangfushou) {
 		this.qianHouzhongyangfushou = qianHouzhongyangfushou;
 	}
-	
+
+	@ExcelField(title="后排杯架", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHoupaibeijia() {
 		return houpaibeijia;
 	}
@@ -2066,7 +2256,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaibeijia(String houpaibeijia) {
 		this.houpaibeijia = houpaibeijia;
 	}
-	
+
+	@ExcelField(title="加热之类杯架", align = ExcelField.Align.CENTER, sort = 2)
 	public String getJiareZhilengbeijia() {
 		return jiareZhilengbeijia;
 	}
@@ -2074,7 +2265,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setJiareZhilengbeijia(String jiareZhilengbeijia) {
 		this.jiareZhilengbeijia = jiareZhilengbeijia;
 	}
-	
+
+	@ExcelField(title="中控彩色液晶屏幕", align = ExcelField.Align.CENTER, sort = 2)
 	public String getZhongkongcaiseyejingpingmu() {
 		return zhongkongcaiseyejingpingmu;
 	}
@@ -2082,7 +2274,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhongkongcaiseyejingpingmu(String zhongkongcaiseyejingpingmu) {
 		this.zhongkongcaiseyejingpingmu = zhongkongcaiseyejingpingmu;
 	}
-	
+
+	@ExcelField(title="中液晶屏尺寸", align = ExcelField.Align.CENTER, sort = 2)
 	public String getZhongkongyejingpingchicun() {
 		return zhongkongyejingpingchicun;
 	}
@@ -2090,7 +2283,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhongkongyejingpingchicun(String zhongkongyejingpingchicun) {
 		this.zhongkongyejingpingchicun = zhongkongyejingpingchicun;
 	}
-	
+
+	@ExcelField(title="GPS导航系统", align = ExcelField.Align.CENTER, sort = 2)
 	public String getGpsdaohangxitong() {
 		return gpsdaohangxitong;
 	}
@@ -2098,7 +2292,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGpsdaohangxitong(String gpsdaohangxitong) {
 		this.gpsdaohangxitong = gpsdaohangxitong;
 	}
-	
+
+	@ExcelField(title="导航路况信息显示", align = ExcelField.Align.CENTER, sort = 2)
 	public String getDaohanglukuangxinxixianshi() {
 		return daohanglukuangxinxixianshi;
 	}
@@ -2106,7 +2301,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDaohanglukuangxinxixianshi(String daohanglukuangxinxixianshi) {
 		this.daohanglukuangxinxixianshi = daohanglukuangxinxixianshi;
 	}
-	
+
+	@ExcelField(title="道路救援呼叫", align = ExcelField.Align.CENTER, sort = 2)
 	public String getDaolujiuyuanhujiao() {
 		return daolujiuyuanhujiao;
 	}
@@ -2114,7 +2310,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDaolujiuyuanhujiao(String daolujiuyuanhujiao) {
 		this.daolujiuyuanhujiao = daolujiuyuanhujiao;
 	}
-	
+
+	@ExcelField(title="中控液晶屏分屏显示", align = ExcelField.Align.CENTER, sort = 2)
 	public String getZhongkongyejingpingfenpingxianshi() {
 		return zhongkongyejingpingfenpingxianshi;
 	}
@@ -2122,7 +2319,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhongkongyejingpingfenpingxianshi(String zhongkongyejingpingfenpingxianshi) {
 		this.zhongkongyejingpingfenpingxianshi = zhongkongyejingpingfenpingxianshi;
 	}
-	
+
+	@ExcelField(title="蓝牙车载电话", align = ExcelField.Align.CENTER, sort = 2)
 	public String getLanyaChezaidianhua() {
 		return lanyaChezaidianhua;
 	}
@@ -2130,7 +2328,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setLanyaChezaidianhua(String lanyaChezaidianhua) {
 		this.lanyaChezaidianhua = lanyaChezaidianhua;
 	}
-	
+
+	@ExcelField(title="手机互联映射", align = ExcelField.Align.CENTER, sort = 2)
 	public String getShoujihulianYingshe() {
 		return shoujihulianYingshe;
 	}
@@ -2138,7 +2337,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShoujihulianYingshe(String shoujihulianYingshe) {
 		this.shoujihulianYingshe = shoujihulianYingshe;
 	}
-	
+
+	@ExcelField(title="语音识别控制系统", align = ExcelField.Align.CENTER, sort = 2)
 	public String getYuyinshibiekongzhixitong() {
 		return yuyinshibiekongzhixitong;
 	}
@@ -2146,7 +2346,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYuyinshibiekongzhixitong(String yuyinshibiekongzhixitong) {
 		this.yuyinshibiekongzhixitong = yuyinshibiekongzhixitong;
 	}
-	
+
+	@ExcelField(title="手势控制", align = ExcelField.Align.CENTER, sort = 2)
 	public String getShoushikongzhi() {
 		return shoushikongzhi;
 	}
@@ -2154,7 +2355,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setShoushikongzhi(String shoushikongzhi) {
 		this.shoushikongzhi = shoushikongzhi;
 	}
-	
+
+	@ExcelField(title="车联网", align = ExcelField.Align.CENTER, sort = 2)
 	public String getChelianwang() {
 		return chelianwang;
 	}
@@ -2162,7 +2364,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChelianwang(String chelianwang) {
 		this.chelianwang = chelianwang;
 	}
-	
+
+	@ExcelField(title="车载电视", align = ExcelField.Align.CENTER, sort = 2)
 	public String getChezaidianshi() {
 		return chezaidianshi;
 	}
@@ -2170,7 +2373,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChezaidianshi(String chezaidianshi) {
 		this.chezaidianshi = chezaidianshi;
 	}
-	
+
+	@ExcelField(title="后排液晶屏幕", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHoupaiyejingpingmu() {
 		return houpaiyejingpingmu;
 	}
@@ -2178,7 +2382,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaiyejingpingmu(String houpaiyejingpingmu) {
 		this.houpaiyejingpingmu = houpaiyejingpingmu;
 	}
-	
+
+	@ExcelField(title="后排控制多媒体", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHoupaikongzhiduomeiti() {
 		return houpaikongzhiduomeiti;
 	}
@@ -2186,7 +2391,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaikongzhiduomeiti(String houpaikongzhiduomeiti) {
 		this.houpaikongzhiduomeiti = houpaikongzhiduomeiti;
 	}
-	
+
+	@ExcelField(title="外接音源接口类型", align = ExcelField.Align.CENTER, sort = 2)
 	public String getWaijieyinyuanjiekouleixing() {
 		return waijieyinyuanjiekouleixing;
 	}
@@ -2194,7 +2400,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setWaijieyinyuanjiekouleixing(String waijieyinyuanjiekouleixing) {
 		this.waijieyinyuanjiekouleixing = waijieyinyuanjiekouleixing;
 	}
-	
+
+	@ExcelField(title="USB-typec接口数量", align = ExcelField.Align.CENTER, sort = 2)
 	public String getUsbTypeCjiekoushuliang() {
 		return usbTypeCjiekoushuliang;
 	}
@@ -2202,7 +2409,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setUsbTypeCjiekoushuliang(String usbTypeCjiekoushuliang) {
 		this.usbTypeCjiekoushuliang = usbTypeCjiekoushuliang;
 	}
-	
+
+	@ExcelField(title="车载CD/DVD", align = ExcelField.Align.CENTER, sort = 2)
 	public String getChezaicdDvd() {
 		return chezaicdDvd;
 	}
@@ -2210,7 +2418,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChezaicdDvd(String chezaicdDvd) {
 		this.chezaicdDvd = chezaicdDvd;
 	}
-	
+
+	@ExcelField(title="电源220V/230V", align = ExcelField.Align.CENTER, sort = 2)
 	public String getDianyuan220v230v() {
 		return dianyuan220v230v;
 	}
@@ -2218,7 +2427,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDianyuan220v230v(String dianyuan220v230v) {
 		this.dianyuan220v230v = dianyuan220v230v;
 	}
-	
+
+	@ExcelField(title="行李箱12V电源接口", align = ExcelField.Align.CENTER, sort = 2)
 	public String getXinglixiang12vdianyuanjiekou() {
 		return xinglixiang12vdianyuanjiekou;
 	}
@@ -2226,7 +2436,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXinglixiang12vdianyuanjiekou(String xinglixiang12vdianyuanjiekou) {
 		this.xinglixiang12vdianyuanjiekou = xinglixiang12vdianyuanjiekou;
 	}
-	
+
+	@ExcelField(title="扬声器品牌名称", align = ExcelField.Align.CENTER, sort = 2)
 	public String getYangshengqipinpaimingcheng() {
 		return yangshengqipinpaimingcheng;
 	}
@@ -2234,7 +2445,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYangshengqipinpaimingcheng(String yangshengqipinpaimingcheng) {
 		this.yangshengqipinpaimingcheng = yangshengqipinpaimingcheng;
 	}
-	
+
+	@ExcelField(title="样式衡器数量", align = ExcelField.Align.CENTER, sort = 2)
 	public String getYangshengqishuliang() {
 		return yangshengqishuliang;
 	}
@@ -2242,7 +2454,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYangshengqishuliang(String yangshengqishuliang) {
 		this.yangshengqishuliang = yangshengqishuliang;
 	}
-	
+
+	@ExcelField(title="后排杯架", align = ExcelField.Align.CENTER, sort = 2)
 	public String getJinguangdengguangyuan() {
 		return jinguangdengguangyuan;
 	}
@@ -2250,7 +2463,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setJinguangdengguangyuan(String jinguangdengguangyuan) {
 		this.jinguangdengguangyuan = jinguangdengguangyuan;
 	}
-	
+
+	@ExcelField(title="远光灯光源", align = ExcelField.Align.CENTER, sort = 2)
 	public String getYuanguangdengguangyuan() {
 		return yuanguangdengguangyuan;
 	}
@@ -2258,7 +2472,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setYuanguangdengguangyuan(String yuanguangdengguangyuan) {
 		this.yuanguangdengguangyuan = yuanguangdengguangyuan;
 	}
-	
+
+	@ExcelField(title="灯光特色功能", align = ExcelField.Align.CENTER, sort = 2)
 	public String getDengguangtesegongneng() {
 		return dengguangtesegongneng;
 	}
@@ -2266,7 +2481,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDengguangtesegongneng(String dengguangtesegongneng) {
 		this.dengguangtesegongneng = dengguangtesegongneng;
 	}
-	
+
+	@ExcelField(title="LED日间行车灯", align = ExcelField.Align.CENTER, sort = 2)
 	public String getLedrijianxingchedeng() {
 		return ledrijianxingchedeng;
 	}
@@ -2274,7 +2490,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setLedrijianxingchedeng(String ledrijianxingchedeng) {
 		this.ledrijianxingchedeng = ledrijianxingchedeng;
 	}
-	
+
+	@ExcelField(title="自适应远近光", align = ExcelField.Align.CENTER, sort = 2)
 	public String getZishiyingyuanjinguang() {
 		return zishiyingyuanjinguang;
 	}
@@ -2282,7 +2499,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZishiyingyuanjinguang(String zishiyingyuanjinguang) {
 		this.zishiyingyuanjinguang = zishiyingyuanjinguang;
 	}
-	
+
+	@ExcelField(title="自动头灯", align = ExcelField.Align.CENTER, sort = 2)
 	public String getZidongtoudeng() {
 		return zidongtoudeng;
 	}
@@ -2290,7 +2508,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZidongtoudeng(String zidongtoudeng) {
 		this.zidongtoudeng = zidongtoudeng;
 	}
-	
+
+	@ExcelField(title="转向辅助灯", align = ExcelField.Align.CENTER, sort = 2)
 	public String getZhuanxiangfuzhudeng() {
 		return zhuanxiangfuzhudeng;
 	}
@@ -2298,7 +2517,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhuanxiangfuzhudeng(String zhuanxiangfuzhudeng) {
 		this.zhuanxiangfuzhudeng = zhuanxiangfuzhudeng;
 	}
-	
+
+	@ExcelField(title="转向头灯", align = ExcelField.Align.CENTER, sort = 2)
 	public String getZhuanxiangtoudeng() {
 		return zhuanxiangtoudeng;
 	}
@@ -2306,7 +2526,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setZhuanxiangtoudeng(String zhuanxiangtoudeng) {
 		this.zhuanxiangtoudeng = zhuanxiangtoudeng;
 	}
-	
+
+	@ExcelField(title="车前雾灯", align = ExcelField.Align.CENTER, sort = 2)
 	public String getCheqianwudeng() {
 		return cheqianwudeng;
 	}
@@ -2314,7 +2535,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setCheqianwudeng(String cheqianwudeng) {
 		this.cheqianwudeng = cheqianwudeng;
 	}
-	
+
+	@ExcelField(title="前大灯雨雾模式", align = ExcelField.Align.CENTER, sort = 2)
 	public String getQiandadengyuwumoshi() {
 		return qiandadengyuwumoshi;
 	}
@@ -2322,7 +2544,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQiandadengyuwumoshi(String qiandadengyuwumoshi) {
 		this.qiandadengyuwumoshi = qiandadengyuwumoshi;
 	}
-	
+
+	@ExcelField(title="大灯高度可调", align = ExcelField.Align.CENTER, sort = 2)
 	public String getDadenggaoduketiao() {
 		return dadenggaoduketiao;
 	}
@@ -2330,7 +2553,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDadenggaoduketiao(String dadenggaoduketiao) {
 		this.dadenggaoduketiao = dadenggaoduketiao;
 	}
-	
+
+	@ExcelField(title="大灯清洗装置", align = ExcelField.Align.CENTER, sort = 2)
 	public String getDadengqingxizhuangzhi() {
 		return dadengqingxizhuangzhi;
 	}
@@ -2338,7 +2562,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDadengqingxizhuangzhi(String dadengqingxizhuangzhi) {
 		this.dadengqingxizhuangzhi = dadengqingxizhuangzhi;
 	}
-	
+
+	@ExcelField(title="大灯延时关闭", align = ExcelField.Align.CENTER, sort = 2)
 	public String getDadengyanshiguanbi() {
 		return dadengyanshiguanbi;
 	}
@@ -2346,7 +2571,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDadengyanshiguanbi(String dadengyanshiguanbi) {
 		this.dadengyanshiguanbi = dadengyanshiguanbi;
 	}
-	
+
+	@ExcelField(title="触摸式阅读灯", align = ExcelField.Align.CENTER, sort = 2)
 	public String getChumoshiyuedudeng() {
 		return chumoshiyuedudeng;
 	}
@@ -2354,7 +2580,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChumoshiyuedudeng(String chumoshiyuedudeng) {
 		this.chumoshiyuedudeng = chumoshiyuedudeng;
 	}
-	
+
+	@ExcelField(title="车内环境氛围灯", align = ExcelField.Align.CENTER, sort = 2)
 	public String getCheneihuanjingfenweideng() {
 		return cheneihuanjingfenweideng;
 	}
@@ -2362,7 +2589,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setCheneihuanjingfenweideng(String cheneihuanjingfenweideng) {
 		this.cheneihuanjingfenweideng = cheneihuanjingfenweideng;
 	}
-	
+
+	@ExcelField(title="前后电动车窗", align = ExcelField.Align.CENTER, sort = 2)
 	public String getQianHoudiandongchechuang() {
 		return qianHoudiandongchechuang;
 	}
@@ -2370,7 +2598,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setQianHoudiandongchechuang(String qianHoudiandongchechuang) {
 		this.qianHoudiandongchechuang = qianHoudiandongchechuang;
 	}
-	
+
+	@ExcelField(title="车窗一键升降功能", align = ExcelField.Align.CENTER, sort = 2)
 	public String getChechuangyijianshengjianggongneng() {
 		return chechuangyijianshengjianggongneng;
 	}
@@ -2378,7 +2607,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChechuangyijianshengjianggongneng(String chechuangyijianshengjianggongneng) {
 		this.chechuangyijianshengjianggongneng = chechuangyijianshengjianggongneng;
 	}
-	
+
+	@ExcelField(title="车窗防夹手功能", align = ExcelField.Align.CENTER, sort = 2)
 	public String getChechuangfangjiashougongneng() {
 		return chechuangfangjiashougongneng;
 	}
@@ -2386,7 +2616,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChechuangfangjiashougongneng(String chechuangfangjiashougongneng) {
 		this.chechuangfangjiashougongneng = chechuangfangjiashougongneng;
 	}
-	
+
+	@ExcelField(title="防紫外线玻璃", align = ExcelField.Align.CENTER, sort = 2)
 	public String getFangziwaixianboli() {
 		return fangziwaixianboli;
 	}
@@ -2394,7 +2625,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFangziwaixianboli(String fangziwaixianboli) {
 		this.fangziwaixianboli = fangziwaixianboli;
 	}
-	
+
+	@ExcelField(title="多层隔音玻璃", align = ExcelField.Align.CENTER, sort = 2)
 	public String getDuocenggeyinboli() {
 		return duocenggeyinboli;
 	}
@@ -2402,7 +2634,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setDuocenggeyinboli(String duocenggeyinboli) {
 		this.duocenggeyinboli = duocenggeyinboli;
 	}
-	
+
+	@ExcelField(title="外后视镜功能", align = ExcelField.Align.CENTER, sort = 2)
 	public String getWaihoushijinggongneng() {
 		return waihoushijinggongneng;
 	}
@@ -2410,7 +2643,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setWaihoushijinggongneng(String waihoushijinggongneng) {
 		this.waihoushijinggongneng = waihoushijinggongneng;
 	}
-	
+
+	@ExcelField(title="内后视镜功能", align = ExcelField.Align.CENTER, sort = 2)
 	public String getNeihoushijinggongneng() {
 		return neihoushijinggongneng;
 	}
@@ -2418,7 +2652,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setNeihoushijinggongneng(String neihoushijinggongneng) {
 		this.neihoushijinggongneng = neihoushijinggongneng;
 	}
-	
+
+	@ExcelField(title="后风挡遮阳帘", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHoufengdangzheyanglian() {
 		return houfengdangzheyanglian;
 	}
@@ -2426,7 +2661,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoufengdangzheyanglian(String houfengdangzheyanglian) {
 		this.houfengdangzheyanglian = houfengdangzheyanglian;
 	}
-	
+
+	@ExcelField(title="后排侧窗遮阳帘", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHoupaicechuangzheyanglian() {
 		return houpaicechuangzheyanglian;
 	}
@@ -2434,7 +2670,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaicechuangzheyanglian(String houpaicechuangzheyanglian) {
 		this.houpaicechuangzheyanglian = houpaicechuangzheyanglian;
 	}
-	
+
+	@ExcelField(title="后排侧隐私玻璃", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHoupaiceyinsiboli() {
 		return houpaiceyinsiboli;
 	}
@@ -2442,7 +2679,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaiceyinsiboli(String houpaiceyinsiboli) {
 		this.houpaiceyinsiboli = houpaiceyinsiboli;
 	}
-	
+
+	@ExcelField(title="车内化妆镜", align = ExcelField.Align.CENTER, sort = 2)
 	public String getCheneihuazhuangjing() {
 		return cheneihuazhuangjing;
 	}
@@ -2450,7 +2688,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setCheneihuazhuangjing(String cheneihuazhuangjing) {
 		this.cheneihuazhuangjing = cheneihuazhuangjing;
 	}
-	
+
+	@ExcelField(title="后雨刷", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHouyushua() {
 		return houyushua;
 	}
@@ -2458,7 +2697,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHouyushua(String houyushua) {
 		this.houyushua = houyushua;
 	}
-	
+
+	@ExcelField(title="感应雨刷功能", align = ExcelField.Align.CENTER, sort = 2)
 	public String getGanyingyushuagongneng() {
 		return ganyingyushuagongneng;
 	}
@@ -2466,7 +2706,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setGanyingyushuagongneng(String ganyingyushuagongneng) {
 		this.ganyingyushuagongneng = ganyingyushuagongneng;
 	}
-	
+
+	@ExcelField(title="可加热喷水嘴", align = ExcelField.Align.CENTER, sort = 2)
 	public String getKejiarepenshuizui() {
 		return kejiarepenshuizui;
 	}
@@ -2474,7 +2715,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setKejiarepenshuizui(String kejiarepenshuizui) {
 		this.kejiarepenshuizui = kejiarepenshuizui;
 	}
-	
+
+	@ExcelField(title="空调温度控制方式", align = ExcelField.Align.CENTER, sort = 2)
 	public String getKongtiaowendukongzhifangshi() {
 		return kongtiaowendukongzhifangshi;
 	}
@@ -2482,7 +2724,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setKongtiaowendukongzhifangshi(String kongtiaowendukongzhifangshi) {
 		this.kongtiaowendukongzhifangshi = kongtiaowendukongzhifangshi;
 	}
-	
+
+	@ExcelField(title="后排独立空调", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHoupaidulikongtiao() {
 		return houpaidulikongtiao;
 	}
@@ -2490,7 +2733,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHoupaidulikongtiao(String houpaidulikongtiao) {
 		this.houpaidulikongtiao = houpaidulikongtiao;
 	}
-	
+
+	@ExcelField(title="后做出风口", align = ExcelField.Align.CENTER, sort = 2)
 	public String getHouzuochufengkou() {
 		return houzuochufengkou;
 	}
@@ -2498,7 +2742,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setHouzuochufengkou(String houzuochufengkou) {
 		this.houzuochufengkou = houzuochufengkou;
 	}
-	
+
+	@ExcelField(title="温度分区控制", align = ExcelField.Align.CENTER, sort = 2)
 	public String getWendufenqukongzhi() {
 		return wendufenqukongzhi;
 	}
@@ -2506,7 +2751,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setWendufenqukongzhi(String wendufenqukongzhi) {
 		this.wendufenqukongzhi = wendufenqukongzhi;
 	}
-	
+
+	@ExcelField(title="车载控制器净化器", align = ExcelField.Align.CENTER, sort = 2)
 	public String getChezaikongqijinghuaqi() {
 		return chezaikongqijinghuaqi;
 	}
@@ -2514,7 +2760,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChezaikongqijinghuaqi(String chezaikongqijinghuaqi) {
 		this.chezaikongqijinghuaqi = chezaikongqijinghuaqi;
 	}
-	
+
+	@ExcelField(title="车内PM2.5过滤装置", align = ExcelField.Align.CENTER, sort = 2)
 	public String getCheneipm25guolvzhuangzhi() {
 		return cheneipm25guolvzhuangzhi;
 	}
@@ -2522,7 +2769,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setCheneipm25guolvzhuangzhi(String cheneipm25guolvzhuangzhi) {
 		this.cheneipm25guolvzhuangzhi = cheneipm25guolvzhuangzhi;
 	}
-	
+
+	@ExcelField(title="负离子发生器", align = ExcelField.Align.CENTER, sort = 2)
 	public String getFulizifashengqi() {
 		return fulizifashengqi;
 	}
@@ -2530,7 +2778,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setFulizifashengqi(String fulizifashengqi) {
 		this.fulizifashengqi = fulizifashengqi;
 	}
-	
+
+	@ExcelField(title="车内像风装置", align = ExcelField.Align.CENTER, sort = 2)
 	public String getCheneixiangfenzhuangzhi() {
 		return cheneixiangfenzhuangzhi;
 	}
@@ -2538,7 +2787,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setCheneixiangfenzhuangzhi(String cheneixiangfenzhuangzhi) {
 		this.cheneixiangfenzhuangzhi = cheneixiangfenzhuangzhi;
 	}
-	
+
+	@ExcelField(title="车载冰箱", align = ExcelField.Align.CENTER, sort = 2)
 	public String getChezaibingxiang() {
 		return chezaibingxiang;
 	}
@@ -2546,7 +2796,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setChezaibingxiang(String chezaibingxiang) {
 		this.chezaibingxiang = chezaibingxiang;
 	}
-	
+
+	@ExcelField(title="旋转包", align = ExcelField.Align.CENTER, sort = 2)
 	public String getXuanzhuangbao() {
 		return xuanzhuangbao;
 	}
@@ -2554,7 +2805,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setXuanzhuangbao(String xuanzhuangbao) {
 		this.xuanzhuangbao = xuanzhuangbao;
 	}
-	
+
+	@ExcelField(title="外观颜色", align = ExcelField.Align.CENTER, sort = 2)
 	public String getWaiguanyanse() {
 		return waiguanyanse;
 	}
@@ -2562,7 +2814,8 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setWaiguanyanse(String waiguanyanse) {
 		this.waiguanyanse = waiguanyanse;
 	}
-	
+
+	@ExcelField(title="内饰颜色", align = ExcelField.Align.CENTER, sort = 2)
 	public String getNeishiyanse() {
 		return neishiyanse;
 	}

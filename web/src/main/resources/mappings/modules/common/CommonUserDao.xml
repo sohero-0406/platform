@@ -34,6 +34,12 @@
 
 	<select id="findNormalStu" resultType="CommonUser">
 		select * from common_user as cu where cu.school_id = #{schoolId} and cu.status = 0 and cu.role_id = '3'
+		<if test="majorName!=null">
+			and cu.major_name = #{majorName}
+		</if>
+		<if test="className!=null">
+			and cu.class_name = #{className}
+		</if>
 	</select>
 
 	<select id="findStuByIdsWithSchoolName" resultType="CommonUser">
@@ -42,6 +48,16 @@
 			#{id}
 		</foreach>
 	</select>
+
+
+	<select id="findStuByExamStuIdsWithSchoolName" resultType="CommonUser">
+		select cu.*, sc.school_name as schoolName, cas.id as commonAssessmentStuId  from common_user as cu, common_school as sc, common_assessment_stu as cas
+		where cu.school_id = sc.id and cu.id = cas.common_user_id and cas.id in
+		<foreach collection="list" open="(" separator="," close=")" item="id">
+			#{id}
+		</foreach>
+	</select>
+
 
 	<select id="findStuByUserNamesWithSchoolName" resultType="CommonUser">
 		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc where cu.school_id = sc.id and cu.user_name in
@@ -84,9 +100,18 @@
 			and cu.school_id = #{schoolId}
 		</if>
 		and cu.status = "0"
-
-
-
 	</select>
-	
+
+    <select id="findMajorNameList" resultType="String">
+		select cu.major_name as majorName from common_user as cu where cu.school_id = #{schoolId} group by cu.major_name
+	</select>
+
+    <select id="findClassNameList" resultType="String">
+		select cu.class_name as className from common_user as cu where cu.school_id = #{schoolId}
+		<if test="majorName!=null">
+            and cu.major_name = #{majorName}
+        </if>
+        group by  cu.class_name
+	</select>
+
 </mapper>

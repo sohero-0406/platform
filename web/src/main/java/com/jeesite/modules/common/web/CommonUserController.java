@@ -176,6 +176,13 @@ public class CommonUserController extends BaseController {
         return commonUserService.login(vo);
     }
 
+    @Log(operationName = "注销")
+    @RequestMapping(value = "logout")
+    @ResponseBody
+    public CommonResult logout(LoginVO vo) {
+        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
+    }
+
     @RequestMapping(value = "loadUserByToken")
     @ResponseBody
     public CommonResult loadUserByToken() {
@@ -197,6 +204,14 @@ public class CommonUserController extends BaseController {
         return commonUserService.loadStuListInPlatform(vo);
     }
 
+    @RequestMapping(value = "loadMajorList")
+    @ResponseBody
+    public CommonResult loadMajorList(String commonUserId){ return commonUserService.loadMajorList(commonUserId); }
+
+    @RequestMapping(value = "loadClassList")
+    @ResponseBody
+    public CommonResult loadClassList(String commonUserId, String majorName){ return commonUserService.loadClassList(commonUserId, majorName); }
+
     @RequestMapping(value = "loadStuListByIds")
     @ResponseBody
     public CommonResult loadStuListByIds(String ids){
@@ -217,6 +232,12 @@ public class CommonUserController extends BaseController {
         return commonUserService.fillUserConditionList(userConditionList);
     }
 
+    @RequestMapping(value = "loadStuListByExamUserIds")
+    @ResponseBody
+    public CommonResult loadStuListByExamUserIds(String examUserIds) {
+        return commonUserService.loadStuListByExamUserIds(examUserIds);
+    }
+
 
     @RequestMapping(value = "tokenExpired")
     @ResponseBody
@@ -232,7 +253,7 @@ public class CommonUserController extends BaseController {
     }
 
     @RequestMapping(value = "commonUserDemoExport")
-    public void commonUserDemoExport(HttpServletResponse response, RedirectAttributes redirectAttributes) {
+    public void commonUserDemoExport(HttpServletResponse response) {
         try {
             String fileName = "人员信息导入模板.xlsx";
             List<CommonUser> list = Lists.newArrayList();

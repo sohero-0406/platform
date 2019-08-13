@@ -6,6 +6,7 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,7 +46,6 @@ public class CommonAccessoryController extends BaseController {
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("common:commonAccessory:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CommonAccessory commonAccessory, Model model) {
 		model.addAttribute("commonAccessory", commonAccessory);
@@ -55,7 +55,6 @@ public class CommonAccessoryController extends BaseController {
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("common:commonAccessory:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<CommonAccessory> listData(CommonAccessory commonAccessory, HttpServletRequest request, HttpServletResponse response) {
@@ -67,7 +66,6 @@ public class CommonAccessoryController extends BaseController {
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("common:commonAccessory:view")
 	@RequestMapping(value = "form")
 	public String form(CommonAccessory commonAccessory, Model model) {
 		model.addAttribute("commonAccessory", commonAccessory);
@@ -77,7 +75,6 @@ public class CommonAccessoryController extends BaseController {
 	/**
 	 * 保存汽车配件表
 	 */
-	@RequiresPermissions("common:commonAccessory:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated CommonAccessory commonAccessory) {
@@ -88,12 +85,26 @@ public class CommonAccessoryController extends BaseController {
 	/**
 	 * 删除汽车配件表
 	 */
-	@RequiresPermissions("common:commonAccessory:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(CommonAccessory commonAccessory) {
 		commonAccessoryService.delete(commonAccessory);
 		return renderResult(Global.TRUE, text("删除汽车配件表成功！"));
 	}
+
+
+	@RequestMapping(value = "listCommonAccessory")
+	@ResponseBody
+	public CommonResult listCommonAccessory(CommonAccessory commonAccessory){
+		return commonAccessoryService.findPageByCondition(commonAccessory);
+	}
+
+	@RequestMapping(value = "deleteCommonAccessory")
+	@ResponseBody
+	public CommonResult deleteCommonAccessory(String json) {
+
+		return commonAccessoryService.deleteCommonCommonAccessory(json);
+	}
+
 	
 }

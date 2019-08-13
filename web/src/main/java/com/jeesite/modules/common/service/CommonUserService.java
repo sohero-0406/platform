@@ -15,6 +15,7 @@ import com.jeesite.modules.common.dao.CommonRoleDao;
 import com.jeesite.modules.common.dao.CommonSchoolDao;
 import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.*;
+import com.jeesite.modules.common.util.CommonUserUtil;
 import com.jeesite.modules.common.vo.LoginVO;
 import com.jeesite.modules.common.vo.StuSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -237,14 +238,29 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
 
     @Transactional(readOnly = false)
     public CommonResult deleteCommonUser(String json) {
+
+        String loginUserId = PreEntity.getUserIdByToken();
+        CommonUser loginUser = super.get(loginUserId);
+        if("3".equals(loginUser.getRoleId())){
+            return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
+        }
+
         JSONObject jsonObject = JSONObject.parseObject(json);
         Integer length =jsonObject.getInteger("length");
         JSONArray ja = JSONArray.parseArray(jsonObject.getString("datas"));
+        int deletedNum = 0;
         for (int i = 0; i < length; i++) {
             String id = ja.getString(i);
-            super.delete(this.get(id));
+            CommonUser cu = this.get(id);
+            if(CommonUserUtil.isSuperAdmin(loginUser)||CommonUserUtil.isSameSchool(loginUser, cu)){
+                super.delete(cu);
+                deletedNum++;
+            }
         }
-        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
+        JSONObject object = new JSONObject();
+        object.put("deletedNum", deletedNum);
+        object.put("notDeletedNum", length- deletedNum);
+        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
     }
 
 
@@ -330,7 +346,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
                 result.setCode(CodeConstant.REQUEST_SUCCESSFUL);
                 result.setData(commonUserList);
             }else{
-                List<CommonUser> commonUserList = dao.findNormalStu(commonUser.getSchoolId());
+                List<CommonUser> commonUserList = dao.findNormalStu(commonUser.getSchoolId(), vo.getMajorName(), vo.getClassName());
                 result.setCode(CodeConstant.REQUEST_SUCCESSFUL);
                 result.setData(commonUserList);
             }
@@ -341,6 +357,24 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return result;
     }
 
+
+    public CommonResult loadMajorList(String commonUserId){
+        CommonUser commonUser = super.get(commonUserId);
+        if("2".equals(commonUser.getRoleId())){
+            return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, dao.findMajorNameList(commonUser.getSchoolId()));
+        }
+        return new CommonResult(CodeConstant.ERROR_DATA, "传入的参数错误");
+    }
+
+    public CommonResult loadClassList(String commonUserId, String majorName){
+        CommonUser commonUser = super.get(commonUserId);
+        if("2".equals(commonUser.getRoleId())){
+            return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, dao.findClassNameList(commonUser.getSchoolId(), majorName));
+        }
+        return new CommonResult(CodeConstant.ERROR_DATA, "传入的参数错误");
+
+    }
+
     public CommonResult loadStuListByIds(String ids){
         String[] isArray = ids.split(",");
         List<String> idList = Arrays.asList(isArray);
@@ -348,6 +382,13 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
 //        con.setId_in(isArray);
         List<CommonUser> list = dao.findStuByIdsWithSchoolName(idList);
 
+        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
+    }
+
+    public CommonResult loadStuListByExamUserIds(String examUserIds){
+        String[] idsArray = examUserIds.split(",");
+        List<String> examUserIdList = Arrays.asList(idsArray);
+        List<CommonUser> list = dao.findStuByExamStuIdsWithSchoolName(examUserIdList);
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
     }
 

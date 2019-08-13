@@ -21,15 +21,23 @@ public interface CommonUserDao extends CrudDao<CommonUser> {
 
     List<CommonUser> findAssessmentStu(String schoolId, String assessmentId, String assessmentDate, String assessmentTime);
 
-    List<CommonUser> findNormalStu(String schoolId);
+    List<CommonUser> findNormalStu(String schoolId, String majorName, String className);
 
     CommonUser findByUserName(String userName);
 
     List<CommonUser> findStuByIdsWithSchoolName(List<String> list);
 
+    List<CommonUser> findStuByExamStuIdsWithSchoolName(List<String> list);
+
     List<CommonUser> findStuByUserNamesWithSchoolName(List<String> list);
 
     List<CommonUser> findCommonUserWithSchoolName(CommonUser commonUser);
+
+
+
+    List<String> findMajorNameList(String schoolId);
+
+    List<String> findClassNameList(String schoolId, String majorName);
 
 }
 

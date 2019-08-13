@@ -6,6 +6,7 @@ package com.jeesite.modules.common.service;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.common.dao.VehicleInfoDao;
+import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.VehicleInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,6 +88,14 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 	 */
 	public VehicleInfo getCarModel(String chexingId){
 		return vehicleInfoDao.getCarModel(chexingId);
+	}
+
+
+
+	public CommonResult findPageByCondition(VehicleInfo vehicleInfo){
+
+
+		return null;
 	}
 
 }

@@ -5,6 +5,15 @@ package com.jeesite.modules.common.service;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.CommonUser;
+import com.jeesite.modules.common.entity.PreEntity;
+import com.jeesite.modules.common.util.CommonUserUtil;
+import com.jeesite.modules.common.util.PageUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +30,10 @@ import com.jeesite.modules.common.dao.CommonAccessoryDao;
 @Service
 @Transactional(readOnly=true)
 public class CommonAccessoryService extends CrudService<CommonAccessoryDao, CommonAccessory> {
-	
+
+	@Autowired
+	private  CommonUserService commonUserService;
+
 	/**
 	 * 获取单条数据
 	 * @param commonAccessory
@@ -71,5 +83,38 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 	public void delete(CommonAccessory commonAccessory) {
 		super.delete(commonAccessory);
 	}
-	
+
+
+
+	public CommonResult findPageByCondition(CommonAccessory commonAccessory){
+		if(!PageUtils.checkPageParams(commonAccessory)){
+			return new CommonResult(CodeConstant.PARA_MUST_NEED, "您未传入分页数据");
+		}
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, super.findPage(commonAccessory));
+	}
+
+
+	public CommonResult deleteCommonCommonAccessory(String json){
+		String commonUserId = PreEntity.getUserIdByToken();
+		CommonUser loginUser = commonUserService.get(commonUserId);
+		if(CommonUserUtil.isSuperAdmin(loginUser)){
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			Integer length =jsonObject.getInteger("length");
+			JSONArray ja = JSONArray.parseArray(jsonObject.getString("datas"));
+			int deletedNum = 0;
+			for (int i = 0; i < length; i++) {
+				String id = ja.getString(i);
+				super.delete(this.get(id));
+				deletedNum++;
+			}
+			JSONObject object = new JSONObject();
+			object.put("deletedNum", deletedNum);
+			object.put("notDeletedNum", length- deletedNum);
+			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+		}else{
+			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
+		}
+
+	}
+
 }

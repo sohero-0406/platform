@@ -133,7 +133,8 @@ public class CommonAccessoryCategoryController extends BaseController {
 		return commonAccessoryCategoryService.updateCommonAccessoryCategory(commonAccessoryCategory);
 	}
 
-	@RequestMapping(value = "downTemplate")
+	@RequestMapping(value = "downTemplate", produces = "application/octet-stream")
+    @ResponseBody
 	public void downTemplate(HttpServletResponse response){
 		File file = new File(FilePathUtil.getFileSavePath("template")+"配件基础信息表.xlsx");
 

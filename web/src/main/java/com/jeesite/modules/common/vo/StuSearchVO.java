@@ -14,6 +14,10 @@ public class StuSearchVO {
 
     private String examOrPractice;
 
+    private String majorName;
+
+    private String className;
+
     public String getAssessmentId() {
         return assessmentId;
     }
@@ -60,5 +64,21 @@ public class StuSearchVO {
 
     public void setExamOrPractice(String examOrPractice) {
         this.examOrPractice = examOrPractice;
+    }
+
+    public String getMajorName() {
+        return majorName;
+    }
+
+    public void setMajorName(String majorName) {
+        this.majorName = majorName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }
