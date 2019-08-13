@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +96,12 @@ public class CommonSoftwareController extends BaseController {
 		return renderResult(Global.TRUE, text("删除软件表成功！"));
 	}
 
-
+	/**
+	 * 加载软件列表数据
+	 * @param commonSoftware
+	 * @return
+	 */
+	@Log(operationName = "加载软件列表数据")
 	@RequestMapping(value = "listCommonSoftwareOnly")
 	@ResponseBody
 	public CommonResult listCommonSoftwareOnly(CommonSoftware commonSoftware) {

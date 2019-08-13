@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.jeesite.common.codec.EncodeUtils;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.utils.excel.ExcelImport;
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonAccessory;
 import com.jeesite.modules.common.entity.CommonAssessment;
 import com.jeesite.modules.common.entity.CommonResult;
@@ -104,13 +105,26 @@ public class CommonAccessoryCategoryController extends BaseController {
 		return renderResult(Global.TRUE, text("删除配件分类表成功！"));
 	}
 
-
+	/**
+	 * 加载分页配件分类数据
+	 * @param commonAccessoryCategory
+	 * @return
+	 */
+	@Log(operationName = "加载分页配件分类数据")
 	@RequestMapping(value = "listCommonAccessoryCategory")
 	@ResponseBody
 	public CommonResult listCommonAccessoryCategory(CommonAccessoryCategory commonAccessoryCategory){
 		return commonAccessoryCategoryService.findPageByCondition(commonAccessoryCategory);
 	}
 
+	/**
+	 * 保存配件分类并上传对应的配件数据
+	 * @param file
+	 * @param commonAccessoryCategory
+	 * @return
+	 * @throws Exception
+	 */
+	@Log(operationName = "保存配件分类并上传对应的配件数据", operationType = Log.OPERA_TYPE_ADD)
 	@RequestMapping(value = "uploadCommonAccessoryAndCategory")
 	@ResponseBody
 	public CommonResult uploadCommonAccessoryAndCategory(MultipartFile file, CommonAccessoryCategory commonAccessoryCategory) throws Exception {
@@ -119,6 +133,12 @@ public class CommonAccessoryCategoryController extends BaseController {
 		return commonAccessoryCategoryService.saveCategoryAndCommonAccessory(commonAccessoryCategory, commonAccessoryList);
 	}
 
+	/**
+	 * 删除配件分类信息
+	 * @param commonAccessoryCategory
+	 * @return
+	 */
+	@Log(operationName = "删除配件分类信息", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAccessoryAndCategory")
 	@ResponseBody
 	public CommonResult deleteCommonAccessoryAndCategory(CommonAccessoryCategory commonAccessoryCategory) {
@@ -126,6 +146,12 @@ public class CommonAccessoryCategoryController extends BaseController {
 		return commonAccessoryCategoryService.deleteCommonAccessoryCategory(commonAccessoryCategory);
 	}
 
+	/**
+	 * 更新配件分类信息
+	 * @param commonAccessoryCategory
+	 * @return
+	 */
+	@Log(operationName = "更新配件分类信息", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
 	@RequestMapping(value = "saveCommonAccessoryAndCategory")
 	@ResponseBody
 	public CommonResult saveCommonAccessoryAndCategory(CommonAccessoryCategory commonAccessoryCategory) {
@@ -133,6 +159,11 @@ public class CommonAccessoryCategoryController extends BaseController {
 		return commonAccessoryCategoryService.updateCommonAccessoryCategory(commonAccessoryCategory);
 	}
 
+	/**
+	 * 下载配件信息表
+	 * @param response
+	 */
+	@Log(operationName = "下载配件信息表", operationType = Log.OPERA_TYPE_OTHER)
 	@RequestMapping(value = "downTemplate", produces = "application/octet-stream")
 	//@RequestMapping(value = "downTemplate")
     @ResponseBody

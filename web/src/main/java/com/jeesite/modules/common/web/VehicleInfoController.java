@@ -12,6 +12,7 @@ import com.jeesite.common.io.FileUtils;
 import com.jeesite.common.utils.excel.ExcelExport;
 import com.jeesite.common.utils.excel.ExcelImport;
 import com.jeesite.common.utils.excel.annotation.ExcelField;
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.CommonUser;
 import com.jeesite.modules.common.util.FilePathUtil;
@@ -105,6 +106,12 @@ public class VehicleInfoController extends BaseController {
         return renderResult(Global.TRUE, text("删除车辆配置全表成功！"));
     }
 
+    /**
+     * 根据车系id加载区分年款的车辆信息
+     * @param chexiId
+     * @return
+     */
+    @Log(operationName = "根据车系id加载区分年款的车辆信息")
     @PostMapping(value = "findList")
     @ResponseBody
     public CommonResult findList(String chexiId) {
@@ -137,6 +144,7 @@ public class VehicleInfoController extends BaseController {
     /**
      * 根据车型id查部分常用属性
      */
+    @Log(operationName = "根据车型id查部分常用属性")
     @RequestMapping(value = "getCarModel")
     @ResponseBody
     public CommonResult getCarModel(String chexingId) {
@@ -147,6 +155,7 @@ public class VehicleInfoController extends BaseController {
     /**
      * 根据车型id查部分常用属性
      */
+    @Log(operationName = "根据车型id查部分常用属性")
     @RequestMapping(value = "getByEntity")
     @ResponseBody
     public CommonResult getByEntity(VehicleInfo vehicleInfo) {
@@ -158,12 +167,23 @@ public class VehicleInfoController extends BaseController {
 
     // 下面是马玉虎写的代码
 
+    /**
+     * 加载车的分页数据
+     * @param vehicleInfo
+     * @return
+     */
+    @Log(operationName = "加载车的分页数据")
     @RequestMapping(value = "listVehicleInfo")
     @ResponseBody
     public CommonResult listVehicleInfo(VehicleInfo vehicleInfo){
         return vehicleInfoService.findPageByCondition(vehicleInfo);
     }
 
+    /**
+     * 下载车型配置表模板
+     * @param response
+     */
+    @Log(operationName = "下载车型配置表模板", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "downTemplate" , produces = "application/octet-stream")
     @ResponseBody
     public void downTemplate(HttpServletResponse response){
@@ -177,6 +197,12 @@ public class VehicleInfoController extends BaseController {
         }
     }
 
+    /**
+     * 导入车的信息
+     * @param file
+     * @return
+     */
+    @Log(operationName = "导入车的信息", operationType = Log.OPERA_TYPE_ADD)
     @RequestMapping(value = "importVehicleInfos", method= RequestMethod.POST)
     @ResponseBody
     public CommonResult importVehicleInfos(MultipartFile file){
@@ -188,9 +214,15 @@ public class VehicleInfoController extends BaseController {
         } catch (Exception e) {
 
         }
-        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
+        return new CommonResult(CodeConstant.ERROR_DATA, "服务器错误");
     }
 
+    /**
+     * 根据json删除车的信息
+     * @param json
+     * @return
+     */
+    @Log(operationName = "根据json删除车的信息", operationType = Log.OPERA_TYPE_DEL)
     @RequestMapping(value = "deleteVehicle")
     @ResponseBody
     public CommonResult deleteVehicle(String json){
@@ -198,12 +230,26 @@ public class VehicleInfoController extends BaseController {
         return vehicleInfoService.deleteVehicle(json);
     }
 
+    /**
+     * 上传车的图片
+     * @param image
+     * @param vehicleInfoId
+     * @return
+     * @throws IOException
+     */
+    @Log(operationName = "上传车的图片", operationType = Log.OPERA_TYPE_ADD)
     @RequestMapping(value = "importVehicleImage", method= RequestMethod.POST)
     @ResponseBody
     public CommonResult importVehicleImage(MultipartFile image, String vehicleInfoId) throws IOException {
         return vehicleInfoService.saveVehicleImage(image, vehicleInfoId);
     }
 
+    /**
+     * 加载车的信息
+     * @param vehicleInfo
+     * @return
+     */
+    @Log(operationName = "加载车的信息")
     @RequestMapping(value = "loadVehicleImages")
     @ResponseBody
     public CommonResult loadVehicleImages(VehicleInfo vehicleInfo){

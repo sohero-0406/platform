@@ -93,6 +93,11 @@ public class CommonLogController extends BaseController {
 		return renderResult(Global.TRUE, text("删除大平台日志表成功！"));
 	}
 
+	/**
+	 * 查询分页日志
+	 * @param commonLog
+	 * @return
+	 */
 	@Log(operationName = "查询日志")
 	@RequestMapping(value = "listLog")
 	@ResponseBody

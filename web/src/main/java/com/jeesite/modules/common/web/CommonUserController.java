@@ -56,6 +56,11 @@ public class CommonUserController extends BaseController {
 //        return commonUserService.get(id, isNewRecord);
 //    }
 
+    /**
+     * 检测方法
+     * @return
+     */
+    @Log(operationName = "检测方法", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "hello")
     @ResponseBody
     public CommonResult hello() {
@@ -93,8 +98,9 @@ public class CommonUserController extends BaseController {
     }
 
     /**
-     * 保存common_user
+     * 保存common_user 此方法不用
      */
+    @Log(operationName = "保存common_user", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
     @RequestMapping(value = "save")
     @ResponseBody
     public CommonResult save(CommonUser commonUser) {
@@ -108,19 +114,28 @@ public class CommonUserController extends BaseController {
     @RequestMapping(value = "delete")
     @ResponseBody
     public String delete(CommonUser commonUser) {
-
-
         commonUserService.delete(commonUser);
         return renderResult(Global.TRUE, text("删除common_user成功！"));
     }
 
-
+    /**
+     * 根据id加载用户
+     * @param id
+     * @return
+     */
+    @Log(operationName = "根据id加载用户")
     @RequestMapping(value = "loadCommonUser")
     @ResponseBody
     public CommonResult loadCommonUser(String id) {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, commonUserService.get(id));
     }
 
+    /**
+     * 保存common_user
+     * @param commonUser
+     * @return
+     */
+    @Log(operationName = "保存common_user", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
     @RequestMapping(value = "addUser")
     @ResponseBody
     public CommonResult addUser(CommonUser commonUser) {
@@ -128,6 +143,12 @@ public class CommonUserController extends BaseController {
         return commonUserService.addCommonUser(commonUser);
     }
 
+    /**
+     * 根据json删除用户
+     * @param json
+     * @return
+     */
+    @Log(operationName = "根据json删除用户", operationType = Log.OPERA_TYPE_DEL)
     @RequestMapping(value = "deleteUser")
     @ResponseBody
     public CommonResult deleteUser(String json) {
@@ -135,8 +156,12 @@ public class CommonUserController extends BaseController {
         return commonUserService.deleteCommonUser(json);
     }
 
-
-
+    /**
+     * 加载分页用户信息
+     * @param commonUser
+     * @return
+     */
+    @Log(operationName = "加载分页用户信息")
     @RequestMapping(value = "listCommonUser")
     @ResponseBody
     public CommonResult listCommonUser(CommonUser commonUser) {
@@ -144,30 +169,33 @@ public class CommonUserController extends BaseController {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
     }
 
+    /**
+     * 根据id重置密码
+     * @param id
+     * @return
+     */
+    @Log(operationName = "根据id重置密码", operationType = Log.OPERA_TYPE_UPD)
     @RequestMapping(value = "resetPass")
     @ResponseBody
     public CommonResult resetPass(String id) {
-
         return  commonUserService.resetPass(id);
     }
 
+    /**
+     * 更改考试权限
+     * @param id
+     * @param isExamRight
+     * @return
+     */
+    @Log(operationName = "更改考试权限", operationType = Log.OPERA_TYPE_UPD)
     @RequestMapping(value = "changeRight")
     @ResponseBody
     public CommonResult changeRight(String id, Integer isExamRight) {
-
         return  commonUserService.changeRight(id, isExamRight);
     }
 
-
-
-
-
     /**
      * 用户登录功能
-     */
-
-    /**
-     * 删除common_user
      */
     @Log(operationName = "登录")
     @RequestMapping(value = "login")
@@ -176,82 +204,142 @@ public class CommonUserController extends BaseController {
         return commonUserService.login(vo);
     }
 
-    @Log(operationName = "注销")
+    /**
+     * 用户注销
+     */
+    @Log(operationName = "注销", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "logout")
     @ResponseBody
     public CommonResult logout(LoginVO vo) {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
     }
 
+    /**
+     * 根据token加载用户信息
+     * @return
+     */
+    @Log(operationName = "根据token加载用户信息")
     @RequestMapping(value = "loadUserByToken")
     @ResponseBody
     public CommonResult loadUserByToken() {
         return commonUserService.loadUserByToken();
     }
 
-
+    /**
+     * 教师端登录
+     * @param vo
+     * @return
+     */
+    @Log(operationName = "教师端登录")
     @RequestMapping(value = "teacherSideLogin")
     @ResponseBody
     public CommonResult teacherSideLogin(LoginVO vo) {
         return commonUserService.teacherSideLogin(vo);
     }
 
-    // @RequestMapping(value)
-
+    /**
+     * 加载平台中的学生
+     * @param vo
+     * @return
+     */
+    @Log(operationName = "加载平台中的学生")
     @RequestMapping(value = "loadStuListInPlatform")
     @ResponseBody
     public CommonResult loadStuListInPlatform(StuSearchVO vo) {
         return commonUserService.loadStuListInPlatform(vo);
     }
 
+    /**
+     * 加载专业列表
+     * @param commonUserId
+     * @return
+     */
+    @Log(operationName = "加载专业列表")
     @RequestMapping(value = "loadMajorList")
     @ResponseBody
     public CommonResult loadMajorList(String commonUserId){ return commonUserService.loadMajorList(commonUserId); }
 
+    /**
+     * 加载班级列表
+     * @param commonUserId
+     * @param majorName
+     * @return
+     */
+    @Log(operationName = "加载班级列表")
     @RequestMapping(value = "loadClassList")
     @ResponseBody
     public CommonResult loadClassList(String commonUserId, String majorName){ return commonUserService.loadClassList(commonUserId, majorName); }
 
+    /**
+     * 根据多个id加载学生信息
+     * @param ids
+     * @return
+     */
+    @Log(operationName = "根据多个id加载学生信息")
     @RequestMapping(value = "loadStuListByIds")
     @ResponseBody
     public CommonResult loadStuListByIds(String ids){
         return commonUserService.loadStuListByIds(ids);
     }
 
+    /**
+     * 根据上传的excel中的身份证数据加载学生信息
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @Log(operationName = "根据上传的excel中的身份证数据加载学生信息")
     @RequestMapping(value = "loadStuListByIDstr")
     @ResponseBody
     public CommonResult loadStuListByIDstr(MultipartFile file) throws Exception {
         ExcelImport ei = new ExcelImport(file, 2, 0);
         List<UserCondition> userConditionList = ei.getDataList(UserCondition.class);
-
         ei.close();
         if(ListUtils.isEmpty(userConditionList)){
             return new CommonResult(CodeConstant.EXCEL_NO_DATA, "您上传的excel没有数据");
         }
-
         return commonUserService.fillUserConditionList(userConditionList);
     }
 
+    /**
+     * 根据服务器考生信息加载学生信息
+     * @param examUserIds
+     * @return
+     */
+    @Log(operationName = "根据服务器考生信息加载学生信息")
     @RequestMapping(value = "loadStuListByExamUserIds")
     @ResponseBody
     public CommonResult loadStuListByExamUserIds(String examUserIds) {
         return commonUserService.loadStuListByExamUserIds(examUserIds);
     }
 
-
+    /**
+     * token过期的跳转接口
+     * @return
+     */
+    @Log(operationName = "token过期的跳转接口", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "tokenExpired")
     @ResponseBody
     public CommonResult tokenExpired(){
         return new CommonResult(CodeConstant.TOKEN_EXPIRED, "登录过期");
     }
 
-
+    /**
+     * 未登录的跳转接口
+     * @return
+     */
+    @Log(operationName = "未登录的跳转接口", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "unLogin")
     @ResponseBody
     public CommonResult unLogin(){
         return new CommonResult(CodeConstant.NO_LOGIN, "您未登录!");
     }
 
+    /**
+     * 导出用户模板
+     * @param response
+     */
+    @Log(operationName = "导出用户模板", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "commonUserDemoExport")
     public void commonUserDemoExport(HttpServletResponse response) {
         try {
@@ -264,6 +352,13 @@ public class CommonUserController extends BaseController {
         }
     }
 
+    /**
+     * 导入用户
+     * @param file
+     * @param roleId
+     * @return
+     */
+    @Log(operationName = "导入用户", operationType = Log.OPERA_TYPE_ADD)
     @RequestMapping(value = "importUsers", method= RequestMethod.POST)
     @ResponseBody
     public CommonResult importUsers(MultipartFile file, String roleId){

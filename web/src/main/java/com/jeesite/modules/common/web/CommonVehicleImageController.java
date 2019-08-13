@@ -6,6 +6,7 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,12 +101,20 @@ public class CommonVehicleImageController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
+	@Log(operationName = "替换车的某一个体图片", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "updateVehicleImage", method= RequestMethod.POST)
 	@ResponseBody
 	public CommonResult updateVehicleImage(MultipartFile image, CommonVehicleImage commonVehicleImage) throws IOException {
 		return commonVehicleImageService.updateVehicleImage(image, commonVehicleImage);
 	}
 
+	/**
+	 * 删除图片
+	 * @param commonVehicleImage
+	 * @return
+	 * @throws IOException
+	 */
+	@Log(operationName = "删除图片", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteVehicleImage")
 	@ResponseBody
 	public CommonResult deleteVehicleImage(CommonVehicleImage commonVehicleImage) throws IOException {

@@ -6,6 +6,7 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,10 @@ public class CommonAccessoryController extends BaseController {
 	/**
 	 * 获取数据
 	 */
-	@ModelAttribute
-	public CommonAccessory get(String id, boolean isNewRecord) {
-		return commonAccessoryService.get(id, isNewRecord);
-	}
+//	@ModelAttribute
+//	public CommonAccessory get(String id, boolean isNewRecord) {
+//		return commonAccessoryService.get(id, isNewRecord);
+//	}
 	
 	/**
 	 * 查询列表
@@ -93,12 +94,24 @@ public class CommonAccessoryController extends BaseController {
 	}
 
 
+	/**
+	 * 加载配件分页数据
+	 * @param commonAccessory
+	 * @return
+	 */
+	@Log(operationName = "加载配件分页数据")
 	@RequestMapping(value = "listCommonAccessory")
 	@ResponseBody
 	public CommonResult listCommonAccessory(CommonAccessory commonAccessory){
 		return commonAccessoryService.findPageByCondition(commonAccessory);
 	}
 
+	/**
+	 * 删除配件信息
+	 * @param json
+	 * @return
+	 */
+	@Log(operationName = "删除配件信息", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAccessory")
 	@ResponseBody
 	public CommonResult deleteCommonAccessory(String json) {

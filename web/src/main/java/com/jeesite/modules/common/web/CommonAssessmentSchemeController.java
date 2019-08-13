@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.io.FileUtils;
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonAssessment;
 import com.jeesite.modules.common.entity.CommonBasicScheme;
 import com.jeesite.modules.common.entity.CommonResult;
@@ -99,7 +100,12 @@ public class CommonAssessmentSchemeController extends BaseController {
 		return renderResult(Global.TRUE, text("删除考核方案表成功！"));
 	}
 
-
+	/**
+	 * 加载分页考核方案数据
+	 * @param commonAssessmentScheme
+	 * @return
+	 */
+	@Log(operationName = "加载分页考核方案数据")
 	@RequestMapping(value = "listCommonAssessmentScheme")
 	@ResponseBody
 	public CommonResult listCommonAssessmentScheme(CommonAssessmentScheme commonAssessmentScheme) {
@@ -107,6 +113,12 @@ public class CommonAssessmentSchemeController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
 	}
 
+	/**
+	 * 加载列表考核方案数据
+	 * @param commonAssessmentScheme
+	 * @return
+	 */
+	@Log(operationName = "加载列表考核方案数据")
 	@RequestMapping(value = "listCommonAssessmentSchemeOnly")
 	@ResponseBody
 	public CommonResult listCommonAssessmentSchemeOnly(CommonAssessmentScheme commonAssessmentScheme) {
@@ -114,49 +126,70 @@ public class CommonAssessmentSchemeController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
 	}
 
-
+	/**
+	 * 保存、更新考核方案
+	 * @param commonAssessmentScheme
+	 * @return
+	 */
+	@Log(operationName = "保存、更新考核方案", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
 	@RequestMapping(value = "saveCommonAssessmentScheme")
 	@ResponseBody
 	public CommonResult saveCommonAssessment(CommonAssessmentScheme commonAssessmentScheme){
 		return commonAssessmentSchemeService.saveCommonAssessmentScheme(commonAssessmentScheme);
-
-		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
-
+	/**
+	 * 根据id加载考核方案
+	 * @param id
+	 * @return
+	 */
+	@Log(operationName = "根据id加载考核方案")
 	@RequestMapping(value = "loadCommonAssessmentScheme")
 	@ResponseBody
 	public CommonResult loadCommonAssessment(String id){
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, commonAssessmentSchemeService.get(id));
 	}
 
+	/**
+	 * 删除考核方案
+	 * @param commonAssessmentScheme
+	 * @return
+	 */
+	@Log(operationName = "删除考核方案", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAssessmentScheme")
 	@ResponseBody
 	public CommonResult deleteCommonAssessment(CommonAssessmentScheme commonAssessmentScheme){
 		return commonAssessmentSchemeService.deleteCommonAssessmentScheme(commonAssessmentScheme);
-		// return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 更新考核方案状态
+	 * @param commonAssessmentScheme
+	 * @return
+	 */
+	@Log(operationName = "更新考核方案状态", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "updateCommonAssessmentSchemeStatus")
 	@ResponseBody
 	public CommonResult updateCommonAssessmentSchemeStatus(CommonAssessmentScheme commonAssessmentScheme){
 		return commonAssessmentSchemeService.updateCommonAssessmentSchemeStatus(commonAssessmentScheme);
-		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 上传评分表样例
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	@Log(operationName = "上传评分表样例", operationType = Log.OPERA_TYPE_OTHER)
 	@RequestMapping(value = "uploadSchemeTable")
 	@ResponseBody
 	public CommonResult uploadSchemeTable(MultipartFile file) throws IOException {
-
-//		System.out.println(file.getContentType());
 		String end = FileUtils.getFileExtension(file.getOriginalFilename());
 		if(!end.equals("xls")&&end.equals("xlsx")){
 			return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确!");
 		}
-//		System.out.println(end);
 		File x = new File(FilePathUtil.getFileSavePath("schemeTable")+"schemeTable"+System.currentTimeMillis()+"."+end);
 		file.transferTo(x);
-		//FilePathUtil.getFileSavePath();
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
 	}
 	

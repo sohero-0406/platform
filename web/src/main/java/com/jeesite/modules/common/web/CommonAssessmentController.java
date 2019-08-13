@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.aspectj.apache.bcel.classfile.Code;
@@ -95,51 +96,75 @@ public class CommonAssessmentController extends BaseController {
 		return renderResult(Global.TRUE, text("删除考核表成功！"));
 	}
 
-
-
+	/**
+	 * 加载考核的分页数据
+	 * @param commonAssessment
+	 * @return
+	 */
+	@Log(operationName = "加载考核的分页数据")
 	@RequestMapping(value = "listAssessment")
 	@ResponseBody
 	public CommonResult listAssessment(CommonAssessment commonAssessment) {
 		return commonAssessmentService.findPageCommonAssessment(commonAssessment);
-		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
 	}
 
-
+	/**
+	 * 保存、更新考核
+	 * @param commonAssessment
+	 * @param userConfig
+	 * @return
+	 */
+	@Log(operationName = "保存、更新考核", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
 	@RequestMapping(value = "saveCommonAssessment")
 	@ResponseBody
 	public CommonResult saveCommonAssessment(CommonAssessment commonAssessment, String userConfig){
 		return commonAssessmentService.save(commonAssessment, userConfig);
-
-		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 根据id加载考核
+	 * @param id
+	 * @return
+	 */
+	@Log(operationName = "根据id加载考核")
 	@RequestMapping(value = "loadCommonAssessment")
 	@ResponseBody
 	public CommonResult loadCommonAssessment(String id){
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, commonAssessmentService.get(id));
 	}
 
+	/**
+	 * 删除考核
+	 * @param json
+	 * @return
+	 */
+	@Log(operationName = "删除考核", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAssessment")
 	@ResponseBody
 	public CommonResult deleteCommonAssessment(String json){
 		return commonAssessmentService.deleteCommonAssessment(json);
-		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
 	/**
-	 *
+	 * 更新考核状态（包括上传主观评分表）
 	 * @param commonAssessment 要更新的对象
 	 * @param file 上传的评分表文件
 	 * @return
 	 */
+	@Log(operationName = "更新考核状态", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "updateCommonAssessmentStatus")
 	@ResponseBody
 	public CommonResult updateCommonAssessmentStatus(CommonAssessment commonAssessment, MultipartFile file) throws Exception {
 
 		return commonAssessmentService.updateCommonAssessmentStatus(commonAssessment, file);
-		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 上传客观评分
+	 * @param scoreInfo
+	 * @return
+	 */
+	@Log(operationName = "上传客观评分", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "uploadScores")
 	@ResponseBody
 	public CommonResult uploadScores(String scoreInfo){

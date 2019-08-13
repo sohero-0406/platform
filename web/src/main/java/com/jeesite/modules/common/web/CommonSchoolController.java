@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonAssessment;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -97,6 +98,12 @@ public class CommonSchoolController extends BaseController {
 	}
 
 
+	/**
+	 * 加载分页学校数据
+	 * @param commonSchool
+	 * @return
+	 */
+	@Log(operationName = "加载分页学校数据")
 	@RequestMapping(value = "listSchool")
 	@ResponseBody
 	public CommonResult listSchool(CommonSchool commonSchool) {
@@ -104,6 +111,12 @@ public class CommonSchoolController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
 	}
 
+	/**
+	 * 加载列表学校数据
+	 * @param commonSchool
+	 * @return
+	 */
+	@Log(operationName = "加载列表学校数据")
 	@RequestMapping(value = "listSchoolOnly")
 	@ResponseBody
 	public CommonResult listSchoolOnly(CommonSchool commonSchool) {
@@ -111,7 +124,12 @@ public class CommonSchoolController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
 	}
 
-
+	/**
+	 * 保存、更新学校
+	 * @param commonSchool
+	 * @return
+	 */
+	@Log(operationName = "保存、更新学校", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
 	@RequestMapping(value = "saveCommonSchool")
 	@ResponseBody
 	public CommonResult saveCommonSchool(CommonSchool commonSchool){
@@ -119,12 +137,24 @@ public class CommonSchoolController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 根据id加载学校
+	 * @param id
+	 * @return
+	 */
+	@Log(operationName = "根据id加载学校")
 	@RequestMapping(value = "loadCommonSchool")
 	@ResponseBody
 	public CommonResult loadCommonSchool(String id){
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, commonSchoolService.get(id));
 	}
 
+	/**
+	 * 删除学校
+	 * @param commonSchool
+	 * @return
+	 */
+	@Log(operationName = "删除学校", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonSchool")
 	@ResponseBody
 	public CommonResult deleteCommonAssessment(CommonSchool commonSchool){

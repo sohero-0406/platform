@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonAssessmentScheme;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -96,8 +97,12 @@ public class CommonBasicSchemeController extends BaseController {
 		return renderResult(Global.TRUE, text("删除方案基本表，目前不做管理使用，只作为基础数据调用，后期能会做出管理界面成功！"));
 	}
 
-
-
+	/**
+	 * 加载分页基本方案
+	 * @param commonBasicScheme
+	 * @return
+	 */
+	@Log(operationName = "加载分页基本方案")
 	@RequestMapping(value = "listCommonBasicScheme")
 	@ResponseBody
 	public CommonResult listCommonBasicScheme(CommonBasicScheme commonBasicScheme) {
@@ -105,6 +110,12 @@ public class CommonBasicSchemeController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
 	}
 
+	/**
+	 * 加载列表基本方案
+	 * @param commonBasicScheme
+	 * @return
+	 */
+	@Log(operationName = "加载列表基本方案")
 	@RequestMapping(value = "listCommonBasicSchemeOnly")
 	@ResponseBody
 	public CommonResult listCommonBasicSchemeOnly(CommonBasicScheme commonBasicScheme) {
@@ -113,7 +124,12 @@ public class CommonBasicSchemeController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
 	}
 
-
+	/**
+	 * 保存、更新基本方案
+	 * @param commonBasicScheme
+	 * @return
+	 */
+	@Log(operationName = "保存、更新基本方案", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
 	@RequestMapping(value = "saveCommonBasicScheme")
 	@ResponseBody
 	public CommonResult saveCommonBasicScheme(CommonBasicScheme commonBasicScheme){
@@ -122,12 +138,24 @@ public class CommonBasicSchemeController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 根据id加载基本方案
+	 * @param id
+	 * @return
+	 */
+	@Log(operationName = "根据id加载基本方案")
 	@RequestMapping(value = "loadCommonBasicScheme")
 	@ResponseBody
 	public CommonResult loadCommonBasicScheme(String id){
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, commonBasicSchemeService.get(id));
 	}
 
+	/**
+	 * 删除基本方案
+	 * @param commonBasicScheme
+	 * @return
+	 */
+	@Log(operationName = "删除基本方案", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonBasicScheme")
 	@ResponseBody
 	public CommonResult deleteCommonBasicScheme(CommonBasicScheme commonBasicScheme){
@@ -135,6 +163,12 @@ public class CommonBasicSchemeController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 根据id删除基本方案
+	 * @param id
+	 * @return
+	 */
+	@Log(operationName = "根据id删除基本方案", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonBasicSchemeById")
 	@ResponseBody
 	public CommonResult deleteCommonBasicSchemeById(String id){
@@ -142,6 +176,12 @@ public class CommonBasicSchemeController extends BaseController {
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 根据json信息删除
+	 * @param json
+	 * @return
+	 */
+	@Log(operationName = "根据json信息删除", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonBasicSchemeByJson")
 	@ResponseBody
 	public CommonResult deleteCommonBasicSchemeByJson(String json){
@@ -154,6 +194,7 @@ public class CommonBasicSchemeController extends BaseController {
 	 * @param commonBasicScheme
 	 * @return
 	 */
+	@Log(operationName = "更新基本方案状态", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "updateStatus")
 	@ResponseBody
 	public CommonResult updateStatus(CommonBasicScheme commonBasicScheme){

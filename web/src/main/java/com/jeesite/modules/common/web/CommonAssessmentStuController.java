@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.common.utils.excel.ExcelExport;
+import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,10 @@ public class CommonAssessmentStuController extends BaseController {
 	/**
 	 * 获取数据
 	 */
-	@ModelAttribute
-	public CommonAssessmentStu get(String id, boolean isNewRecord) {
-		return commonAssessmentStuService.get(id, isNewRecord);
-	}
+//	@ModelAttribute
+//	public CommonAssessmentStu get(String id, boolean isNewRecord) {
+//		return commonAssessmentStuService.get(id, isNewRecord);
+//	}
 	
 	/**
 	 * 查询列表
@@ -94,12 +95,24 @@ public class CommonAssessmentStuController extends BaseController {
 	}
 
 
+	/**
+	 * 加载分页考生数据
+	 * @param commonAssessmentStu
+	 * @return
+	 */
+	@Log(operationName = "加载分页考生数据")
 	@RequestMapping(value = "searchStuScore")
 	@ResponseBody
 	public CommonResult searchStuScore(CommonAssessmentStu commonAssessmentStu){
 		return commonAssessmentStuService.findPageByCondition(commonAssessmentStu);
 	}
 
+	/**
+	 * 导出成绩excel
+	 * @param response
+	 * @param commonAssessmentStu
+	 */
+	@Log(operationName = "导出成绩excel")
 	@RequestMapping(value = "exportStuScore")
 	public void exportStuScore(HttpServletResponse response,CommonAssessmentStu commonAssessmentStu){
 		ExcelExport ee = commonAssessmentStuService.exportStuScore(commonAssessmentStu);

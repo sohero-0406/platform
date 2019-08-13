@@ -117,6 +117,8 @@ public class CommonVehicleImageService extends CrudService<CommonVehicleImageDao
 		if(!"1".equals(loginUser.getRoleId())){
 			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 		}
+		// 在增加一行删除图片的代码
+		FileUtils.deleteFile(FilePathUtil.getFileSavePath("vehicleImage")+this.get(commonVehicleImage.getId()).getImageName());
 		dao.phyDelete(commonVehicleImage);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "删除成功");
 	}
