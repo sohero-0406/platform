@@ -8,15 +8,23 @@ import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.entity.Page;
+import com.jeesite.common.io.FileUtils;
+import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.common.dao.VehicleInfoDao;
 import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
+import com.jeesite.modules.common.util.FilePathUtil;
 import com.jeesite.modules.common.util.PageUtils;
+import com.jeesite.modules.job.p.C;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -36,6 +44,8 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 	private VehicleSeriesService vehicleSeriesService;
 	@Autowired
 	private CommonUserService commonUserService;
+	@Autowired
+	private CommonVehicleImageService commonVehicleImageService;
 	// 还需要一个厂商service
 
 	/**
@@ -172,6 +182,41 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		object.put("deletedNum", deletedNum);
 		object.put("notDeletedNum", length- deletedNum);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+	}
+
+
+	@Transactional(readOnly = false)
+	public CommonResult saveVehicleImage(MultipartFile image, String vehicleInfoId) throws IOException {
+		String loginUserId = PreEntity.getUserIdByToken();
+		CommonUser loginUser = commonUserService.get(loginUserId);
+		if(!"1".equals(loginUser.getRoleId())){
+			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
+		}
+		String end = FileUtils.getFileExtension(image.getOriginalFilename());
+		if(!end.equals("jpg")&&end.equals("png")){
+			return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
+		}
+		File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage_"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
+		image.transferTo(x);
+		CommonVehicleImage commonVehicleImage = new CommonVehicleImage();
+		commonVehicleImage.setVehicleId(vehicleInfoId);
+		commonVehicleImage.setImageName(x.getName());
+		commonVehicleImageService.save(commonVehicleImage);
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
+	}
+
+
+	public CommonResult findImageList(VehicleInfo vehicleInfo){
+		if(vehicleInfo==null || StringUtils.isBlank(vehicleInfo.getId())){
+			return new CommonResult(CodeConstant.PARA_MUST_NEED, "您需要传入必要的参数");
+		}
+		String loginUserId = PreEntity.getUserIdByToken();
+		CommonUser loginUser = commonUserService.get(loginUserId);
+		if(!"1".equals(loginUser.getRoleId())){
+			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
+		}
+		List<CommonVehicleImage> commonVehicleImageList = commonVehicleImageService.findList(new CommonVehicleImage(vehicleInfo.getId()));
+		return new CommonResult(commonVehicleImageList);
 	}
 
 }

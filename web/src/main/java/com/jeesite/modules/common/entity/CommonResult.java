@@ -28,6 +28,11 @@ public class CommonResult<T> {
         this.code = CodeConstant.REQUEST_SUCCESSFUL;
     }
 
+    public CommonResult(T data) {
+        this.code = CodeConstant.REQUEST_SUCCESSFUL;
+        this.data = data;
+    }
+
     public CommonResult(String code ) {
         this.code = code;
     }

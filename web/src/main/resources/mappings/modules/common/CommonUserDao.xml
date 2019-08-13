@@ -20,13 +20,13 @@
 		select cu.*, castu.id as commonAssessmentStuId, sc.school_name as schoolName from common_user as cu, common_assessment_stu as castu, common_school as sc
 		where cu.id = castu.common_user_id and cu.school_id = sc.id and cu.id in (select common_user_id from common_assessment_stu as cas
 						where cas.school_id = #{schoolId} and cu.status = 0
-						 <if test="assessmentId!=null">
+						 <if test="assessmentId!=null and assessmentId!=''">
 							 and cas.assessment_id = #{assessmentId}
 						 </if>
-						 <if test="assessmentDate!=null">
+						 <if test="assessmentDate!=null and assessmentDate!=''">
 							 and cas.assessment_date = #{assessmentDate}
 						 </if>
-						<if test="assessmentTime!=null">
+						<if test="assessmentTime!=null and assessmentTime!=''">
 							and cas.assessment_time = #{assessmentTime}
 						</if>
 						 )
@@ -35,10 +35,10 @@
 	<select id="findNormalStu" resultType="CommonUser">
 		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc
 		where cu.school_id = #{schoolId} and cu.school_id = sc.id and cu.status = 0 and cu.role_id = '3'
-		<if test="majorName!=null">
+		<if test="majorName!=null and majorName!=''">
 			and cu.major_name = #{majorName}
 		</if>
-		<if test="className!=null">
+		<if test="className!=null and className!=''">
 			and cu.class_name = #{className}
 		</if>
 	</select>
@@ -73,31 +73,31 @@
 
 	<select id="findCommonUserWithSchoolName" resultType="CommonUser">
 		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc where cu.school_id = sc.id
-		<if test="userName!=null">
+		<if test="userName!=null and userName!=''">
 			and cu.user_name like "%"#{userName}"%"
 		</if>
-		<if test="trueName!=null">
+		<if test="trueName!=null and trueName!=''">
 			and cu.true_name like "%"#{trueName}"%"
 		</if>
-		<if test="phoneNum!=null">
+		<if test="phoneNum!=null and phoneNum!=''">
 			and cu.phone_num like "%"#{phoneNum}"%"
 		</if>
-		<if test="majorName!=null">
+		<if test="majorName!=null and majorName!=''">
 			and cu.major_name like "%"#{majorName}"%"
 		</if>
-		<if test="className!=null">
+		<if test="className!=null and className!=''">
 			and cu.class_name like "%"#{className}"%"
 		</if>
-		<if test="schoolName!=null">
+		<if test="schoolName!=null and schoolName!=''">
 			and sc.school_name like "%"#{schoolName}"%"
 		</if>
-		<if test="gender!=null">
+		<if test="gender!=null and gender!=''">
 			and cu.gender like "%"#{gender}"%"
 		</if>
-		<if test="roleId!=null">
+		<if test="roleId!=null and roleId!=''">
 			and cu.role_id = #{roleId}
 		</if>
-		<if test="schoolId!=null">
+		<if test="schoolId!=null and schoolId!=''">
 			and cu.school_id = #{schoolId}
 		</if>
 		and cu.status = "0"
@@ -109,7 +109,7 @@
 
     <select id="findClassNameList" resultType="String">
 		select cu.class_name as className from common_user as cu where cu.school_id = #{schoolId}
-		<if test="majorName!=null">
+		<if test="majorName!=null and majorName!=''">
             and cu.major_name = #{majorName}
         </if>
         group by  cu.class_name

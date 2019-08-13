@@ -201,13 +201,13 @@ public class VehicleInfoController extends BaseController {
     @RequestMapping(value = "importVehicleImage", method= RequestMethod.POST)
     @ResponseBody
     public CommonResult importVehicleImage(MultipartFile image, String vehicleInfoId) throws IOException {
-        System.out.println(image.getContentType());
-        String end = FileUtils.getFileExtension(image.getOriginalFilename());
-        if(!end.equals("jpg")&&end.equals("png")){
-            return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
-        }
-        File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage)"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
-        image.transferTo(x);
-        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
+        return vehicleInfoService.saveVehicleImage(image, vehicleInfoId);
     }
+
+    @RequestMapping(value = "loadVehicleImages")
+    @ResponseBody
+    public CommonResult loadVehicleImages(VehicleInfo vehicleInfo){
+        return vehicleInfoService.findImageList(vehicleInfo);
+    }
+
 }
