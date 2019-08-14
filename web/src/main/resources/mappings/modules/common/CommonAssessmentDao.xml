@@ -11,5 +11,8 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+	<select id="loadNameList" resultType="String">
+		select ca.assessment_name as assessmentName from common_assessment as ca where ca.school_id = #{schoolId} and data_status = '2' group by ca.assessment_name
+	</select>
+
 </mapper>

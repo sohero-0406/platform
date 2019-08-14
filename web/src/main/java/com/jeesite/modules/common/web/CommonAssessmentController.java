@@ -172,5 +172,19 @@ public class CommonAssessmentController extends BaseController {
 		return commonAssessmentService.parseScoreInfo(scoreInfo);
 	}
 
+	/**
+	 * 根据登录人加载考核名称
+	 * @param commonUserId
+	 * @return
+	 */
+	@Log(operationName = "根据登录人加载考核名称", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "loadAssessmentNameList")
+	@ResponseBody
+	public CommonResult loadAssessmentNameList(String commonUserId){
+
+		return commonAssessmentService.loadAssessmentNameList(commonUserId);
+	}
+
+
 	
 }

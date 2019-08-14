@@ -226,7 +226,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
     }
 
     @Transactional(readOnly = false)
-    public CommonResult changeRight(String id, Integer isExamRight){
+    public CommonResult changeRight(String id, String isExamRight){
         CommonUser commonUser = super.get(id);
         String loginUserId = PreEntity.getUserIdByToken();
         CommonUser loginUser = super.get(loginUserId);

@@ -125,5 +125,17 @@
 				and ca.assessment_name like "%"#{commonAssessmentStu.assessmentName}"%"
 			</if>
 	</select>
-	
+
+
+	<select id="loadDateList" resultType="String">
+		select cas.assessment_date as assessmentDate from common_assessment_stu as cas, common_assessment as ca
+		where ca.school_id = #{schoolId} and ca.id = cas.assessment_id and ca.assessment_name = #{assessmentName} group by cas.assessment_date
+	</select>
+
+	<select id="loadTimeList" resultType="String">
+		select cas.assessment_time as assessmentTime from common_assessment_stu as cas, common_assessment as ca
+		where ca.school_id = #{schoolId} and ca.id = cas.assessment_id and ca.assessment_name = #{assessmentName} and cas.assessment_date = #{assessmentDate}
+		group by cas.assessment_time
+	</select>
+
 </mapper>

@@ -122,6 +122,7 @@ public class CommonAssessmentSchemeController extends BaseController {
 	@RequestMapping(value = "listCommonAssessmentSchemeOnly")
 	@ResponseBody
 	public CommonResult listCommonAssessmentSchemeOnly(CommonAssessmentScheme commonAssessmentScheme) {
+		commonAssessmentScheme.setDataStatus("0");
 		List<CommonAssessmentScheme> list = commonAssessmentSchemeService.findList(commonAssessmentScheme);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
 	}
@@ -152,14 +153,14 @@ public class CommonAssessmentSchemeController extends BaseController {
 
 	/**
 	 * 删除考核方案
-	 * @param commonAssessmentScheme
+	 * @param json
 	 * @return
 	 */
 	@Log(operationName = "删除考核方案", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAssessmentScheme")
 	@ResponseBody
-	public CommonResult deleteCommonAssessment(CommonAssessmentScheme commonAssessmentScheme){
-		return commonAssessmentSchemeService.deleteCommonAssessmentScheme(commonAssessmentScheme);
+	public CommonResult deleteCommonAssessment(String json){
+		return commonAssessmentSchemeService.deleteCommonAssessmentScheme(json);
 	}
 
 	/**
@@ -192,5 +193,7 @@ public class CommonAssessmentSchemeController extends BaseController {
 		file.transferTo(x);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
 	}
-	
+
+
+
 }

@@ -7,6 +7,8 @@ import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.common.entity.CommonAssessment;
 
+import java.util.List;
+
 /**
  * 考核表DAO接口
  * @author mayuhu
@@ -14,5 +16,5 @@ import com.jeesite.modules.common.entity.CommonAssessment;
  */
 @MyBatisDao
 public interface CommonAssessmentDao extends CrudDao<CommonAssessment> {
-	
+	List<String> loadNameList(String schoolId);
 }

@@ -5,6 +5,8 @@ package com.jeesite.modules.common.service;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.CommonResult;
@@ -95,14 +97,14 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(loginUser.getRoleId().equals("1")){
-			super.updateStatus(commonAssessmentScheme);
+			super.update(commonAssessmentScheme);
 			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 		}
-		if(loginUser.getRoleId().equals("2")&&loginUser.getIsExamRight()==1){
+		if(loginUser.getRoleId().equals("2")&&"1".equals(loginUser.getIsExamRight())){
 			//CommonUser createOne = commonUserDao.getByEntity(new CommonUser(commonAssessmentScheme.getCreateBy()));
 			CommonUser createOne = commonUserService.get(commonAssessmentScheme.getCreateBy());
 			if(loginUser.getSchoolId().equals(createOne.getSchoolId())){
-				super.updateStatus(commonAssessmentScheme);
+				super.update(commonAssessmentScheme);
 				return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 			}
 		}
@@ -120,26 +122,30 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 	}
 
 	@Transactional(readOnly=false)
-	public CommonResult deleteCommonAssessmentScheme(CommonAssessmentScheme commonAssessmentScheme) {
+	public CommonResult deleteCommonAssessmentScheme(String json) {
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
-		if(CommonUserUtil.isHaveExamRight(loginUser)){
-			if(loginUser.getRoleId().equals("1")){
-				super.delete(commonAssessmentScheme);
-				return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
-			}else{
-				CommonUser createOne = commonUserService.get(commonAssessmentScheme.getCreateBy());
-				if(loginUser.getSchoolId().equals(createOne.getSchoolId())){
-					super.delete(commonAssessmentScheme);
-					return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
-				}else{
-					return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
-				}
-			}
-		}else{
+		if("3".equals(loginUser.getRoleId())){
 			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 		}
-		// super.delete(commonAssessmentScheme);
+
+		JSONObject jsonObject = JSONObject.parseObject(json);
+		Integer length =jsonObject.getInteger("length");
+		JSONArray ja = JSONArray.parseArray(jsonObject.getString("datas"));
+		int deletedNum = 0;
+		for (int i = 0; i < length; i++) {
+			String id = ja.getString(i);
+			CommonAssessmentScheme commonAssessmentScheme = super.get(id);
+			CommonUser creator = commonUserService.get(commonAssessmentScheme.getCreateBy());
+			if(CommonUserUtil.isSuperAdmin(loginUser)||CommonUserUtil.isSameSchool(loginUser, creator)){
+				super.delete(commonAssessmentScheme);
+				deletedNum++;
+			}
+		}
+		JSONObject object = new JSONObject();
+		object.put("deletedNum", deletedNum);
+		object.put("notDeletedNum", length- deletedNum);
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
 	}
 	
 }

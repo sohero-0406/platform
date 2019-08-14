@@ -118,5 +118,34 @@ public class CommonAssessmentStuController extends BaseController {
 		ExcelExport ee = commonAssessmentStuService.exportStuScore(commonAssessmentStu);
 		ee.write(response, "testx.xlsx").close();
 	}
+
+	/**
+	 * 根据登录人加载考核名称下的考核日期
+	 * @param commonUserId
+	 * @param assessmentName
+	 * @return
+	 */
+	@Log(operationName = "根据登录人加载考核名称下的考核日期", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "loadAssessmentDateList")
+	@ResponseBody
+	public CommonResult loadAssessmentDateList(String commonUserId, String assessmentName){
+
+		return commonAssessmentStuService.loadAssessmentDateList(commonUserId, assessmentName);
+	}
+
+	/**
+	 * 根据登录人加载考核名称下的考核日期下的考核时间
+	 * @param commonUserId
+	 * @param assessmentName
+	 * @param assessmentDate
+	 * @return
+	 */
+	@Log(operationName = "根据登录人加载考核名称下的考核日期下的考核时间", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "loadAssessmentTimeList")
+	@ResponseBody
+	public CommonResult loadAssessmentTimeList(String commonUserId, String assessmentName, String assessmentDate){
+
+		return commonAssessmentStuService.loadAssessmentTimeList(commonUserId, assessmentName, assessmentDate);
+	}
 	
 }

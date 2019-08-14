@@ -27,8 +27,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="class_name", attrName="className", label="班级", queryType=QueryType.LIKE),
 		@Column(name="assessment_date", attrName="assessmentDate", label="考核日期"),
 		@Column(name="assessment_time", attrName="assessmentTime", label="考核时间"),
+		@Column(name="soft_uploaded_marks", attrName="softUploadedMarks", label="软件分数上传标识"),
 		@Column(name="total_score", attrName="totalScore", label="总分"),
 		@Column(name="score_details", attrName="scoreDetails", label="得分详情"),
+        @Column(name="data_status", attrName="dataStatus", label="通过状态"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -45,8 +47,10 @@ public class CommonAssessmentStu extends PreEntity<CommonAssessmentStu> {
 	private String className;		// 班级
 	private String assessmentDate;		// 考核日期
 	private String assessmentTime;		// 考核时间
+	private String softUploadedMarks; // 软件分数上传标识
 	private String totalScore;		// 总分
 	private String scoreDetails; // 得分详情
+    private String dataStatus; // 通过状态
 
 	//非数据库字段
 	private String assessmentName;
@@ -149,7 +153,16 @@ public class CommonAssessmentStu extends PreEntity<CommonAssessmentStu> {
 	public void setAssessmentTime(String assessmentTime) {
 		this.assessmentTime = assessmentTime;
 	}
-	
+
+	@Length(min=0, max=300, message="软件分数上传标识长度不能超过 300 个字符")
+	public String getSoftUploadedMarks() {
+		return softUploadedMarks;
+	}
+
+	public void setSoftUploadedMarks(String softUploadedMarks) {
+		this.softUploadedMarks = softUploadedMarks;
+	}
+
 	@Length(min=0, max=20, message="总分长度不能超过 20 个字符")
 	public String getTotalScore() {
 		return totalScore;
@@ -174,4 +187,13 @@ public class CommonAssessmentStu extends PreEntity<CommonAssessmentStu> {
 	public void setAssessmentName(String assessmentName) {
 		this.assessmentName = assessmentName;
 	}
+
+    @Length(min=0, max=100, message="通过状态长度不能超过 100 个字符")
+    public String getDataStatus() {
+        return dataStatus;
+    }
+
+    public void setDataStatus(String dataStatus) {
+        this.dataStatus = dataStatus;
+    }
 }

@@ -42,7 +42,7 @@ public class CommonUser extends PreEntity<CommonUser> {
 	private String type;		// 用户类型（学员，教员）
 	private String schoolId;   // 学校id
 	private String roleId;    // 角色id
-	private Integer isExamRight; // 是否有考试权限
+	private String isExamRight; // 是否有考试权限
 	private String phoneNum;
 	private String majorName;
 	private String className;
@@ -117,11 +117,11 @@ public class CommonUser extends PreEntity<CommonUser> {
 		this.roleId = roleId;
 	}
 
-	public Integer getIsExamRight() {
+	public String getIsExamRight() {
 		return isExamRight;
 	}
 
-	public void setIsExamRight(Integer isExamRight) {
+	public void setIsExamRight(String isExamRight) {
 		this.isExamRight = isExamRight;
 	}
 

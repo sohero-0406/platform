@@ -83,7 +83,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(commonAssessment.getId()==null){
 			if(CommonUserUtil.isHaveExamRight(loginUser)){
-				//commonAssessment.setStatus("2");
+
 				super.save(commonAssessment);
 				return saveCommonSchemeStus(commonAssessment, userConfig);
 			}else{
@@ -91,7 +91,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			}
 		}else{
 			CommonAssessment c = super.get(commonAssessment.getId());
-			if(!c.getStatus().equals("0")){
+			if(!c.getDataStatus().equals("0")){
 				return new CommonResult(CodeConstant.DATA_LOCK, "该数据不能修改");
 			}
 			CommonUser creator = commonUserService.get(commonAssessment.getCreateBy());
@@ -142,7 +142,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			commonAssessmentStu.setClassName(jo.getString("className"));
 			commonAssessmentStu.setAssessmentDate(jo.getString("assessmentDate"));
 			commonAssessmentStu.setAssessmentTime(jo.getString("assessmentTime"));
-			commonAssessmentStu.setStatus("0");
+			commonAssessmentStu.setDataStatus("0");
 			commonAssessmentStu.setScoreDetails(commonAssessmentScheme.getSchemeDetails());
 			commonAssessmentStu.setSoftUploadedMarks(softUploadedMarks.toJSONString());
 			commonAssessmentStuService.save(commonAssessmentStu);
@@ -195,7 +195,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				for (int i = 0; i < length; i++) {
 					String id = ja.getString(i);
 					CommonAssessment ca = this.get(id);
-					if(ca!=null&&ca.getStatus().equals("0")){
+					if(ca!=null&&ca.getDataStatus().equals("0")){
 						this.deleteOneAssessment(ca);
 						deletedNum++;
 					}
@@ -213,7 +213,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 						// CommonUser createOne = commonUserDao.getByEntity(new CommonUser(ca.getCreateBy()));
 						CommonUser createOne = commonUserService.get(ca.getCreateBy());
 						if(loginUser.getSchoolId().equals(createOne.getSchoolId())){
-							if(ca.getStatus().equals("0")){
+							if(ca.getDataStatus().equals("0")){
 								this.deleteOneAssessment(ca);
 								deletedNum++;
 							}
@@ -255,12 +255,12 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 	public CommonResult updateCommonAssessmentStatus(CommonAssessment commonAssessment, MultipartFile file) throws Exception {
 		CommonAssessment ca = super.get(commonAssessment.getId());
 		if(file==null){
-			if(!commonAssessment.getStatus().equals("5")){ // 以下的情况只是开始考核 和结束考核
+			if(!commonAssessment.getDataStatus().equals("5")){ // 以下的情况只是开始考核 和结束考核
 				String loginUserId = PreEntity.getUserIdByToken();
 				CommonUser loginUser = commonUserService.get(loginUserId);
 				CommonUser creator = commonUserService.get(ca.getCreateBy());
 				if(CommonUserUtil.isHaveExamRight(loginUser, creator)){
-					super.updateStatus(commonAssessment);
+					super.update(commonAssessment);
 					return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 				}else{
 					return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
@@ -334,6 +334,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				for (int j = 0; j < commonAssessmentStuList.size(); j++) {
 					commonAssessmentStuService.update(commonAssessmentStuList.get(j));
 				}
+				super.update(commonAssessment);
 			}else{
 				return new CommonResult(CodeConstant.EXCEL_WRONG_DATA,"数据无法正确解析", msgList);
 			}
@@ -344,10 +345,10 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	private CommonResult calcTotalScore(CommonAssessment commonAssessment) {
 		CommonAssessment ca = super.get(commonAssessment.getId());
-		if(!ca.getStatus().equals("4")){
+		if(!ca.getDataStatus().equals("4")){
 			return new CommonResult(CodeConstant.NO_RIGHT, "数据状态不正确!");
 		}
-		if(ca.getStatus().equals("5")){
+		if(ca.getDataStatus().equals("5")){
 			return new CommonResult(CodeConstant.NO_RIGHT, "分数已统计完毕!");
 		}
 		CommonAssessmentStu con = new CommonAssessmentStu();
@@ -387,14 +388,15 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				scoreDetails_jsonArray.set(i, oneSubject);
 			}
 			if(subjectPassNum==scoreDetails_jsonArray.size()){
-				cas.setStatus("2");
+				cas.setDataStatus("2");
 			}else{
-				cas.setStatus("2");
+				cas.setDataStatus("3");
 			}
 			cas.setTotalScore(totalScore.toString());
 			cas.setScoreDetails(scoreDetails_jsonArray.toJSONString());
 			commonAssessmentStuService.update(cas);
 		}
+		super.update(commonAssessment);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
@@ -521,6 +523,19 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			}
 		}
 		return null;
+	}
+
+
+
+	public CommonResult loadAssessmentNameList(String commonUserId){
+		CommonUser loginUser = commonUserService.get(commonUserId);
+		if(!"2".equals(loginUser.getRoleId())){
+			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
+		}
+
+		List<String> assessmentNameList = dao.loadNameList(loginUser.getSchoolId());
+
+		return new CommonResult(assessmentNameList);
 	}
 
 

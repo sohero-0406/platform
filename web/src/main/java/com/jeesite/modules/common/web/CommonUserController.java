@@ -19,8 +19,13 @@ import com.jeesite.modules.common.entity.CommonUser;
 import com.jeesite.modules.common.entity.TestUser;
 import com.jeesite.modules.common.entity.UserCondition;
 import com.jeesite.modules.common.service.CommonUserService;
+import com.jeesite.modules.common.vo.DeleteVO;
 import com.jeesite.modules.common.vo.LoginVO;
 import com.jeesite.modules.common.vo.StuSearchVO;
+import com.jeesite.modules.job.p.C;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -123,6 +128,8 @@ public class CommonUserController extends BaseController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "根据id加载用户")
+    @ApiImplicitParam(name = "id", value = "用户id", required = true, dataTypeClass = String.class)
     @Log(operationName = "根据id加载用户")
     @RequestMapping(value = "loadCommonUser")
     @ResponseBody
@@ -135,11 +142,13 @@ public class CommonUserController extends BaseController {
      * @param commonUser
      * @return
      */
+    @ApiOperation(value = "保存用户信息")
+    @ApiImplicitParam(name = "commonUser", value = "用户的对象", required = true, dataType = "CommonUser")
     @Log(operationName = "保存common_user", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
     @RequestMapping(value = "addUser")
     @ResponseBody
     public CommonResult addUser(CommonUser commonUser) {
-        //commonUser.setCreateBy("999");
+
         return commonUserService.addCommonUser(commonUser);
     }
 
@@ -148,6 +157,8 @@ public class CommonUserController extends BaseController {
      * @param json
      * @return
      */
+    @ApiOperation(value = "根据json删除用户")
+    @ApiImplicitParam(name = "json", value = "删除信息的json数据", required = true, dataType = "String")
     @Log(operationName = "根据json删除用户", operationType = Log.OPERA_TYPE_DEL)
     @RequestMapping(value = "deleteUser")
     @ResponseBody
@@ -155,6 +166,16 @@ public class CommonUserController extends BaseController {
 
         return commonUserService.deleteCommonUser(json);
     }
+
+//    @RequestMapping(value = "deleteUserByVO")
+//    @ResponseBody
+//    public CommonResult deleteUserByVO(DeleteVO deleteVO) {
+//
+//        System.out.println("1111");
+//
+//
+//        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
+//    }
 
     /**
      * 加载分页用户信息
@@ -190,13 +211,15 @@ public class CommonUserController extends BaseController {
     @Log(operationName = "更改考试权限", operationType = Log.OPERA_TYPE_UPD)
     @RequestMapping(value = "changeRight")
     @ResponseBody
-    public CommonResult changeRight(String id, Integer isExamRight) {
+    public CommonResult changeRight(String id, String isExamRight) {
         return  commonUserService.changeRight(id, isExamRight);
     }
 
     /**
      * 用户登录功能
      */
+    @ApiOperation(value = "大后台前端登录", notes = "根据用户名和密码来判断是否登录")
+    @ApiImplicitParam(name = "vo", value = "登录模型", required = true, dataTypeClass = LoginVO.class)
     @Log(operationName = "登录")
     @RequestMapping(value = "login")
     @ResponseBody
@@ -207,10 +230,11 @@ public class CommonUserController extends BaseController {
     /**
      * 用户注销
      */
+    @ApiOperation(value = "大后台前端注销")
     @Log(operationName = "注销", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "logout")
     @ResponseBody
-    public CommonResult logout(LoginVO vo) {
+    public CommonResult logout() {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
     }
 
@@ -218,6 +242,7 @@ public class CommonUserController extends BaseController {
      * 根据token加载用户信息
      * @return
      */
+    @ApiOperation(value = "根据token加载用户信息", notes = "在token解析出用户id，再记载数据后返回")
     @Log(operationName = "根据token加载用户信息")
     @RequestMapping(value = "loadUserByToken")
     @ResponseBody
@@ -230,6 +255,8 @@ public class CommonUserController extends BaseController {
      * @param vo
      * @return
      */
+    @ApiOperation(value = "教师端登录", notes = "根据用户名和密码来判断是否登录")
+    @ApiImplicitParam(name = "vo", value = "登录模型", required = true, dataType = "LoginVO")
     @Log(operationName = "教师端登录")
     @RequestMapping(value = "teacherSideLogin")
     @ResponseBody
@@ -242,6 +269,8 @@ public class CommonUserController extends BaseController {
      * @param vo
      * @return
      */
+    @ApiOperation(value = "加载平台中的学生", notes = "根据查询对象里的数据进行加载")
+    @ApiImplicitParam(name = "vo", value = "学生查询模型", required = true, dataType = "StuSearchVO")
     @Log(operationName = "加载平台中的学生")
     @RequestMapping(value = "loadStuListInPlatform")
     @ResponseBody
@@ -254,6 +283,8 @@ public class CommonUserController extends BaseController {
      * @param commonUserId
      * @return
      */
+    @ApiOperation(value = "加载专业列表", notes = "根据登录的id夹杂对应学校的专业列表")
+    @ApiImplicitParam(name = "commonUserId", value = "登录的用户id", required = true, dataTypeClass = String.class)
     @Log(operationName = "加载专业列表")
     @RequestMapping(value = "loadMajorList")
     @ResponseBody
@@ -265,6 +296,11 @@ public class CommonUserController extends BaseController {
      * @param majorName
      * @return
      */
+    @ApiOperation(value = "加载班级列表", notes = "根据登录的id夹杂对应学校的专业列表")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "commonUserId", value = "登录的用户id", required = true, dataTypeClass = String.class),
+        @ApiImplicitParam(name = "majorName", value = "专业个名称", dataTypeClass = String.class)
+    })
     @Log(operationName = "加载班级列表")
     @RequestMapping(value = "loadClassList")
     @ResponseBody

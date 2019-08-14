@@ -20,6 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="scheme_name", attrName="schemeName", label="scheme_name", queryType=QueryType.LIKE),
 		@Column(name="basic_scheme_id", attrName="basicSchemeId", label="basic_scheme_id"),
 		@Column(name="scheme_details", attrName="schemeDetails", label="详细的配置内容"),
+		@Column(name="data_status", attrName="dataStatus", label="数据是否启用状态"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -29,6 +30,7 @@ public class CommonAssessmentScheme extends PreEntity<CommonAssessmentScheme> {
 	private String schemeName;		// scheme_name
 	private String basicSchemeId;		// basic_scheme_id
 	private String schemeDetails;		// 详细的配置内容
+	private String dataStatus; //  数据是否启用状态(0 未启用，1是启用)
 	
 	public CommonAssessmentScheme() {
 		this(null);
@@ -63,5 +65,13 @@ public class CommonAssessmentScheme extends PreEntity<CommonAssessmentScheme> {
 	public void setSchemeDetails(String schemeDetails) {
 		this.schemeDetails = schemeDetails;
 	}
-	
+
+	@Length(min=0, max=100, message="数据是否启用状态长度不能超过 100 个字符")
+	public String getDataStatus() {
+		return dataStatus;
+	}
+
+	public void setDataStatus(String dataStatus) {
+		this.dataStatus = dataStatus;
+	}
 }

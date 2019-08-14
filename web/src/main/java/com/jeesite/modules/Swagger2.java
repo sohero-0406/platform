@@ -52,4 +52,12 @@ public class Swagger2 {
         return SwaggerConfig.docket(moduleCode, moduleName, basePackage).select().apis(RequestHandlerSelectors.basePackage(basePackage)).build();
     }
 
+    @Bean
+    public Docket webApi() {
+        String moduleCode = "web";
+        String moduleName = "整体接口模块";
+        String basePackage = "com.jeesite.modules.common.web";
+        return SwaggerConfig.docket(moduleCode, moduleName, basePackage).select().apis(RequestHandlerSelectors.basePackage(basePackage)).build();
+    }
+
 }

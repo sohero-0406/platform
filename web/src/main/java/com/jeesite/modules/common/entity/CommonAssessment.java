@@ -23,6 +23,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="end_date", attrName="endDate", label="end_date"),
 		@Column(name="school_id", attrName="schoolId", label="school_id"),
 		@Column(name="school_name", attrName="schoolName", label="school_name", queryType=QueryType.LIKE),
+		@Column(name="data_status", attrName="dataStatus", label="自定义状态"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -35,8 +36,9 @@ public class CommonAssessment extends PreEntity<CommonAssessment> {
 	private String endDate;		// end_date
 	private String schoolId;		// school_id
 	private String schoolName;		// school_name
+	private String dataStatus;
 
-	// status 0 初始状态可以修改和删除，1 是逻辑删除状态  2 是 考核处于开始状态   3是 考核处于结束状态 4 是 评分表上传后并解析成功状态 5 是统分成功状态
+	// dataStatus 0 初始状态可以修改和删除，1 是逻辑删除状态  2 是 考核处于开始状态   3是 考核处于结束状态 4 是 评分表上传后并解析成功状态 5 是统分成功状态
 	
 	public CommonAssessment() {
 		this(null);
@@ -99,5 +101,13 @@ public class CommonAssessment extends PreEntity<CommonAssessment> {
 	public void setSchoolName(String schoolName) {
 		this.schoolName = schoolName;
 	}
-	
+
+	@Length(min=0, max=100, message="自定义状态长度不能超过 100 个字符")
+	public String getDataStatus() {
+		return dataStatus;
+	}
+
+	public void setDataStatus(String dataStatus) {
+		this.dataStatus = dataStatus;
+	}
 }

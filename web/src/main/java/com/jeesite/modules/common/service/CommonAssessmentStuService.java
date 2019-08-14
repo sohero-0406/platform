@@ -173,9 +173,28 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 				colIndex++;
 			}
 			ee.addCell(row, colIndex, cas.getTotalScore());
-			ee.addCell(row, colIndex+1, "2".equals(cas.getStatus())?"通过":"未通过");
+			ee.addCell(row, colIndex+1, "2".equals(cas.getDataStatus())?"通过":"未通过");
 		}
 		return ee;
 	}
-	
+
+    public CommonResult loadAssessmentDateList(String commonUserId, String assessmentName) {
+		CommonUser loginUser = commonUserService.get(commonUserId);
+		if(!"2".equals(loginUser.getRoleId())){
+			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
+		}
+
+		List<String> assessmentDateList = dao.loadDateList(loginUser.getSchoolId(), assessmentName);
+
+		return new CommonResult(assessmentDateList);
+    }
+
+	public CommonResult loadAssessmentTimeList(String commonUserId, String assessmentName, String assessmentDate) {
+		CommonUser loginUser = commonUserService.get(commonUserId);
+		if(!"2".equals(loginUser.getRoleId())){
+			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
+		}
+		List<String> assessmentTimeList = dao.loadTimeList(loginUser.getSchoolId(), assessmentName, assessmentDate);
+		return new CommonResult(assessmentTimeList);
+	}
 }
