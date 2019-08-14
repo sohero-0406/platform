@@ -119,13 +119,21 @@ public class CommonAssessmentStuController extends BaseController {
 		ee.write(response, "testx.xlsx").close();
 	}
 
+	@Log(operationName = "根据id返回一个考生对象", operationType = Log.OPERA_TYPE_SEL)
+	@RequestMapping(value = "loadOneExamStu")
+	@ResponseBody
+	public CommonResult loadOneExamStu(String serverExamStuId){
+
+		return commonAssessmentStuService.loadOneExamStu(serverExamStuId);
+	}
+
 	/**
 	 * 根据登录人加载考核名称下的考核日期
 	 * @param commonUserId
 	 * @param assessmentName
 	 * @return
 	 */
-	@Log(operationName = "根据登录人加载考核名称下的考核日期", operationType = Log.OPERA_TYPE_UPD)
+	@Log(operationName = "根据登录人加载考核名称下的考核日期", operationType = Log.OPERA_TYPE_SEL)
 	@RequestMapping(value = "loadAssessmentDateList")
 	@ResponseBody
 	public CommonResult loadAssessmentDateList(String commonUserId, String assessmentName){
@@ -140,7 +148,7 @@ public class CommonAssessmentStuController extends BaseController {
 	 * @param assessmentDate
 	 * @return
 	 */
-	@Log(operationName = "根据登录人加载考核名称下的考核日期下的考核时间", operationType = Log.OPERA_TYPE_UPD)
+	@Log(operationName = "根据登录人加载考核名称下的考核日期下的考核时间", operationType = Log.OPERA_TYPE_SEL)
 	@RequestMapping(value = "loadAssessmentTimeList")
 	@ResponseBody
 	public CommonResult loadAssessmentTimeList(String commonUserId, String assessmentName, String assessmentDate){

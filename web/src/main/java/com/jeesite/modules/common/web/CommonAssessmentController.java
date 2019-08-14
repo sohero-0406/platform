@@ -177,7 +177,7 @@ public class CommonAssessmentController extends BaseController {
 	 * @param commonUserId
 	 * @return
 	 */
-	@Log(operationName = "根据登录人加载考核名称", operationType = Log.OPERA_TYPE_UPD)
+	@Log(operationName = "根据登录人加载考核名称", operationType = Log.OPERA_TYPE_SEL)
 	@RequestMapping(value = "loadAssessmentNameList")
 	@ResponseBody
 	public CommonResult loadAssessmentNameList(String commonUserId){

@@ -197,4 +197,14 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 		List<String> assessmentTimeList = dao.loadTimeList(loginUser.getSchoolId(), assessmentName, assessmentDate);
 		return new CommonResult(assessmentTimeList);
 	}
+
+	public CommonResult loadOneExamStu(String serverExamStuId) {
+		CommonAssessmentStu commonAssessmentStu = super.get(serverExamStuId);
+		if(commonAssessmentStu==null){
+			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
+		}
+		CommonAssessment commonAssessment = commonAssessmentService.get(commonAssessmentStu.getAssessmentId());
+		commonAssessmentStu.setAssessmentName(commonAssessment.getAssessmentName());
+		return new CommonResult(commonAssessmentStu);
+	}
 }
