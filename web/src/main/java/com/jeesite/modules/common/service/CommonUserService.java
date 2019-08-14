@@ -40,7 +40,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
     @Autowired
     private CommonRoleService commonRoleService;
     @Autowired
-    private CommonSchoolDao commonSchoolDao;
+    private CommonSchoolService commonSchoolService;
 
     /**
      * 获取单条数据
@@ -419,5 +419,14 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
             }
         }
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, userConditionList);
+    }
+
+    public CommonResult loadOneUser(String commonUserId) {
+        CommonUser commonUser = super.get(commonUserId);
+        if(commonUser==null){
+            return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
+        }
+        commonUser.setSchoolName(commonSchoolService.get(commonUser.getSchoolId()).getSchoolName());
+        return new CommonResult(commonUser);
     }
 }

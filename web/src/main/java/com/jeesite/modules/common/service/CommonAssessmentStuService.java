@@ -207,4 +207,6 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 		commonAssessmentStu.setAssessmentName(commonAssessment.getAssessmentName());
 		return new CommonResult(commonAssessmentStu);
 	}
+
+
 }

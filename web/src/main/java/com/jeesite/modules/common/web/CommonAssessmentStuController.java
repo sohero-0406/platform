@@ -127,6 +127,7 @@ public class CommonAssessmentStuController extends BaseController {
 		return commonAssessmentStuService.loadOneExamStu(serverExamStuId);
 	}
 
+
 	/**
 	 * 根据登录人加载考核名称下的考核日期
 	 * @param commonUserId

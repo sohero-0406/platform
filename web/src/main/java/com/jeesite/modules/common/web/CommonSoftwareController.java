@@ -39,62 +39,62 @@ public class CommonSoftwareController extends BaseController {
 	@Autowired
 	private CommonSoftwareService commonSoftwareService;
 	
-	/**
-	 * 获取数据
-	 */
-	@ModelAttribute
-	public CommonSoftware get(String id, boolean isNewRecord) {
-		return commonSoftwareService.get(id, isNewRecord);
-	}
-	
-	/**
-	 * 查询列表
-	 */
-	@RequestMapping(value = {"list", ""})
-	public String list(CommonSoftware commonSoftware, Model model) {
-		model.addAttribute("commonSoftware", commonSoftware);
-		return "modules/common/commonSoftwareList";
-	}
-	
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "listData")
-	@ResponseBody
-	public Page<CommonSoftware> listData(CommonSoftware commonSoftware, HttpServletRequest request, HttpServletResponse response) {
-		commonSoftware.setPage(new Page<>(request, response));
-		Page<CommonSoftware> page = commonSoftwareService.findPage(commonSoftware);
-		return page;
-	}
-
-	/**
-	 * 查看编辑表单
-	 */
-	@RequestMapping(value = "form")
-	public String form(CommonSoftware commonSoftware, Model model) {
-		model.addAttribute("commonSoftware", commonSoftware);
-		return "modules/common/commonSoftwareForm";
-	}
-
-	/**
-	 * 保存软件表
-	 */
-	@PostMapping(value = "save")
-	@ResponseBody
-	public String save(@Validated CommonSoftware commonSoftware) {
-		commonSoftwareService.save(commonSoftware);
-		return renderResult(Global.TRUE, text("保存软件表成功！"));
-	}
-	
-	/**
-	 * 删除软件表
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public String delete(CommonSoftware commonSoftware) {
-		commonSoftwareService.delete(commonSoftware);
-		return renderResult(Global.TRUE, text("删除软件表成功！"));
-	}
+//	/**
+//	 * 获取数据
+//	 */
+//	@ModelAttribute
+//	public CommonSoftware get(String id, boolean isNewRecord) {
+//		return commonSoftwareService.get(id, isNewRecord);
+//	}
+//
+//	/**
+//	 * 查询列表
+//	 */
+//	@RequestMapping(value = {"list", ""})
+//	public String list(CommonSoftware commonSoftware, Model model) {
+//		model.addAttribute("commonSoftware", commonSoftware);
+//		return "modules/common/commonSoftwareList";
+//	}
+//
+//	/**
+//	 * 查询列表数据
+//	 */
+//	@RequestMapping(value = "listData")
+//	@ResponseBody
+//	public Page<CommonSoftware> listData(CommonSoftware commonSoftware, HttpServletRequest request, HttpServletResponse response) {
+//		commonSoftware.setPage(new Page<>(request, response));
+//		Page<CommonSoftware> page = commonSoftwareService.findPage(commonSoftware);
+//		return page;
+//	}
+//
+//	/**
+//	 * 查看编辑表单
+//	 */
+//	@RequestMapping(value = "form")
+//	public String form(CommonSoftware commonSoftware, Model model) {
+//		model.addAttribute("commonSoftware", commonSoftware);
+//		return "modules/common/commonSoftwareForm";
+//	}
+//
+//	/**
+//	 * 保存软件表
+//	 */
+//	@PostMapping(value = "save")
+//	@ResponseBody
+//	public String save(@Validated CommonSoftware commonSoftware) {
+//		commonSoftwareService.save(commonSoftware);
+//		return renderResult(Global.TRUE, text("保存软件表成功！"));
+//	}
+//
+//	/**
+//	 * 删除软件表
+//	 */
+//	@RequestMapping(value = "delete")
+//	@ResponseBody
+//	public String delete(CommonSoftware commonSoftware) {
+//		commonSoftwareService.delete(commonSoftware);
+//		return renderResult(Global.TRUE, text("删除软件表成功！"));
+//	}
 
 	/**
 	 * 加载软件列表数据

@@ -411,20 +411,30 @@ public class CommonUserController extends BaseController {
     }
 
 
-    @RequestMapping(value = "testExportExcel")
-    public void importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
-        try {
-            String fileName = "人员信息导入模板.xlsx";
+//    @RequestMapping(value = "testExportExcel")
+//    public void importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
+//        try {
+//            String fileName = "人员信息导入模板.xlsx";
+//
+//            List<TestUser> list = Lists.newArrayList();
+//            list.add(new TestUser());
+//            new ExcelExport("人员信息", TestUser.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
+//            // new ExcelExport("人员信息", TestUser.class, 2).setDataList(list).write(response, fileName).dispose();
+//// null;
+//        } catch (Exception e) {
+//            // addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+//        }
+//        //return "redirect:" + Global.getAdminPath() + "/basic/personInfo/?repage";
+//    }
 
-            List<TestUser> list = Lists.newArrayList();
-            list.add(new TestUser());
-            new ExcelExport("人员信息", TestUser.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
-            // new ExcelExport("人员信息", TestUser.class, 2).setDataList(list).write(response, fileName).dispose();
-// null;
-        } catch (Exception e) {
-            // addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
-        }
-        //return "redirect:" + Global.getAdminPath() + "/basic/personInfo/?repage";
+
+
+    @Log(operationName = "根据id返回用户对象", operationType = Log.OPERA_TYPE_SEL)
+    @RequestMapping(value = "loadOneUser")
+    @ResponseBody
+    public CommonResult loadOneUser(String commonUserId){
+
+        return commonUserService.loadOneUser(commonUserId);
     }
 
 
