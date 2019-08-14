@@ -115,6 +115,20 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	private CommonResult saveCommonSchemeStus(CommonAssessment commonAssessment, String userConfig) {
 		String assessmentId = commonAssessment.getId();
+		CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(commonAssessment.getAssessmentSchemeId());
+		JSONArray schemeDetails = JSONArray.parseArray(commonAssessmentScheme.getSchemeDetails());
+		JSONArray softUploadedMarks = new JSONArray();
+		for (int i = 0; i < schemeDetails.size(); i++) {
+			JSONObject jsonObject = schemeDetails.getJSONObject(i);
+			JSONArray softDetails = JSONArray.parseArray(jsonObject.getString("softDetails"));
+			for (int j = 0; j < softDetails.size(); j++) {
+				JSONObject oneSoft = softDetails.getJSONObject(j);
+				JSONObject oneMark = new JSONObject();
+				oneMark.put("softwareId", oneSoft.getString("softwareId"));
+				oneMark.put("mark", "0");
+				softUploadedMarks.add(oneMark);
+			}
+		}
 		JSONArray jsonArray = JSONArray.parseArray(userConfig);
 		for (int i = 0; i < jsonArray.size() ; i++) {
 			JSONObject jo = jsonArray.getJSONObject(i);
@@ -129,6 +143,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			commonAssessmentStu.setAssessmentDate(jo.getString("assessmentDate"));
 			commonAssessmentStu.setAssessmentTime(jo.getString("assessmentTime"));
 			commonAssessmentStu.setStatus("0");
+			commonAssessmentStu.setScoreDetails(commonAssessmentScheme.getSchemeDetails());
+			commonAssessmentStu.setSoftUploadedMarks(softUploadedMarks.toJSONString());
 			commonAssessmentStuService.save(commonAssessmentStu);
 		}
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
@@ -391,6 +407,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 	@Transactional(readOnly = false)
 	public CommonResult parseScoreInfo(String scoreInfo){
 		List<String> msgList = new ArrayList<>();
+		List<String> resultMsgList = new ArrayList<>();
 		JSONObject jsonObject = null;
 		try{
 			jsonObject = JSONObject.parseObject(scoreInfo);
@@ -439,7 +456,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			JSONObject object = jsonArray.getJSONObject(i);
 			String serverExamStuId = object.getString("serverExamStuId");
 			String score = object.getString("score");
-			if(NumberUtils.isParsable(score)){
+			if(!NumberUtils.isParsable(score)){
 				msgList.add("服务器考生标识为"+serverExamStuId+"的分数无法被解析为数值");
 				continue;
 			}
@@ -449,15 +466,34 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 					CommonAssessmentScheme commonAssessmentScheme = this.getSchemeByCommonAssessmentList(commonAssessmentList, commonAssessmentStu.getAssessmentId());
 					String schemeDetail = commonAssessmentScheme.getSchemeDetails();
+					String softUploadedMarks = commonAssessmentStu.getSoftUploadedMarks();
 					JSONArray ja = JSONArray.parseArray(schemeDetail);
 					for (int k = 0; k < ja.size(); k++) {
 						JSONArray softDetails = ja.getJSONObject(k).getJSONArray("softDetails");
 						for (int l = 0; l < softDetails.size(); l++) {
 							JSONObject oneSoft = softDetails.getJSONObject(l);
 							if(softwareId.equals(oneSoft.getInteger("softwareId"))){
-								oneSoft.put("objScore", score);
-								softDetails.set(l, oneSoft);
-								ja.getJSONObject(k).put("softDetails", softDetails);
+								JSONArray softUploadedMarks_array = JSONArray.parseArray(softUploadedMarks);
+								int uploadedFlag = 0;
+								for (int m = 0; m < softUploadedMarks_array.size(); m++) {
+									JSONObject oneMark = softUploadedMarks_array.getJSONObject(m);
+									if(oneMark.getString("softwareId").equals(oneSoft.getInteger("softwareId").toString())){
+										if("1".equals(oneMark.getString("mark"))){
+											resultMsgList.add("身份证好为"+commonAssessmentStu.getLoginName()+"的软件分数已经上传!");
+											uploadedFlag = 1;
+										}else{
+											oneMark.put("mark", "1");
+											softUploadedMarks_array.set(m, oneMark);
+										}
+									}
+								}
+								if(uploadedFlag==0){
+									oneSoft.put("objScore", score);
+									softDetails.set(l, oneSoft);
+									ja.getJSONObject(k).put("softDetails", softDetails);
+								}
+								commonAssessmentStu.setSoftUploadedMarks(softUploadedMarks_array.toJSONString());
+
 								break;
 							}
 						}
@@ -469,13 +505,13 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			}
 		}
 		if(msgList.size()>0){
-			return new CommonResult(CodeConstant.ERROR_DATA, "分数解析错误", msgList);
+			return new CommonResult(CodeConstant.ERROR_DATA, "分数解析错误,所有分户均未上传", msgList);
 		}
 		for (int j = 0; j < commonAssessmentStuList.size(); j++) {
 			commonAssessmentStuService.update(commonAssessmentStuList.get(j));
 		}
 
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, commonAssessmentStuList.size()+"分数全部解析并上传成功!");
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, (commonAssessmentStuList.size()-resultMsgList.size())+"条分数全部解析并上传成功!", resultMsgList);
 	}
 
 	private CommonAssessmentScheme getSchemeByCommonAssessmentList(List<CommonAssessment> commonAssessmentList, String commonAssessmentId){
