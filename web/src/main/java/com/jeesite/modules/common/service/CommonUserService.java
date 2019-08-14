@@ -346,7 +346,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
             CommonUser commonUser = super.get(vo.getCommonUserId());
             if(vo.getExamOrPractice().equals("exam")){
                 List<CommonUser> commonUserList = dao.findAssessmentStu(commonUser.getSchoolId(),
-                        vo.getAssessmentId(), vo.getAssessmentDate(), vo.getAssessmentTime());
+                        vo.getAssessmentName(), vo.getAssessmentDate(), vo.getAssessmentTime());
                 result.setCode(CodeConstant.REQUEST_SUCCESSFUL);
                 result.setData(commonUserList);
             }else{

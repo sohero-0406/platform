@@ -4,6 +4,8 @@ public class StuSearchVO {
 
     private String assessmentId;
 
+    private String assessmentName;
+
     private String commonUserId;
 
     private String schoolId;
@@ -80,5 +82,13 @@ public class StuSearchVO {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String getAssessmentName() {
+        return assessmentName;
+    }
+
+    public void setAssessmentName(String assessmentName) {
+        this.assessmentName = assessmentName;
     }
 }
