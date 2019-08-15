@@ -19,8 +19,9 @@
 
 	<!-- 查询车型 -->
 	<select id="getCarModel" resultType="VehicleInfo">
-		SELECT id,chexingmingcheng,changshangzhidaojia_yuan,ranyoubiaohao,qigangshu_ge,huanbaobiaozhun,biansuxiangleixing,
-		qudongfangshi,absfangbaosi
+		SELECT id,chexingmingcheng,pinpai,chexi,changshangzhidaojia_yuan,ranyoubiaohao,qigangshu_ge,huanbaobiaozhun,
+		biansuxiangleixing,qudongfangshi,absfangbaosi,zhu_fujiashizuoanquanqinang,qian_houpaiceqinang,
+		qian_houpaitoubuqinang_qilian,xibuqinang,houpaianquandaishiqinang,houpaizhongyanganquanqinang
 		FROM common_vehicle_info
 		WHERE chexing_id = #{chexingId}
 	</select>

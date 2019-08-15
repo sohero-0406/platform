@@ -6,7 +6,9 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.VehicleSeries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -112,4 +114,14 @@ public class VehicleBrandController extends BaseController {
         comRes.setData(dataList);
 	    return comRes;
     }
+
+	/**
+	 * 查询实体
+	 */
+	@RequestMapping(value = "getByEntity")
+	@ResponseBody
+	public CommonResult getByEntity(VehicleBrand vehicleBrand) {
+		vehicleBrand = vehicleBrandService.getByEntity(vehicleBrand);
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, vehicleBrand);
+	}
 }

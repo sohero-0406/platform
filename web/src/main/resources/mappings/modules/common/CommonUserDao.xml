@@ -21,7 +21,7 @@
 		where cu.id = castu.common_user_id and cu.school_id = sc.id and cu.id in (select common_user_id from common_assessment_stu as cas
 						where cas.school_id = #{schoolId} and cu.status = 0 and ca.id = castu.assessment_id
 						 <if test="assessmentName!=null and assessmentName!=''">
-							 and cas.assessment_id = #{assessmentId}
+							 and ca.assessment_name = #{assessmentName}
 						 </if>
 						 <if test="assessmentDate!=null and assessmentDate!=''">
 							 and cas.assessment_date = #{assessmentDate}
@@ -104,11 +104,12 @@
 	</select>
 
     <select id="findMajorNameList" resultType="String">
-		select cu.major_name as majorName from common_user as cu where cu.school_id = #{schoolId} group by cu.major_name
+		select cu.major_name as majorName from common_user as cu where cu.school_id = #{schoolId} and major_name is not null
+		group by cu.major_name
 	</select>
 
     <select id="findClassNameList" resultType="String">
-		select cu.class_name as className from common_user as cu where cu.school_id = #{schoolId}
+		select cu.class_name as className from common_user as cu where cu.school_id = #{schoolId} and class_name is not null
 		<if test="majorName!=null and majorName!=''">
             and cu.major_name = #{majorName}
         </if>

@@ -72,5 +72,8 @@ public class VehicleSeriesService extends CrudService<VehicleSeriesDao, VehicleS
 	public void delete(VehicleSeries vehicleSeries) {
 		super.delete(vehicleSeries);
 	}
-	
+
+    public VehicleSeries getByEntity(VehicleSeries vehicleSeries) {
+		return dao.getByEntity(vehicleSeries);
+    }
 }

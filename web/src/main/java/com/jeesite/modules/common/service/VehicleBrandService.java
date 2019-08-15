@@ -72,5 +72,8 @@ public class VehicleBrandService extends CrudService<VehicleBrandDao, VehicleBra
 	public void delete(VehicleBrand vehicleBrand) {
 		super.delete(vehicleBrand);
 	}
-	
+
+    public VehicleBrand getByEntity(VehicleBrand vehicleBrand) {
+		return dao.getByEntity(vehicleBrand);
+    }
 }
