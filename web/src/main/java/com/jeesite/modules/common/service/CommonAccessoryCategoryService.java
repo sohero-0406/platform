@@ -83,6 +83,11 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
 	}
 
 
+	/**
+	 * 根据对象条件加载分页配件分类数据
+	 * @param commonAccessoryCategory
+	 * @return
+	 */
 	public CommonResult findPageByCondition(CommonAccessoryCategory commonAccessoryCategory){
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
@@ -92,6 +97,12 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
 		return new CommonResult(CodeConstant.NO_RIGHT, "您有权限进行该操作");
 	}
 
+	/**
+	 * 保存配件分类数据，并保存对应上传的配件数据
+	 * @param commonAccessoryCategory
+	 * @param commonAccessoryList
+	 * @return
+	 */
 	@Transactional(readOnly = false)
 	public CommonResult saveCategoryAndCommonAccessory(CommonAccessoryCategory commonAccessoryCategory, List<CommonAccessory> commonAccessoryList){
 		String loginUserId = PreEntity.getUserIdByToken();
@@ -113,6 +124,12 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
 	}
 
 	// 只是逻辑删除
+
+	/**
+	 * 删除配件分类数据（逻辑删除）
+	 * @param commonAccessoryCategory
+	 * @return
+	 */
 	@Transactional(readOnly = false)
 	public CommonResult deleteCommonAccessoryCategory(CommonAccessoryCategory commonAccessoryCategory){
 		String loginUserId = PreEntity.getUserIdByToken();
@@ -127,6 +144,11 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 更新配件分类信息，其实只是更新了分类的名称
+	 * @param commonAccessoryCategory
+	 * @return
+	 */
 	@Transactional(readOnly = false)
 	public CommonResult updateCommonAccessoryCategory(CommonAccessoryCategory commonAccessoryCategory){
 		if(commonAccessoryCategory.getId()==null){

@@ -76,11 +76,19 @@ public class CommonBasicSchemeService extends CrudService<CommonBasicSchemeDao, 
 	}
 
 
+	/**
+	 * 根据id删除基本方案
+	 * @param id
+	 */
 	@Transactional(readOnly = false)
 	public void deleteById(String id){
 		super.delete(this.get(id));
 	}
 
+	/**
+	 * 根据json信息删除一个或者多个基本方案
+	 * @param json
+	 */
 	@Transactional(readOnly = false)
 	public void deleteByJson(String json){
 		JSONObject jo = JSONObject.parseObject(json);

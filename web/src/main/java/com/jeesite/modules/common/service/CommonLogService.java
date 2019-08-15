@@ -75,6 +75,11 @@ public class CommonLogService extends CrudService<CommonLogDao, CommonLog> {
 		super.delete(commonLog);
 	}
 
+	/**
+	 * 根据条件加载分页日期
+	 * @param commonLog
+	 * @return
+	 */
 	public CommonResult findPageByCondition(CommonLog commonLog){
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, super.findPage(commonLog));
 	}

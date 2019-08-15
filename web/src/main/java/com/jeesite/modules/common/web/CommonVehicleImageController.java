@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,62 +39,62 @@ public class CommonVehicleImageController extends BaseController {
 	@Autowired
 	private CommonVehicleImageService commonVehicleImageService;
 	
-	/**
-	 * 获取数据
-	 */
+//	/**
+//	 * 获取数据
+//	 */
 //	@ModelAttribute
 //	public CommonVehicleImage get(String id, boolean isNewRecord) {
 //		return commonVehicleImageService.get(id, isNewRecord);
 //	}
 	
-	/**
-	 * 查询列表
-	 */
-	@RequestMapping(value = {"list", ""})
-	public String list(CommonVehicleImage commonVehicleImage, Model model) {
-		model.addAttribute("commonVehicleImage", commonVehicleImage);
-		return "modules/common/commonVehicleImageList";
-	}
-	
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "listData")
-	@ResponseBody
-	public Page<CommonVehicleImage> listData(CommonVehicleImage commonVehicleImage, HttpServletRequest request, HttpServletResponse response) {
-		commonVehicleImage.setPage(new Page<>(request, response));
-		Page<CommonVehicleImage> page = commonVehicleImageService.findPage(commonVehicleImage);
-		return page;
-	}
-
-	/**
-	 * 查看编辑表单
-	 */
-	@RequestMapping(value = "form")
-	public String form(CommonVehicleImage commonVehicleImage, Model model) {
-		model.addAttribute("commonVehicleImage", commonVehicleImage);
-		return "modules/common/commonVehicleImageForm";
-	}
-
-	/**
-	 * 保存车辆图片表
-	 */
-	@PostMapping(value = "save")
-	@ResponseBody
-	public String save(@Validated CommonVehicleImage commonVehicleImage) {
-		commonVehicleImageService.save(commonVehicleImage);
-		return renderResult(Global.TRUE, text("保存车辆图片表成功！"));
-	}
-	
-	/**
-	 * 删除车辆图片表
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public String delete(CommonVehicleImage commonVehicleImage) {
-		commonVehicleImageService.delete(commonVehicleImage);
-		return renderResult(Global.TRUE, text("删除车辆图片表成功！"));
-	}
+//	/**
+//	 * 查询列表
+//	 */
+//	@RequestMapping(value = {"list", ""})
+//	public String list(CommonVehicleImage commonVehicleImage, Model model) {
+//		model.addAttribute("commonVehicleImage", commonVehicleImage);
+//		return "modules/common/commonVehicleImageList";
+//	}
+//
+//	/**
+//	 * 查询列表数据
+//	 */
+//	@RequestMapping(value = "listData")
+//	@ResponseBody
+//	public Page<CommonVehicleImage> listData(CommonVehicleImage commonVehicleImage, HttpServletRequest request, HttpServletResponse response) {
+//		commonVehicleImage.setPage(new Page<>(request, response));
+//		Page<CommonVehicleImage> page = commonVehicleImageService.findPage(commonVehicleImage);
+//		return page;
+//	}
+//
+//	/**
+//	 * 查看编辑表单
+//	 */
+//	@RequestMapping(value = "form")
+//	public String form(CommonVehicleImage commonVehicleImage, Model model) {
+//		model.addAttribute("commonVehicleImage", commonVehicleImage);
+//		return "modules/common/commonVehicleImageForm";
+//	}
+//
+//	/**
+//	 * 保存车辆图片表
+//	 */
+//	@PostMapping(value = "save")
+//	@ResponseBody
+//	public String save(@Validated CommonVehicleImage commonVehicleImage) {
+//		commonVehicleImageService.save(commonVehicleImage);
+//		return renderResult(Global.TRUE, text("保存车辆图片表成功！"));
+//	}
+//
+//	/**
+//	 * 删除车辆图片表
+//	 */
+//	@RequestMapping(value = "delete")
+//	@ResponseBody
+//	public String delete(CommonVehicleImage commonVehicleImage) {
+//		commonVehicleImageService.delete(commonVehicleImage);
+//		return renderResult(Global.TRUE, text("删除车辆图片表成功！"));
+//	}
 
 
 	/**
@@ -101,6 +104,11 @@ public class CommonVehicleImageController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
+	@ApiOperation(value = "加载软件列表数据")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "image", value = "新的车型图片", required = true, dataType="MultipartFile"),
+		@ApiImplicitParam(name = "commonVehicleImage", value = "要替换的车型图片对象", required = true, dataType="CommonVehicleImage")
+	})
 	@Log(operationName = "替换车的某一个体图片", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "updateVehicleImage", method= RequestMethod.POST)
 	@ResponseBody
@@ -114,6 +122,8 @@ public class CommonVehicleImageController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
+	@ApiOperation(value = "加载软件列表数据")
+	@ApiImplicitParam(name = "commonVehicleImage", value = "被删除的车型图片对象", required = true, dataType="CommonVehicleImage")
 	@Log(operationName = "删除图片", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteVehicleImage")
 	@ResponseBody

@@ -149,7 +149,6 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
      *
      * @param commonUser
      */
-
     @Transactional(readOnly = false)
     public CommonResult addCommonUser(CommonUser commonUser) {
         if(StringUtils.isBlank(commonUser.getId())){
@@ -165,6 +164,12 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
     }
 
+    /**
+     * 保存多条用户（导入的数据）
+     * @param userList
+     * @param roleId
+     * @return
+     */
     @Transactional
     public CommonResult saveUserList(List<CommonUser> userList, String roleId){
         if(ListUtils.isEmpty(userList)){
@@ -198,6 +203,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, msg, jo);
     }
 
+    /**
+     * 重置密码
+     * @param id
+     * @return
+     */
     @Transactional(readOnly = false)
     public CommonResult resetPass(String id) {
         String loginUserId = PreEntity.getUserIdByToken();
@@ -225,6 +235,12 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
 
     }
 
+    /**
+     * 更靠权限
+     * @param id
+     * @param isExamRight
+     * @return
+     */
     @Transactional(readOnly = false)
     public CommonResult changeRight(String id, String isExamRight){
         CommonUser commonUser = super.get(id);
@@ -240,6 +256,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
 
     }
 
+    /**
+     * 根据json删除一个或者多个用户
+     * @param json
+     * @return
+     */
     @Transactional(readOnly = false)
     public CommonResult deleteCommonUser(String json) {
 
@@ -267,7 +288,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
     }
 
-
+    /**
+     * 教师端登录的service方法
+     * @param vo
+     * @return
+     */
     public CommonResult teacherSideLogin(LoginVO vo){
         CommonResult result = new CommonResult();
         String userName = vo.getUserName();
@@ -334,12 +359,22 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return result;
     }
 
+    /**
+     * 根据token返回用户数据
+     * @return
+     */
     public CommonResult loadUserByToken(){
         String loginUserId = PreEntity.getUserIdByToken();
         CommonUser user = super.get(loginUserId);
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, user);
     }
 
+
+    /**
+     * 根据搜索条件返回用户列表（考试的时候会带有考生信息）
+     * @param vo
+     * @return
+     */
     public CommonResult loadStuListInPlatform(StuSearchVO vo){
         CommonResult result = new CommonResult();
         if(vo.getCommonUserId()!=null&&vo.getExamOrPractice()!=null){
@@ -361,7 +396,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return result;
     }
 
-
+    /**
+     * 根据用户id加载专业列表
+     * @param commonUserId
+     * @return
+     */
     public CommonResult loadMajorList(String commonUserId){
         CommonUser commonUser = super.get(commonUserId);
         if("2".equals(commonUser.getRoleId())){
@@ -370,6 +409,12 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return new CommonResult(CodeConstant.ERROR_DATA, "传入的参数错误");
     }
 
+    /**
+     * 根据用户id和专业名称加载班级列表
+     * @param commonUserId
+     * @param majorName
+     * @return
+     */
     public CommonResult loadClassList(String commonUserId, String majorName){
         CommonUser commonUser = super.get(commonUserId);
         if("2".equals(commonUser.getRoleId())){
@@ -379,6 +424,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
 
     }
 
+    /**
+     * 根据用户的多个id，加载用户列表信息
+     * @param ids
+     * @return
+     */
     public CommonResult loadStuListByIds(String ids){
         String[] isArray = ids.split(",");
         List<String> idList = Arrays.asList(isArray);
@@ -389,6 +439,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
     }
 
+    /**
+     * 根据多个考生id加载用户列表信息
+     * @param examUserIds
+     * @return
+     */
     public CommonResult loadStuListByExamUserIds(String examUserIds){
         String[] idsArray = examUserIds.split(",");
         List<String> examUserIdList = Arrays.asList(idsArray);
@@ -396,6 +451,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
     }
 
+    /**
+     * 根据已有的基本用户列表，把需要的信息从数据库架子啊出来，放到每个对应的对象中去
+     * @param userConditionList
+     * @return
+     */
     public CommonResult fillUserConditionList(List<UserCondition> userConditionList){
         List<String> userNameList = new ArrayList<>();
         for (UserCondition userCondition:userConditionList ) {
@@ -421,6 +481,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, userConditionList);
     }
 
+    /**
+     * 用户
+     * @param commonUserId
+     * @return
+     */
     public CommonResult loadOneUser(String commonUserId) {
         CommonUser commonUser = super.get(commonUserId);
         if(commonUser==null){

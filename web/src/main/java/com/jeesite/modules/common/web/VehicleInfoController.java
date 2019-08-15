@@ -16,6 +16,9 @@ import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.CommonUser;
 import com.jeesite.modules.common.util.FilePathUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,68 +52,70 @@ public class VehicleInfoController extends BaseController {
     @Autowired
     private VehicleInfoService vehicleInfoService;
 
-    /**
-     * 获取数据
-     */
+//    /**
+//     * 获取数据
+//     */
 //    @ModelAttribute
 //    public VehicleInfo get(String id, boolean isNewRecord) {
 //        return vehicleInfoService.get(id, isNewRecord);
 //    }
 
-    /**
-     * 查询列表
-     */
-    @RequestMapping(value = {"list", ""})
-    public String list(VehicleInfo vehicleInfo, Model model) {
-        model.addAttribute("vehicleInfo", vehicleInfo);
-        return "modules/common/vehicleInfoList";
-    }
-
-    /**
-     * 查询列表数据
-     */
-    @RequestMapping(value = "listData")
-    @ResponseBody
-    public Page<VehicleInfo> listData(VehicleInfo vehicleInfo, HttpServletRequest request, HttpServletResponse response) {
-        vehicleInfo.setPage(new Page<>(request, response));
-        Page<VehicleInfo> page = vehicleInfoService.findPage(vehicleInfo);
-        return page;
-    }
-
-    /**
-     * 查看编辑表单
-     */
-    @RequestMapping(value = "form")
-    public String form(VehicleInfo vehicleInfo, Model model) {
-        model.addAttribute("vehicleInfo", vehicleInfo);
-        return "modules/common/vehicleInfoForm";
-    }
-
-    /**
-     * 保存车辆配置全表
-     */
-    @PostMapping(value = "save")
-    @ResponseBody
-    public String save(@Validated VehicleInfo vehicleInfo) {
-        vehicleInfoService.save(vehicleInfo);
-        return renderResult(Global.TRUE, text("保存车辆配置全表成功！"));
-    }
-
-    /**
-     * 删除车辆配置全表
-     */
-    @RequestMapping(value = "delete")
-    @ResponseBody
-    public String delete(VehicleInfo vehicleInfo) {
-        vehicleInfoService.delete(vehicleInfo);
-        return renderResult(Global.TRUE, text("删除车辆配置全表成功！"));
-    }
+//    /**
+//     * 查询列表
+//     */
+//    @RequestMapping(value = {"list", ""})
+//    public String list(VehicleInfo vehicleInfo, Model model) {
+//        model.addAttribute("vehicleInfo", vehicleInfo);
+//        return "modules/common/vehicleInfoList";
+//    }
+//
+//    /**
+//     * 查询列表数据
+//     */
+//    @RequestMapping(value = "listData")
+//    @ResponseBody
+//    public Page<VehicleInfo> listData(VehicleInfo vehicleInfo, HttpServletRequest request, HttpServletResponse response) {
+//        vehicleInfo.setPage(new Page<>(request, response));
+//        Page<VehicleInfo> page = vehicleInfoService.findPage(vehicleInfo);
+//        return page;
+//    }
+//
+//    /**
+//     * 查看编辑表单
+//     */
+//    @RequestMapping(value = "form")
+//    public String form(VehicleInfo vehicleInfo, Model model) {
+//        model.addAttribute("vehicleInfo", vehicleInfo);
+//        return "modules/common/vehicleInfoForm";
+//    }
+//
+//    /**
+//     * 保存车辆配置全表
+//     */
+//    @PostMapping(value = "save")
+//    @ResponseBody
+//    public String save(@Validated VehicleInfo vehicleInfo) {
+//        vehicleInfoService.save(vehicleInfo);
+//        return renderResult(Global.TRUE, text("保存车辆配置全表成功！"));
+//    }
+//
+//    /**
+//     * 删除车辆配置全表
+//     */
+//    @RequestMapping(value = "delete")
+//    @ResponseBody
+//    public String delete(VehicleInfo vehicleInfo) {
+//        vehicleInfoService.delete(vehicleInfo);
+//        return renderResult(Global.TRUE, text("删除车辆配置全表成功！"));
+//    }
 
     /**
      * 根据车系id加载区分年款的车辆信息
      * @param chexiId
      * @return
      */
+    @ApiOperation(value = "根据车系id加载区分年款的车辆信息")
+    @ApiImplicitParam(name = "chexiId", value = "车系id", required = true, dataType="String")
     @Log(operationName = "根据车系id加载区分年款的车辆信息")
     @PostMapping(value = "findList")
     @ResponseBody
@@ -144,6 +149,8 @@ public class VehicleInfoController extends BaseController {
     /**
      * 根据车型id查部分常用属性
      */
+    @ApiOperation(value = "根据车型id查部分常用属性")
+    @ApiImplicitParam(name = "chexingId", value = "车型id", required = true, dataType="String")
     @Log(operationName = "根据车型id查部分常用属性")
     @RequestMapping(value = "getCarModel")
     @ResponseBody
@@ -155,6 +162,8 @@ public class VehicleInfoController extends BaseController {
     /**
      * 根据车型id查部分常用属性
      */
+    @ApiOperation(value = "根据车型id查部分常用属性")
+    @ApiImplicitParam(name = "vehicleInfo", value = "车的条件对象", required = true, dataType="VehicleInfo")
     @Log(operationName = "根据车型id查部分常用属性")
     @RequestMapping(value = "getByEntity")
     @ResponseBody
@@ -172,6 +181,8 @@ public class VehicleInfoController extends BaseController {
      * @param vehicleInfo
      * @return
      */
+    @ApiOperation(value = "加载车的分页数据")
+    @ApiImplicitParam(name = "vehicleInfo", value = "查询的条件对象", required = true, dataType="VehicleInfo")
     @Log(operationName = "加载车的分页数据")
     @RequestMapping(value = "listVehicleInfo")
     @ResponseBody
@@ -183,6 +194,7 @@ public class VehicleInfoController extends BaseController {
      * 下载车型配置表模板
      * @param response
      */
+    @ApiOperation(value = "下载车型配置表模板")
     @Log(operationName = "下载车型配置表模板", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "downTemplate" , produces = "application/octet-stream")
     @ResponseBody
@@ -202,6 +214,8 @@ public class VehicleInfoController extends BaseController {
      * @param file
      * @return
      */
+    @ApiOperation(value = "加载车的分页数据")
+    @ApiImplicitParam(name = "file", value = "车型的excel文件", required = true, dataType="MultipartFile")
     @Log(operationName = "导入车的信息", operationType = Log.OPERA_TYPE_ADD)
     @RequestMapping(value = "importVehicleInfos", method= RequestMethod.POST)
     @ResponseBody
@@ -222,6 +236,8 @@ public class VehicleInfoController extends BaseController {
      * @param json
      * @return
      */
+    @ApiOperation(value = "根据json删除车的信息")
+    @ApiImplicitParam(name = "json", value = "要删除的车的json数据", required = true, dataType="String")
     @Log(operationName = "根据json删除车的信息", operationType = Log.OPERA_TYPE_DEL)
     @RequestMapping(value = "deleteVehicle")
     @ResponseBody
@@ -237,6 +253,11 @@ public class VehicleInfoController extends BaseController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value = "上传车的图片")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "image", value = "要上传的图片文件", required = true, dataType="MultipartFile"),
+        @ApiImplicitParam(name = "vehicleInfoId", value = "车的id", required = true, dataType="String")
+    })
     @Log(operationName = "上传车的图片", operationType = Log.OPERA_TYPE_ADD)
     @RequestMapping(value = "importVehicleImage", method= RequestMethod.POST)
     @ResponseBody
@@ -245,11 +266,13 @@ public class VehicleInfoController extends BaseController {
     }
 
     /**
-     * 加载车的信息
+     * 加载车的所有图片信息
      * @param vehicleInfo
      * @return
      */
-    @Log(operationName = "加载车的信息")
+    @ApiOperation(value = "加载车的所有图片信息")
+    @ApiImplicitParam(name = "vehicleInfo", value = "车的条件对象", required = true, dataType="VehicleInfo")
+    @Log(operationName = "加载车的所有图片信息")
     @RequestMapping(value = "loadVehicleImages")
     @ResponseBody
     public CommonResult loadVehicleImages(VehicleInfo vehicleInfo){

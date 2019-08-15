@@ -98,6 +98,11 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		super.delete(vehicleInfo);
 	}
 
+	/**
+	 * 分局车型id返回车的列表
+	 * @param chexiId
+	 * @return
+	 */
 	public List<VehicleInfo> findVehicleName(String chexiId){
 		if(chexiId == null || chexiId.trim().length() <= 0){
 			return null;
@@ -105,6 +110,11 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		return vehicleInfoDao.findVehicleName(chexiId);
 	}
 
+	/**
+	 * 加载一个车对象
+	 * @param vehicleInfo
+	 * @return
+	 */
 	public VehicleInfo getByEntity(VehicleInfo vehicleInfo){ return dao.getByEntity(vehicleInfo); }
 
 	/**
@@ -115,7 +125,11 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 	}
 
 
-
+	/**
+	 * 根据对象信息加载分页车的数据
+	 * @param vehicleInfo
+	 * @return
+	 */
 	public CommonResult findPageByCondition(VehicleInfo vehicleInfo){
         if(!PageUtils.checkPageParams(vehicleInfo)){
             return new CommonResult(CodeConstant.PARA_MUST_NEED, "您未传入分页数据");
@@ -123,6 +137,11 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, super.findPage(vehicleInfo));
 	}
 
+	/**
+	 * 保存车的信息的列表 导入进来的
+	 * @param vehicleInfoList
+	 * @return
+	 */
 	@Transactional(readOnly = false)
 	public CommonResult saveVehicleList(List<VehicleInfo> vehicleInfoList){
         if(ListUtils.isEmpty(vehicleInfoList)){
@@ -160,7 +179,12 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, msg, jo);
     }
 
-    @Transactional(readOnly = false)
+	/**
+	 * 根据json删除一个或者多个车的数据
+	 * @param json
+	 * @return
+	 */
+	@Transactional(readOnly = false)
 	public CommonResult deleteVehicle(String json){
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
@@ -184,7 +208,13 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
 	}
 
-
+	/**
+	 * 保存一个车的图片
+	 * @param image
+	 * @param vehicleInfoId
+	 * @return
+	 * @throws IOException
+	 */
 	@Transactional(readOnly = false)
 	public CommonResult saveVehicleImage(MultipartFile image, String vehicleInfoId) throws IOException {
 		String loginUserId = PreEntity.getUserIdByToken();
@@ -206,6 +236,11 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 	}
 
 
+	/**
+	 * 加载一个车的所有图片
+	 * @param vehicleInfo
+	 * @return
+	 */
 	public CommonResult findImageList(VehicleInfo vehicleInfo){
 		if(vehicleInfo==null || StringUtils.isBlank(vehicleInfo.getId())){
 			return new CommonResult(CodeConstant.PARA_MUST_NEED, "您需要传入必要的参数");

@@ -113,6 +113,12 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	}
 
+	/**
+	 * 在考核之下 保存考生数据
+	 * @param commonAssessment
+	 * @param userConfig
+	 * @return
+	 */
 	private CommonResult saveCommonSchemeStus(CommonAssessment commonAssessment, String userConfig) {
 		String assessmentId = commonAssessment.getId();
 		CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(commonAssessment.getAssessmentSchemeId());
@@ -170,6 +176,11 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		super.delete(commonAssessment);
 	}
 
+	/**
+	 * 根据条件加载考核分页数据
+	 * @param commonAssessment
+	 * @return
+	 */
 	public CommonResult findPageCommonAssessment(CommonAssessment commonAssessment) {
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
@@ -181,6 +192,11 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	}
 
+	/**
+	 * 根据json 删除考核数据
+	 * @param json
+	 * @return
+	 */
 	@Transactional(readOnly=false)
 	public CommonResult deleteCommonAssessment(String json) {
 		String loginUserId = PreEntity.getUserIdByToken();
@@ -238,6 +254,10 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		}
 	}
 
+	/**
+	 * 物理删除一个考核数据
+	 * @param ca
+	 */
 	private void deleteOneAssessment(CommonAssessment ca){
 		CommonAssessmentStu con = new CommonAssessmentStu();
 		con.setAssessmentId(ca.getId());
@@ -250,7 +270,13 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		}
 	}
 
-
+	/**
+	 * 更新考核状态 <br/>变为2是开始<br/>变为3是结束<br/>变为4是上传评分表 <br/>变为5是统计总分
+	 * @param commonAssessment
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
 	@Transactional(readOnly = false)
 	public CommonResult updateCommonAssessmentStatus(CommonAssessment commonAssessment, MultipartFile file) throws Exception {
 		CommonAssessment ca = super.get(commonAssessment.getId());
@@ -343,6 +369,11 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 计算总分
+	 * @param commonAssessment
+	 * @return
+	 */
 	private CommonResult calcTotalScore(CommonAssessment commonAssessment) {
 		CommonAssessment ca = super.get(commonAssessment.getId());
 		if(!ca.getDataStatus().equals("4")){
@@ -351,6 +382,9 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		if(ca.getDataStatus().equals("5")){
 			return new CommonResult(CodeConstant.NO_RIGHT, "分数已统计完毕!");
 		}
+		CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(ca.getAssessmentSchemeId());
+		Double passScore_scheme = NumberUtils.createDouble(commonAssessmentScheme.getPassScore());
+		String needSinglePass = commonAssessmentScheme.getNeedSinglePass();
 		CommonAssessmentStu con = new CommonAssessmentStu();
 		con.setAssessmentId(ca.getId());
 		List<CommonAssessmentStu> commonAssessmentStuList = commonAssessmentStuService.findList(con);
@@ -387,10 +421,18 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				totalScore += NumberUtils.mul(oneSubjectScore, NumberUtils.createDouble(weight)/100);
 				scoreDetails_jsonArray.set(i, oneSubject);
 			}
-			if(subjectPassNum==scoreDetails_jsonArray.size()){
-				cas.setDataStatus("2");
+			if("0".equals(needSinglePass)){ // 不需要单独每项通过，直接看总分即可
+				if(totalScore>passScore_scheme){
+					cas.setDataStatus("2");
+				}else{
+					cas.setDataStatus("3");
+				}
 			}else{
-				cas.setDataStatus("3");
+				if(totalScore>passScore_scheme&&subjectPassNum==scoreDetails_jsonArray.size()){
+					cas.setDataStatus("2");
+				}else{
+					cas.setDataStatus("3");
+				}
 			}
 			cas.setTotalScore(totalScore.toString());
 			cas.setScoreDetails(scoreDetails_jsonArray.toJSONString());
@@ -516,6 +558,12 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, (commonAssessmentStuList.size()-resultMsgList.size())+"条分数全部解析并上传成功!", resultMsgList);
 	}
 
+	/**
+	 * 从考核列表里选一个考核返回
+	 * @param commonAssessmentList
+	 * @param commonAssessmentId
+	 * @return
+	 */
 	private CommonAssessmentScheme getSchemeByCommonAssessmentList(List<CommonAssessment> commonAssessmentList, String commonAssessmentId){
 		for (int i = 0; i < commonAssessmentList.size(); i++) {
 			if(commonAssessmentList.get(i).getId().equals(commonAssessmentId)){
@@ -526,7 +574,11 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 	}
 
 
-
+	/**
+	 * 根据用户id 返回 考核名称 (给教师端用)
+	 * @param commonUserId
+	 * @return
+	 */
 	public CommonResult loadAssessmentNameList(String commonUserId){
 		CommonUser loginUser = commonUserService.get(commonUserId);
 		if(!"2".equals(loginUser.getRoleId())){

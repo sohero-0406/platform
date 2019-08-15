@@ -10,6 +10,8 @@ import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonAssessmentScheme;
 import com.jeesite.modules.common.entity.CommonResult;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,68 +42,70 @@ public class CommonBasicSchemeController extends BaseController {
 	@Autowired
 	private CommonBasicSchemeService commonBasicSchemeService;
 	
-	/**
-	 * 获取数据
-	 */
-	@ModelAttribute
-	public CommonBasicScheme get(String id, boolean isNewRecord) {
-		return commonBasicSchemeService.get(id, isNewRecord);
-	}
-	
-	/**
-	 * 查询列表
-	 */
-	@RequestMapping(value = {"list", ""})
-	public String list(CommonBasicScheme commonBasicScheme, Model model) {
-		model.addAttribute("commonBasicScheme", commonBasicScheme);
-		return "modules/common/commonBasicSchemeList";
-	}
-	
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "listData")
-	@ResponseBody
-	public Page<CommonBasicScheme> listData(CommonBasicScheme commonBasicScheme, HttpServletRequest request, HttpServletResponse response) {
-		commonBasicScheme.setPage(new Page<>(request, response));
-		Page<CommonBasicScheme> page = commonBasicSchemeService.findPage(commonBasicScheme);
-		return page;
-	}
-
-	/**
-	 * 查看编辑表单
-	 */
-	@RequestMapping(value = "form")
-	public String form(CommonBasicScheme commonBasicScheme, Model model) {
-		model.addAttribute("commonBasicScheme", commonBasicScheme);
-		return "modules/common/commonBasicSchemeForm";
-	}
-
-	/**
-	 * 保存方案基本表，目前不做管理使用，只作为基础数据调用，后期能会做出管理界面
-	 */
-	@PostMapping(value = "save")
-	@ResponseBody
-	public String save(@Validated CommonBasicScheme commonBasicScheme) {
-		commonBasicSchemeService.save(commonBasicScheme);
-		return renderResult(Global.TRUE, text("保存方案基本表，目前不做管理使用，只作为基础数据调用，后期能会做出管理界面成功！"));
-	}
-	
-	/**
-	 * 删除方案基本表，目前不做管理使用，只作为基础数据调用，后期能会做出管理界面
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public String delete(CommonBasicScheme commonBasicScheme) {
-		commonBasicSchemeService.delete(commonBasicScheme);
-		return renderResult(Global.TRUE, text("删除方案基本表，目前不做管理使用，只作为基础数据调用，后期能会做出管理界面成功！"));
-	}
+//	/**
+//	 * 获取数据
+//	 */
+//	@ModelAttribute
+//	public CommonBasicScheme get(String id, boolean isNewRecord) {
+//		return commonBasicSchemeService.get(id, isNewRecord);
+//	}
+//
+//	/**
+//	 * 查询列表
+//	 */
+//	@RequestMapping(value = {"list", ""})
+//	public String list(CommonBasicScheme commonBasicScheme, Model model) {
+//		model.addAttribute("commonBasicScheme", commonBasicScheme);
+//		return "modules/common/commonBasicSchemeList";
+//	}
+//
+//	/**
+//	 * 查询列表数据
+//	 */
+//	@RequestMapping(value = "listData")
+//	@ResponseBody
+//	public Page<CommonBasicScheme> listData(CommonBasicScheme commonBasicScheme, HttpServletRequest request, HttpServletResponse response) {
+//		commonBasicScheme.setPage(new Page<>(request, response));
+//		Page<CommonBasicScheme> page = commonBasicSchemeService.findPage(commonBasicScheme);
+//		return page;
+//	}
+//
+//	/**
+//	 * 查看编辑表单
+//	 */
+//	@RequestMapping(value = "form")
+//	public String form(CommonBasicScheme commonBasicScheme, Model model) {
+//		model.addAttribute("commonBasicScheme", commonBasicScheme);
+//		return "modules/common/commonBasicSchemeForm";
+//	}
+//
+//	/**
+//	 * 保存方案基本表，目前不做管理使用，只作为基础数据调用，后期能会做出管理界面
+//	 */
+//	@PostMapping(value = "save")
+//	@ResponseBody
+//	public String save(@Validated CommonBasicScheme commonBasicScheme) {
+//		commonBasicSchemeService.save(commonBasicScheme);
+//		return renderResult(Global.TRUE, text("保存方案基本表，目前不做管理使用，只作为基础数据调用，后期能会做出管理界面成功！"));
+//	}
+//
+//	/**
+//	 * 删除方案基本表，目前不做管理使用，只作为基础数据调用，后期能会做出管理界面
+//	 */
+//	@RequestMapping(value = "delete")
+//	@ResponseBody
+//	public String delete(CommonBasicScheme commonBasicScheme) {
+//		commonBasicSchemeService.delete(commonBasicScheme);
+//		return renderResult(Global.TRUE, text("删除方案基本表，目前不做管理使用，只作为基础数据调用，后期能会做出管理界面成功！"));
+//	}
 
 	/**
 	 * 加载分页基本方案
 	 * @param commonBasicScheme
 	 * @return
 	 */
+	@ApiOperation(value = "加载分页基本方案")
+	@ApiImplicitParam(name = "commonBasicScheme", value = "查询基本方案的条件对象", required = true, dataType="CommonBasicScheme")
 	@Log(operationName = "加载分页基本方案")
 	@RequestMapping(value = "listCommonBasicScheme")
 	@ResponseBody
@@ -115,6 +119,8 @@ public class CommonBasicSchemeController extends BaseController {
 	 * @param commonBasicScheme
 	 * @return
 	 */
+	@ApiOperation(value = "加载列表基本方案")
+	@ApiImplicitParam(name = "commonBasicScheme", value = "查询基本方案的条件对象", required = true, dataType="CommonBasicScheme")
 	@Log(operationName = "加载列表基本方案")
 	@RequestMapping(value = "listCommonBasicSchemeOnly")
 	@ResponseBody
@@ -129,6 +135,8 @@ public class CommonBasicSchemeController extends BaseController {
 	 * @param commonBasicScheme
 	 * @return
 	 */
+	@ApiOperation(value = "保存、更新基本方案")
+	@ApiImplicitParam(name = "commonBasicScheme", value = "要保存或者更新的对象", required = true, dataType="CommonBasicScheme")
 	@Log(operationName = "保存、更新基本方案", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
 	@RequestMapping(value = "saveCommonBasicScheme")
 	@ResponseBody
@@ -143,6 +151,8 @@ public class CommonBasicSchemeController extends BaseController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "根据id加载基本方案")
+	@ApiImplicitParam(name = "id", value = "基本方案的id", required = true, dataType="String")
 	@Log(operationName = "根据id加载基本方案")
 	@RequestMapping(value = "loadCommonBasicScheme")
 	@ResponseBody
@@ -155,6 +165,8 @@ public class CommonBasicSchemeController extends BaseController {
 	 * @param commonBasicScheme
 	 * @return
 	 */
+	@ApiOperation(value = "删除基本方案")
+	@ApiImplicitParam(name = "commonBasicScheme", value = "要删除的方案对象", required = true, dataType="CommonBasicScheme")
 	@Log(operationName = "删除基本方案", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonBasicScheme")
 	@ResponseBody
@@ -168,6 +180,8 @@ public class CommonBasicSchemeController extends BaseController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "根据id删除基本方案")
+	@ApiImplicitParam(name = "id", value = "要被删除的基本发囊的id", required = true, dataType="String")
 	@Log(operationName = "根据id删除基本方案", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonBasicSchemeById")
 	@ResponseBody
@@ -181,6 +195,8 @@ public class CommonBasicSchemeController extends BaseController {
 	 * @param json
 	 * @return
 	 */
+	@ApiOperation(value = "根据json信息删除")
+	@ApiImplicitParam(name = "json", value = "要删除基本方案的json数据", required = true, dataType="String")
 	@Log(operationName = "根据json信息删除", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonBasicSchemeByJson")
 	@ResponseBody
@@ -194,6 +210,8 @@ public class CommonBasicSchemeController extends BaseController {
 	 * @param commonBasicScheme
 	 * @return
 	 */
+	@ApiOperation(value = "更新基本方案状态")
+	@ApiImplicitParam(name = "commonBasicScheme", value = "要更新状态的基本方案对象", required = true, dataType="CommonBasicScheme")
 	@Log(operationName = "更新基本方案状态", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "updateStatus")
 	@ResponseBody

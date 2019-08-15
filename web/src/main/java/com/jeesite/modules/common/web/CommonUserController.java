@@ -11,33 +11,27 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.utils.excel.ExcelExport;
 import com.jeesite.common.utils.excel.ExcelImport;
 import com.jeesite.common.utils.excel.annotation.ExcelField;
-import com.jeesite.common.utils.test.Test;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.CommonUser;
-import com.jeesite.modules.common.entity.TestUser;
 import com.jeesite.modules.common.entity.UserCondition;
 import com.jeesite.modules.common.service.CommonUserService;
-import com.jeesite.modules.common.vo.DeleteVO;
 import com.jeesite.modules.common.vo.LoginVO;
 import com.jeesite.modules.common.vo.StuSearchVO;
-import com.jeesite.modules.job.p.C;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -65,6 +59,7 @@ public class CommonUserController extends BaseController {
      * 检测方法
      * @return
      */
+    @ApiOperation(value = "检测方法")
     @Log(operationName = "检测方法", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "hello")
     @ResponseBody
@@ -75,11 +70,11 @@ public class CommonUserController extends BaseController {
     /**
      * 查询列表
      */
-    @RequestMapping(value = {"list", ""})
-    public String list(CommonUser commonUser, Model model) {
-        model.addAttribute("commonUser", commonUser);
-        return "modules/common/commonUserList";
-    }
+//    @RequestMapping(value = {"list", ""})
+//    public String list(CommonUser commonUser, Model model) {
+//        model.addAttribute("commonUser", commonUser);
+//        return "modules/common/commonUserList";
+//    }
 
     /**
      * 查询列表数据
@@ -92,20 +87,22 @@ public class CommonUserController extends BaseController {
         return page;
     }
 
-    /**
-     * 查看编辑表单
-     */
-    @RequestMapping(value = "form")
-    public String form(CommonUser commonUser, Model model) {
-
-        model.addAttribute("commonUser", commonUser);
-        return "modules/common/commonUserForm";
-    }
+//    /**
+//     * 查看编辑表单
+//     */
+//    @RequestMapping(value = "form")
+//    public String form(CommonUser commonUser, Model model) {
+//
+//        model.addAttribute("commonUser", commonUser);
+//        return "modules/common/commonUserForm";
+//    }
 
     /**
      * 保存common_user 此方法不用
      */
-    @Log(operationName = "保存common_user", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
+    @ApiOperation(value = "保存用户信息")
+    @ApiImplicitParam(name = "commonUser", value = "用户的对象", required = true, dataType = "CommonUser")
+    @Log(operationName = "保存common_user_此方法不用", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
     @RequestMapping(value = "save")
     @ResponseBody
     public CommonResult save(CommonUser commonUser) {
@@ -113,15 +110,15 @@ public class CommonUserController extends BaseController {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
     }
 
-    /**
-     * 删除common_user
-     */
-    @RequestMapping(value = "delete")
-    @ResponseBody
-    public String delete(CommonUser commonUser) {
-        commonUserService.delete(commonUser);
-        return renderResult(Global.TRUE, text("删除common_user成功！"));
-    }
+//    /**
+//     * 删除common_user
+//     */
+//    @RequestMapping(value = "delete")
+//    @ResponseBody
+//    public String delete(CommonUser commonUser) {
+//        commonUserService.delete(commonUser);
+//        return renderResult(Global.TRUE, text("删除common_user成功！"));
+//    }
 
     /**
      * 根据id加载用户
@@ -182,6 +179,8 @@ public class CommonUserController extends BaseController {
      * @param commonUser
      * @return
      */
+    @ApiOperation(value = "加载分页用户信息")
+    @ApiImplicitParam(name = "commonUser", value = "查询的条件对象", required = true, dataType = "CommonUser")
     @Log(operationName = "加载分页用户信息")
     @RequestMapping(value = "listCommonUser")
     @ResponseBody
@@ -195,6 +194,8 @@ public class CommonUserController extends BaseController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "根据id重置密码")
+    @ApiImplicitParam(name = "id", value = "用户的id", required = true, dataType = "String")
     @Log(operationName = "根据id重置密码", operationType = Log.OPERA_TYPE_UPD)
     @RequestMapping(value = "resetPass")
     @ResponseBody
@@ -208,6 +209,11 @@ public class CommonUserController extends BaseController {
      * @param isExamRight
      * @return
      */
+    @ApiOperation(value = "更改考试权限")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户的id", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "isExamRight", value = "考核权限的标志位0是没有1是有", required = true, dataType = "String")
+    })
     @Log(operationName = "更改考试权限", operationType = Log.OPERA_TYPE_UPD)
     @RequestMapping(value = "changeRight")
     @ResponseBody
@@ -311,6 +317,8 @@ public class CommonUserController extends BaseController {
      * @param ids
      * @return
      */
+    @ApiOperation(value = "根据多个id加载学生信息", notes = "ids 的样式是 1,2,3,4")
+    @ApiImplicitParam(name = "ids", value = "用的id的以英文逗号组合字符串", required = true, dataType = "")
     @Log(operationName = "根据多个id加载学生信息")
     @RequestMapping(value = "loadStuListByIds")
     @ResponseBody
@@ -324,6 +332,8 @@ public class CommonUserController extends BaseController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "根据上传的excel中的身份证数据加载学生信息")
+    @ApiImplicitParam(name = "file", value = "上传的excel文件", required = true, dataType="MultipartFile")
     @Log(operationName = "根据上传的excel中的身份证数据加载学生信息")
     @RequestMapping(value = "loadStuListByIDstr")
     @ResponseBody
@@ -342,6 +352,8 @@ public class CommonUserController extends BaseController {
      * @param examUserIds
      * @return
      */
+    @ApiOperation(value = "根据服务器考生信息加载学生信息")
+    @ApiImplicitParam(name = "examUserIds", value = "以逗号分隔的多个服务器考生id", required = true, dataType="String")
     @Log(operationName = "根据服务器考生信息加载学生信息")
     @RequestMapping(value = "loadStuListByExamUserIds")
     @ResponseBody
@@ -353,6 +365,7 @@ public class CommonUserController extends BaseController {
      * token过期的跳转接口
      * @return
      */
+    @ApiOperation(value = "token过期的跳转接口")
     @Log(operationName = "token过期的跳转接口", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "tokenExpired")
     @ResponseBody
@@ -364,6 +377,7 @@ public class CommonUserController extends BaseController {
      * 未登录的跳转接口
      * @return
      */
+    @ApiOperation(value = "未登录的跳转接口")
     @Log(operationName = "未登录的跳转接口", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "unLogin")
     @ResponseBody
@@ -375,6 +389,7 @@ public class CommonUserController extends BaseController {
      * 导出用户模板
      * @param response
      */
+    @ApiOperation(value = "导出用户模板")
     @Log(operationName = "导出用户模板", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "commonUserDemoExport")
     public void commonUserDemoExport(HttpServletResponse response) {
@@ -394,6 +409,11 @@ public class CommonUserController extends BaseController {
      * @param roleId
      * @return
      */
+    @ApiOperation(value = "导入用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "file", value = "导入用户的excel文件", required = true, dataType="MultipartFile"),
+            @ApiImplicitParam(name = "roleId", value = "角色标识", required = true, dataType="String")
+    })
     @Log(operationName = "导入用户", operationType = Log.OPERA_TYPE_ADD)
     @RequestMapping(value = "importUsers", method= RequestMethod.POST)
     @ResponseBody
@@ -428,15 +448,13 @@ public class CommonUserController extends BaseController {
 //    }
 
 
-
+    @ApiOperation(value = "根据id返回用户对象")
+    @ApiImplicitParam(name = "commonUserId", value = "用户id", required = true, dataType="String")
     @Log(operationName = "根据id返回用户对象", operationType = Log.OPERA_TYPE_SEL)
     @RequestMapping(value = "loadOneUser")
     @ResponseBody
     public CommonResult loadOneUser(String commonUserId){
-
         return commonUserService.loadOneUser(commonUserId);
     }
-
-
 
 }

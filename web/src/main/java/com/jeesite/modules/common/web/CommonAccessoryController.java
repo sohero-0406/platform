@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,62 +38,62 @@ public class CommonAccessoryController extends BaseController {
 	@Autowired
 	private CommonAccessoryService commonAccessoryService;
 	
-	/**
-	 * 获取数据
-	 */
+//	/**
+//	 * 获取数据
+//	 */
 //	@ModelAttribute
 //	public CommonAccessory get(String id, boolean isNewRecord) {
 //		return commonAccessoryService.get(id, isNewRecord);
 //	}
 	
-	/**
-	 * 查询列表
-	 */
-	@RequestMapping(value = {"list", ""})
-	public String list(CommonAccessory commonAccessory, Model model) {
-		model.addAttribute("commonAccessory", commonAccessory);
-		return "modules/common/commonAccessoryList";
-	}
-	
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "listData")
-	@ResponseBody
-	public Page<CommonAccessory> listData(CommonAccessory commonAccessory, HttpServletRequest request, HttpServletResponse response) {
-		commonAccessory.setPage(new Page<>(request, response));
-		Page<CommonAccessory> page = commonAccessoryService.findPage(commonAccessory);
-		return page;
-	}
-
-	/**
-	 * 查看编辑表单
-	 */
-	@RequestMapping(value = "form")
-	public String form(CommonAccessory commonAccessory, Model model) {
-		model.addAttribute("commonAccessory", commonAccessory);
-		return "modules/common/commonAccessoryForm";
-	}
-
-	/**
-	 * 保存汽车配件表
-	 */
-	@PostMapping(value = "save")
-	@ResponseBody
-	public String save(@Validated CommonAccessory commonAccessory) {
-		commonAccessoryService.save(commonAccessory);
-		return renderResult(Global.TRUE, text("保存汽车配件表成功！"));
-	}
-	
-	/**
-	 * 删除汽车配件表
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public String delete(CommonAccessory commonAccessory) {
-		commonAccessoryService.delete(commonAccessory);
-		return renderResult(Global.TRUE, text("删除汽车配件表成功！"));
-	}
+//	/**
+//	 * 查询列表
+//	 */
+//	@RequestMapping(value = {"list", ""})
+//	public String list(CommonAccessory commonAccessory, Model model) {
+//		model.addAttribute("commonAccessory", commonAccessory);
+//		return "modules/common/commonAccessoryList";
+//	}
+//
+//	/**
+//	 * 查询列表数据
+//	 */
+//	@RequestMapping(value = "listData")
+//	@ResponseBody
+//	public Page<CommonAccessory> listData(CommonAccessory commonAccessory, HttpServletRequest request, HttpServletResponse response) {
+//		commonAccessory.setPage(new Page<>(request, response));
+//		Page<CommonAccessory> page = commonAccessoryService.findPage(commonAccessory);
+//		return page;
+//	}
+//
+//	/**
+//	 * 查看编辑表单
+//	 */
+//	@RequestMapping(value = "form")
+//	public String form(CommonAccessory commonAccessory, Model model) {
+//		model.addAttribute("commonAccessory", commonAccessory);
+//		return "modules/common/commonAccessoryForm";
+//	}
+//
+//	/**
+//	 * 保存汽车配件表
+//	 */
+//	@PostMapping(value = "save")
+//	@ResponseBody
+//	public String save(@Validated CommonAccessory commonAccessory) {
+//		commonAccessoryService.save(commonAccessory);
+//		return renderResult(Global.TRUE, text("保存汽车配件表成功！"));
+//	}
+//
+//	/**
+//	 * 删除汽车配件表
+//	 */
+//	@RequestMapping(value = "delete")
+//	@ResponseBody
+//	public String delete(CommonAccessory commonAccessory) {
+//		commonAccessoryService.delete(commonAccessory);
+//		return renderResult(Global.TRUE, text("删除汽车配件表成功！"));
+//	}
 
 
 	/**
@@ -99,6 +101,8 @@ public class CommonAccessoryController extends BaseController {
 	 * @param commonAccessory
 	 * @return
 	 */
+	@ApiOperation(value = "加载配件分页数据")
+	@ApiImplicitParam(name = "commonAccessory", value = "查询的配件条件对象", required = true, dataType="CommonAccessory")
 	@Log(operationName = "加载配件分页数据")
 	@RequestMapping(value = "listCommonAccessory")
 	@ResponseBody
@@ -111,6 +115,8 @@ public class CommonAccessoryController extends BaseController {
 	 * @param json
 	 * @return
 	 */
+	@ApiOperation(value = "删除配件信息")
+	@ApiImplicitParam(name = "json", value = "删除的json信息", required = true, dataType="String")
 	@Log(operationName = "删除配件信息", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAccessory")
 	@ResponseBody

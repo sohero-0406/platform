@@ -15,6 +15,9 @@ import com.jeesite.modules.common.entity.CommonAccessory;
 import com.jeesite.modules.common.entity.CommonAssessment;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.util.FilePathUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,68 +51,70 @@ public class CommonAccessoryCategoryController extends BaseController {
 	@Autowired
 	private CommonAccessoryCategoryService commonAccessoryCategoryService;
 	
-	/**
-	 * 获取数据
-	 */
+//	/**
+//	 * 获取数据
+//	 */
 //	@ModelAttribute
 //	public CommonAccessoryCategory get(String id, boolean isNewRecord) {
 //		return commonAccessoryCategoryService.get(id, isNewRecord);
 //	}
 	
-	/**
-	 * 查询列表
-	 */
-	@RequestMapping(value = {"list", ""})
-	public String list(CommonAccessoryCategory commonAccessoryCategory, Model model) {
-		model.addAttribute("commonAccessoryCategory", commonAccessoryCategory);
-		return "modules/common/commonAccessoryCategoryList";
-	}
-	
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "listData")
-	@ResponseBody
-	public Page<CommonAccessoryCategory> listData(CommonAccessoryCategory commonAccessoryCategory, HttpServletRequest request, HttpServletResponse response) {
-		commonAccessoryCategory.setPage(new Page<>(request, response));
-		Page<CommonAccessoryCategory> page = commonAccessoryCategoryService.findPage(commonAccessoryCategory);
-		return page;
-	}
-
-	/**
-	 * 查看编辑表单
-	 */
-	@RequestMapping(value = "form")
-	public String form(CommonAccessoryCategory commonAccessoryCategory, Model model) {
-		model.addAttribute("commonAccessoryCategory", commonAccessoryCategory);
-		return "modules/common/commonAccessoryCategoryForm";
-	}
-
-	/**
-	 * 保存配件分类表
-	 */
-	@PostMapping(value = "save")
-	@ResponseBody
-	public String save(@Validated CommonAccessoryCategory commonAccessoryCategory) {
-		commonAccessoryCategoryService.save(commonAccessoryCategory);
-		return renderResult(Global.TRUE, text("保存配件分类表成功！"));
-	}
-	
-	/**
-	 * 删除配件分类表
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public String delete(CommonAccessoryCategory commonAccessoryCategory) {
-		commonAccessoryCategoryService.delete(commonAccessoryCategory);
-		return renderResult(Global.TRUE, text("删除配件分类表成功！"));
-	}
+//	/**
+//	 * 查询列表
+//	 */
+//	@RequestMapping(value = {"list", ""})
+//	public String list(CommonAccessoryCategory commonAccessoryCategory, Model model) {
+//		model.addAttribute("commonAccessoryCategory", commonAccessoryCategory);
+//		return "modules/common/commonAccessoryCategoryList";
+//	}
+//
+//	/**
+//	 * 查询列表数据
+//	 */
+//	@RequestMapping(value = "listData")
+//	@ResponseBody
+//	public Page<CommonAccessoryCategory> listData(CommonAccessoryCategory commonAccessoryCategory, HttpServletRequest request, HttpServletResponse response) {
+//		commonAccessoryCategory.setPage(new Page<>(request, response));
+//		Page<CommonAccessoryCategory> page = commonAccessoryCategoryService.findPage(commonAccessoryCategory);
+//		return page;
+//	}
+//
+//	/**
+//	 * 查看编辑表单
+//	 */
+//	@RequestMapping(value = "form")
+//	public String form(CommonAccessoryCategory commonAccessoryCategory, Model model) {
+//		model.addAttribute("commonAccessoryCategory", commonAccessoryCategory);
+//		return "modules/common/commonAccessoryCategoryForm";
+//	}
+//
+//	/**
+//	 * 保存配件分类表
+//	 */
+//	@PostMapping(value = "save")
+//	@ResponseBody
+//	public String save(@Validated CommonAccessoryCategory commonAccessoryCategory) {
+//		commonAccessoryCategoryService.save(commonAccessoryCategory);
+//		return renderResult(Global.TRUE, text("保存配件分类表成功！"));
+//	}
+//
+//	/**
+//	 * 删除配件分类表
+//	 */
+//	@RequestMapping(value = "delete")
+//	@ResponseBody
+//	public String delete(CommonAccessoryCategory commonAccessoryCategory) {
+//		commonAccessoryCategoryService.delete(commonAccessoryCategory);
+//		return renderResult(Global.TRUE, text("删除配件分类表成功！"));
+//	}
 
 	/**
 	 * 加载分页配件分类数据
 	 * @param commonAccessoryCategory
 	 * @return
 	 */
+	@ApiOperation(value = "加载分页配件分类数据")
+	@ApiImplicitParam(name = "commonAccessoryCategory", value = "查询的数据对象", required = true, dataType="CommonAccessoryCategory")
 	@Log(operationName = "加载分页配件分类数据")
 	@RequestMapping(value = "listCommonAccessoryCategory")
 	@ResponseBody
@@ -124,6 +129,11 @@ public class CommonAccessoryCategoryController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
+	@ApiOperation(value = "保存配件分类并上传对应的配件数据")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "file", value = "查询的数据对象", required = true, dataType="MultipartFile"),
+			@ApiImplicitParam(name = "commonAccessoryCategory", value = "保存的配件分类对象", required = true, dataType="CommonAccessoryCategory")
+	})
 	@Log(operationName = "保存配件分类并上传对应的配件数据", operationType = Log.OPERA_TYPE_ADD)
 	@RequestMapping(value = "uploadCommonAccessoryAndCategory")
 	@ResponseBody
@@ -138,6 +148,8 @@ public class CommonAccessoryCategoryController extends BaseController {
 	 * @param commonAccessoryCategory
 	 * @return
 	 */
+	@ApiOperation(value = "删除配件分类信息")
+	@ApiImplicitParam(name = "commonAccessoryCategory", value = "删除的配件分类对象", required = true, dataType="CommonAccessoryCategory")
 	@Log(operationName = "删除配件分类信息", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAccessoryAndCategory")
 	@ResponseBody
@@ -151,6 +163,8 @@ public class CommonAccessoryCategoryController extends BaseController {
 	 * @param commonAccessoryCategory
 	 * @return
 	 */
+	@ApiOperation(value = "更新配件分类信息")
+	@ApiImplicitParam(name = "commonAccessoryCategory", value = "要更新的配件分类对象", required = true, dataType="CommonAccessoryCategory")
 	@Log(operationName = "更新配件分类信息", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
 	@RequestMapping(value = "saveCommonAccessoryAndCategory")
 	@ResponseBody
@@ -163,6 +177,7 @@ public class CommonAccessoryCategoryController extends BaseController {
 	 * 下载配件信息表
 	 * @param response
 	 */
+	@ApiOperation(value = "下载配件信息表")
 	@Log(operationName = "下载配件信息表", operationType = Log.OPERA_TYPE_OTHER)
 	@RequestMapping(value = "downTemplate", produces = "application/octet-stream")
 	//@RequestMapping(value = "downTemplate")

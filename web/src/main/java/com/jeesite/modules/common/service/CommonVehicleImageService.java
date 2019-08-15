@@ -86,6 +86,13 @@ public class CommonVehicleImageService extends CrudService<CommonVehicleImageDao
 		super.delete(commonVehicleImage);
 	}
 
+	/**
+	 * 保存一张车型的图片，并更新数据库
+	 * @param image
+	 * @param commonVehicleImage
+	 * @return
+	 * @throws IOException
+	 */
 	@Transactional(readOnly = false)
 	public CommonResult updateVehicleImage(MultipartFile image, CommonVehicleImage commonVehicleImage) throws IOException {
 		if(commonVehicleImage==null||StringUtils.isAllBlank(commonVehicleImage.getId(), commonVehicleImage.getVehicleId())){
@@ -107,6 +114,11 @@ public class CommonVehicleImageService extends CrudService<CommonVehicleImageDao
 		return new CommonResult(x.getName());
 	}
 
+	/**
+	 * 删除已有的一张车型图片
+	 * @param commonVehicleImage
+	 * @return
+	 */
 	@Transactional(readOnly = false)
 	public CommonResult deleteVehicleImage(CommonVehicleImage commonVehicleImage){
 		if(commonVehicleImage==null||StringUtils.isAllBlank(commonVehicleImage.getId())){

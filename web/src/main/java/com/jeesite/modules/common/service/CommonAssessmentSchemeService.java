@@ -68,6 +68,11 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 		super.save(commonAssessmentScheme);
 	}
 
+	/**
+	 * 保存方案信息
+	 * @param commonAssessmentScheme
+	 * @return
+	 */
 	@Transactional(readOnly=false)
 	public CommonResult saveCommonAssessmentScheme(CommonAssessmentScheme commonAssessmentScheme) {
 		String loginUserId = PreEntity.getUserIdByToken();
@@ -92,6 +97,11 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 	}
 
 
+	/**
+	 * 更新方案状态 更新的是dataStatus字段
+	 * @param commonAssessmentScheme
+	 * @return
+	 */
 	@Transactional(readOnly=false)
 	public CommonResult updateCommonAssessmentSchemeStatus(CommonAssessmentScheme commonAssessmentScheme) {
 		String loginUserId = PreEntity.getUserIdByToken();
@@ -121,6 +131,11 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 		super.delete(commonAssessmentScheme);
 	}
 
+	/**
+	 * 根据json配置文件删除方案数据
+	 * @param json
+	 * @return
+	 */
 	@Transactional(readOnly=false)
 	public CommonResult deleteCommonAssessmentScheme(String json) {
 		String loginUserId = PreEntity.getUserIdByToken();

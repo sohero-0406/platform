@@ -85,7 +85,11 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 	}
 
 
-
+	/**
+	 * 根据对象条件加载配件分页信息
+	 * @param commonAccessory
+	 * @return
+	 */
 	public CommonResult findPageByCondition(CommonAccessory commonAccessory){
 		if(!PageUtils.checkPageParams(commonAccessory)){
 			return new CommonResult(CodeConstant.PARA_MUST_NEED, "您未传入分页数据");
@@ -93,7 +97,11 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, super.findPage(commonAccessory));
 	}
 
-
+	/**
+	 * 根据删除的json文件删除数据 （逻辑删除）
+	 * @param json
+	 * @return
+	 */
 	public CommonResult deleteCommonCommonAccessory(String json){
 		String commonUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(commonUserId);

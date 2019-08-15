@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,81 +42,70 @@ public class CommonAssessmentController extends BaseController {
 	@Autowired
 	private CommonAssessmentService commonAssessmentService;
 	
-	/**
-	 * 获取数据
-	 */
-	@ModelAttribute
-	public CommonAssessment get(String id, boolean isNewRecord) {
-		return commonAssessmentService.get(id, isNewRecord);
-	}
-	
-	/**
-	 * 查询列表
-	 */
-	@RequestMapping(value = {"list", ""})
-	public String list(CommonAssessment commonAssessment, Model model) {
-		model.addAttribute("commonAssessment", commonAssessment);
-		return "modules/common/commonAssessmentList";
-	}
-	
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "listData")
-	@ResponseBody
-	public Page<CommonAssessment> listData(CommonAssessment commonAssessment, HttpServletRequest request, HttpServletResponse response) {
-		commonAssessment.setPage(new Page<>(request, response));
-		Page<CommonAssessment> page = commonAssessmentService.findPage(commonAssessment);
-		return page;
-	}
-
-	/**
-	 * 查看编辑表单
-	 */
-	@RequestMapping(value = "form")
-	public String form(CommonAssessment commonAssessment, Model model) {
-		model.addAttribute("commonAssessment", commonAssessment);
-		return "modules/common/commonAssessmentForm";
-	}
-
-	/**
-	 * 保存考核表
-	 */
-	@PostMapping(value = "save")
-	@ResponseBody
-	public String save(@Validated CommonAssessment commonAssessment) {
-		commonAssessmentService.save(commonAssessment);
-		return renderResult(Global.TRUE, text("保存考核表成功！"));
-	}
-	
-	/**
-	 * 删除考核表
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public String delete(CommonAssessment commonAssessment) {
-		commonAssessmentService.delete(commonAssessment);
-		return renderResult(Global.TRUE, text("删除考核表成功！"));
-	}
-
-	/**
-	 * 加载考核的分页数据
-	 * @param commonAssessment
-	 * @return
-	 */
-	@Log(operationName = "加载考核的分页数据")
-	@RequestMapping(value = "listAssessment")
-	@ResponseBody
-	public CommonResult listAssessment(CommonAssessment commonAssessment) {
-		return commonAssessmentService.findPageCommonAssessment(commonAssessment);
-	}
-
+//	/**
+//	 * 获取数据
+//	 */
+//	@ModelAttribute
+//	public CommonAssessment get(String id, boolean isNewRecord) {
+//		return commonAssessmentService.get(id, isNewRecord);
+//	}
+//
+//	/**
+//	 * 查询列表
+//	 */
+//	@RequestMapping(value = {"list", ""})
+//	public String list(CommonAssessment commonAssessment, Model model) {
+//		model.addAttribute("commonAssessment", commonAssessment);
+//		return "modules/common/commonAssessmentList";
+//	}
+//
+//	/**
+//	 * 查询列表数据
+//	 */
+//	@RequestMapping(value = "listData")
+//	@ResponseBody
+//	public Page<CommonAssessment> listData(CommonAssessment commonAssessment, HttpServletRequest request, HttpServletResponse response) {
+//		commonAssessment.setPage(new Page<>(request, response));
+//		Page<CommonAssessment> page = commonAssessmentService.findPage(commonAssessment);
+//		return page;
+//	}
+//
+//	/**
+//	 * 查看编辑表单
+//	 */
+//	@RequestMapping(value = "form")
+//	public String form(CommonAssessment commonAssessment, Model model) {
+//		model.addAttribute("commonAssessment", commonAssessment);
+//		return "modules/common/commonAssessmentForm";
+//	}
+//
+//	/**
+//	 * 保存考核表
+//	 */
+//	@PostMapping(value = "save")
+//	@ResponseBody
+//	public String save(@Validated CommonAssessment commonAssessment) {
+//		commonAssessmentService.save(commonAssessment);
+//		return renderResult(Global.TRUE, text("保存考核表成功！"));
+//	}
+//
+//	/**
+//	 * 删除考核表
+//	 */
+//	@RequestMapping(value = "delete")
+//	@ResponseBody
+//	public String delete(CommonAssessment commonAssessment) {
 	/**
 	 * 保存、更新考核
 	 * @param commonAssessment
 	 * @param userConfig
 	 * @return
 	 */
+	@ApiOperation(value = "保存、更新考核")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "commonAssessment", value = "要保存的考核对象", required = true, dataType="CommonAssessment"),
+			@ApiImplicitParam(name = "userConfig", value = "前台发来的用户列表json数据", required = true, dataType="String")
+	})
 	@Log(operationName = "保存、更新考核", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
 	@RequestMapping(value = "saveCommonAssessment")
 	@ResponseBody
@@ -122,10 +114,26 @@ public class CommonAssessmentController extends BaseController {
 	}
 
 	/**
+	 * 加载考核的分页数据
+	 * @param commonAssessment
+	 * @return
+	 */
+	@ApiOperation(value = "加载考核的分页数据")
+	@ApiImplicitParam(name = "commonAssessment", value = "查询的考核条件对象", required = true, dataType="CommonAssessment")
+	@Log(operationName = "加载考核的分页数据")
+	@RequestMapping(value = "listAssessment")
+	@ResponseBody
+	public CommonResult listAssessment(CommonAssessment commonAssessment) {
+		return commonAssessmentService.findPageCommonAssessment(commonAssessment);
+	}
+
+	/**
 	 * 根据id加载考核
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "根据id加载考核")
+	@ApiImplicitParam(name = "id", value = "考核的id", required = true, dataType="String")
 	@Log(operationName = "根据id加载考核")
 	@RequestMapping(value = "loadCommonAssessment")
 	@ResponseBody
@@ -138,6 +146,8 @@ public class CommonAssessmentController extends BaseController {
 	 * @param json
 	 * @return
 	 */
+	@ApiOperation(value = "删除考核")
+	@ApiImplicitParam(name = "json", value = "要删除的考核的json数据", required = true, dataType="String")
 	@Log(operationName = "删除考核", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAssessment")
 	@ResponseBody
@@ -151,6 +161,11 @@ public class CommonAssessmentController extends BaseController {
 	 * @param file 上传的评分表文件
 	 * @return
 	 */
+	@ApiOperation(value = "删除考核")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "commonAssessment", value = "要更新的考核对象", required = true, dataType="CommonAssessment"),
+			@ApiImplicitParam(name = "file", value = "上传的评分结果文件", dataType="MultipartFile")
+	})
 	@Log(operationName = "更新考核状态", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "updateCommonAssessmentStatus")
 	@ResponseBody
@@ -164,6 +179,8 @@ public class CommonAssessmentController extends BaseController {
 	 * @param scoreInfo
 	 * @return
 	 */
+	@ApiOperation(value = "上传客观评分")
+	@ApiImplicitParam(name = "scoreInfo", value = "教师端上传来的分数json数据", required = true, dataType="String")
 	@Log(operationName = "上传客观评分", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "uploadScores")
 	@ResponseBody
@@ -177,6 +194,8 @@ public class CommonAssessmentController extends BaseController {
 	 * @param commonUserId
 	 * @return
 	 */
+	@ApiOperation(value = "根据登录人加载考核名称")
+	@ApiImplicitParam(name = "commonUserId", value = "用户id", required = true, dataType="String")
 	@Log(operationName = "根据登录人加载考核名称", operationType = Log.OPERA_TYPE_SEL)
 	@RequestMapping(value = "loadAssessmentNameList")
 	@ResponseBody

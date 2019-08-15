@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -101,6 +103,8 @@ public class CommonSoftwareController extends BaseController {
 	 * @param commonSoftware
 	 * @return
 	 */
+	@ApiOperation(value = "加载软件列表数据")
+	@ApiImplicitParam(name = "commonSoftware", value = "查询软件的条件对象", dataType="CommonSoftware")
 	@Log(operationName = "加载软件列表数据")
 	@RequestMapping(value = "listCommonSoftwareOnly")
 	@ResponseBody

@@ -13,6 +13,8 @@ import com.jeesite.modules.common.entity.CommonAssessment;
 import com.jeesite.modules.common.entity.CommonBasicScheme;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.util.FilePathUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,68 +45,70 @@ public class CommonAssessmentSchemeController extends BaseController {
 	@Autowired
 	private CommonAssessmentSchemeService commonAssessmentSchemeService;
 	
-	/**
-	 * 获取数据
-	 */
-	@ModelAttribute
-	public CommonAssessmentScheme get(String id, boolean isNewRecord) {
-		return commonAssessmentSchemeService.get(id, isNewRecord);
-	}
-	
-	/**
-	 * 查询列表
-	 */
-	@RequestMapping(value = {"list", ""})
-	public String list(CommonAssessmentScheme commonAssessmentScheme, Model model) {
-		model.addAttribute("commonAssessmentScheme", commonAssessmentScheme);
-		return "modules/common/commonAssessmentSchemeList";
-	}
-	
-	/**
-	 * 查询列表数据
-	 */
-	@RequestMapping(value = "listData")
-	@ResponseBody
-	public Page<CommonAssessmentScheme> listData(CommonAssessmentScheme commonAssessmentScheme, HttpServletRequest request, HttpServletResponse response) {
-		commonAssessmentScheme.setPage(new Page<>(request, response));
-		Page<CommonAssessmentScheme> page = commonAssessmentSchemeService.findPage(commonAssessmentScheme);
-		return page;
-	}
-
-	/**
-	 * 查看编辑表单
-	 */
-	@RequestMapping(value = "form")
-	public String form(CommonAssessmentScheme commonAssessmentScheme, Model model) {
-		model.addAttribute("commonAssessmentScheme", commonAssessmentScheme);
-		return "modules/common/commonAssessmentSchemeForm";
-	}
-
-	/**
-	 * 保存考核方案表
-	 */
-	@PostMapping(value = "save")
-	@ResponseBody
-	public String save(@Validated CommonAssessmentScheme commonAssessmentScheme) {
-		commonAssessmentSchemeService.save(commonAssessmentScheme);
-		return renderResult(Global.TRUE, text("保存考核方案表成功！"));
-	}
-	
-	/**
-	 * 删除考核方案表
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public String delete(CommonAssessmentScheme commonAssessmentScheme) {
-		commonAssessmentSchemeService.delete(commonAssessmentScheme);
-		return renderResult(Global.TRUE, text("删除考核方案表成功！"));
-	}
+//	/**
+//	 * 获取数据
+//	 */
+//	@ModelAttribute
+//	public CommonAssessmentScheme get(String id, boolean isNewRecord) {
+//		return commonAssessmentSchemeService.get(id, isNewRecord);
+//	}
+//
+//	/**
+//	 * 查询列表
+//	 */
+//	@RequestMapping(value = {"list", ""})
+//	public String list(CommonAssessmentScheme commonAssessmentScheme, Model model) {
+//		model.addAttribute("commonAssessmentScheme", commonAssessmentScheme);
+//		return "modules/common/commonAssessmentSchemeList";
+//	}
+//
+//	/**
+//	 * 查询列表数据
+//	 */
+//	@RequestMapping(value = "listData")
+//	@ResponseBody
+//	public Page<CommonAssessmentScheme> listData(CommonAssessmentScheme commonAssessmentScheme, HttpServletRequest request, HttpServletResponse response) {
+//		commonAssessmentScheme.setPage(new Page<>(request, response));
+//		Page<CommonAssessmentScheme> page = commonAssessmentSchemeService.findPage(commonAssessmentScheme);
+//		return page;
+//	}
+//
+//	/**
+//	 * 查看编辑表单
+//	 */
+//	@RequestMapping(value = "form")
+//	public String form(CommonAssessmentScheme commonAssessmentScheme, Model model) {
+//		model.addAttribute("commonAssessmentScheme", commonAssessmentScheme);
+//		return "modules/common/commonAssessmentSchemeForm";
+//	}
+//
+//	/**
+//	 * 保存考核方案表
+//	 */
+//	@PostMapping(value = "save")
+//	@ResponseBody
+//	public String save(@Validated CommonAssessmentScheme commonAssessmentScheme) {
+//		commonAssessmentSchemeService.save(commonAssessmentScheme);
+//		return renderResult(Global.TRUE, text("保存考核方案表成功！"));
+//	}
+//
+//	/**
+//	 * 删除考核方案表
+//	 */
+//	@RequestMapping(value = "delete")
+//	@ResponseBody
+//	public String delete(CommonAssessmentScheme commonAssessmentScheme) {
+//		commonAssessmentSchemeService.delete(commonAssessmentScheme);
+//		return renderResult(Global.TRUE, text("删除考核方案表成功！"));
+//	}
 
 	/**
 	 * 加载分页考核方案数据
 	 * @param commonAssessmentScheme
 	 * @return
 	 */
+	@ApiOperation(value = "加载分页考核方案数据")
+	@ApiImplicitParam(name = "commonAssessmentScheme", value = "查询方案的条件对象", required = true, dataType="CommonAssessmentScheme")
 	@Log(operationName = "加载分页考核方案数据")
 	@RequestMapping(value = "listCommonAssessmentScheme")
 	@ResponseBody
@@ -118,6 +122,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 	 * @param commonAssessmentScheme
 	 * @return
 	 */
+	@ApiOperation(value = "加载列表考核方案数据")
+	@ApiImplicitParam(name = "commonAssessmentScheme", value = "查询方案的条件对象", required = true, dataType="CommonAssessmentScheme")
 	@Log(operationName = "加载列表考核方案数据")
 	@RequestMapping(value = "listCommonAssessmentSchemeOnly")
 	@ResponseBody
@@ -132,6 +138,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 	 * @param commonAssessmentScheme
 	 * @return
 	 */
+	@ApiOperation(value = "保存、更新考核方案")
+	@ApiImplicitParam(name = "commonAssessmentScheme", value = "保存或者更新的对象", required = true, dataType="CommonAssessmentScheme")
 	@Log(operationName = "保存、更新考核方案", operationType = Log.OPERA_TYPE_ADD_OR_UPD)
 	@RequestMapping(value = "saveCommonAssessmentScheme")
 	@ResponseBody
@@ -144,10 +152,12 @@ public class CommonAssessmentSchemeController extends BaseController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "根据id加载考核方案")
+	@ApiImplicitParam(name = "id", value = "方案的id", required = true, dataType="String")
 	@Log(operationName = "根据id加载考核方案")
 	@RequestMapping(value = "loadCommonAssessmentScheme")
 	@ResponseBody
-	public CommonResult loadCommonAssessment(String id){
+	public CommonResult loadCommonAssessmentScheme(String id){
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, commonAssessmentSchemeService.get(id));
 	}
 
@@ -156,6 +166,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 	 * @param json
 	 * @return
 	 */
+	@ApiOperation(value = "删除考核方案")
+	@ApiImplicitParam(name = "json", value = "删除方案的json数据", required = true, dataType="String")
 	@Log(operationName = "删除考核方案", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAssessmentScheme")
 	@ResponseBody
@@ -168,6 +180,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 	 * @param commonAssessmentScheme
 	 * @return
 	 */
+	@ApiOperation(value = "更新考核方案状态")
+	@ApiImplicitParam(name = "commonAssessmentScheme", value = "要更新状态的对象", required = true, dataType="CommonAssessmentScheme")
 	@Log(operationName = "更新考核方案状态", operationType = Log.OPERA_TYPE_UPD)
 	@RequestMapping(value = "updateCommonAssessmentSchemeStatus")
 	@ResponseBody
@@ -181,6 +195,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
+	@ApiOperation(value = "上传评分表样例")
+	@ApiImplicitParam(name = "file", value = "评分样例文件", required = true, dataType="MultipartFile")
 	@Log(operationName = "上传评分表样例", operationType = Log.OPERA_TYPE_OTHER)
 	@RequestMapping(value = "uploadSchemeTable")
 	@ResponseBody

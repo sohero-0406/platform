@@ -20,6 +20,8 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="scheme_name", attrName="schemeName", label="scheme_name", queryType=QueryType.LIKE),
 		@Column(name="basic_scheme_id", attrName="basicSchemeId", label="basic_scheme_id"),
 		@Column(name="scheme_details", attrName="schemeDetails", label="详细的配置内容"),
+		@Column(name="pass_score", attrName="passScore", label="通过分值"),
+		@Column(name="need_single_pass", attrName="needSinglePass", label="是否需要单项同过分值"),
 		@Column(name="data_status", attrName="dataStatus", label="数据是否启用状态"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
@@ -31,6 +33,8 @@ public class CommonAssessmentScheme extends PreEntity<CommonAssessmentScheme> {
 	private String basicSchemeId;		// basic_scheme_id
 	private String schemeDetails;		// 详细的配置内容
 	private String dataStatus; //  数据是否启用状态(0 未启用，1是启用)
+	private String passScore; // 通过分值
+	private String needSinglePass; //是否需要单项同过分值(取值为0不需要、1需要)
 	
 	public CommonAssessmentScheme() {
 		this(null);
@@ -73,5 +77,23 @@ public class CommonAssessmentScheme extends PreEntity<CommonAssessmentScheme> {
 
 	public void setDataStatus(String dataStatus) {
 		this.dataStatus = dataStatus;
+	}
+
+	@Length(min=0, max=100, message="通过分值长度不能超过 100 个字符")
+	public String getPassScore() {
+		return passScore;
+	}
+
+	public void setPassScore(String passScore) {
+		this.passScore = passScore;
+	}
+
+	@Length(min=0, max=10, message="是否需要单项同过分值长度不能超过 10 个字符")
+	public String getNeedSinglePass() {
+		return needSinglePass;
+	}
+
+	public void setNeedSinglePass(String needSinglePass) {
+		this.needSinglePass = needSinglePass;
 	}
 }

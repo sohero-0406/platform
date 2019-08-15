@@ -96,7 +96,11 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 		dao.phyDelete(commonAssessmentStu);
 	}
 
-
+    /**
+     * 根据对象条件加载分页的考生数据
+     * @param commonAssessmentStu
+     * @return
+     */
 	public CommonResult findPageByCondition(CommonAssessmentStu commonAssessmentStu){
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
@@ -121,6 +125,12 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 	}
 
 	//此导出方法 必须要传入 commonAssessmentStu.assessmentId
+
+    /**
+     * 导出考生分数，并返回一个Excel的导出对象
+     * @param commonAssessmentStu
+     * @return
+     */
 	public ExcelExport exportStuScore(CommonAssessmentStu commonAssessmentStu){
         List<String> headerList = new ArrayList<>();
 		List<Integer> headerWidthList = new ArrayList<>();
@@ -178,6 +188,12 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 		return ee;
 	}
 
+    /**
+     * 根据用户id和考核名称，加载考核日期
+     * @param commonUserId
+     * @param assessmentName
+     * @return
+     */
     public CommonResult loadAssessmentDateList(String commonUserId, String assessmentName) {
 		CommonUser loginUser = commonUserService.get(commonUserId);
 		if(!"2".equals(loginUser.getRoleId())){
@@ -189,6 +205,13 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 		return new CommonResult(assessmentDateList);
     }
 
+    /**
+     * 根据用户id、考核名称、考核日期，加载考核时间
+     * @param commonUserId
+     * @param assessmentName
+     * @param assessmentDate
+     * @return
+     */
 	public CommonResult loadAssessmentTimeList(String commonUserId, String assessmentName, String assessmentDate) {
 		CommonUser loginUser = commonUserService.get(commonUserId);
 		if(!"2".equals(loginUser.getRoleId())){
@@ -198,6 +221,11 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 		return new CommonResult(assessmentTimeList);
 	}
 
+    /**
+     * 加载一个考生信息
+     * @param serverExamStuId
+     * @return
+     */
 	public CommonResult loadOneExamStu(String serverExamStuId) {
 		CommonAssessmentStu commonAssessmentStu = super.get(serverExamStuId);
 		if(commonAssessmentStu==null){
