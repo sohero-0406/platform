@@ -275,6 +275,43 @@ public class ExcelExport implements Closeable{
 			}
 		}
 	}
+
+	public void makeAnnotationList(Class<?> cls){
+		this.annotationList = ListUtils.newArrayList();
+
+		// Get annotation field
+		Field[] fs = cls.getDeclaredFields();
+		for (Field f : fs){
+			ExcelFields efs = f.getAnnotation(ExcelFields.class);
+			if (efs != null && efs.value() != null){
+				for (ExcelField ef : efs.value()){
+					addAnnotation(annotationList, ef, f, ExcelField.Type.EXPORT);
+				}
+			}
+			ExcelField ef = f.getAnnotation(ExcelField.class);
+			addAnnotation(annotationList, ef, f, ExcelField.Type.EXPORT);
+		}
+		// Get annotation method
+		Method[] ms = cls.getDeclaredMethods();
+		for (Method m : ms){
+			ExcelFields efs = m.getAnnotation(ExcelFields.class);
+			if (efs != null && efs.value() != null){
+				for (ExcelField ef : efs.value()){
+					addAnnotation(annotationList, ef, m, ExcelField.Type.EXPORT);
+				}
+			}
+			ExcelField ef = m.getAnnotation(ExcelField.class);
+			addAnnotation(annotationList, ef, m, ExcelField.Type.EXPORT);
+		}
+		// Field sorting
+		Collections.sort(annotationList, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				return new Integer(((ExcelField)o1[0]).sort()).compareTo(
+						new Integer(((ExcelField)o2[0]).sort()));
+			};
+		});
+	}
 	
 	/**
 	 * 创建工作表
@@ -413,6 +450,10 @@ public class ExcelExport implements Closeable{
 		return sheet.createRow(rownum++);
 	}
 
+	public Row addRow(int addRowNum){
+		return sheet.createRow(rownum+addRowNum);
+	}
+
 	/**
 	 * 添加一个单元格
 	 * @param row 添加的行
@@ -422,6 +463,16 @@ public class ExcelExport implements Closeable{
 	 */
 	public Cell addCell(Row row, int column, Object val){
 		return this.addCell(row, column, val, Align.AUTO, Class.class, null);
+	}
+
+	public void addMergedRegion(CellRangeAddress cellRangeAddress){
+		this.sheet.addMergedRegion(cellRangeAddress);
+	}
+
+	public void addMergedRegionList(List<CellRangeAddress> cellRangeAddressList){
+		for (int i = 0; i < cellRangeAddressList.size(); i++) {
+			this.sheet.addMergedRegion(cellRangeAddressList.get(i));
+		}
 	}
 	
 	/**
@@ -435,6 +486,7 @@ public class ExcelExport implements Closeable{
 	 */
 	public Cell addCell(Row row, int column, Object val, Align align, Class<?> fieldType, String dataFormat){
 		Cell cell = row.createCell(column);
+
 		String defaultDataFormat = "@";
 		try {
 			if(val == null){

@@ -267,16 +267,16 @@ public class VehicleInfoController extends BaseController {
 
     /**
      * 加载车的所有图片信息
-     * @param vehicleInfo
+     * @param id
      * @return
      */
     @ApiOperation(value = "加载车的所有图片信息")
-    @ApiImplicitParam(name = "vehicleInfo", value = "车的条件对象", required = true, dataType="VehicleInfo")
+    @ApiImplicitParam(name = "id", value = "车的条件对象", required = true, dataType="String")
     @Log(operationName = "加载车的所有图片信息")
     @RequestMapping(value = "loadVehicleImages")
     @ResponseBody
-    public CommonResult loadVehicleImages(VehicleInfo vehicleInfo){
-        return vehicleInfoService.findImageList(vehicleInfo);
+    public CommonResult loadVehicleImages(String id){
+        return vehicleInfoService.findImageList(id);
     }
 
 }

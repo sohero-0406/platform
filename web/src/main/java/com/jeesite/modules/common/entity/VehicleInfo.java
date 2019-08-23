@@ -271,6 +271,7 @@ import com.jeesite.common.utils.excel.annotation.ExcelField;
 		@Column(name="xuanzhuangbao", attrName="xuanzhuangbao", label="xuanzhuangbao"),
 		@Column(name="waiguanyanse", attrName="waiguanyanse", label="waiguanyanse"),
 		@Column(name="neishiyanse", attrName="neishiyanse", label="neishiyanse"),
+		@Column(name="upload_date", attrName="uploadDate", label="uploadDate"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -531,6 +532,7 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	private String xuanzhuangbao;		// xuanzhuangbao
 	private String waiguanyanse;		// waiguanyanse
 	private String neishiyanse;		// neishiyanse
+	private String uploadDate;
 	
 	public VehicleInfo() {
 		this(null);
@@ -2446,7 +2448,7 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 		this.yangshengqipinpaimingcheng = yangshengqipinpaimingcheng;
 	}
 
-	@ExcelField(title="样式衡器数量", align = ExcelField.Align.CENTER, sort = 206)
+	@ExcelField(title="扬声器数量", align = ExcelField.Align.CENTER, sort = 206)
 	public String getYangshengqishuliang() {
 		return yangshengqishuliang;
 	}
@@ -2455,7 +2457,7 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 		this.yangshengqishuliang = yangshengqishuliang;
 	}
 
-	@ExcelField(title="后排杯架", align = ExcelField.Align.CENTER, sort = 207)
+	@ExcelField(title="近光灯光源", align = ExcelField.Align.CENTER, sort = 207)
 	public String getJinguangdengguangyuan() {
 		return jinguangdengguangyuan;
 	}
@@ -2823,5 +2825,12 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 	public void setNeishiyanse(String neishiyanse) {
 		this.neishiyanse = neishiyanse;
 	}
-	
+
+	public String getUploadDate() {
+		return uploadDate;
+	}
+
+	public void setUploadDate(String uploadDate) {
+		this.uploadDate = uploadDate;
+	}
 }

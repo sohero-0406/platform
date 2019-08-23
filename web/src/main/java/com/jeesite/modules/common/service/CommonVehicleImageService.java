@@ -104,7 +104,7 @@ public class CommonVehicleImageService extends CrudService<CommonVehicleImageDao
 			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 		}
 		String end = FileUtils.getFileExtension(image.getOriginalFilename());
-		if(!end.equals("jpg")&&end.equals("png")){
+		if(!end.equals("jpg")&&!end.equals("png")){
 			return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
 		}
 		File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage_"+commonVehicleImage.getVehicleId()+"_"+System.currentTimeMillis()+"."+end);

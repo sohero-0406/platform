@@ -14,7 +14,7 @@
 
 	<select id="findAssessmentStuListByConditionCount" resultType="Long">
 		select count(cas.id) from common_assessment_stu as cas, common_assessment as ca where
-		cas.assessment_id in (select id from common_assessment where status = '5' ) and cas.assessment_id = ca.id
+		cas.assessment_id in (select id from common_assessment where data_status = '5' ) and cas.assessment_id = ca.id
 		<if test="assessmentId!=null">
 			and cas.assessment_id = #{assessmentId}
 		</if>
@@ -41,57 +41,54 @@
 
 	<select id="findAssessmentStuListByCondition" resultType="CommonAssessmentStu">
 		select cas.*, ca.assessment_name as assessmentName from common_assessment_stu as cas, common_assessment as ca where
-			cas.assessment_id in (select id from common_assessment where status = '5' ) and cas.assessment_id = ca.id
-			<if test="assessmentId!=null">
-				and cas.assessment_id = #{assessmentId}
+			cas.assessment_id in (select id from common_assessment where data_status = '5' ) and cas.assessment_id = ca.id
+			<if test="assessmentId!=null and assessmentId!=''">
+				and ca.assessment_id = #{assessmentId}
 			</if>
-			<if test="assessmentDate!=null">
+			<if test="assessmentName!=null and assessmentName!=''">
+				and ca.assessment_name = #{assessmentName}
+			</if>
+			<if test="assessmentDate!=null and assessmentDate!=''">
 				and cas.assessment_date = #{assessmentDate}
 			</if>
-			<if test="status!=null">
-				and cas.status = #{status}
+			<if test="dataStatus!=null and dataStatus!=''">
+				and cas.data_status = #{dataStatus}
 			</if>
-			<if test="loginName!=null">
+			<if test="loginName!=null and loginName!=''">
 				and cas.login_name like "%"#{loginName}"%"
 			</if>
-			<if test="trueName!=null">
+			<if test="trueName!=null and trueName!=''">
 				and cas.true_name like "%"#{trueName}"%"
 			</if>
-			<if test="schoolName!=null">
+			<if test="schoolName!=null and schoolName!=''">
 				and cas.school_name like "%"#{schoolName}"%"
 			</if>
-			<if test="assessmentName!=null">
-				and ca.assessment_name like "%"#{assessmentName}"%"
-			</if>
-
-
-
 	</select>
 
 	<select id="findAssessmentStuListByConditionAndSchoolId" resultType="CommonAssessmentStu">
 		select cas.*, ca.assessment_name as assessmentName from common_assessment_stu as cas, common_assessment as ca where
-			cas.assessment_id in (select id from common_assessment where status = '5' ) and cas.assessment_id = ca.id
+			cas.assessment_id in (select id from common_assessment where data_status = '5' ) and cas.assessment_id = ca.id
 			and cas.school_id = #{schoolId}
-			<if test="commonAssessmentStu.assessmentId!=null">
-				and cas.assessment_id = #{commonAssessmentStu.assessmentId}
+			<if test="commonAssessmentStu.assessmentId!=null and commonAssessmentStu.assessmentId!=''">
+				and ca.assessment_id = #{commonAssessmentStu.assessmentId}
 			</if>
-			<if test="commonAssessmentStu.assessmentDate!=null">
+			<if test="commonAssessmentStu.assessmentName!=null and commonAssessmentStu.assessmentName!=''">
+				and ca.assessment_name = #{commonAssessmentStu.assessmentName}
+			</if>
+			<if test="commonAssessmentStu.assessmentDate!=null and commonAssessmentStu.assessmentDate!=''">
 				and cas.assessment_date = #{commonAssessmentStu.assessmentDate}
 			</if>
-			<if test="commonAssessmentStu.status!=null">
-				and cas.status = #{commonAssessmentStu.status}
+			<if test="commonAssessmentStu.dataStatus!=null and commonAssessmentStu.dataStatus!=''">
+				and cas.data_status = #{commonAssessmentStu.dataStatus}
 			</if>
-			<if test="commonAssessmentStu.loginName!=null">
+			<if test="commonAssessmentStu.loginName!=null and commonAssessmentStu.loginName!=''">
 				and cas.login_name like "%"#{commonAssessmentStu.loginName}"%"
 			</if>
-			<if test="commonAssessmentStu.trueName!=null">
+			<if test="commonAssessmentStu.trueName!=null and commonAssessmentStu.trueName!=''">
 				and cas.true_name like "%"#{commonAssessmentStu.trueName}"%"
 			</if>
-			<if test="commonAssessmentStu.schoolName!=null">
+			<if test="commonAssessmentStu.schoolName!=null and commonAssessmentStu.schoolName!=''">
 				and cas.school_name like "%"#{commonAssessmentStu.schoolName}"%"
-			</if>
-			<if test="commonAssessmentStu.assessmentName!=null">
-				and ca.assessment_name like "%"#{commonAssessmentStu.assessmentName}"%"
 			</if>
 
 
@@ -101,28 +98,28 @@
 
 	<select id="findAssessmentStuListByConditionAndSchoolIdCount" resultType="Long">
 		select count(cas.id) from common_assessment_stu as cas, common_assessment as ca where
-			cas.assessment_id in (select id from common_assessment where status = '5' ) and cas.assessment_id = ca.id
+			cas.assessment_id in (select id from common_assessment where data_status = '5' ) and cas.assessment_id = ca.id
 			and cas.school_id = #{schoolId}
-			<if test="commonAssessmentStu.assessmentId!=null">
-				and cas.assessment_id = #{commonAssessmentStu.assessmentId}
+			<if test="commonAssessmentStu.assessmentId!=null and commonAssessmentStu.assessmentId!=''">
+				and ca.assessment_id = #{commonAssessmentStu.assessmentId}
 			</if>
-			<if test="commonAssessmentStu.assessmentDate!=null">
+			<if test="commonAssessmentStu.assessmentName!=null and commonAssessmentStu.assessmentName!=''">
+				and ca.assessment_name = #{commonAssessmentStu.assessmentName}
+			</if>
+			<if test="commonAssessmentStu.assessmentDate!=null and commonAssessmentStu.assessmentDate!=''">
 				and cas.assessment_date = #{commonAssessmentStu.assessmentDate}
 			</if>
-			<if test="commonAssessmentStu.status!=null">
-				and cas.status = #{commonAssessmentStu.status}
+			<if test="commonAssessmentStu.dataStatus!=null and commonAssessmentStu.dataStatus!=''">
+				and cas.data_status = #{commonAssessmentStu.dataStatus}
 			</if>
-			<if test="commonAssessmentStu.loginName!=null">
+			<if test="commonAssessmentStu.loginName!=null and commonAssessmentStu.loginName!=''">
 				and cas.login_name like "%"#{commonAssessmentStu.loginName}"%"
 			</if>
-			<if test="commonAssessmentStu.trueName!=null">
+			<if test="commonAssessmentStu.trueName!=null and commonAssessmentStu.trueName!=''">
 				and cas.true_name like "%"#{commonAssessmentStu.trueName}"%"
 			</if>
-			<if test="commonAssessmentStu.schoolName!=null">
+			<if test="commonAssessmentStu.schoolName!=null and commonAssessmentStu.schoolName!=''">
 				and cas.school_name like "%"#{commonAssessmentStu.schoolName}"%"
-			</if>
-			<if test="commonAssessmentStu.assessmentName!=null">
-				and ca.assessment_name like "%"#{commonAssessmentStu.assessmentName}"%"
 			</if>
 	</select>
 
@@ -136,6 +133,15 @@
 		select cas.assessment_time as assessmentTime from common_assessment_stu as cas, common_assessment as ca
 		where ca.school_id = #{schoolId} and ca.id = cas.assessment_id and ca.assessment_name = #{assessmentName} and cas.assessment_date = #{assessmentDate}
 		group by cas.assessment_time
+	</select>
+
+
+	<select id="findAssessmentStuListInAssessment" resultType="CommonAssessmentStu">
+		select cas.*, ca.assessment_name as assessmentName from common_assessment_stu as cas, common_assessment as ca where
+		cas.assessment_id = ca.id
+		<if test="assessmentId!=null">
+			and ca.id = #{assessmentId}
+		</if>
 	</select>
 
 </mapper>

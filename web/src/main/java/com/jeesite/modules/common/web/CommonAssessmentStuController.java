@@ -12,8 +12,10 @@ import com.jeesite.modules.common.service.CommonAssessmentStuService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -99,9 +101,25 @@ public class CommonAssessmentStuController extends BaseController {
 	@Log(operationName = "加载分页考生数据")
 	@RequestMapping(value = "searchStuScore")
 	@ResponseBody
-	public CommonResult searchStuScore(CommonAssessmentStu commonAssessmentStu){
+	public CommonResult searchStuScore(CommonAssessmentStu commonAssessmentStu) {
 		return commonAssessmentStuService.findPageByCondition(commonAssessmentStu);
 	}
+//	@ApiOperation(value = "加载分页考生数据")
+//	//@ApiImplicitParam(name = "commonAssessmentStu", value = "查询考生的条件对象", required = true, dataType="CommonAssessmentStu")
+//	@Log(operationName = "加载分页考生数据")
+//	@RequestMapping(value = "searchStuScore")
+//	@ResponseBody
+//	public CommonResult searchStuScore(@RequestBody @ApiParam(name="commonAssessmentStu 查询考生的条件对象",
+//												value="{\n\"loginName\":String, // 登录名" +
+//														"\n\"trueName\":String, // 姓名" +
+//														"\n\"schoolName\":String, // 学校" +
+//														"\n\"assessmentDate\":String, // 考核日期" +
+//														"\n\"dataStatus\":String, // 是否通过" +
+//														"\n\"assessmentName\":String, // 考核名称" +
+//														"}", required = true)
+//												   CommonAssessmentStu commonAssessmentStu){
+//		return commonAssessmentStuService.findPageByCondition(commonAssessmentStu);
+//	}
 
 	/**
 	 * 导出成绩excel

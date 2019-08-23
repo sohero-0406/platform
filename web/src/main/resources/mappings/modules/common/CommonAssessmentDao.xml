@@ -15,4 +15,19 @@
 		select ca.assessment_name as assessmentName from common_assessment as ca where ca.school_id = #{schoolId} and data_status = '2' group by ca.assessment_name
 	</select>
 
+    <select id="loadCalcedNameList" resultType="String">
+        select ca.assessment_name as assessmentName from common_assessment as ca where data_status = '5'
+         <if test="schoolId!=null and schoolId!=''">
+             and  ca.school_id = #{schoolId}
+         </if>
+         group by ca.assessment_name
+    </select>
+
+	<select id="countConflictNum" resultType="Integer">
+		select count(ca.id) as totalNum from common_assessment as ca where (ca.start_date between #{startDate} and #{endDate} or ca.end_date between #{startDate} and #{endDate})
+		<if test="id!=null">
+			and ca.id != #{id}
+		</if>
+	</select>
+
 </mapper>

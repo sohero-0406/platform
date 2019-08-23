@@ -3,9 +3,11 @@
  */
 package com.jeesite.modules.common.web;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.common.codec.EncodeUtils;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.io.FileUtils;
 import com.jeesite.modules.common.aop.Log;
@@ -29,7 +31,9 @@ import com.jeesite.modules.common.entity.CommonAssessmentScheme;
 import com.jeesite.modules.common.service.CommonAssessmentSchemeService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -128,7 +132,7 @@ public class CommonAssessmentSchemeController extends BaseController {
 	@RequestMapping(value = "listCommonAssessmentSchemeOnly")
 	@ResponseBody
 	public CommonResult listCommonAssessmentSchemeOnly(CommonAssessmentScheme commonAssessmentScheme) {
-		commonAssessmentScheme.setDataStatus("0");
+		commonAssessmentScheme.setDataStatus("1");
 		List<CommonAssessmentScheme> list = commonAssessmentSchemeService.findList(commonAssessmentScheme);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
 	}
@@ -202,12 +206,50 @@ public class CommonAssessmentSchemeController extends BaseController {
 	@ResponseBody
 	public CommonResult uploadSchemeTable(MultipartFile file) throws IOException {
 		String end = FileUtils.getFileExtension(file.getOriginalFilename());
-		if(!end.equals("xls")&&end.equals("xlsx")){
+		if(!end.equals("xls")&&!end.equals("xlsx")){
 			return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确!");
 		}
 		File x = new File(FilePathUtil.getFileSavePath("schemeTable")+"schemeTable"+System.currentTimeMillis()+"."+end);
 		file.transferTo(x);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
+	}
+
+	/**
+	 * 上传评分表样例
+	 * @param id
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	@ApiOperation(value = "下载评分表样例")
+	@ApiImplicitParam(name = "id", value = "方案的id", required = true, dataType="String")
+	@Log(operationName = "下载评分表样例", operationType = Log.OPERA_TYPE_OTHER)
+	@RequestMapping(value = "downloadSchemeTable")
+	public void downloadSchemeTable(String id, HttpServletResponse response) throws IOException {
+		CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(id);
+
+		File file = new File(FilePathUtil.getFileSavePath("schemeTable")+commonAssessmentScheme.getSchemeTable());
+
+		try {
+			FileInputStream fileIn = new FileInputStream(file);
+			BufferedInputStream is = new BufferedInputStream(fileIn);
+			byte[] fileBytes = new byte[1024];
+			response.reset();
+			response.setContentType("application/octet-stream; charset=utf-8");
+			response.setHeader("Content-Disposition", "attachment; filename="+ EncodeUtils.encodeUrl("评分表.xlsx"));
+			// 输出文件流
+			ServletOutputStream out = response.getOutputStream();
+			int len = -1;
+			while ((len = is.read(fileBytes, 0, 1024)) != -1) {
+				out.write(fileBytes, 0, len);
+			}
+			is.close();
+			out.close();
+
+			fileIn.close();
+		} catch (IOException ex) {
+			//log.error(ex.getMessage(), ex);
+		}
 	}
 
 

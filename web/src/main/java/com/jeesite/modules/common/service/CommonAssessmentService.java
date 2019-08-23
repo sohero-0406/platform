@@ -14,6 +14,7 @@ import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.lang.NumberUtils;
 import com.jeesite.common.lang.StringUtils;
+import com.jeesite.common.utils.excel.ExcelExport;
 import com.jeesite.common.utils.excel.ExcelImport;
 import com.jeesite.modules.common.dao.CommonAssessmentSchemeDao;
 import com.jeesite.modules.common.dao.CommonAssessmentStuDao;
@@ -21,9 +22,11 @@ import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
 
+import com.jeesite.modules.common.vo.ExportUploadScoreVo;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.omg.IOP.Codec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +52,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 	private CommonUserService commonUserService;
 	@Autowired
 	private CommonAssessmentSchemeService commonAssessmentSchemeService;
+	@Autowired
+	private CommonSchoolService commonSchoolService;
 
 	/**
 	 * 获取单条数据
@@ -81,9 +86,23 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 	public CommonResult save(CommonAssessment commonAssessment, String userConfig) {
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
+		if(StringUtils.isBlank(commonAssessment.getStartDate())||StringUtils.isBlank(commonAssessment.getEndDate())){
+			return new CommonResult(CodeConstant.PARA_MUST_NEED, "必须传入开始日期和结束日期");
+		}
+		if(dao.countConflictNum(commonAssessment.getStartDate(), commonAssessment.getEndDate(), commonAssessment.getId())>0){
+			return new CommonResult(CodeConstant.ERROR_DATA, "开始日期和结束日期不能和其他有重复后者冲突");
+		}
 		if(commonAssessment.getId()==null){
 			if(CommonUserUtil.isHaveExamRight(loginUser)){
-
+				if(!StringUtils.isBlank(commonAssessment.getSchoolId())){
+					commonAssessment.setSchoolId(loginUser.getSchoolId());
+					commonAssessment.setSchoolName(commonSchoolService.get(loginUser.getSchoolId()).getSchoolName());
+				}else{
+					if(StringUtils.isBlank(commonAssessment.getSchoolName())){
+						commonAssessment.setSchoolName(commonSchoolService.get(commonAssessment.getSchoolId()).getSchoolName());
+					}
+				}
+				commonAssessment.setDataStatus("0");
 				super.save(commonAssessment);
 				return saveCommonSchemeStus(commonAssessment, userConfig);
 			}else{
@@ -148,6 +167,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			commonAssessmentStu.setClassName(jo.getString("className"));
 			commonAssessmentStu.setAssessmentDate(jo.getString("assessmentDate"));
 			commonAssessmentStu.setAssessmentTime(jo.getString("assessmentTime"));
+			commonAssessmentStu.setSchoolId(jo.getString("schoolId"));
 			commonAssessmentStu.setDataStatus("0");
 			commonAssessmentStu.setScoreDetails(commonAssessmentScheme.getSchemeDetails());
 			commonAssessmentStu.setSoftUploadedMarks(softUploadedMarks.toJSONString());
@@ -326,7 +346,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 									msgList.add(userName+"下没有任何软件或者主观分数!");
 								}else{
 									String softwareNameAll = ei.getCellValue(row0, colIndex).toString();
-									while(ei.getCellValue(row0, colIndex+1)!=null){
+									while(ei.getCellValue(row0, colIndex+1)!=null&&!"".equals(ei.getCellValue(row0, colIndex+1).toString())){
 										softwareNameAll += ","+ ei.getCellValue(row0, colIndex+1).toString();
 										colIndex++;
 									}
@@ -337,7 +357,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 											if(jox.getString("softwareName").equals(softwareNameArray[n])){
 												Object obj = ei.getCellValue(row, n+3);
 												if(obj==null||!NumberUtils.isParsable(obj.toString())){
-													msgList.add(userName+"下的"+softwareNameArray[n]+"分值不能解析书数值");
+													msgList.add(userName+"下的"+softwareNameArray[n]+"分值不能解析为数值");
 												}else{
 													jox.put("subjScore", obj.toString());
 													softDetails.set(k, jox);
@@ -392,10 +412,12 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			CommonAssessmentStu cas = commonAssessmentStuList.get(i);
 			String scoreDetails = cas.getScoreDetails();
 			JSONArray scoreDetails_jsonArray = JSONArray.parseArray(scoreDetails);
+			System.out.println(scoreDetails_jsonArray);
 			Double totalScore = 0.0;
 			int subjectPassNum = 0;
 			for (int j = 0; j < scoreDetails_jsonArray.size(); j++) {
 				// 循环拿出一项
+				System.out.println(cas.getId());
 				JSONObject oneSubject = scoreDetails_jsonArray.getJSONObject(j);
 				String weight = oneSubject.getString("weight");
 				String passScore = oneSubject.getString("passScore");
@@ -419,7 +441,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				}
 				oneSubject.put("gainScore", oneSubjectScore);
 				totalScore += NumberUtils.mul(oneSubjectScore, NumberUtils.createDouble(weight)/100);
-				scoreDetails_jsonArray.set(i, oneSubject);
+				scoreDetails_jsonArray.set(j, oneSubject);
 			}
 			if("0".equals(needSinglePass)){ // 不需要单独每项通过，直接看总分即可
 				if(totalScore>passScore_scheme){
@@ -590,5 +612,86 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		return new CommonResult(assessmentNameList);
 	}
 
+	public CommonResult loadAssessmentNameList(){
+		String loginUsreId = PreEntity.getUserIdByToken();
+		CommonUser loginUser = commonUserService.get(loginUsreId);
+		if("3".equals(loginUser.getRoleId())){
+			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
+		}
+		if("1".equals(loginUser.getRoleId())){
+			List<String> assessmentNameList = dao.loadCalcedNameList(null);
+			return new CommonResult(assessmentNameList);
+		}else{
+			List<String> assessmentNameList = dao.loadCalcedNameList(loginUser.getSchoolId());
+			return new CommonResult(assessmentNameList);
+		}
+	}
 
+	public CommonResult loadOneAssessment(String id){
+		if(StringUtils.isBlank(id)){
+			return new CommonResult(CodeConstant.PARA_MUST_NEED, "id必须传入数据！");
+		}
+		CommonAssessment commonAssessment = super.get(id);
+		if(commonAssessment==null){
+			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的数据无法查到结果");
+		}
+		CommonAssessmentStu con = new CommonAssessmentStu();
+		con.setAssessmentId(id);
+		List<CommonAssessmentStu> commonAssessmentStuList = commonAssessmentStuService.findAssessmentStuListInAssessment(con);
+		commonAssessment.setCommonAssessmentStuList(commonAssessmentStuList);
+		return new CommonResult(commonAssessment);
+	}
+
+	public ExcelExport makeExcelMode(String id) {
+		CommonAssessmentStu commonAssessmentStuCon = new CommonAssessmentStu();
+		commonAssessmentStuCon.setAssessmentId(id);
+		List<CommonAssessmentStu> commonAssessmentStuList = commonAssessmentStuService.findList(commonAssessmentStuCon);
+
+		List<ExportUploadScoreVo> exportUploadScoreVoList = new ArrayList<>();
+		for (CommonAssessmentStu c: commonAssessmentStuList) {
+			ExportUploadScoreVo exportUploadScoreVo = new ExportUploadScoreVo();
+			exportUploadScoreVo.setUserName(c.getLoginName());
+			exportUploadScoreVo.setTrueName(c.getTrueName());
+			exportUploadScoreVo.setSchoolName(c.getSchoolName());
+			exportUploadScoreVoList.add(exportUploadScoreVo);
+		}
+
+		CommonAssessment commonAssessment = super.get(id);
+		CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(commonAssessment.getAssessmentSchemeId());
+		JSONArray schemeDetails = JSONArray.parseArray(commonAssessmentScheme.getSchemeDetails());
+		ExcelExport ee = null;
+		for (int i = 0; i < schemeDetails.size(); i++) {
+			JSONObject jsonObject = schemeDetails.getJSONObject(i);
+			List<String> headerList = new ArrayList<>();
+			List<Integer> headerWidthList = new ArrayList<>();
+
+			headerList.add("登录名（身份证号）");
+			headerWidthList.add(Integer.valueOf(20*256));
+			headerList.add("姓名");
+			headerWidthList.add(Integer.valueOf(10*256));
+			headerList.add("学校");
+			headerWidthList.add(Integer.valueOf(40*256));
+			JSONArray ja = JSONArray.parseArray(jsonObject.getString("softDetails"));
+			for (int j = 0; j < ja.size(); j++) {
+				JSONObject jo = ja.getJSONObject(j);
+				headerList.add(jo.getString("softwareName"));
+				headerWidthList.add(Integer.valueOf(10*256));
+			}
+			if(i == 0){
+				ee = new ExcelExport(jsonObject.getString("title"), null, headerList, headerWidthList);
+				ee.makeAnnotationList(ExportUploadScoreVo.class);
+				ee.setDataList(exportUploadScoreVoList);
+			}else{
+				ee.createSheet(jsonObject.getString("title"), null, headerList, headerWidthList);
+				ee.setDataList(exportUploadScoreVoList);
+			}
+		}
+		return ee;
+	}
+
+
+//    public CommonResult loadAssessmentStuTempList(List<UploadStu> uploadStuList) {
+//		commonUserService.fillUserConditionList()
+//		return null;
+//    }
 }

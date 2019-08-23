@@ -9,6 +9,7 @@ import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.io.FileUtils;
+import com.jeesite.common.lang.DateUtils;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.common.dao.VehicleInfoDao;
@@ -169,6 +170,7 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
                 msg += vehicleInfo.getChexingmingcheng()+"已存在！<br/>";
                 errorNum++;
             }else{
+            	vehicleInfo.setUploadDate(DateUtils.getDate());
 				super.save(vehicleInfo);
 				okNum++;
             }
@@ -223,7 +225,7 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 		}
 		String end = FileUtils.getFileExtension(image.getOriginalFilename());
-		if(!end.equals("jpg")&&end.equals("png")){
+		if(!end.equals("jpg")&&!	end.equals("png")){
 			return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
 		}
 		File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage_"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
@@ -238,11 +240,11 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 
 	/**
 	 * 加载一个车的所有图片
-	 * @param vehicleInfo
+	 * @param id
 	 * @return
 	 */
-	public CommonResult findImageList(VehicleInfo vehicleInfo){
-		if(vehicleInfo==null || StringUtils.isBlank(vehicleInfo.getId())){
+	public CommonResult findImageList(String id){
+		if(id==null || StringUtils.isBlank(id)){
 			return new CommonResult(CodeConstant.PARA_MUST_NEED, "您需要传入必要的参数");
 		}
 		String loginUserId = PreEntity.getUserIdByToken();
@@ -250,7 +252,15 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		if(!"1".equals(loginUser.getRoleId())){
 			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 		}
-		List<CommonVehicleImage> commonVehicleImageList = commonVehicleImageService.findList(new CommonVehicleImage(vehicleInfo.getId()));
+		CommonVehicleImage con = new CommonVehicleImage();
+		con.setVehicleId(id);
+		List<CommonVehicleImage> commonVehicleImageList = commonVehicleImageService.findList(con);
+		for (int i = 0; i < commonVehicleImageList.size(); i++) {
+			CommonVehicleImage vehicleImage = commonVehicleImageList.get(i);
+			vehicleImage.setImageName("/image/"+vehicleImage.getImageName());
+			commonVehicleImageList.set(i, vehicleImage);
+			///image/
+		}
 		return new CommonResult(commonVehicleImageList);
 	}
 

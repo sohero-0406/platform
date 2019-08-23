@@ -10,6 +10,8 @@ import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
+import java.util.List;
+
 /**
  * 考核表Entity
  * @author mayuhu
@@ -39,6 +41,8 @@ public class CommonAssessment extends PreEntity<CommonAssessment> {
 	private String dataStatus;
 
 	// dataStatus 0 初始状态可以修改和删除，1 是逻辑删除状态  2 是 考核处于开始状态   3是 考核处于结束状态 4 是 评分表上传后并解析成功状态 5 是统分成功状态
+
+	private List<CommonAssessmentStu> commonAssessmentStuList;
 	
 	public CommonAssessment() {
 		this(null);
@@ -109,5 +113,13 @@ public class CommonAssessment extends PreEntity<CommonAssessment> {
 
 	public void setDataStatus(String dataStatus) {
 		this.dataStatus = dataStatus;
+	}
+
+	public List<CommonAssessmentStu> getCommonAssessmentStuList() {
+		return commonAssessmentStuList;
+	}
+
+	public void setCommonAssessmentStuList(List<CommonAssessmentStu> commonAssessmentStuList) {
+		this.commonAssessmentStuList = commonAssessmentStuList;
 	}
 }

@@ -6,29 +6,32 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.collect.Lists;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.utils.excel.ExcelExport;
+import com.jeesite.common.utils.excel.ExcelImport;
+import com.jeesite.common.utils.excel.annotation.ExcelField;
 import com.jeesite.modules.common.aop.Log;
-import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.*;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.common.entity.CommonAssessment;
 import com.jeesite.modules.common.service.CommonAssessmentService;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * 考核表Controller
@@ -138,10 +141,10 @@ public class CommonAssessmentController extends BaseController {
 	@RequestMapping(value = "loadCommonAssessment")
 	@ResponseBody
 	public CommonResult loadCommonAssessment(String id){
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, commonAssessmentService.get(id));
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, commonAssessmentService.loadOneAssessment(id));
 	}
 
-	/**
+	/*
 	 * 删除考核
 	 * @param json
 	 * @return
@@ -161,7 +164,7 @@ public class CommonAssessmentController extends BaseController {
 	 * @param file 上传的评分表文件
 	 * @return
 	 */
-	@ApiOperation(value = "删除考核")
+	@ApiOperation(value = "更新考核状态")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "commonAssessment", value = "要更新的考核对象", required = true, dataType="CommonAssessment"),
 			@ApiImplicitParam(name = "file", value = "上传的评分结果文件", dataType="MultipartFile")
@@ -204,6 +207,44 @@ public class CommonAssessmentController extends BaseController {
 		return commonAssessmentService.loadAssessmentNameList(commonUserId);
 	}
 
+	/**
+	 * 加载考核名称
+	 *
+	 * @return
+	 */
+	@ApiOperation(value = "加载考核名称")
+	@Log(operationName = "加载考核名称", operationType = Log.OPERA_TYPE_SEL)
+	@RequestMapping(value = "loadAssessmentNameListWithCalc")
+	@ResponseBody
+	public CommonResult loadAssessmentNameList(){
+		return commonAssessmentService.loadAssessmentNameList();
+	}
 
+	/**
+	 * 导出用户模板
+	 * @param response
+	 */
+	@ApiOperation(value = "导出上传考生基本信息模板")
+	@Log(operationName = "导出上传考生基本信息模板", operationType = Log.OPERA_TYPE_OTHER)
+	@RequestMapping(value = "exportUploadMode")
+	public void exportUploadMode(HttpServletResponse response) {
+		try {
+			String fileName = "考生基本信息模板.xlsx";
+			List<UserCondition> list = Lists.newArrayList();
+			list.add(new UserCondition());
+			new ExcelExport(null, UserCondition.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
+		} catch (Exception e) {
+			// addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+		}
+	}
+
+	@ApiOperation(value = "下载带有学生新的评分表")
+	@ApiImplicitParam(name = "id", value = "考核的id", required = true, dataType="String")
+	@Log(operationName = "下载带有学生新的评分表", operationType = Log.OPERA_TYPE_SEL)
+	@RequestMapping(value = "downloadStandardScoreMode")
+	public void downloadStandardScoreMode(String id, HttpServletResponse response){
+		ExcelExport ee = commonAssessmentService.makeExcelMode(id);
+		ee.write(response, "123.xlsx").close();
+	}
 	
 }

@@ -191,6 +191,15 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
                     msg += user.getUserName()+"长度不是18！<br/>";
                     errorNum++;
                 }else{
+                    CommonSchool commonSchool = new CommonSchool();
+                    commonSchool.setSchoolName(user.getSchoolName());
+                    CommonSchool cs = commonSchoolService.getByEntity(commonSchool);
+                    if(cs!=null){
+                        user.setSchoolId(cs.getId());
+                    }else{
+                        commonSchoolService.save(commonSchool);
+                        user.setSchoolId(commonSchool.getId());
+                    }
                     user.setRoleId(roleId);
                     super.save(user);
                     okNum++;
@@ -351,7 +360,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         result.setCode(CodeConstant.REQUEST_SUCCESSFUL);
 
         CommonRole cr = commonRoleService.get(user.getRoleId());
-
+        if("0".equals(user.getSchoolId())){
+            user.setSchoolName("没有学校");
+        }else{
+            user.setSchoolName(commonSchoolService.get(user.getSchoolId()).getSchoolName());
+        }
         user.setRoleArray(cr.getRightArray());
         user.setToken(JwtUtils.generateToken(user.getId()));
         user.setPassword(null);
@@ -366,6 +379,11 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
     public CommonResult loadUserByToken(){
         String loginUserId = PreEntity.getUserIdByToken();
         CommonUser user = super.get(loginUserId);
+        if("0".equals(user.getSchoolId())){
+            user.setSchoolName("没有学校");
+        }else{
+            user.setSchoolName(commonSchoolService.get(user.getSchoolId()).getSchoolName());
+        }
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, user);
     }
 
@@ -459,26 +477,32 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
     public CommonResult fillUserConditionList(List<UserCondition> userConditionList){
         List<String> userNameList = new ArrayList<>();
         for (UserCondition userCondition:userConditionList ) {
-            userNameList.add(userCondition.getUserName());
+            userNameList.add(userCondition.getLoginName());
         }
         List<CommonUser> userList = dao.findStuByUserNamesWithSchoolName(userNameList);
         if(ListUtils.isEmpty(userList)){
             return new CommonResult(CodeConstant.EXCEL_NO_DATA, "没有查询到任何数据");
         }
+        List<UserCondition> list2 = new ArrayList<>();
         for (UserCondition userCondition:userConditionList ) {
             for (CommonUser commonUser:userList) {
-                if(userCondition.getUserName().equals(commonUser.getUserName())){
+                if(userCondition.getLoginName().equals(commonUser.getUserName())){
                     userCondition.setClassName(commonUser.getClassName());
                     userCondition.setMajorName(commonUser.getMajorName());
                     userCondition.setSchoolName(commonUser.getSchoolName());
                     userCondition.setGender(commonUser.getGender());
                     userCondition.setCommonUserId(commonUser.getId());
                     userCondition.setSchoolId(commonUser.getSchoolId());
+                    list2.add(userCondition);
                     break;
                 }
             }
         }
-        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, userConditionList);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("successNum", list2.size());
+        jsonObject.put("errorNum", userNameList.size()-list2.size());
+        jsonObject.put("list", list2);
+        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, jsonObject);
     }
 
     /**
@@ -493,5 +517,18 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         }
         commonUser.setSchoolName(commonSchoolService.get(commonUser.getSchoolId()).getSchoolName());
         return new CommonResult(commonUser);
+    }
+
+    @Transactional(readOnly = false)
+    public CommonResult changePassword(String oldPassword, String newPassword) {
+        String loginUserId = PreEntity.getUserIdByToken();
+        CommonUser loginUser = super.get(loginUserId);
+        if(oldPassword.equals(loginUser.getPassword())){
+            loginUser.setPassword(newPassword);
+            super.save(loginUser);
+            return new CommonResult();
+        }else{
+            return new CommonResult(CodeConstant.WRONG_PASS, "您提供的旧密码不正确");
+        }
     }
 }

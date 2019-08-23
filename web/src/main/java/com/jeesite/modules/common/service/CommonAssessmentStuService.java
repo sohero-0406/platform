@@ -5,6 +5,7 @@ package com.jeesite.modules.common.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -15,7 +16,9 @@ import com.jeesite.modules.common.dao.CommonAssessmentDao;
 import com.jeesite.modules.common.dao.CommonAssessmentSchemeDao;
 import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.*;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -150,24 +153,41 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 		headerWidthList.add(2050);
         headerList.add("考核日期");
 		headerWidthList.add(2060);
-        CommonAssessment commonAssessment = commonAssessmentService.get(commonAssessmentStu.getAssessmentId());
-        CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(commonAssessment.getAssessmentSchemeId());
-		JSONArray schemeDetails = JSONArray.parseArray(commonAssessmentScheme.getSchemeDetails());
-		for (int i = 0; i < schemeDetails.size(); i++) {
-			JSONObject oneSubject = schemeDetails.getJSONObject(i);
-			headerList.add(oneSubject.getString("title")+"成绩");
-			headerWidthList.add(2070+i);
-		}
+		headerList.add("考核项目");
+		headerWidthList.add(2070);
+		headerList.add("考核分数");
+		headerWidthList.add(2080);
 		headerList.add("总分");
 		headerWidthList.add(2110);
 		headerList.add("是否通过");
 		headerWidthList.add(2120);
 
+//		CommonAssessment commonAssessment = commonAssessmentService.get(commonAssessmentStu.getAssessmentId());
+//		CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(commonAssessment.getAssessmentSchemeId());
+//		//JSONArray schemeDetails = JSONArray.parseArray(commonAssessmentScheme.getSchemeDetails());
+//		for (int i = 0; i < schemeDetails.size(); i++) {
+//			JSONObject oneSubject = schemeDetails.getJSONObject(i);
+//			headerList.add(oneSubject.getString("title")+"成绩");
+//			headerWidthList.add(2070+i);
+//		}
+
+		//int rowNum = 1;
+		Map<String, JSONArray> map = new HashedMap();
 		ExcelExport ee = new ExcelExport("导出成绩表", null, headerList, headerWidthList);
 		List<CommonAssessmentStu> commonAssessmentStuList = dao.findAssessmentStuListByCondition(commonAssessmentStu);
 		for (int i = 0; i < commonAssessmentStuList.size(); i++) {
 			CommonAssessmentStu cas = commonAssessmentStuList.get(i);
+//			JSONArray schemeDetails = null;
+//			if(map.get(cas.getAssessmentId())==null){
+//				CommonAssessment ca = commonAssessmentService.get(cas.getAssessmentId());
+//				CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(ca.getAssessmentSchemeId());
+//				schemeDetails = JSONArray.parseArray(commonAssessmentScheme.getSchemeDetails());
+//				map.put(cas.getAssessmentId(), schemeDetails);
+//			}else{
+//				schemeDetails = map.get(cas.getAssessmentId());
+//			}
 			Row row = ee.addRow();
+			int tempRowNum = row.getRowNum();
 			ee.addCell(row, 0, cas.getLoginName());
 			ee.addCell(row, 1, cas.getTrueName());
 			ee.addCell(row, 2, cas.getSchoolName());
@@ -175,17 +195,36 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 			ee.addCell(row, 4, cas.getClassName());
 			ee.addCell(row, 5, cas.getAssessmentName());
 			ee.addCell(row, 6, cas.getAssessmentDate());
+			ee.addCell(row, 9, cas.getTotalScore());
+			ee.addCell(row, 10, "2".equals(cas.getDataStatus())?"通过":"未通过");
 			JSONArray scoreDetails = JSONArray.parseArray(cas.getScoreDetails());
-			int colIndex = 7;
 			for (int j = 0; j < scoreDetails.size(); j++) {
 				JSONObject jsonObject = scoreDetails.getJSONObject(j);
-				ee.addCell(row, colIndex, jsonObject.getString("gainScore"));
-				colIndex++;
+				ee.addCell(row, 7, jsonObject.getString("title"));
+				ee.addCell(row, 8, jsonObject.getString("gainScore"));
+				if(j<scoreDetails.size()-1){
+					row = ee.addRow();
+				}
 			}
-			ee.addCell(row, colIndex, cas.getTotalScore());
-			ee.addCell(row, colIndex+1, "2".equals(cas.getDataStatus())?"通过":"未通过");
+			ee.addMergedRegionList(cellRangeAddressList(tempRowNum, scoreDetails.size()));
+			//rowNum = schemeDetails.size();
 		}
 		return ee;
+	}
+
+	private List<CellRangeAddress> cellRangeAddressList(int startRowNum, int endRowNum){
+		List<CellRangeAddress> cellRangeAddressList = new ArrayList<>();
+		endRowNum = startRowNum+endRowNum-1;
+		cellRangeAddressList.add(new CellRangeAddress(startRowNum, endRowNum, 0, 0));
+		cellRangeAddressList.add(new CellRangeAddress(startRowNum, endRowNum, 1, 1));
+		cellRangeAddressList.add(new CellRangeAddress(startRowNum, endRowNum, 2, 2));
+		cellRangeAddressList.add(new CellRangeAddress(startRowNum, endRowNum, 3, 3));
+		cellRangeAddressList.add(new CellRangeAddress(startRowNum, endRowNum, 4, 4));
+		cellRangeAddressList.add(new CellRangeAddress(startRowNum, endRowNum, 5, 5));
+		cellRangeAddressList.add(new CellRangeAddress(startRowNum, endRowNum, 6, 6));
+		cellRangeAddressList.add(new CellRangeAddress(startRowNum, endRowNum, 9, 9));
+		cellRangeAddressList.add(new CellRangeAddress(startRowNum, endRowNum, 10, 10));
+		return cellRangeAddressList;
 	}
 
     /**
@@ -237,4 +276,7 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 	}
 
 
+	public List<CommonAssessmentStu> findAssessmentStuListInAssessment(CommonAssessmentStu con) {
+		return dao.findAssessmentStuListInAssessment(con);
+	}
 }

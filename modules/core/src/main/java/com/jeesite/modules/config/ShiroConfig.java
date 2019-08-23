@@ -232,5 +232,5 @@ public class ShiroConfig {
 //		bean.setArguments(new Object[] { securityManager });
 //		return bean;
 //	}
-	
+
 }

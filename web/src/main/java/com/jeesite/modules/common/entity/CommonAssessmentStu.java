@@ -54,6 +54,7 @@ public class CommonAssessmentStu extends PreEntity<CommonAssessmentStu> {
 
 	//非数据库字段
 	private String assessmentName;
+	private String searchDate;
 
 	
 	public CommonAssessmentStu() {
@@ -196,4 +197,12 @@ public class CommonAssessmentStu extends PreEntity<CommonAssessmentStu> {
     public void setDataStatus(String dataStatus) {
         this.dataStatus = dataStatus;
     }
+
+	public String getSearchDate() {
+		return searchDate;
+	}
+
+	public void setSearchDate(String searchDate) {
+		this.searchDate = searchDate;
+	}
 }

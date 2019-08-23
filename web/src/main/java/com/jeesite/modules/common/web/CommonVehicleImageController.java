@@ -104,7 +104,7 @@ public class CommonVehicleImageController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
-	@ApiOperation(value = "加载软件列表数据")
+	@ApiOperation(value = "替换车的某一个体图片")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "image", value = "新的车型图片", required = true, dataType="MultipartFile"),
 		@ApiImplicitParam(name = "commonVehicleImage", value = "要替换的车型图片对象", required = true, dataType="CommonVehicleImage")
@@ -122,13 +122,14 @@ public class CommonVehicleImageController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
-	@ApiOperation(value = "加载软件列表数据")
+	@ApiOperation(value = "删除图片")
 	@ApiImplicitParam(name = "commonVehicleImage", value = "被删除的车型图片对象", required = true, dataType="CommonVehicleImage")
 	@Log(operationName = "删除图片", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteVehicleImage")
 	@ResponseBody
 	public CommonResult deleteVehicleImage(CommonVehicleImage commonVehicleImage) throws IOException {
 		return commonVehicleImageService.deleteVehicleImage(commonVehicleImage);
+
 	}
 	
 }

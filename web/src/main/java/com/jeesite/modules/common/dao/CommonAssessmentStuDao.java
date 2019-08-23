@@ -29,4 +29,6 @@ public interface CommonAssessmentStuDao extends CrudDao<CommonAssessmentStu> {
     List<String> loadDateList(String schoolId, String assessmentName);
 
     List<String> loadTimeList(String schoolId, String assessmentName, String assessmentDate);
+
+    List<CommonAssessmentStu> findAssessmentStuListInAssessment(CommonAssessmentStu commonAssessmentStu);
 }

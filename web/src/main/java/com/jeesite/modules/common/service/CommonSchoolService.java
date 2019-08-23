@@ -71,5 +71,10 @@ public class CommonSchoolService extends CrudService<CommonSchoolDao, CommonScho
 	public void delete(CommonSchool commonSchool) {
 		super.delete(commonSchool);
 	}
-	
+
+	public CommonSchool getByEntity(CommonSchool commonSchool){
+		return dao.getByEntity(commonSchool);
+	}
+
+
 }

@@ -5,6 +5,7 @@ package com.jeesite.modules.common.service;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.dao.CommonAccessoryDao;
@@ -120,7 +121,12 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
 			commonAccessory.setCategoryId(commonAccessoryCategory.getId());
 			commonAccessoryService.save(commonAccessory);
 		}
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "成功上传"+commonAccessoryList.size()+"条配件信息");
+
+		JSONObject jo = new JSONObject();
+		jo.put("successNum", commonAccessoryList.size());
+		jo.put("errorNum", 0);
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, jo);
+		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "成功上传"+commonAccessoryList.size()+"条配件信息");
 	}
 
 	// 只是逻辑删除

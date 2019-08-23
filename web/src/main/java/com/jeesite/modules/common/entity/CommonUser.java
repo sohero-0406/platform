@@ -28,7 +28,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="is_exam_right", attrName="isExamRight", label="是否有创建考试的权限", comment="0是没有 1是有"),
 		@Column(name="phone_num", attrName="phoneNum", label="手机号", comment="手机号"),
 		@Column(name="major_name", attrName="majorName", label="专业", comment="专业"),
-		@Column(name="class_name", attrName="majorName", label="班级", comment="班级"),
+		@Column(name="class_name", attrName="className", label="班级", comment="班级"),
 		@Column(name="gender", attrName="gender", label="性别", comment="性别"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"

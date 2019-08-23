@@ -338,7 +338,7 @@ public class CommonUserController extends BaseController {
     @RequestMapping(value = "loadStuListByIDstr")
     @ResponseBody
     public CommonResult loadStuListByIDstr(MultipartFile file) throws Exception {
-        ExcelImport ei = new ExcelImport(file, 2, 0);
+        ExcelImport ei = new ExcelImport(file, 1, 0);
         List<UserCondition> userConditionList = ei.getDataList(UserCondition.class);
         ei.close();
         if(ListUtils.isEmpty(userConditionList)){
@@ -425,9 +425,10 @@ public class CommonUserController extends BaseController {
             System.out.println(userList.toString());
             return commonUserService.saveUserList(userList, roleId);
         } catch (Exception e) {
-
+            e.printStackTrace();
+            return new CommonResult(CodeConstant.WRONG_FILE, "您传入的文件有问题，请检查！");
         }
-        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
+        //return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
     }
 
 
@@ -455,6 +456,19 @@ public class CommonUserController extends BaseController {
     @ResponseBody
     public CommonResult loadOneUser(String commonUserId){
         return commonUserService.loadOneUser(commonUserId);
+    }
+
+    @ApiOperation(value = "修改密码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "oldPassword", value = "旧密码", required = true, dataType="String"),
+            @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, dataType="String")
+    })
+    @Log(operationName = "修改密码", operationType = Log.OPERA_TYPE_SEL)
+    @RequestMapping(value = "changePassword")
+    @ResponseBody
+    public CommonResult changePassword(String oldPassword, String newPassword){
+
+        return commonUserService.changePassword(oldPassword, newPassword);
     }
 
 }

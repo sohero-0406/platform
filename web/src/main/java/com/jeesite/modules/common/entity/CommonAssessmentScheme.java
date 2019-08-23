@@ -23,6 +23,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="pass_score", attrName="passScore", label="通过分值"),
 		@Column(name="need_single_pass", attrName="needSinglePass", label="是否需要单项同过分值"),
 		@Column(name="data_status", attrName="dataStatus", label="数据是否启用状态"),
+		@Column(name="scheme_table", attrName="schemeTable", label="评分表名称"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
@@ -35,6 +36,7 @@ public class CommonAssessmentScheme extends PreEntity<CommonAssessmentScheme> {
 	private String dataStatus; //  数据是否启用状态(0 未启用，1是启用)
 	private String passScore; // 通过分值
 	private String needSinglePass; //是否需要单项同过分值(取值为0不需要、1需要)
+	private String schemeTable;
 	
 	public CommonAssessmentScheme() {
 		this(null);
@@ -95,5 +97,13 @@ public class CommonAssessmentScheme extends PreEntity<CommonAssessmentScheme> {
 
 	public void setNeedSinglePass(String needSinglePass) {
 		this.needSinglePass = needSinglePass;
+	}
+
+	public String getSchemeTable() {
+		return schemeTable;
+	}
+
+	public void setSchemeTable(String schemeTable) {
+		this.schemeTable = schemeTable;
 	}
 }

@@ -5,13 +5,12 @@ package com.jeesite.modules.common.service;
 
 import java.util.List;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.dao.CommonUserDao;
-import com.jeesite.modules.common.entity.CommonResult;
-import com.jeesite.modules.common.entity.CommonUser;
-import com.jeesite.modules.common.entity.PreEntity;
+import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.common.entity.CommonAssessmentScheme;
 import com.jeesite.modules.common.dao.CommonAssessmentSchemeDao;
 
 /**
@@ -34,6 +32,8 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 
 	@Autowired
 	private CommonUserService commonUserService;
+	@Autowired
+	private CommonBasicSchemeService commonBasicSchemeService;
 
 
 	/**
@@ -108,6 +108,7 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(loginUser.getRoleId().equals("1")){
 			super.update(commonAssessmentScheme);
+			updateOther(commonAssessmentScheme);
 			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 		}
 		if(loginUser.getRoleId().equals("2")&&"1".equals(loginUser.getIsExamRight())){
@@ -115,12 +116,32 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 			CommonUser createOne = commonUserService.get(commonAssessmentScheme.getCreateBy());
 			if(loginUser.getSchoolId().equals(createOne.getSchoolId())){
 				super.update(commonAssessmentScheme);
+				updateOther(commonAssessmentScheme);
 				return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 			}
 		}
 		return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 	}
-	
+
+	private void updateOther(CommonAssessmentScheme commonAssessmentScheme) {
+		if ("1".equals(commonAssessmentScheme.getDataStatus())) {
+			CommonAssessmentScheme con = new CommonAssessmentScheme();
+			con.setBasicSchemeId(commonAssessmentScheme.getBasicSchemeId());
+			con.setDataStatus("1");
+			List<CommonAssessmentScheme> commonAssessmentSchemeList = super.findList(con);
+
+			for (int i = 0; i < commonAssessmentSchemeList.size(); i++) {
+				CommonAssessmentScheme cas = commonAssessmentSchemeList.get(i);
+				cas.setDataStatus("0");
+				if(!cas.getId().equals(commonAssessmentScheme.getId())){
+
+					System.out.println(cas.getId());
+					super.update(cas);
+				}
+			}
+		}
+	}
+
 	/**
 	 * 删除数据
 	 * @param commonAssessmentScheme

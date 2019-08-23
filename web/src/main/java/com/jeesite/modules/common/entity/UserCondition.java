@@ -4,7 +4,7 @@ import com.jeesite.common.utils.excel.annotation.ExcelField;
 
 public class UserCondition {
 
-    private String userName;
+    private String loginName;
     private String trueName;
     private String assessmentDate;
     private String assessmentTime;
@@ -18,13 +18,13 @@ public class UserCondition {
 
 
     @ExcelField(title = "身份证",align=ExcelField.Align.CENTER, sort=1)
-    public String getUserName() {
-        return userName;
+    public String getLoginName() {
+        return loginName;
     }
 
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     @ExcelField(title = "姓名",align=ExcelField.Align.CENTER, sort=2)

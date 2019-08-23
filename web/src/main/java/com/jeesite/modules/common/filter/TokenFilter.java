@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Map;
 
-//@Component
-//@WebFilter(urlPatterns = "/*", filterName = "tokenFilter")
+@Component
+@WebFilter(urlPatterns = "/*", filterName = "tokenFilter")
 public class TokenFilter implements Filter {
 
 
@@ -38,11 +38,13 @@ public class TokenFilter implements Filter {
                 flag = true;
                 break;
             }
+            if(!uri.contains("/common")){
+                flag = true;
+                break;
+            }
         }
         System.out.println(flag);
         if(flag){
-            Map<String, String[]> map = httpServletRequest.getParameterMap();
-            System.out.println("xxx");
             filterChain.doFilter(servletRequest, servletResponse);
         }else{
             HttpServletResponse httpServletResponse = (HttpServletResponse)servletResponse;

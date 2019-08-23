@@ -40,4 +40,5 @@ public class CodeConstant {
     // excel的数据无法成功解析
     public static final String EXCEL_WRONG_DATA = "8011";
 
+    public static final String WRONG_PASS = "8012";
 }
