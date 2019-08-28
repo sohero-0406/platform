@@ -9,6 +9,8 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.lang.NumberUtils;
+import com.jeesite.common.lang.StringUtils;
 import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
@@ -75,10 +77,43 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 	 */
 	@Transactional(readOnly=false)
 	public CommonResult saveCommonAssessmentScheme(CommonAssessmentScheme commonAssessmentScheme) {
+		if(StringUtils.isBlank(commonAssessmentScheme.getPassScore())){
+			return new CommonResult(CodeConstant.ERROR_DATA, "需要设置通过分值");
+		}
+		String needSinglePass = commonAssessmentScheme.getNeedSinglePass();
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(CommonUserUtil.isHaveExamRight(loginUser)){
-			super.save(commonAssessmentScheme);
+			JSONArray schemeDetails = JSONArray.parseArray(commonAssessmentScheme.getSchemeDetails());
+			Integer schemeWeight = 0;
+			for (int i = 0; i < schemeDetails.size(); i++) {
+				JSONObject oneScheme = schemeDetails.getJSONObject(i);
+				if(needSinglePass.equals("1")&& NumberUtils.createDouble(oneScheme.getString("passScore"))>100){
+					return new CommonResult(CodeConstant.ERROR_DATA, oneScheme.getString("title")+"的及格分不能大于100");
+				}
+				schemeWeight += Integer.parseInt(oneScheme.getString("weight"));
+				JSONArray softDetails = JSONArray.parseArray(oneScheme.getString("softDetails"));
+				Integer softWeight = 0;
+				for (int j = 0; j < softDetails.size(); j++) {
+					JSONObject oneSoft = softDetails.getJSONObject(j);
+					softWeight += Integer.parseInt(oneSoft.getString("softwareWeight"));
+					Integer oneSoftWeight = Integer.parseInt(oneSoft.getString("subjScoreWeight")) + Integer.parseInt(oneSoft.getString("objScoreWeight"));
+					if(oneSoftWeight!=100){
+						return new CommonResult(CodeConstant.ERROR_DATA, oneScheme.getString("title")+"下的"+oneSoft.getString("softwareName")+"主客观权重不为100");
+					}
+				}
+				if(softWeight!=100){
+					return new CommonResult(CodeConstant.ERROR_DATA, oneScheme.getString("title")+"的软件权重之和不为100");
+				}
+			}
+			if(schemeWeight!=100){
+				return new CommonResult(CodeConstant.ERROR_DATA, "各个考核项的权重之和不为100");
+			}
+			if(commonAssessmentScheme.getId()!=null&&!"".equals(commonAssessmentScheme.getId())){
+				super.update(commonAssessmentScheme);
+			}else{
+				super.save(commonAssessmentScheme);
+			}
 			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 		}else{
 			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");

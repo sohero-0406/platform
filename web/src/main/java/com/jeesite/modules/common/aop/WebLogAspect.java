@@ -4,6 +4,7 @@ import com.jeesite.modules.common.entity.CommonLog;
 import com.jeesite.modules.common.entity.CommonUser;
 import com.jeesite.modules.common.entity.PreEntity;
 import com.jeesite.modules.common.service.CommonLogService;
+import com.jeesite.modules.common.service.CommonSchoolService;
 import com.jeesite.modules.common.service.CommonUserService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,6 +30,8 @@ public class WebLogAspect {
     private CommonLogService commonLogService;
     @Autowired
     private CommonUserService commonUserService;
+    @Autowired
+    private CommonSchoolService commonSchoolService;
 
     private final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
@@ -107,13 +110,23 @@ public class WebLogAspect {
                 if(loginUserId!=null){
                     CommonUser loginUser = commonUserService.get(loginUserId);
                     log.setCreateBy(loginUser.getUserName());
+                    log.setUserName(loginUser.getUserName());
+                    log.setTrueName(loginUser.getTrueName());
+                    if(loginUser.getSchoolId().equals("0")){
+                        log.setSchoolName("管理员无学校");
+                    }else{
+                        log.setSchoolName(commonSchoolService.get(loginUser.getSchoolId()).getSchoolName());
+                    }
                 }else{
                     log.setCreateBy("匿名");
+                    log.setUserName("匿名");
+                    log.setTrueName("匿名");
+                    log.setSchoolName("匿名");
                 }
 
 //            log.setCreateDate(new Date());
                 // 保存数据库
-                //commonLogService.save(log);
+                commonLogService.save(log);
             }
 
             // //System.out.println("=====controller后置通知结束=====");

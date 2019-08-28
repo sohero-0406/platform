@@ -3,11 +3,14 @@
  */
 package com.jeesite.modules.common.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.lang.StringUtils;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.CommonUser;
 import com.jeesite.modules.common.entity.PreEntity;
@@ -125,4 +128,104 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 
 	}
 
+
+	@Transactional(readOnly = false)
+	public void saveList(List<CommonAccessory> commonAccessoryList){
+		dao.insertBatch(commonAccessoryList);
+	}
+
+	@Transactional(readOnly = false)
+	public CommonResult saveByCategoryId(List<CommonAccessory> commonAccessoryList, String categoryId) {
+		String loginUserId = PreEntity.getUserIdByToken();
+		CommonUser loginUser = commonUserService.get(loginUserId);
+		if(!"1".equals(loginUser.getRoleId())){
+			return new CommonResult(CodeConstant.NO_RIGHT, "您有权限进行该操作");
+		}
+		if(ListUtils.isEmpty(commonAccessoryList)){
+			return new CommonResult(CodeConstant.EXCEL_NO_DATA, "您传入的EXCEL表格没有数据");
+		}
+		List<String> msgList = new ArrayList<>();
+		List<CommonAccessory> okCommonAccessoryList = new ArrayList<>();
+		String msg = "";
+		for (CommonAccessory commonAccessory :commonAccessoryList) {
+			int sum = 0;
+			String msgX = "编号为\""+commonAccessory.getAccessoryIndex()+"\"的配件:";
+			if(StringUtils.isBlank(commonAccessory.getAccessoryIndex())){
+				msgX += "编号不能为空;";
+				sum++;
+			}else {
+				if (commonAccessory.getAccessoryIndex().length()>50) {
+					msgX += "编号长度不能大于50;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryName())){
+				msgX += "配件品牌不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryName().length()>100) {
+					msgX += "配件品牌长度不能大于100;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryLevel())){
+				msgX += "配件等级不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryLevel().length()>45) {
+					msgX += "配件等级长度不能大于45;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessorySpecifications())){
+				msgX += "规格不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessorySpecifications().length()>20) {
+					msgX += "规格长度不能大于20;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryUnit())){
+				msgX += "单位不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryUnit().length()>10) {
+					msgX += "单位长度不能大于10;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryPrice())){
+				msgX += "指导价不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryPrice().length()>20) {
+					msgX += "指导价长度不能大于20;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryPlaceOfOrigin())){
+				msgX += "产地不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryPlaceOfOrigin().length()>100) {
+					msgX += "产地长度不能大于100;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryImport())){
+				msgX += "是否进口不能为空;";sum++;
+			}
+			if(sum>0){
+				msgList.add(msgX);
+				msg += msgX+"<br/>";
+			}else{
+				okCommonAccessoryList.add(commonAccessory);
+			}
+		}
+		if(okCommonAccessoryList.size()>0){
+			for (CommonAccessory commonAccessory :commonAccessoryList) {
+				commonAccessory.setCategoryId(categoryId);
+			}
+			this.saveList(okCommonAccessoryList);
+		}else{
+			JSONObject jo = new JSONObject();
+			jo.put("successNum", okCommonAccessoryList.size());
+			jo.put("errorNum", commonAccessoryList.size()-okCommonAccessoryList.size());
+			jo.put("msgList", msgList);
+			return new CommonResult(CodeConstant.EXCEL_WRONG_DATA, "excel文件中没有一个数据能正常上传", jo);
+		}
+		JSONObject jo = new JSONObject();
+		jo.put("successNum", okCommonAccessoryList.size());
+		jo.put("errorNum", commonAccessoryList.size()-okCommonAccessoryList.size());
+		jo.put("msgList", msgList);
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, msg, jo);
+	}
 }

@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.entity.Page;
+import com.jeesite.common.lang.DateUtils;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.common.utils.jwt.JwtUtils;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -151,16 +153,40 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
      */
     @Transactional(readOnly = false)
     public CommonResult addCommonUser(CommonUser commonUser) {
+        if(StringUtils.isNotBlank(commonUser.getPhoneNum())&&commonUser.getPhoneNum().length()!=11){
+            return new CommonResult(CodeConstant.ERROR_DATA, "手机号长度不是11位!");
+        }
+        if(StringUtils.isNotBlank(commonUser.getTrueName())&&commonUser.getTrueName().length()>32){
+            return new CommonResult(CodeConstant.ERROR_DATA, "姓名的长度不得大于32!");
+        }
+        if(StringUtils.isNotBlank(commonUser.getMajorName())&&commonUser.getMajorName().length()>100){
+            return new CommonResult(CodeConstant.ERROR_DATA, "专业的长度不得大于100!");
+        }
+        if(StringUtils.isNotBlank(commonUser.getClassName())&&commonUser.getClassName().length()>100){
+            return new CommonResult(CodeConstant.ERROR_DATA, "班级的长度不得大于100!");
+        }
         if(StringUtils.isBlank(commonUser.getId())){
+            if(commonUser.getSchoolId()==null){
+                return new CommonResult(CodeConstant.ERROR_DATA, "该用户没有设置学校属性!");
+            }
+            if(StringUtils.isBlank(commonUser.getUserName())){
+                return new CommonResult(CodeConstant.ERROR_DATA, "请填写身份证信息!");
+            }
+            if(commonUser.getUserName()!=null&&commonUser.getUserName().length()!=18){
+                return new CommonResult(CodeConstant.ERROR_DATA, "登录名长度不是18位!");
+            }
             commonUser.setPassword("123456");
             CommonUser con = new CommonUser();
             con.setUserName(commonUser.getUserName());
+
             List<CommonUser> exist = super.findList(con);
             if(exist!=null&&exist.size()>0){
                 return new CommonResult(CodeConstant.USER_EXIST, commonUser.getUserName()+"已存在！");
             }
+            super.save(commonUser);
+        }else{
+            super.update(commonUser);
         }
-        super.save(commonUser);
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
     }
 
@@ -187,19 +213,42 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
                 msg += user.getUserName()+"已存在！<br/>";
                 errorNum++;
             }else{
+                int sum = 0;
+                if(StringUtils.isNotBlank(user.getPhoneNum())&&user.getPhoneNum().length()!=11){
+                    sum++;
+                    //return new CommonResult(CodeConstant.ERROR_DATA, "手机号长度不是11位!");
+                    msg += user.getUserName()+"手机号长度不是11位!<br/>";
+                }
+                if(StringUtils.isNotBlank(user.getTrueName())&&user.getTrueName().length()>32){
+                    sum++;
+                    msg += user.getUserName()+"姓名的长度不得大于32!<br/>";
+//                    return new CommonResult(CodeConstant.ERROR_DATA, "姓名的长度不得大于32!");
+                }
+                if(StringUtils.isNotBlank(user.getMajorName())&&user.getMajorName().length()>100){
+                    sum++;
+                    msg += user.getUserName()+"专业的长度不得大于100!<br/>";
+                    //return new CommonResult(CodeConstant.ERROR_DATA, "专业的长度不得大于100!");
+                }
+                if(StringUtils.isNotBlank(user.getClassName())&&user.getClassName().length()>100){
+                    sum++;
+                    msg += user.getUserName()+"班级的长度不得大于100!<br/>";
+                    //return new CommonResult(CodeConstant.ERROR_DATA, "班级的长度不得大于100!");
+                }
                 if(user.getUserName().trim().length()!=18){
                     msg += user.getUserName()+"长度不是18！<br/>";
+                    sum++;
+                }
+                CommonSchool commonSchool = new CommonSchool();
+                commonSchool.setSchoolName(user.getSchoolName());
+                CommonSchool cs = commonSchoolService.getByEntity(commonSchool);
+                if(cs==null){
+                    msg += user.getUserName()+"设置的学校名称无法查询到!<br/>";
+                    sum++;
+                }
+                if(sum>0){
                     errorNum++;
                 }else{
-                    CommonSchool commonSchool = new CommonSchool();
-                    commonSchool.setSchoolName(user.getSchoolName());
-                    CommonSchool cs = commonSchoolService.getByEntity(commonSchool);
-                    if(cs!=null){
-                        user.setSchoolId(cs.getId());
-                    }else{
-                        commonSchoolService.save(commonSchool);
-                        user.setSchoolId(commonSchool.getId());
-                    }
+                    user.setSchoolId(cs.getId());
                     user.setRoleId(roleId);
                     super.save(user);
                     okNum++;
@@ -321,6 +370,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
                 return result;
             }
             user.setToken(JwtUtils.generateToken(user.getId()));
+            user.setPassword(null);
             result.setData(user);
 
             result.setCode(CodeConstant.REQUEST_SUCCESSFUL);
@@ -439,7 +489,6 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
             return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, dao.findClassNameList(commonUser.getSchoolId(), majorName));
         }
         return new CommonResult(CodeConstant.ERROR_DATA, "传入的参数错误");
-
     }
 
     /**
@@ -450,10 +499,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
     public CommonResult loadStuListByIds(String ids){
         String[] isArray = ids.split(",");
         List<String> idList = Arrays.asList(isArray);
-//        CommonUser con = new CommonUser();
-//        con.setId_in(isArray);
         List<CommonUser> list = dao.findStuByIdsWithSchoolName(idList);
-
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
     }
 
@@ -476,12 +522,25 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
      */
     public CommonResult fillUserConditionList(List<UserCondition> userConditionList){
         List<String> userNameList = new ArrayList<>();
+        String msg = "";
         for (UserCondition userCondition:userConditionList ) {
             userNameList.add(userCondition.getLoginName());
+            try {
+                Date d = DateUtils.parseDate(userCondition.getAssessmentDate(), "yyyyMMdd");
+            } catch (ParseException e) {
+                //e.printStackTrace();
+                msg += "身份证号为"+userCondition.getLoginName()+"的考核日期填写格式不正确，请按照20190828的样式来填写";
+            }
+        }
+        if(!"".equals(msg)){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("successNum", 0);
+            jsonObject.put("errorNum", userConditionList.size());
+            return new CommonResult(CodeConstant.EXCEL_WRONG_DATA, msg, jsonObject);
         }
         List<CommonUser> userList = dao.findStuByUserNamesWithSchoolName(userNameList);
         if(ListUtils.isEmpty(userList)){
-            return new CommonResult(CodeConstant.EXCEL_NO_DATA, "没有查询到任何数据");
+            return new CommonResult(CodeConstant.EXCEL_NO_DATA, "根据您文件内提供的身份号，系统没有查询到任何用户信息");
         }
         List<UserCondition> list2 = new ArrayList<>();
         for (UserCondition userCondition:userConditionList ) {

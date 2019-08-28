@@ -279,4 +279,9 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 	public List<CommonAssessmentStu> findAssessmentStuListInAssessment(CommonAssessmentStu con) {
 		return dao.findAssessmentStuListInAssessment(con);
 	}
+
+	@Transactional(readOnly = false)
+	public void saveList(List<CommonAssessmentStu> commonAssessmentStuList){
+		dao.insertBatch(commonAssessmentStuList);
+	}
 }

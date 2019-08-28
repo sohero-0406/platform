@@ -145,17 +145,17 @@ public class CommonAccessoryCategoryController extends BaseController {
 
 	/**
 	 * 删除配件分类信息
-	 * @param commonAccessoryCategory
+	 * @param json
 	 * @return
 	 */
 	@ApiOperation(value = "删除配件分类信息")
-	@ApiImplicitParam(name = "commonAccessoryCategory", value = "删除的配件分类对象", required = true, dataType="CommonAccessoryCategory")
+	@ApiImplicitParam(name = "json", value = "删除用的json数据", required = true, dataType="String")
 	@Log(operationName = "删除配件分类信息", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAccessoryAndCategory")
 	@ResponseBody
-	public CommonResult deleteCommonAccessoryAndCategory(CommonAccessoryCategory commonAccessoryCategory) {
+	public CommonResult deleteCommonAccessoryAndCategory(String json) {
 
-		return commonAccessoryCategoryService.deleteCommonAccessoryCategory(commonAccessoryCategory);
+		return commonAccessoryCategoryService.deleteCommonAccessoryCategory(json);
 	}
 
 	/**

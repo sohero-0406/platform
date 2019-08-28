@@ -1,6 +1,8 @@
 package com.jeesite.modules.common.util;
 
+import com.jeesite.modules.common.entity.CommonAccessoryCategory;
 import com.jeesite.modules.common.entity.CommonUser;
+import com.jeesite.modules.common.entity.PreEntity;
 
 public class CommonUserUtil {
 
@@ -20,4 +22,7 @@ public class CommonUserUtil {
         return "1".equals(loginUser.getRoleId());
     }
 
+    public static boolean isSameCreator(CommonUser loginUser, PreEntity preEntity) {
+        return loginUser.getId().equals(preEntity.getCreateBy());
+    }
 }

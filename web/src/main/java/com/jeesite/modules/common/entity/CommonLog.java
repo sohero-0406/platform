@@ -28,6 +28,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="exception_code", attrName="exceptionCode", label="异常代号"),
 		@Column(name="exception_detail", attrName="exceptionDetail", label="异常详情"),
 		@Column(name="params", attrName="params", label="传入参数"),
+		@Column(name="true_name", attrName="trueName", label="姓名"),
+		@Column(name="user_name", attrName="userName", label="登录名"),
+		@Column(name="school_name", attrName="schoolName", label="学校"),
 		@Column(name="create_by", attrName="createBy", label="创建者", isUpdate=false, isQuery=false),
 		@Column(name="create_date", attrName="createDate", label="创建时间", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="更新者", isQuery=false),
@@ -47,6 +50,9 @@ public class CommonLog extends PreEntity<CommonLog> {
 	private String exceptionDetail;		// 异常详情
 	private String params;		// 传入参数
 	private Date updateTime;		// 更新时间
+	private String trueName;
+	private String userName;
+	private String schoolName;
 	
 	public CommonLog() {
 		this(null);
@@ -127,5 +133,33 @@ public class CommonLog extends PreEntity<CommonLog> {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-	
+
+
+	@Length(min=0, max=100, message="姓名长度不能超过 1000 个字符")
+	public String getTrueName() {
+		return trueName;
+	}
+
+	public void setTrueName(String trueName) {
+		this.trueName = trueName;
+	}
+
+	@Length(min=0, max=100, message="登录名长度不能超过 1000 个字符")
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	@Length(min=0, max=100, message="学校长度不能超过 1000 个字符")
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+
 }

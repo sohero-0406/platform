@@ -231,7 +231,12 @@ public class CommonAssessmentController extends BaseController {
 		try {
 			String fileName = "考生基本信息模板.xlsx";
 			List<UserCondition> list = Lists.newArrayList();
-			list.add(new UserCondition());
+			UserCondition userCondition = new UserCondition();
+			userCondition.setLoginName("110101199912121558");
+			userCondition.setTrueName("王小明");
+			userCondition.setAssessmentDate("20190828");
+			userCondition.setAssessmentTime("7:30-10:30");
+			list.add(userCondition);
 			new ExcelExport(null, UserCondition.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
 		} catch (Exception e) {
 			// addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
@@ -244,7 +249,7 @@ public class CommonAssessmentController extends BaseController {
 	@RequestMapping(value = "downloadStandardScoreMode")
 	public void downloadStandardScoreMode(String id, HttpServletResponse response){
 		ExcelExport ee = commonAssessmentService.makeExcelMode(id);
-		ee.write(response, "123.xlsx").close();
+		ee.write(response, "评分表.xlsx").close();
 	}
 	
 }

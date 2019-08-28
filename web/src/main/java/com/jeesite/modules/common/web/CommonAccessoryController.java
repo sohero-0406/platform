@@ -6,10 +6,13 @@ package com.jeesite.modules.common.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.common.utils.excel.ExcelImport;
 import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,10 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.entity.CommonAccessory;
 import com.jeesite.modules.common.service.CommonAccessoryService;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 汽车配件表Controller
@@ -123,6 +130,21 @@ public class CommonAccessoryController extends BaseController {
 	public CommonResult deleteCommonAccessory(String json) {
 
 		return commonAccessoryService.deleteCommonCommonAccessory(json);
+	}
+
+	@ApiOperation(value = "上传配件信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "categoryId", value = "车型分类的id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "file", value = "上传的数据文件", required = true, dataType="MultipartFile")
+
+	})
+	@Log(operationName = "上传配件信息", operationType = Log.OPERA_TYPE_ADD)
+	@RequestMapping(value = "uploadCommonAccessoryByCategoryId")
+	@ResponseBody
+	public CommonResult uploadCommonAccessoryByCategoryId(String categoryId, MultipartFile file) throws Exception {
+		ExcelImport ei = new ExcelImport(file, 1, 0);
+		List<CommonAccessory> commonAccessoryList = ei.getDataList(CommonAccessory.class);
+		return commonAccessoryService.saveByCategoryId(commonAccessoryList, categoryId);
 	}
 
 	

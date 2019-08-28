@@ -3,14 +3,18 @@
  */
 package com.jeesite.modules.common.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.lang.StringUtils;
 import com.jeesite.modules.common.dao.CommonAccessoryDao;
 import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.*;
+import com.jeesite.modules.common.util.CommonUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,6 +110,12 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
 	 */
 	@Transactional(readOnly = false)
 	public CommonResult saveCategoryAndCommonAccessory(CommonAccessoryCategory commonAccessoryCategory, List<CommonAccessory> commonAccessoryList){
+		if(StringUtils.isBlank(commonAccessoryCategory.getCategoryName())){
+			return new CommonResult(CodeConstant.ERROR_DATA, "您为传入车型名称");
+		}
+		if(StringUtils.isNotBlank(commonAccessoryCategory.getCategoryName())&&commonAccessoryCategory.getCategoryName().length()>100){
+			return new CommonResult(CodeConstant.ERROR_DATA, "车型名称长度不得超过100");
+		}
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(!"1".equals(loginUser.getRoleId())){
@@ -114,40 +124,123 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
 		if(ListUtils.isEmpty(commonAccessoryList)){
 			return new CommonResult(CodeConstant.EXCEL_NO_DATA, "您传入的EXCEL表格没有数据");
 		}
-		super.save(commonAccessoryCategory);
 
-		for (int i = 0; i < commonAccessoryList.size(); i++) {
-			CommonAccessory commonAccessory = commonAccessoryList.get(i);
-			commonAccessory.setCategoryId(commonAccessoryCategory.getId());
-			commonAccessoryService.save(commonAccessory);
+		List<String> msgList = new ArrayList<>();
+		List<CommonAccessory> okCommonAccessoryList = new ArrayList<>();
+		String msg = "";
+		for (CommonAccessory commonAccessory :commonAccessoryList) {
+			int sum = 0;
+			String msgX = "编号为\""+commonAccessory.getAccessoryIndex()+"\"的配件:";
+			if(StringUtils.isBlank(commonAccessory.getAccessoryIndex())){
+				msgX += "编号不能为空;";
+				sum++;
+			}else {
+				if (commonAccessory.getAccessoryIndex().length()>50) {
+					msgX += "编号长度不能大于50;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryName())){
+				msgX += "配件品牌不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryName().length()>100) {
+					msgX += "配件品牌长度不能大于100;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryLevel())){
+				msgX += "配件等级不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryLevel().length()>45) {
+					msgX += "配件等级长度不能大于45;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessorySpecifications())){
+				msgX += "规格不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessorySpecifications().length()>20) {
+					msgX += "规格长度不能大于20;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryUnit())){
+				msgX += "单位不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryUnit().length()>10) {
+					msgX += "单位长度不能大于10;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryPrice())){
+				msgX += "指导价不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryPrice().length()>20) {
+					msgX += "指导价长度不能大于20;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryPlaceOfOrigin())){
+				msgX += "产地不能为空;";sum++;
+			}else {
+				if (commonAccessory.getAccessoryPlaceOfOrigin().length()>100) {
+					msgX += "产地长度不能大于100;";sum++;
+				}
+			}
+			if(StringUtils.isBlank(commonAccessory.getAccessoryImport())){
+				msgX += "是否进口不能为空;";sum++;
+			}
+			if(sum>0){
+				msgList.add(msgX);
+				msg += msgX+"<br/>";
+			}else{
+				okCommonAccessoryList.add(commonAccessory);
+			}
 		}
-
+		if(okCommonAccessoryList.size()>0){
+			super.save(commonAccessoryCategory);
+			for (CommonAccessory commonAccessory :commonAccessoryList) {
+				commonAccessory.setCategoryId(commonAccessoryCategory.getId());
+			}
+			commonAccessoryService.saveList(okCommonAccessoryList);
+		}else{
+			JSONObject jo = new JSONObject();
+			jo.put("successNum", okCommonAccessoryList.size());
+			jo.put("errorNum", commonAccessoryList.size()-okCommonAccessoryList.size());
+			jo.put("msgList", msgList);
+			return new CommonResult(CodeConstant.EXCEL_WRONG_DATA, "excel文件中没有一个数据能正常上传", jo);
+		}
 		JSONObject jo = new JSONObject();
-		jo.put("successNum", commonAccessoryList.size());
-		jo.put("errorNum", 0);
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, jo);
-		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "成功上传"+commonAccessoryList.size()+"条配件信息");
+		jo.put("successNum", okCommonAccessoryList.size());
+		jo.put("errorNum", commonAccessoryList.size()-okCommonAccessoryList.size());
+		jo.put("msgList", msgList);
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, msg, jo);
 	}
 
 	// 只是逻辑删除
 
 	/**
 	 * 删除配件分类数据（逻辑删除）
-	 * @param commonAccessoryCategory
+	 * @param json
 	 * @return
 	 */
 	@Transactional(readOnly = false)
-	public CommonResult deleteCommonAccessoryCategory(CommonAccessoryCategory commonAccessoryCategory){
+	public CommonResult deleteCommonAccessoryCategory(String json){
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(!"1".equals(loginUser.getRoleId())){
 			return new CommonResult(CodeConstant.NO_RIGHT, "您有权限进行该操作");
 		}
-		if(commonAccessoryCategory.getId()==null){
-			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的数据错误");
+		JSONObject jsonObject = JSONObject.parseObject(json);
+		Integer length =jsonObject.getInteger("length");
+		JSONArray ja = JSONArray.parseArray(jsonObject.getString("datas"));
+		int deletedNum = 0;
+		for (int i = 0; i < length; i++) {
+			String id = ja.getString(i);
+			CommonAccessoryCategory commonAccessoryCategory = this.get(id);
+			if(CommonUserUtil.isSuperAdmin(loginUser)||CommonUserUtil.isSameCreator(loginUser, commonAccessoryCategory)){
+				super.delete(commonAccessoryCategory);
+				deletedNum++;
+			}
 		}
-		super.delete(commonAccessoryCategory);
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
+		JSONObject object = new JSONObject();
+		object.put("deletedNum", deletedNum);
+		object.put("notDeletedNum", length - deletedNum);
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
 	}
 
 	/**

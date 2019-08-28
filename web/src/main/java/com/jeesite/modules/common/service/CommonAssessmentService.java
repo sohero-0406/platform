@@ -22,6 +22,7 @@ import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
 
+import com.jeesite.modules.common.util.ThisDateUtil;
 import com.jeesite.modules.common.vo.ExportUploadScoreVo;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -103,7 +104,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 					}
 				}
 				commonAssessment.setDataStatus("0");
-				super.save(commonAssessment);
+				//super.save(commonAssessment);
 				return saveCommonSchemeStus(commonAssessment, userConfig);
 			}else{
 				return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
@@ -115,15 +116,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			}
 			CommonUser creator = commonUserService.get(commonAssessment.getCreateBy());
 			if(loginUser.getRoleId().equals("1")||(loginUser.getSchoolId().equals(creator.getSchoolId()))){
-				super.update(commonAssessment);
-				CommonAssessmentStu con = new CommonAssessmentStu();
-				con.setAssessmentId(commonAssessment.getId());
-				List<CommonAssessmentStu> stuList = commonAssessmentStuService.findList(con);
-				if(ListUtils.isNotEmpty(stuList)){
-					for (CommonAssessmentStu stu : stuList) {
-						commonAssessmentStuService.phyDelete(stu);
-					}
-				}
+				//super.update(commonAssessment);
+
 				return saveCommonSchemeStus(commonAssessment, userConfig);
 			}else{
 				return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
@@ -154,24 +148,62 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				softUploadedMarks.add(oneMark);
 			}
 		}
+		String msg = "";
 		JSONArray jsonArray = JSONArray.parseArray(userConfig);
+		List<CommonAssessmentStu> commonAssessmentStuList = new ArrayList<>();
 		for (int i = 0; i < jsonArray.size() ; i++) {
 			JSONObject jo = jsonArray.getJSONObject(i);
 			CommonAssessmentStu commonAssessmentStu = new CommonAssessmentStu();
-			commonAssessmentStu.setAssessmentId(assessmentId);
+			//commonAssessmentStu.setAssessmentId(assessmentId);
 			commonAssessmentStu.setCommonUserId(jo.getString("commonUserId"));
 			commonAssessmentStu.setLoginName(jo.getString("loginName"));
 			commonAssessmentStu.setTrueName(jo.getString("trueName"));
 			commonAssessmentStu.setSchoolName(jo.getString("schoolName"));
 			commonAssessmentStu.setMajorName(jo.getString("majorName"));
 			commonAssessmentStu.setClassName(jo.getString("className"));
-			commonAssessmentStu.setAssessmentDate(jo.getString("assessmentDate"));
+			String assessmentDate = jo.getString("assessmentDate");
+			if(!ThisDateUtil.checkDateIn(commonAssessment.getStartDate(), commonAssessment.getEndDate(), assessmentDate)){
+				msg += commonAssessmentStu.getLoginName()+"的考核日期不在考核的开始日期和结束日期之间!<br/>";
+				break;
+			}else{
+				commonAssessmentStu.setAssessmentDate(assessmentDate);
+			}
+
 			commonAssessmentStu.setAssessmentTime(jo.getString("assessmentTime"));
 			commonAssessmentStu.setSchoolId(jo.getString("schoolId"));
 			commonAssessmentStu.setDataStatus("0");
 			commonAssessmentStu.setScoreDetails(commonAssessmentScheme.getSchemeDetails());
 			commonAssessmentStu.setSoftUploadedMarks(softUploadedMarks.toJSONString());
-			commonAssessmentStuService.save(commonAssessmentStu);
+			//commonAssessmentStuService.save(commonAssessmentStu);
+			commonAssessmentStuList.add(commonAssessmentStu);
+		}
+		if(!"".equals(msg)){
+			return new CommonResult(CodeConstant.ERROR_DATA, msg);
+		}
+		if(commonAssessmentStuList.size()==0){
+			return new CommonResult(CodeConstant.ERROR_DATA, "没有任何考生数据");
+		}
+
+		if(commonAssessment.getId()==null){
+			super.save(commonAssessment);
+			for (CommonAssessmentStu commonAssessmentStu:commonAssessmentStuList) {
+				commonAssessmentStu.setAssessmentId(commonAssessment.getAssessmentSchemeId());
+			}
+			commonAssessmentStuService.saveList(commonAssessmentStuList);
+		}else{
+			CommonAssessmentStu con = new CommonAssessmentStu();
+			con.setAssessmentId(commonAssessment.getId());
+			List<CommonAssessmentStu> stuList = commonAssessmentStuService.findList(con);
+			if(ListUtils.isNotEmpty(stuList)){
+				for (CommonAssessmentStu stu : stuList) {
+					commonAssessmentStuService.phyDelete(stu);
+				}
+			}
+			super.update(commonAssessment);
+			for (CommonAssessmentStu commonAssessmentStu:commonAssessmentStuList) {
+				commonAssessmentStu.setAssessmentId(commonAssessment.getAssessmentSchemeId());
+			}
+			commonAssessmentStuService.saveList(commonAssessmentStuList);
 		}
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
