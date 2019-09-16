@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Map;
 
-//@Component
-//@WebFilter(urlPatterns = "/*", filterName = "tokenFilter")
+@Component
+@WebFilter(urlPatterns = "/*", filterName = "tokenFilter")
 public class TokenFilter implements Filter {
 
 
