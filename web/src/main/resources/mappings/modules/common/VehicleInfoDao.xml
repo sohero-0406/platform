@@ -12,7 +12,7 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="findVehicleName" resultType="VehicleInfo">
-		select id,niankuan,chexingmingcheng
+		select chexing_id,niankuan,chexingmingcheng
 		from common_vehicle_info
 		where chexi_id=#{chexiId}
 	</select>
