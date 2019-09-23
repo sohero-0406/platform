@@ -6,6 +6,8 @@ package com.jeesite.modules.common.dao;
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.common.entity.VehicleInfo;
+import com.jeesite.modules.common.vo.SelectVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -25,4 +27,9 @@ public interface VehicleInfoDao extends CrudDao<VehicleInfo> {
 
     VehicleInfo getCarModel(String chexingId);
 
+    List<VehicleInfo> findListWithField(@Param("vehicleInfo") VehicleInfo vehicleInfo, @Param("fieldList")List<SelectVO> fieldList);
+
+    VehicleInfo selectOneWithField(@Param("vehicleInfo")VehicleInfo vehicleInfo,@Param("fieldList") List<SelectVO> fieldList);
+
+    List<String> loadCheXingIds(String chexiId);
 }

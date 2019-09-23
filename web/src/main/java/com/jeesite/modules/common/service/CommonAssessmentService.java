@@ -163,8 +163,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			commonAssessmentStu.setClassName(jo.getString("className"));
 			String assessmentDate = jo.getString("assessmentDate");
 			if(!ThisDateUtil.checkDateIn(commonAssessment.getStartDate(), commonAssessment.getEndDate(), assessmentDate)){
-				msg += commonAssessmentStu.getLoginName()+"的考核日期不在考核的开始日期和结束日期之间!<br/>";
-				break;
+				msg += commonAssessmentStu.getLoginName()+"的考核日期不在考核的开始日期和结束日期之间!<br/><br/>";
+				//break;
 			}else{
 				commonAssessmentStu.setAssessmentDate(assessmentDate);
 			}
@@ -187,7 +187,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		if(commonAssessment.getId()==null){
 			super.save(commonAssessment);
 			for (CommonAssessmentStu commonAssessmentStu:commonAssessmentStuList) {
-				commonAssessmentStu.setAssessmentId(commonAssessment.getAssessmentSchemeId());
+				commonAssessmentStu.setAssessmentId(commonAssessment.getId());
 			}
 			commonAssessmentStuService.saveList(commonAssessmentStuList);
 		}else{
@@ -346,11 +346,11 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			}else { // 此分支是 统计分数
 				return this.calcTotalScore(commonAssessment);
 			}
-		}else{  // 次分支是上传了评分表
+		}else{  // 此分支是上传了评分表
 			CommonAssessmentStu commonAssessmentStuCon = new CommonAssessmentStu();
 			commonAssessmentStuCon.setAssessmentId(ca.getId());
 			List<CommonAssessmentStu> commonAssessmentStuList = commonAssessmentStuService.findList(commonAssessmentStuCon);
-
+			int sumx = 0;
 			//CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(ca.getAssessmentSchemeId());
 			//JSONArray jsonArray = JSONArray.parseArray(commonAssessmentScheme.getSchemeDetails());
 			List<String> msgList = new ArrayList<>();
@@ -362,6 +362,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 					int rowIndex = 1;
 					JSONObject jsonObject = jsonArray.getJSONObject(i);
 					String title = jsonObject.getString("title");
+
 					ExcelImport ei = new ExcelImport(file, 0, title);
 					Row row0 = ei.getRow(0);
 					while(ei.getRow(rowIndex)!=null){
@@ -393,6 +394,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 												}else{
 													jox.put("subjScore", obj.toString());
 													softDetails.set(k, jox);
+													sumx++;
 												}
 												break;
 											}
@@ -407,7 +409,9 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 					}
 				}
 				cas.setScoreDetails(jsonArray.toJSONString());
+				commonAssessmentStuList.set(j, cas);
 			}
+			System.out.println("sumx="+sumx);
 			if(msgList.size()==0){
 				for (int j = 0; j < commonAssessmentStuList.size(); j++) {
 					commonAssessmentStuService.update(commonAssessmentStuList.get(j));
@@ -562,8 +566,9 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				CommonAssessmentStu commonAssessmentStu = commonAssessmentStuList.get(j);
 				if(serverExamStuId.equals(commonAssessmentStu.getId())){
 
-					CommonAssessmentScheme commonAssessmentScheme = this.getSchemeByCommonAssessmentList(commonAssessmentList, commonAssessmentStu.getAssessmentId());
-					String schemeDetail = commonAssessmentScheme.getSchemeDetails();
+					//CommonAssessmentScheme commonAssessmentScheme = this.getSchemeByCommonAssessmentList(commonAssessmentList, commonAssessmentStu.getAssessmentId());
+					//String schemeDetail = commonAssessmentScheme.getSchemeDetails();
+					String schemeDetail = commonAssessmentStu.getScoreDetails();
 					String softUploadedMarks = commonAssessmentStu.getSoftUploadedMarks();
 					JSONArray ja = JSONArray.parseArray(schemeDetail);
 					for (int k = 0; k < ja.size(); k++) {
@@ -605,9 +610,9 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		if(msgList.size()>0){
 			return new CommonResult(CodeConstant.ERROR_DATA, "分数解析错误,所有分户均未上传", msgList);
 		}
-		for (int j = 0; j < commonAssessmentStuList.size(); j++) {
-			commonAssessmentStuService.update(commonAssessmentStuList.get(j));
-		}
+        for (CommonAssessmentStu commonAssessmentStu : commonAssessmentStuList) {
+            commonAssessmentStuService.update(commonAssessmentStu);
+        }
 
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, (commonAssessmentStuList.size()-resultMsgList.size())+"条分数全部解析并上传成功!", resultMsgList);
 	}
@@ -639,10 +644,21 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
 		}
 
-		List<String> assessmentNameList = dao.loadNameList(loginUser.getSchoolId());
-
-		return new CommonResult(assessmentNameList);
+		return new CommonResult(dao.loadNameList(loginUser.getSchoolId()));
 	}
+
+	public CommonResult loadAssessmentNameList(String commonUserId, String softwareId){
+	    if(StringUtils.isBlank(softwareId)||StringUtils.isBlank(commonUserId)){
+            return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
+        }
+        CommonUser loginUser = commonUserService.get(commonUserId);
+        if(!"2".equals(loginUser.getRoleId())){
+            return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
+        }
+        String softwareIdStr = "\"softwareId\":\""+softwareId+"\"";
+        List<String> l = dao.loadNameListBySoftwareId(loginUser.getSchoolId(), softwareIdStr);
+        return new CommonResult(l);
+    }
 
 	public CommonResult loadAssessmentNameList(){
 		String loginUsreId = PreEntity.getUserIdByToken();

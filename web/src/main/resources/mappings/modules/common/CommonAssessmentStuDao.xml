@@ -43,7 +43,7 @@
 		select cas.*, ca.assessment_name as assessmentName from common_assessment_stu as cas, common_assessment as ca where
 			cas.assessment_id in (select id from common_assessment where data_status = '5' ) and cas.assessment_id = ca.id
 			<if test="assessmentId!=null and assessmentId!=''">
-				and ca.assessment_id = #{assessmentId}
+				and cas.assessment_id = #{assessmentId}
 			</if>
 			<if test="assessmentName!=null and assessmentName!=''">
 				and ca.assessment_name = #{assessmentName}

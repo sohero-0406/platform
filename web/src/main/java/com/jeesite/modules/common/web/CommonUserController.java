@@ -15,6 +15,7 @@ import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.aop.Log;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.CommonUser;
+import com.jeesite.modules.common.entity.CommonUserTeacher;
 import com.jeesite.modules.common.entity.UserCondition;
 import com.jeesite.modules.common.service.CommonUserService;
 import com.jeesite.modules.common.vo.LoginVO;
@@ -393,12 +394,34 @@ public class CommonUserController extends BaseController {
     @ApiOperation(value = "导出用户模板")
     @Log(operationName = "导出用户模板", operationType = Log.OPERA_TYPE_OTHER)
     @RequestMapping(value = "commonUserDemoExport")
-    public void commonUserDemoExport(HttpServletResponse response) {
+    public void commonUserDemoExport(HttpServletResponse response, String roleId) {
         try {
-            String fileName = "人员信息导入模板.xlsx";
-            List<CommonUser> list = Lists.newArrayList();
-            list.add(new CommonUser());
-            new ExcelExport("人员信息", CommonUser.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
+            if("3".equals(roleId)){
+                String fileName = "人员信息导入模板.xlsx";
+                List<CommonUser> list = Lists.newArrayList();
+                CommonUser commonUser = new CommonUser();
+                commonUser.setUserName("120101198807071557");
+                commonUser.setTrueName("王峰");
+                commonUser.setGender("男");
+                commonUser.setSchoolName("北京大学");
+                commonUser.setMajorName("汽车营销");
+                commonUser.setClassName("营销一班");
+                commonUser.setPhoneNum("13912345678");
+                list.add(commonUser);
+                new ExcelExport("人员信息", CommonUser.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
+            }else{
+                String fileName = "人员信息导入模板.xlsx";
+                List<CommonUser> list = Lists.newArrayList();
+                CommonUser commonUser = new CommonUser();
+                commonUser.setUserName("120101198807071557");
+                commonUser.setTrueName("王峰");
+                commonUser.setGender("男");
+                commonUser.setSchoolName("北京大学");
+                commonUser.setMajorName("汽车营销");
+                commonUser.setPhoneNum("13912345678");
+                list.add(commonUser);
+                new ExcelExport("人员信息", CommonUserTeacher.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
+            }
         } catch (Exception e) {
             // addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
         }
@@ -452,7 +475,7 @@ public class CommonUserController extends BaseController {
 
     @ApiOperation(value = "根据id返回用户对象")
     @ApiImplicitParam(name = "commonUserId", value = "用户id", required = true, dataType="String")
-    @Log(operationName = "根据id返回用户对象", operationType = Log.OPERA_TYPE_SEL)
+    @Log(operationName = "根据id返回用户对象")
     @RequestMapping(value = "loadOneUser")
     @ResponseBody
     public CommonResult loadOneUser(String commonUserId){
@@ -464,7 +487,7 @@ public class CommonUserController extends BaseController {
             @ApiImplicitParam(name = "oldPassword", value = "旧密码", required = true, dataType="String"),
             @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, dataType="String")
     })
-    @Log(operationName = "修改密码", operationType = Log.OPERA_TYPE_SEL)
+    @Log(operationName = "修改密码")
     @RequestMapping(value = "changePassword")
     @ResponseBody
     public CommonResult changePassword(String oldPassword, String newPassword){

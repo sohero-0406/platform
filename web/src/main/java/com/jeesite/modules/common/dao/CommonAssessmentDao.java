@@ -18,6 +18,8 @@ import java.util.List;
 public interface CommonAssessmentDao extends CrudDao<CommonAssessment> {
 	List<String> loadNameList(String schoolId);
 
+	List<String> loadNameListBySoftwareId(String schoolId, String softwareIdStr);
+
 	List<String> loadCalcedNameList(String schoolId);
 
 	Integer countConflictNum(String startDate, String endDate, String id);

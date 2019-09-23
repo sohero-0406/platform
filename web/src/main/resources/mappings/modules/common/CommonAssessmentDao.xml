@@ -15,6 +15,11 @@
 		select ca.assessment_name as assessmentName from common_assessment as ca where ca.school_id = #{schoolId} and data_status = '2' group by ca.assessment_name
 	</select>
 
+	<select id="loadNameListBySoftwareId" resultType="String">
+		select ca.assessment_name as assessmentName from common_assessment as ca, common_assessment_scheme as cas
+		where ca.school_id = #{schoolId} and ca.data_status = '2' and cas.scheme_details like CONCAT('%', #{softwareIdStr}, '%') group by ca.assessment_name
+	</select>
+
     <select id="loadCalcedNameList" resultType="String">
         select ca.assessment_name as assessmentName from common_assessment as ca where data_status = '5'
          <if test="schoolId!=null and schoolId!=''">

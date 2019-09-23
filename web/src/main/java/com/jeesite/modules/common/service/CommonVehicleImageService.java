@@ -134,5 +134,10 @@ public class CommonVehicleImageService extends CrudService<CommonVehicleImageDao
 		dao.phyDelete(commonVehicleImage);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "删除成功");
 	}
+
+	@Transactional(readOnly = false)
+	public void saveList(List<CommonVehicleImage> commonVehicleImageList){
+		dao.insertBatch(commonVehicleImageList);
+	}
 	
 }

@@ -17,6 +17,7 @@ import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
 import com.jeesite.modules.common.util.FilePathUtil;
 import com.jeesite.modules.common.util.PageUtils;
+import com.jeesite.modules.common.vo.SelectVO;
 import com.jeesite.modules.job.p.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -225,7 +227,7 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 		}
 		String end = FileUtils.getFileExtension(image.getOriginalFilename());
-		if(!end.equals("jpg")&&!	end.equals("png")){
+		if(!end.equals("jpg")&&!end.equals("png")){
 			return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
 		}
 		File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage_"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
@@ -235,6 +237,44 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		commonVehicleImage.setImageName(x.getName());
 		commonVehicleImageService.save(commonVehicleImage);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
+	}
+
+	/**
+	 * 保存多个车的图片
+	 * @param images
+	 * @param vehicleInfoId
+	 * @return
+	 * @throws IOException
+	 */
+	@Transactional(readOnly = false)
+	public CommonResult saveVehicleImages(MultipartFile[] images, String vehicleInfoId) throws IOException {
+		String loginUserId = PreEntity.getUserIdByToken();
+		CommonUser loginUser = commonUserService.get(loginUserId);
+		if (!"1".equals(loginUser.getRoleId())) {
+			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
+		}
+		List<CommonVehicleImage> commonVehicleImageList = new ArrayList<>();
+		if (images != null && images.length >= 1){
+
+			for (MultipartFile f : images) {
+				String end = FileUtils.getFileExtension(f.getOriginalFilename());
+				if(!end.equals("jpg")&&!end.equals("png")){
+					return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
+				}
+				File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage_"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
+				f.transferTo(x);
+				CommonVehicleImage commonVehicleImage = new CommonVehicleImage();
+				commonVehicleImage.setVehicleId(vehicleInfoId);
+				commonVehicleImage.setImageName(x.getName());
+				commonVehicleImageList.add(commonVehicleImage);
+			}
+		}
+		if(commonVehicleImageList.size()>0){
+			commonVehicleImageService.saveList(commonVehicleImageList);
+		}else{
+			return new CommonResult(CodeConstant.ERROR_DATA, "没有任何图片");
+		}
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", commonVehicleImageList);
 	}
 
 
@@ -264,4 +304,17 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		return new CommonResult(commonVehicleImageList);
 	}
 
+	public List<VehicleInfo> findListWithField(VehicleInfo vehicleInfo, List<SelectVO> fieldList) {
+
+		return dao.findListWithField(vehicleInfo, fieldList);
+	}
+
+
+	public VehicleInfo selectOneWithField(VehicleInfo vehicleInfo, List<SelectVO> fieldList) {
+		return dao.selectOneWithField(vehicleInfo, fieldList);
+	}
+
+	public List<String> loadCheXingIds(String chexiId){
+		return dao.loadCheXingIds(chexiId);
+	}
 }

@@ -26,4 +26,34 @@
 		WHERE chexing_id = #{chexingId}
 	</select>
 
+	<select id="findListWithField" resultType="VehicleInfo">
+		select id as id, pinpai as pinpai, chexi as chexi, chexi_id as chexiId, niankuan as niankuan, chexingmingcheng as chexingmingcheng, chexing_id as chexingId
+		from  common_vehicle_info
+		where  1 = 1
+		<if test="vehicleInfo.pinpaiId!=null and vehicleInfo.pinpaiId!=''">
+			and pinpai_id = #{vehicleInfo.pinpaiId}
+		</if>
+		<if test="vehicleInfo.chexiId!=null and vehicleInfo.chexiId!=''">
+			and chexi_id = #{vehicleInfo.chexiId}
+		</if>
+		<if test="vehicleInfo.niankuan!=null and vehicleInfo.niankuan!=''">
+			and niankuan = #{vehicleInfo.niankuan}
+		</if>
+	</select>
+
+	<select id="selectOneWithField" resultType="VehicleInfo">
+		select id as id, chexingmingcheng as chexingmingcheng, chexi as chexi, chexi_id as chexiId,
+		changshangzhidaojia_yuan as changshangzhidaojiaYuan, fadongji as fadongji, biansuxiang as biansuxiang,
+		pailiang_l as pailiangL, nengyuanleixing as nengyuanleixing, zuidagonglv_kw as zuidagonglvKw,
+		zuidagonglv_kw as zuidagonglvKw,  zuidaniuju_n_m as zuidaniujuNM, changdu_mm as changduMm,
+		kuandu_mm as kuanduMm, gaodu_mm as gaoduMm, zuoweishu_ge as zuoweishuGe,
+		waiguanyanse as waiguanyanse, neishiyanse as neishiyanse
+
+		from  common_vehicle_info where chexing_id = #{vehicleInfo.chexingId}
+	</select>
+
+	<select id="loadCheXingIds" resultType="String">
+		select chexing_id as chexingId from common_vehicle_info where chexi_id = #{chexiId}
+	</select>
+
 </mapper>

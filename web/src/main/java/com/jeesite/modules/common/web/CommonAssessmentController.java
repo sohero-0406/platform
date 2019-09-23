@@ -1,36 +1,26 @@
-/**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
- */
 package com.jeesite.modules.common.web;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.utils.excel.ExcelExport;
-import com.jeesite.common.utils.excel.ExcelImport;
 import com.jeesite.common.utils.excel.annotation.ExcelField;
+import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.aop.Log;
-import com.jeesite.modules.common.entity.*;
+import com.jeesite.modules.common.entity.CommonAssessment;
+import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.entity.UserCondition;
+import com.jeesite.modules.common.service.CommonAssessmentService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.aspectj.apache.bcel.classfile.Code;
+import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import com.jeesite.common.config.Global;
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.common.service.CommonAssessmentService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -151,6 +141,7 @@ public class CommonAssessmentController extends BaseController {
 	 */
 	@ApiOperation(value = "删除考核")
 	@ApiImplicitParam(name = "json", value = "要删除的考核的json数据", required = true, dataType="String")
+	@ApiResponse(code = 200, message = "哈哈说得好")
 	@Log(operationName = "删除考核", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAssessment")
 	@ResponseBody
@@ -207,6 +198,22 @@ public class CommonAssessmentController extends BaseController {
 		return commonAssessmentService.loadAssessmentNameList(commonUserId);
 	}
 
+	@ApiOperation(value = "根据登录人加载考核名称")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "commonUserId", value = "用户id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "softwareId", value = "软件id", required = true, dataType="String")
+	})
+
+	@Log(operationName = "根据登录人加载考核名称", operationType = Log.OPERA_TYPE_SEL)
+	@RequestMapping(value = "loadAssessmentNameListBySoftwareId")
+	@ResponseBody
+	public CommonResult loadAssessmentNameListBySoftwareId(String commonUserId, String softwareId){
+
+		return commonAssessmentService.loadAssessmentNameList(commonUserId, softwareId);
+	}
+
+
+
 	/**
 	 * 加载考核名称
 	 *
@@ -219,6 +226,7 @@ public class CommonAssessmentController extends BaseController {
 	public CommonResult loadAssessmentNameList(){
 		return commonAssessmentService.loadAssessmentNameList();
 	}
+
 
 	/**
 	 * 导出用户模板
