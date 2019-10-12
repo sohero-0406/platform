@@ -6,6 +6,7 @@ package com.jeesite.modules.common.dao;
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.common.entity.CommonAssessment;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface CommonAssessmentDao extends CrudDao<CommonAssessment> {
 
 	List<String> loadNameListBySoftwareId(String schoolId, String softwareIdStr);
 
-	List<String> loadCalcedNameList(String schoolId);
+	List<String> loadCalcedNameList(@Param("schoolId") String schoolId);
 
 	Integer countConflictNum(String startDate, String endDate, String id);
 

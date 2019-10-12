@@ -183,6 +183,16 @@ public class CommonAssessmentController extends BaseController {
 		return commonAssessmentService.parseScoreInfo(scoreInfo);
 	}
 
+	@ApiOperation(value = "H5上传所有分数")
+	@ApiImplicitParam(name = "scoreInfo", value = "教师端上传来的分数json数据", required = true, dataType="String")
+	@Log(operationName = "H5上传所有分数", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "uploadScoresAll")
+	@ResponseBody
+	public CommonResult uploadScoresAll(String scoreInfo){
+
+		return commonAssessmentService.parseScoreInfoAll(scoreInfo);
+	}
+
 	/**
 	 * 根据登录人加载考核名称
 	 * @param commonUserId

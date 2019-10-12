@@ -91,11 +91,11 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			return new CommonResult(CodeConstant.PARA_MUST_NEED, "必须传入开始日期和结束日期");
 		}
 		if(dao.countConflictNum(commonAssessment.getStartDate(), commonAssessment.getEndDate(), commonAssessment.getId())>0){
-			return new CommonResult(CodeConstant.ERROR_DATA, "开始日期和结束日期不能和其他有重复后者冲突");
+			return new CommonResult(CodeConstant.ERROR_DATA, "开始日期和结束日期不能和其他有重复或者冲突");
 		}
 		if(commonAssessment.getId()==null){
 			if(CommonUserUtil.isHaveExamRight(loginUser)){
-				if(!StringUtils.isBlank(commonAssessment.getSchoolId())){
+				if(StringUtils.isBlank(commonAssessment.getSchoolId())){
 					commonAssessment.setSchoolId(loginUser.getSchoolId());
 					commonAssessment.setSchoolName(commonSchoolService.get(loginUser.getSchoolId()).getSchoolName());
 				}else{
@@ -237,6 +237,9 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(CommonUserUtil.isHaveExamRight(loginUser)){
+			if(loginUser.getRoleId().equals("2")){
+				commonAssessment.setSchoolId(loginUser.getSchoolId());
+			}
 			Page<CommonAssessment> page = super.findPage(commonAssessment);
 			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
 		}
@@ -617,6 +620,117 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, (commonAssessmentStuList.size()-resultMsgList.size())+"条分数全部解析并上传成功!", resultMsgList);
 	}
 
+	@Transactional(readOnly = false)
+	public CommonResult parseScoreInfoAll(String scoreInfo) {
+		List<String> msgList = new ArrayList<>();
+		List<String> resultMsgList = new ArrayList<>();
+		JSONObject jsonObject = null;
+		try{
+			jsonObject = JSONObject.parseObject(scoreInfo);
+		} catch (Exception e){
+			return new CommonResult(CodeConstant.ERROR_DATA, "数据无法解析为JSON对象");
+		}
+
+		Integer softwareId = jsonObject.getInteger("softwareId");
+		if(softwareId==null){
+			return new CommonResult(CodeConstant.ERROR_DATA, "数据无法解析出软件标识");
+		}
+		JSONArray jsonArray = jsonObject.getJSONArray("scores");
+		String commonAssessmentStuIds = "";
+		int wrongExamStuIdNum = 0;
+		for (int i = 0; i < jsonArray.size(); i++) {
+			JSONObject object = jsonArray.getJSONObject(i);
+			if(StringUtils.isBlank(object.getString("serverExamStuId"))){
+				wrongExamStuIdNum++;
+			}else{
+				commonAssessmentStuIds = "".equals(commonAssessmentStuIds)?object.getString("serverExamStuId"):(commonAssessmentStuIds+","+object.getString("serverExamStuId"));
+			}
+		}
+		if(wrongExamStuIdNum>0){
+			return new CommonResult(CodeConstant.ERROR_DATA, "部分服务器考生标识无法解析");
+		}
+		CommonAssessmentStu con = new CommonAssessmentStu();
+		con.setId_in(commonAssessmentStuIds.split(","));
+		List<CommonAssessmentStu> commonAssessmentStuList = commonAssessmentStuService.findList(con);
+		Set<String> commonAssessmentSet = new HashSet<>();
+		for (int i = 0; i <commonAssessmentStuList.size(); i++) {
+			commonAssessmentSet.add(commonAssessmentStuList.get(i).getAssessmentId());
+		}
+		String[] assessmentIds = new String[commonAssessmentSet.size()];
+		Iterator<String> iterator = commonAssessmentSet.iterator();
+		int index = 0;
+		while(iterator.hasNext()){
+			assessmentIds[index] = iterator.next();
+		}
+		CommonAssessment commonAssessmentCon = new CommonAssessment();
+		commonAssessmentCon.setId_in(assessmentIds);
+		List<CommonAssessment> commonAssessmentList = dao.findList(commonAssessmentCon);
+		for (int i = 0; i < jsonArray.size(); i++) {
+			JSONObject object = jsonArray.getJSONObject(i);
+			String serverExamStuId = object.getString("serverExamStuId");
+			String score = object.getString("objScore");
+			String score_sub = object.getString("subScore");
+			if(!NumberUtils.isParsable(score)){
+				msgList.add("服务器考生标识为"+serverExamStuId+"的客观分数无法被解析为数值");
+				continue;
+			}
+			if(!NumberUtils.isParsable(score_sub)){
+				msgList.add("服务器考生标识为"+serverExamStuId+"的主观分数无法被解析为数值");
+				continue;
+			}
+			for (int j = 0; j < commonAssessmentStuList.size(); j++) {
+				CommonAssessmentStu commonAssessmentStu = commonAssessmentStuList.get(j);
+				if(serverExamStuId.equals(commonAssessmentStu.getId())){
+					String schemeDetail = commonAssessmentStu.getScoreDetails();
+					String softUploadedMarks = commonAssessmentStu.getSoftUploadedMarks();
+					JSONArray ja = JSONArray.parseArray(schemeDetail);
+					for (int k = 0; k < ja.size(); k++) {
+						JSONArray softDetails = ja.getJSONObject(k).getJSONArray("softDetails");
+						for (int l = 0; l < softDetails.size(); l++) {
+							JSONObject oneSoft = softDetails.getJSONObject(l);
+							if(softwareId.equals(oneSoft.getInteger("softwareId"))){
+								JSONArray softUploadedMarks_array = JSONArray.parseArray(softUploadedMarks);
+								int uploadedFlag = 0;
+								for (int m = 0; m < softUploadedMarks_array.size(); m++) {
+									JSONObject oneMark = softUploadedMarks_array.getJSONObject(m);
+									if(oneMark.getString("softwareId").equals(oneSoft.getInteger("softwareId").toString())){
+										if("1".equals(oneMark.getString("mark"))){
+											resultMsgList.add("身份证好为"+commonAssessmentStu.getLoginName()+"的软件分数已经上传!");
+											uploadedFlag = 1;
+										}else{
+											oneMark.put("mark", "1");
+											softUploadedMarks_array.set(m, oneMark);
+										}
+									}
+								}
+								if(uploadedFlag==0){
+									oneSoft.put("objScore", score);
+									oneSoft.put("subjScore", score_sub);
+									softDetails.set(l, oneSoft);
+									ja.getJSONObject(k).put("softDetails", softDetails);
+								}
+								commonAssessmentStu.setSoftUploadedMarks(softUploadedMarks_array.toJSONString());
+
+								break;
+							}
+						}
+
+					}
+					commonAssessmentStu.setScoreDetails(ja.toJSONString());
+					commonAssessmentStuList.set(j, commonAssessmentStu);
+				}
+			}
+		}
+		if(msgList.size()>0){
+			return new CommonResult(CodeConstant.ERROR_DATA, "分数解析错误,所有分户均未上传", msgList);
+		}
+		for (CommonAssessmentStu commonAssessmentStu : commonAssessmentStuList) {
+			commonAssessmentStuService.update(commonAssessmentStu);
+		}
+
+		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, (commonAssessmentStuList.size()-resultMsgList.size())+"条分数全部解析并上传成功!", resultMsgList);
+	}
+
 	/**
 	 * 从考核列表里选一个考核返回
 	 * @param commonAssessmentList
@@ -647,6 +761,10 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		return new CommonResult(dao.loadNameList(loginUser.getSchoolId()));
 	}
 
+	public List<String> loadAssessmentNameListBySchoolId(String schoolId){
+		return dao.loadNameList(schoolId);
+	}
+
 	public CommonResult loadAssessmentNameList(String commonUserId, String softwareId){
 	    if(StringUtils.isBlank(softwareId)||StringUtils.isBlank(commonUserId)){
             return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
@@ -661,8 +779,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
     }
 
 	public CommonResult loadAssessmentNameList(){
-		String loginUsreId = PreEntity.getUserIdByToken();
-		CommonUser loginUser = commonUserService.get(loginUsreId);
+		String loginUserId = PreEntity.getUserIdByToken();
+		CommonUser loginUser = commonUserService.get(loginUserId);
 		if("3".equals(loginUser.getRoleId())){
 			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
 		}
@@ -736,6 +854,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		}
 		return ee;
 	}
+
+
 
 
 //    public CommonResult loadAssessmentStuTempList(List<UploadStu> uploadStuList) {

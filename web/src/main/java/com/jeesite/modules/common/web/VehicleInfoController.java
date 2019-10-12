@@ -359,8 +359,8 @@ public class VehicleInfoController extends BaseController {
         selectVO2.setEntityAttrName("chexiId");
         fieldList.add(selectVO2);
         SelectVO selectVO3 = new SelectVO();
-        selectVO3.setFieldName("changshangzhidaojia_yuan");
-        selectVO3.setEntityAttrName("changshangzhidaojiaYuan");
+        selectVO3.setFieldName("changshangzhidaojia");
+        selectVO3.setEntityAttrName("changshangzhidaojia");
         fieldList.add(selectVO3);
         SelectVO selectVO4 = new SelectVO();
         selectVO4.setFieldName("fadongji");

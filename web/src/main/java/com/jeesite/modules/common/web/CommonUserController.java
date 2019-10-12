@@ -18,6 +18,7 @@ import com.jeesite.modules.common.entity.CommonUser;
 import com.jeesite.modules.common.entity.CommonUserTeacher;
 import com.jeesite.modules.common.entity.UserCondition;
 import com.jeesite.modules.common.service.CommonUserService;
+import com.jeesite.modules.common.vo.ExamUserListAndOtherInfoVO;
 import com.jeesite.modules.common.vo.LoginVO;
 import com.jeesite.modules.common.vo.StuSearchVO;
 import io.swagger.annotations.ApiImplicitParam;
@@ -328,6 +329,15 @@ public class CommonUserController extends BaseController {
         return commonUserService.loadStuListByIds(ids);
     }
 
+    @ApiOperation(value = "根据多个id加载学生信息", notes = "ids 的样式是 1,2,3,4")
+    @ApiImplicitParam(name = "ids", value = "用的id的以英文逗号组合字符串", required = true, dataType = "")
+    @Log(operationName = "根据多个id加载学生信息")
+    @RequestMapping(value = "loadStuListAndOtherByUserIds")
+    @ResponseBody
+    public CommonResult<ExamUserListAndOtherInfoVO> loadStuListAndOtherByUserIds(String ids){
+        return commonUserService.loadStuListAndOtherByUserIds(ids);
+    }
+
     /**
      * 根据上传的excel中的身份证数据加载学生信息
      * @param file
@@ -361,6 +371,20 @@ public class CommonUserController extends BaseController {
     @ResponseBody
     public CommonResult loadStuListByExamUserIds(String examUserIds) {
         return commonUserService.loadStuListByExamUserIds(examUserIds);
+    }
+
+    /**
+     * 根据服务器考生信息加载学生信息
+     * @param examUserIds
+     * @return
+     */
+    @ApiOperation(value = "根据服务器考生和其他信息加载学生信息")
+    @ApiImplicitParam(name = "examUserIds", value = "以逗号分隔的多个服务器考生id", required = true, dataType="String")
+    @Log(operationName = "根据服务器考生和其他信息加载学生信息")
+    @RequestMapping(value = "loadStuListAndOtherByExamUserIds")
+    @ResponseBody
+    public CommonResult<ExamUserListAndOtherInfoVO> loadStuListAndOtherByExamUserIds(String examUserIds) {
+        return commonUserService.loadStuListAndOtherByExamUserIds(examUserIds);
     }
 
     /**

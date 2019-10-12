@@ -50,7 +50,7 @@
 
 	<select id="findNormalStu" resultType="CommonUser">
 		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc
-		where cu.school_id = #{schoolId} and cu.school_id = sc.id and cu.status = 0 and cu.role_id = '3'
+		where cu.school_id = #{schoolId} and cu.school_id = sc.id and cu.status = '0' and cu.role_id = '3'
 		<if test="majorName!=null and majorName!=''">
 			and cu.major_name = #{majorName}
 		</if>
@@ -77,14 +77,14 @@
 
 
 	<select id="findStuByUserNamesWithSchoolName" resultType="CommonUser">
-		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc where cu.school_id = sc.id and cu.user_name in
+		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc where cu.school_id = sc.id and cu.status = '0' and cu.user_name in
 		<foreach collection="list" open="(" separator="," close=")" item="userName">
 			#{userName}
 		</foreach>
 	</select>
 
 	<select id="findByUserName" resultType="CommonUser">
-		select * from common_user where user_name = #{userName}
+		select * from common_user where user_name = #{userName} and status = '0'
 	</select>
 
 	<select id="findCommonUserWithSchoolName" resultType="CommonUser">
@@ -120,12 +120,12 @@
 	</select>
 
     <select id="findMajorNameList" resultType="String">
-		select cu.major_name as majorName from common_user as cu where cu.school_id = #{schoolId} and major_name is not null
+		select cu.major_name as majorName from common_user as cu where cu.school_id = #{schoolId} and major_name is not null and role_id = '3'
 		group by cu.major_name
 	</select>
 
     <select id="findClassNameList" resultType="String">
-		select cu.class_name as className from common_user as cu where cu.school_id = #{schoolId} and class_name is not null
+		select cu.class_name as className from common_user as cu where cu.school_id = #{schoolId} and class_name is not null and role_id = '3'
 		<if test="majorName!=null and majorName!=''">
             and cu.major_name = #{majorName}
         </if>

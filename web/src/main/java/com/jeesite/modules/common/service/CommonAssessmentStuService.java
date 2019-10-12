@@ -116,7 +116,7 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 //			page.setCount(dao.findAssessmentStuListByConditionCount(commonAssessmentStu));
 
 			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
-		}else{
+		}else if (loginUser.getRoleId().equals("2")){
 			// Page page = commonAssessmentStu.getPage();
 			Page page = new Page();
 			page.setList(dao.findAssessmentStuListByConditionAndSchoolId(commonAssessmentStu, loginUser.getSchoolId()));
@@ -124,6 +124,9 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 			page.setPageSize(commonAssessmentStu.getPageSize());
 			page.setCount(dao.findAssessmentStuListByConditionAndSchoolIdCount(commonAssessmentStu, loginUser.getSchoolId()));
 			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
+		}else{
+			commonAssessmentStu.setCommonUserId(loginUser.getId());
+			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, this.findPage(commonAssessmentStu));
 		}
 	}
 
@@ -244,6 +247,10 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 		return new CommonResult(assessmentDateList);
     }
 
+	public List<String> loadAssessmentDateListBySchoolId(String schoolId, String assessmentName) {
+		return dao.loadDateList(schoolId, assessmentName);
+	}
+
     /**
      * 根据用户id、考核名称、考核日期，加载考核时间
      * @param commonUserId
@@ -258,6 +265,10 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 		}
 		List<String> assessmentTimeList = dao.loadTimeList(loginUser.getSchoolId(), assessmentName, assessmentDate);
 		return new CommonResult(assessmentTimeList);
+	}
+
+	public List<String> loadAssessmentTimeListBySchoolId(String schoolId, String assessmentName, String assessmentDate) {
+		return dao.loadTimeList(schoolId, assessmentName, assessmentDate);
 	}
 
     /**

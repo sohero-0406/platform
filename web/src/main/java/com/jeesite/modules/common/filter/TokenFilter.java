@@ -20,7 +20,10 @@ public class TokenFilter implements Filter {
 
     private static final String[] IGNORE_URI = { "/teacherSideLogin", "/unLogin", "/static", "/login",
             "/loadStuListInPlatform", "/testExportExcel", "/commonUserDemoExport", "/importUsers", "/loadStuListInPlatform",
-            "/loadStuListByIds"};
+            "/loadStuListByIds", "/loadAssessmentNameList", "/loadAssessmentDateList", "/loadAssessmentTimeList", "/uploadScores",
+            "/vehicleInfo/", "/vehicleBrand/getByEntity", "/vehicleSeries/getByEntity", "/vehicleBrand/findList", "/vehicleSeries/findList",
+            "/loadOneExamStu", "/loadOneUser", "/loadMajorList", "/loadClassList", "/loadStuListByExamUserIds", "/loadStuListAndOtherByExamUserIds",
+            "/loadStuListAndOtherByUserIds"};
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

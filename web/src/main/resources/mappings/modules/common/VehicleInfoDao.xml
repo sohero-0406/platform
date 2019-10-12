@@ -43,7 +43,7 @@
 
 	<select id="selectOneWithField" resultType="VehicleInfo">
 		select id as id, chexingmingcheng as chexingmingcheng, chexi as chexi, chexi_id as chexiId,
-		changshangzhidaojia_yuan as changshangzhidaojiaYuan, fadongji as fadongji, biansuxiang as biansuxiang,
+		changshangzhidaojia as changshangzhidaojia, fadongji as fadongji, biansuxiang as biansuxiang,
 		pailiang_l as pailiangL, nengyuanleixing as nengyuanleixing, zuidagonglv_kw as zuidagonglvKw,
 		zuidagonglv_kw as zuidagonglvKw,  zuidaniuju_n_m as zuidaniujuNM, changdu_mm as changduMm,
 		kuandu_mm as kuanduMm, gaodu_mm as gaoduMm, zuoweishu_ge as zuoweishuGe,

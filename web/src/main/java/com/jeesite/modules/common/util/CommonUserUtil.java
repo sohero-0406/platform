@@ -11,7 +11,17 @@ public class CommonUserUtil {
     }
 
     public static boolean isHaveExamRight(CommonUser loginUser, CommonUser creator){
-        return loginUser.getRoleId().equals("1")||(loginUser.getRoleId().equals("2")&&"1".equals(loginUser.getIsExamRight())&&loginUser.getSchoolId().equals(creator.getSchoolId()));
+        if(loginUser.getRoleId().equals("1")){
+            return true;
+        }
+        if(creator.getRoleId().equals("2")){
+            return loginUser.getRoleId().equals("2")&&"1".equals(loginUser.getIsExamRight())&&loginUser.getSchoolId().equals(creator.getSchoolId());
+        }
+        if(creator.getRoleId().equals("1")){
+            return loginUser.getRoleId().equals("2")&&"1".equals(loginUser.getIsExamRight());
+        }
+        //return loginUser.getRoleId().equals("1")||(loginUser.getRoleId().equals("2")&&"1".equals(loginUser.getIsExamRight())&&loginUser.getSchoolId().equals(creator.getSchoolId()));
+        return false;
     }
 
     public static boolean isSameSchool(CommonUser loginUser, CommonUser otherUser){

@@ -18,6 +18,7 @@ import com.jeesite.modules.common.dao.CommonUserDao;
 import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
 import com.jeesite.modules.common.util.PageUtils;
+import com.jeesite.modules.common.vo.ExamUserListAndOtherInfoVO;
 import com.jeesite.modules.common.vo.LoginVO;
 import com.jeesite.modules.common.vo.StuSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,10 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
     private CommonRoleService commonRoleService;
     @Autowired
     private CommonSchoolService commonSchoolService;
+    @Autowired
+    private CommonAssessmentStuService commonAssessmentStuService;
+    @Autowired
+    private CommonAssessmentService commonAssessmentService;
 
     /**
      * 获取单条数据
@@ -175,7 +180,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
             if(commonUser.getUserName()!=null&&commonUser.getUserName().length()!=18){
                 return new CommonResult(CodeConstant.ERROR_DATA, "登录名长度不是18位!");
             }
-            commonUser.setPassword("123456");
+            commonUser.setPassword(commonUser.getPhoneNum().substring(commonUser.getPhoneNum().length()-6));
             CommonUser con = new CommonUser();
             con.setUserName(commonUser.getUserName());
 
@@ -250,6 +255,8 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
                 }else{
                     user.setSchoolId(cs.getId());
                     user.setRoleId(roleId);
+
+                    user.setPassword(user.getPhoneNum().substring(user.getPhoneNum().length()-6));
                     super.save(user);
                     okNum++;
                 }
@@ -503,6 +510,20 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
     }
 
+    public CommonResult<ExamUserListAndOtherInfoVO> loadStuListAndOtherByUserIds(String ids) {
+        String[] isArray = ids.split(",");
+        List<String> idList = Arrays.asList(isArray);
+        List<CommonUser> list = dao.findStuByIdsWithSchoolName(idList);
+        ExamUserListAndOtherInfoVO e = new ExamUserListAndOtherInfoVO();
+        e.setList(list);
+        CommonUser commonUser = list.get(0);
+        e.setMajorName(commonUser.getMajorName());
+        e.setClsName(commonUser.getClassName());
+        e.setMajorNameList(dao.findMajorNameList(commonUser.getSchoolId()));
+        e.setClsNameList(dao.findClassNameList(commonUser.getSchoolId(), commonUser.getMajorName()));
+        return new CommonResult<>(e);
+    }
+
     /**
      * 根据多个考生id加载用户列表信息
      * @param examUserIds
@@ -513,6 +534,23 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         List<String> examUserIdList = Arrays.asList(idsArray);
         List<CommonUser> list = dao.findStuByExamStuIdsWithSchoolName(examUserIdList);
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, list);
+    }
+
+    public CommonResult<ExamUserListAndOtherInfoVO> loadStuListAndOtherByExamUserIds(String examUserIds) {
+        String[] idsArray = examUserIds.split(",");
+        List<String> examUserIdList = Arrays.asList(idsArray);
+        List<CommonUser> list = dao.findStuByExamStuIdsWithSchoolName(examUserIdList);
+        ExamUserListAndOtherInfoVO e = new ExamUserListAndOtherInfoVO();
+        e.setList(list);
+        CommonAssessmentStu commonAssessmentStu = commonAssessmentStuService.get(list.get(0).getCommonAssessmentStuId());
+        CommonAssessment commonAssessment = commonAssessmentService.get(commonAssessmentStu.getAssessmentId());
+        e.setAssessmentName(commonAssessment.getAssessmentName());
+        e.setAssessmentDate(commonAssessmentStu.getAssessmentDate());
+        e.setAssessmentTime(commonAssessmentStu.getAssessmentTime());
+        e.setAssessmentNameList(commonAssessmentService.loadAssessmentNameListBySchoolId(commonAssessment.getSchoolId()));
+        e.setAssessmentDateList(commonAssessmentStuService.loadAssessmentDateListBySchoolId(commonAssessment.getSchoolId(), commonAssessment.getAssessmentName()));
+        e.setAssessmentTimeList(commonAssessmentStuService.loadAssessmentTimeListBySchoolId(commonAssessment.getSchoolId(), commonAssessment.getAssessmentName(), commonAssessmentStu.getAssessmentDate()));
+        return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, e);
     }
 
     /**
@@ -590,4 +628,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
             return new CommonResult(CodeConstant.WRONG_PASS, "您提供的旧密码不正确");
         }
     }
+
+
+
 }
