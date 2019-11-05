@@ -120,8 +120,13 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 			}
 			JSONObject object = new JSONObject();
 			object.put("deletedNum", deletedNum);
-			object.put("notDeletedNum", length- deletedNum);
-			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+			int x = length - deletedNum;
+			object.put("notDeletedNum", x);
+			if(x>0){
+				return new CommonResult(CodeConstant.DATA_LOCK, "有"+x+"条件数据不符合删除条件，不能删除，符合的已删除", object);
+			}else{
+				return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+			}
 		}else{
 			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 		}

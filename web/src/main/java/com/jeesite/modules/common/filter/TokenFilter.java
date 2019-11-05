@@ -23,7 +23,7 @@ public class TokenFilter implements Filter {
             "/loadStuListByIds", "/loadAssessmentNameList", "/loadAssessmentDateList", "/loadAssessmentTimeList", "/uploadScores",
             "/vehicleInfo/", "/vehicleBrand/getByEntity", "/vehicleSeries/getByEntity", "/vehicleBrand/findList", "/vehicleSeries/findList",
             "/loadOneExamStu", "/loadOneUser", "/loadMajorList", "/loadClassList", "/loadStuListByExamUserIds", "/loadStuListAndOtherByExamUserIds",
-            "/loadStuListAndOtherByUserIds"};
+            "/loadStuListAndOtherByUserIds", "/loadVehicleImages"};
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

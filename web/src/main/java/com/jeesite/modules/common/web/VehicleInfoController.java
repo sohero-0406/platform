@@ -205,7 +205,7 @@ public class VehicleInfoController extends BaseController {
      * @param file 车型的excel文件
      * @return CommonResult
      */
-    @ApiOperation(value = "加载车的分页数据")
+    @ApiOperation(value = "导入车的信息")
     @ApiImplicitParam(name = "file", value = "车型的excel文件", required = true, dataType="MultipartFile")
     @Log(operationName = "导入车的信息", operationType = Log.OPERA_TYPE_ADD)
     @RequestMapping(value = "importVehicleInfos", method= RequestMethod.POST)

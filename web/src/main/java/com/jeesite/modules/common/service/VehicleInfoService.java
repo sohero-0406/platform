@@ -208,8 +208,13 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		}
 		JSONObject object = new JSONObject();
 		object.put("deletedNum", deletedNum);
-		object.put("notDeletedNum", length- deletedNum);
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+		int x = length - deletedNum;
+		object.put("notDeletedNum", x);
+		if(x>0){
+			return new CommonResult(CodeConstant.DATA_LOCK, "有"+x+"条件数据不符合删除条件，不能删除，符合的已删除", object);
+		}else{
+			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+		}
 	}
 
 	/**
@@ -230,13 +235,13 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		if(!end.equals("jpg")&&!end.equals("png")){
 			return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
 		}
-		File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage_"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
+		File x = new File(FilePathUtil.getFileSavePath("platformPic")+"vehicleImage_"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
 		image.transferTo(x);
 		CommonVehicleImage commonVehicleImage = new CommonVehicleImage();
 		commonVehicleImage.setVehicleId(vehicleInfoId);
 		commonVehicleImage.setImageName(x.getName());
 		commonVehicleImageService.save(commonVehicleImage);
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
+		return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
 	}
 
 	/**
@@ -261,7 +266,7 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 				if(!end.equals("jpg")&&!end.equals("png")){
 					return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
 				}
-				File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage_"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
+				File x = new File(FilePathUtil.getFileSavePath("platformPic")+"vehicleImage_"+vehicleInfoId+"_"+System.currentTimeMillis()+"."+end);
 				f.transferTo(x);
 				CommonVehicleImage commonVehicleImage = new CommonVehicleImage();
 				commonVehicleImage.setVehicleId(vehicleInfoId);
@@ -287,11 +292,11 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 		if(id==null || StringUtils.isBlank(id)){
 			return new CommonResult(CodeConstant.PARA_MUST_NEED, "您需要传入必要的参数");
 		}
-		String loginUserId = PreEntity.getUserIdByToken();
-		CommonUser loginUser = commonUserService.get(loginUserId);
-		if(!"1".equals(loginUser.getRoleId())){
-			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
-		}
+//		String loginUserId = PreEntity.getUserIdByToken();
+//		CommonUser loginUser = commonUserService.get(loginUserId);
+//		if(!"1".equals(loginUser.getRoleId())){
+//			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
+//		}
 		CommonVehicleImage con = new CommonVehicleImage();
 		con.setVehicleId(id);
 		List<CommonVehicleImage> commonVehicleImageList = commonVehicleImageService.findList(con);

@@ -61,7 +61,7 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 	
 	/**
 	 * 保存数据（插入或更新）
-	 * @param commonAssessmentScheme
+	 * @param commonAssessmentScheme 1
 	 */
 	@Override
 	@Transactional(readOnly=false)
@@ -72,8 +72,8 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 
 	/**
 	 * 保存方案信息
-	 * @param commonAssessmentScheme
-	 * @return
+	 * @param commonAssessmentScheme 1
+	 * @return 1
 	 */
 	@Transactional(readOnly=false)
 	public CommonResult saveCommonAssessmentScheme(CommonAssessmentScheme commonAssessmentScheme) {
@@ -215,8 +215,14 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 		}
 		JSONObject object = new JSONObject();
 		object.put("deletedNum", deletedNum);
-		object.put("notDeletedNum", length- deletedNum);
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+		int x = length- deletedNum;
+		object.put("notDeletedNum", x);
+		if (x>0) {
+			return new CommonResult(CodeConstant.DATA_LOCK, "有"+x+"个方案不符合删除条件，不能删除，符合的已删除", object);
+		}else{
+			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+		}
+
 	}
 	
 }

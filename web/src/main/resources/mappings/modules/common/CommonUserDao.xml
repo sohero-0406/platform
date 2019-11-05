@@ -88,7 +88,7 @@
 	</select>
 
 	<select id="findCommonUserWithSchoolName" resultType="CommonUser">
-		select cu.*, sc.school_name as schoolName from common_user as cu, common_school as sc where cu.school_id = sc.id
+		select cu.*, sc.school_name as schoolName from common_user as cu left join common_school as sc on cu.school_id = sc.id where 1=1
 		<if test="userName!=null and userName!=''">
 			and cu.user_name like "%"#{userName}"%"
 		</if>
@@ -116,7 +116,7 @@
 		<if test="schoolId!=null and schoolId!=''">
 			and cu.school_id = #{schoolId}
 		</if>
-		and cu.status = "0"
+		and cu.status = '0'
 	</select>
 
     <select id="findMajorNameList" resultType="String">

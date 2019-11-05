@@ -35,7 +35,7 @@ public class VehicleSeriesService extends CrudService<VehicleSeriesDao, VehicleS
 	/**
 	 * 查询分页数据
 	 * @param vehicleSeries 查询条件
-	 * @param vehicleSeries.page 分页对象
+	 *
 	 * @return
 	 */
 	@Override

@@ -12,7 +12,30 @@ public class FileLocalConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/image/**").addResourceLocations("file:C:/test001/vehicleImage/");
+
+        System.out.println(FileLocalConfig.class.getResource("").toString());
+        String url = FileLocalConfig.class.getResource("").toString().replace("file:/", "");
+
+        System.out.println("**********************");
+        System.out.println(url);
+        System.out.println("**********************");
+        if (url.contains("/webapps")) {
+            url = url.substring(0, url.indexOf("/webapps"));
+            url = url.substring(0, url.lastIndexOf("/"));
+        } else {
+            url = "C:/test001";
+        }
+        //图片上传路径
+        String picUrl = url + "/soHero/platformPic/";
+        System.out.println("**********************");
+        System.out.println(url);
+        System.out.println("**********************");
+        registry.addResourceHandler("/image/**").addResourceLocations("file:" + picUrl);
+
+
+        //registry.addResourceHandler("/image/**").addResourceLocations("file:C:/test001/vehicleImage/");
+        //registry.addResourceHandler("/image/**").addResourceLocations("file:/hardDisk2/platform/");
+
     }
 
     @Override

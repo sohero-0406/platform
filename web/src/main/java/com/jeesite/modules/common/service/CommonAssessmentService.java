@@ -274,7 +274,12 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				JSONObject jo = new JSONObject();
 				jo.put("deletedNum", deletedNum);
 				jo.put("notDeletedNum", length - deletedNum);
-				return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, jo);
+				if(length - deletedNum>0){
+					return new CommonResult(CodeConstant.DATA_LOCK, "有"+(length - deletedNum)+"个考核不符合删除条件，不能删除，符合的已删除", jo);
+				}else {
+					return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, jo);
+				}
+
 			}else{
 				int deletedNum = 0;
 				for (int i = 0; i < length; i++) {
@@ -295,7 +300,12 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				JSONObject jo = new JSONObject();
 				jo.put("deletedNum", deletedNum);
 				jo.put("notDeletedNum", length - deletedNum);
-				return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, jo);
+				if(length - deletedNum>0){
+					return new CommonResult(CodeConstant.DATA_LOCK, "有"+(length - deletedNum)+"个考核不符合删除条件", jo);
+				}else {
+					return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, jo);
+				}
+
 //				CommonUser createOne = commonUserDao.getByEntity(new CommonUser(commonAssessment.getCreateBy()));
 //				if(loginUser.getSchoolId().equals(createOne.getSchoolId())){
 //					super.delete(commonAssessment);
@@ -585,7 +595,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 									JSONObject oneMark = softUploadedMarks_array.getJSONObject(m);
 									if(oneMark.getString("softwareId").equals(oneSoft.getInteger("softwareId").toString())){
 										if("1".equals(oneMark.getString("mark"))){
-											resultMsgList.add("身份证好为"+commonAssessmentStu.getLoginName()+"的软件分数已经上传!");
+											resultMsgList.add("身份证号为"+commonAssessmentStu.getLoginName()+"的软件分数已经上传!");
 											uploadedFlag = 1;
 										}else{
 											oneMark.put("mark", "1");
@@ -841,6 +851,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			for (int j = 0; j < ja.size(); j++) {
 				JSONObject jo = ja.getJSONObject(j);
 				headerList.add(jo.getString("softwareName"));
+				System.out.println(jo.getString("softwareName"));
 				headerWidthList.add(Integer.valueOf(10*256));
 			}
 			if(i == 0){

@@ -3,6 +3,7 @@
  */
 package com.jeesite.modules.common.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.config.Global;
@@ -269,7 +270,7 @@ public class CommonUserController extends BaseController {
     @Log(operationName = "教师端登录")
     @RequestMapping(value = "teacherSideLogin")
     @ResponseBody
-    public CommonResult teacherSideLogin(LoginVO vo) {
+    public CommonResult<CommonUser> teacherSideLogin(LoginVO vo) {
         return commonUserService.teacherSideLogin(vo);
     }
 
@@ -283,7 +284,7 @@ public class CommonUserController extends BaseController {
     @Log(operationName = "加载平台中的学生")
     @RequestMapping(value = "loadStuListInPlatform")
     @ResponseBody
-    public CommonResult loadStuListInPlatform(StuSearchVO vo) {
+    public CommonResult<List<CommonUser>> loadStuListInPlatform(StuSearchVO vo) {
         return commonUserService.loadStuListInPlatform(vo);
     }
 
@@ -297,7 +298,7 @@ public class CommonUserController extends BaseController {
     @Log(operationName = "加载专业列表")
     @RequestMapping(value = "loadMajorList")
     @ResponseBody
-    public CommonResult loadMajorList(String commonUserId){ return commonUserService.loadMajorList(commonUserId); }
+    public CommonResult<List<String>> loadMajorList(String commonUserId){ return commonUserService.loadMajorList(commonUserId); }
 
     /**
      * 加载班级列表
@@ -313,7 +314,7 @@ public class CommonUserController extends BaseController {
     @Log(operationName = "加载班级列表")
     @RequestMapping(value = "loadClassList")
     @ResponseBody
-    public CommonResult loadClassList(String commonUserId, String majorName){ return commonUserService.loadClassList(commonUserId, majorName); }
+    public CommonResult<List<String>> loadClassList(String commonUserId, String majorName){ return commonUserService.loadClassList(commonUserId, majorName); }
 
     /**
      * 根据多个id加载学生信息
@@ -325,7 +326,7 @@ public class CommonUserController extends BaseController {
     @Log(operationName = "根据多个id加载学生信息")
     @RequestMapping(value = "loadStuListByIds")
     @ResponseBody
-    public CommonResult loadStuListByIds(String ids){
+    public CommonResult<List<CommonUser>> loadStuListByIds(String ids){
         return commonUserService.loadStuListByIds(ids);
     }
 
@@ -349,12 +350,12 @@ public class CommonUserController extends BaseController {
     @Log(operationName = "根据上传的excel中的身份证数据加载学生信息")
     @RequestMapping(value = "loadStuListByIDstr")
     @ResponseBody
-    public CommonResult loadStuListByIDstr(MultipartFile file) throws Exception {
+    public CommonResult<JSONObject> loadStuListByIDstr(MultipartFile file) throws Exception {
         ExcelImport ei = new ExcelImport(file, 1, 0);
         List<UserCondition> userConditionList = ei.getDataList(UserCondition.class);
         ei.close();
         if(ListUtils.isEmpty(userConditionList)){
-            return new CommonResult(CodeConstant.EXCEL_NO_DATA, "您上传的excel没有数据");
+            return new CommonResult<>(CodeConstant.EXCEL_NO_DATA, "您上传的excel没有数据");
         }
         return commonUserService.fillUserConditionList(userConditionList);
     }
@@ -369,7 +370,7 @@ public class CommonUserController extends BaseController {
     @Log(operationName = "根据服务器考生信息加载学生信息")
     @RequestMapping(value = "loadStuListByExamUserIds")
     @ResponseBody
-    public CommonResult loadStuListByExamUserIds(String examUserIds) {
+    public CommonResult<List<CommonUser>> loadStuListByExamUserIds(String examUserIds) {
         return commonUserService.loadStuListByExamUserIds(examUserIds);
     }
 
@@ -502,7 +503,7 @@ public class CommonUserController extends BaseController {
     @Log(operationName = "根据id返回用户对象")
     @RequestMapping(value = "loadOneUser")
     @ResponseBody
-    public CommonResult loadOneUser(String commonUserId){
+    public CommonResult<CommonUser> loadOneUser(String commonUserId){
         return commonUserService.loadOneUser(commonUserId);
     }
 

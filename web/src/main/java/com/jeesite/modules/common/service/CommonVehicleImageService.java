@@ -107,7 +107,7 @@ public class CommonVehicleImageService extends CrudService<CommonVehicleImageDao
 		if(!end.equals("jpg")&&!end.equals("png")){
 			return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确，请上传jpg或者png文件");
 		}
-		File x = new File(FilePathUtil.getFileSavePath("vehicleImage")+"vehicleImage_"+commonVehicleImage.getVehicleId()+"_"+System.currentTimeMillis()+"."+end);
+		File x = new File(FilePathUtil.getFileSavePath("platformPic")+"vehicleImage_"+commonVehicleImage.getVehicleId()+"_"+System.currentTimeMillis()+"."+end);
 		image.transferTo(x);
 		commonVehicleImage.setImageName(x.getName());
 		super.save(commonVehicleImage);
@@ -130,7 +130,7 @@ public class CommonVehicleImageService extends CrudService<CommonVehicleImageDao
 			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 		}
 		// 在增加一行删除图片的代码
-		FileUtils.deleteFile(FilePathUtil.getFileSavePath("vehicleImage")+this.get(commonVehicleImage.getId()).getImageName());
+		FileUtils.deleteFile(FilePathUtil.getFileSavePath("platformPic")+this.get(commonVehicleImage.getId()).getImageName());
 		dao.phyDelete(commonVehicleImage);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "删除成功");
 	}
