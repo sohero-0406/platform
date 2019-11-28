@@ -14,7 +14,7 @@
 	<select id="findVehicleName" resultType="VehicleInfo">
 		select chexing_id,niankuan,chexingmingcheng
 		from common_vehicle_info
-		where chexi_id=#{chexiId}
+		where chexi_id=#{chexiId} and status = '0'
 	</select>
 
 	<!-- 查询车型 -->
@@ -23,13 +23,13 @@
 		biansuxiangleixing,qudongfangshi,absfangbaosi,zhu_fujiashizuoanquanqinang,qian_houpaiceqinang,
 		qian_houpaitoubuqinang_qilian,xibuqinang,houpaianquandaishiqinang,houpaizhongyanganquanqinang
 		FROM common_vehicle_info
-		WHERE chexing_id = #{chexingId}
+		WHERE chexing_id = #{chexingId}  and status = '0'
 	</select>
 
 	<select id="findListWithField" resultType="VehicleInfo">
 		select id as id, pinpai as pinpai, chexi as chexi, chexi_id as chexiId, niankuan as niankuan, chexingmingcheng as chexingmingcheng, chexing_id as chexingId
 		from  common_vehicle_info
-		where  1 = 1
+		where  status = '0'
 		<if test="vehicleInfo.pinpaiId!=null and vehicleInfo.pinpaiId!=''">
 			and pinpai_id = #{vehicleInfo.pinpaiId}
 		</if>
@@ -49,11 +49,11 @@
 		kuandu_mm as kuanduMm, gaodu_mm as gaoduMm, zuoweishu_ge as zuoweishuGe,
 		waiguanyanse as waiguanyanse, neishiyanse as neishiyanse
 
-		from  common_vehicle_info where chexing_id = #{vehicleInfo.chexingId}
+		from  common_vehicle_info where chexing_id = #{vehicleInfo.chexingId}  and status = '0'
 	</select>
 
 	<select id="loadCheXingIds" resultType="String">
-		select chexing_id as chexingId from common_vehicle_info where chexi_id = #{chexiId}
+		select chexing_id as chexingId from common_vehicle_info where chexi_id = #{chexiId}  and status = '0'
 	</select>
 
 </mapper>

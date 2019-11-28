@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.utils.excel.ExcelExport;
 import com.jeesite.common.utils.excel.annotation.ExcelField;
@@ -115,7 +116,7 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 //			page.setPageSize(commonAssessmentStu.getPageSize());
 //			page.setCount(dao.findAssessmentStuListByConditionCount(commonAssessmentStu));
 
-			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
+			return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, page);
 		}else if (loginUser.getRoleId().equals("2")){
 			// Page page = commonAssessmentStu.getPage();
 			Page page = new Page();
@@ -123,10 +124,18 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
 			page.setPageNo(commonAssessmentStu.getPageNo());
 			page.setPageSize(commonAssessmentStu.getPageSize());
 			page.setCount(dao.findAssessmentStuListByConditionAndSchoolIdCount(commonAssessmentStu, loginUser.getSchoolId()));
-			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, page);
+			return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, page);
 		}else{
 			commonAssessmentStu.setCommonUserId(loginUser.getId());
-			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, this.findPage(commonAssessmentStu));
+			Page<CommonAssessmentStu> px = this.findPage(commonAssessmentStu);
+			List<CommonAssessmentStu> cList = px.getList();
+			if(ListUtils.isNotEmpty(cList)){
+				for (CommonAssessmentStu assessmentStu : cList) {
+					assessmentStu.setAssessmentName(commonAssessmentService.get(assessmentStu.getAssessmentId()).getAssessmentName());
+				}
+			}
+			px.setList(cList);
+			return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, px);
 		}
 	}
 
