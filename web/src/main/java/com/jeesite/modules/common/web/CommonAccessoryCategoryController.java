@@ -209,6 +209,23 @@ public class CommonAccessoryCategoryController extends BaseController {
 		//return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
 
+	/**
+	 * 配件项目，调用车型查配件
+	 */
+	@Log(operationName = "配件项目，调用车型查配件")
+	@RequestMapping(value = "findPartsForVehicleParts")
+	@ResponseBody
+	public CommonResult findPartsForVehicleParts(){
+		return commonAccessoryCategoryService.findPartsForVehicleParts();
+	}
 
-
+	/**
+	 * 配件项目，根据配件编码查适用车型
+	 */
+	@Log(operationName = "配件项目，根据配件编码查适用车型")
+	@RequestMapping(value = "findNameByPartsCode")
+	@ResponseBody
+	public CommonResult findNameByPartsCode(String code){
+		return commonAccessoryCategoryService.findNameByPartsCode(code);
+	}
 }

@@ -10,6 +10,8 @@ import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
+import java.util.List;
+
 /**
  * 配件分类表Entity
  * @author mayuhu
@@ -25,6 +27,9 @@ public class CommonAccessoryCategory extends PreEntity<CommonAccessoryCategory> 
 	
 	private static final long serialVersionUID = 1L;
 	private String categoryName;		// 分类名称
+
+	//非数据库字段
+	private List<CommonAccessory> partsList;
 	
 	public CommonAccessoryCategory() {
 		this(null);
@@ -42,5 +47,12 @@ public class CommonAccessoryCategory extends PreEntity<CommonAccessoryCategory> 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-	
+
+	public List<CommonAccessory> getPartsList() {
+		return partsList;
+	}
+
+	public void setPartsList(List<CommonAccessory> partsList) {
+		this.partsList = partsList;
+	}
 }

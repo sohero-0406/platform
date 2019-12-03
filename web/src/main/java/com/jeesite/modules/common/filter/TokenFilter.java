@@ -18,12 +18,12 @@ import java.util.Map;
 public class TokenFilter implements Filter {
 
 
-    private static final String[] IGNORE_URI = { "/teacherSideLogin", "/unLogin", "/static", "/login",
+    private static final String[] IGNORE_URI = {"/teacherSideLogin", "/unLogin", "/static", "/login",
             "/loadStuListInPlatform", "/testExportExcel", "/commonUserDemoExport", "/importUsers", "/loadStuListInPlatform",
             "/loadStuListByIds", "/loadAssessmentNameList", "/loadAssessmentDateList", "/loadAssessmentTimeList", "/uploadScores",
             "/vehicleInfo/", "/vehicleBrand/getByEntity", "/vehicleSeries/getByEntity", "/vehicleBrand/findList", "/vehicleSeries/findList",
             "/loadOneExamStu", "/loadOneUser", "/loadMajorList", "/loadClassList", "/loadStuListByExamUserIds", "/loadStuListAndOtherByExamUserIds",
-            "/loadStuListAndOtherByUserIds", "/loadVehicleImages"};
+            "/loadStuListAndOtherByUserIds", "/loadVehicleImages", "/findPartsForVehicleParts", "/findNameByPartsCode"};
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -32,7 +32,7 @@ public class TokenFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String uri = httpServletRequest.getServletPath();
         System.out.println(uri);
         boolean flag = false;
@@ -41,16 +41,16 @@ public class TokenFilter implements Filter {
                 flag = true;
                 break;
             }
-            if(!uri.contains("/common")){
+            if (!uri.contains("/common")) {
                 flag = true;
                 break;
             }
         }
         System.out.println(flag);
-        if(flag){
+        if (flag) {
             filterChain.doFilter(servletRequest, servletResponse);
-        }else{
-            HttpServletResponse httpServletResponse = (HttpServletResponse)servletResponse;
+        } else {
+            HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
             String token = httpServletRequest.getHeader(JwtUtils.getHeader());
             // 如果header中不存在token，则从参数中获取token
             if (StringUtils.isEmpty(token)) {
@@ -59,15 +59,15 @@ public class TokenFilter implements Filter {
             Claims claims = JwtUtils.getClaimByToken(token);
 
             //claims.get
-            if(claims == null || JwtUtils.isTokenExpired(claims.getExpiration())){
-                if(claims == null ){
+            if (claims == null || JwtUtils.isTokenExpired(claims.getExpiration())) {
+                if (claims == null) {
                     httpServletResponse.sendRedirect("/platform/common/commonUser/unLogin");
-                }else{
+                } else {
                     httpServletResponse.sendRedirect("/platform/common/commonUser/tokenExpired");
                 }
-            }else{
-                if(uri.contains("/add")||uri.contains("/save")){
-                    Enumeration<String>  list = httpServletRequest.getParameterNames();
+            } else {
+                if (uri.contains("/add") || uri.contains("/save")) {
+                    Enumeration<String> list = httpServletRequest.getParameterNames();
                     Map<String, String[]> map = httpServletRequest.getParameterMap();
                     System.out.println("xxx");
                 }

@@ -1,15 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeesite.modules.common.dao.CommonAccessoryCategoryDao">
-	
-	<!-- 查询数据
-	<select id="findList" resultType="CommonAccessoryCategory">
-		SELECT ${sqlMap.column.toSql()}
-		FROM ${sqlMap.table.toSql()}
-		<where>
-			${sqlMap.where.toSql()}
-		</where>
-		ORDER BY ${sqlMap.order.toSql()}
-	</select> -->
-	
+
+    <!-- 查询数据
+    <select id="findList" resultType="CommonAccessoryCategory">
+        SELECT ${sqlMap.column.toSql()}
+        FROM ${sqlMap.table.toSql()}
+        <where>
+            ${sqlMap.where.toSql()}
+        </where>
+        ORDER BY ${sqlMap.order.toSql()}
+    </select> -->
+    <resultMap id="findPartsForVehiclePartsMap" type="CommonAccessoryCategory">
+        <id property="id" column="categoryId"></id>
+        <result property="categoryName" column="category_name"></result>
+        <collection property="partsList" ofType="CommonAccessory">
+            <id property="id" column="id"></id>
+            <result property="accessoryIndex" column="accessory_index"></result>
+            <result property="accessoryName" column="accessory_name"></result>
+            <result property="accessoryBrand" column="accessory_brand"></result>
+            <result property="accessoryLevel" column="accessory_level"></result>
+            <result property="accessorySpecifications" column="accessory_specifications"></result>
+            <result property="accessoryUnit" column="accessory_unit"></result>
+            <result property="accessoryPrice" column="accessory_price"></result>
+            <result property="accessoryPlaceOfOrigin" column="accessory_place_of_origin"></result>
+            <result property="accessoryImport" column="accessory_import"></result>
+        </collection>
+    </resultMap>
+
+    <select id="findPartsForVehicleParts" resultMap="findPartsForVehiclePartsMap">
+        SELECT
+        a.id,
+        a.accessory_index,
+        a.accessory_name,
+        a.accessory_brand,
+        a.accessory_level,
+        a.accessory_specifications,
+        a.accessory_unit,
+        a.accessory_price,
+        a.accessory_place_of_origin,
+        a.accessory_import,
+        b.id as categoryId,
+        b.category_name
+        FROM `common_accessory` a
+        LEFT JOIN common_accessory_category b on a.category_id = b.id
+        where a.status = 0 and b.status = 0
+    </select>
+
+    <select id="findNameByPartsCode" resultType="java.lang.String">
+        SELECT
+        b.category_name
+        FROM `common_accessory` a
+        LEFT JOIN common_accessory_category b on a.category_id = b.id
+        where a.accessory_index = #{code} and a.status = 0 and b.status = 0
+    </select>
+
 </mapper>
