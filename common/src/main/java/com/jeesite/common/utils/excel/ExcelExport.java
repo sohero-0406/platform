@@ -171,6 +171,8 @@ public class ExcelExport implements Closeable{
 			this.wb = createWorkbook();
 		}
 		this.createSheet(sheetName, title, headerList, headerWidthList);
+
+		//this.sheet.getRow(1).getCell(3).setCellValue();
 	}
 	
 	/**
@@ -311,6 +313,11 @@ public class ExcelExport implements Closeable{
 						new Integer(((ExcelField)o2[0]).sort()));
 			};
 		});
+	}
+
+	public void setCellValue(int rowIndex, int colIndex, String value){
+		//this.sheet.getRow(rowIndex).
+		this.sheet.getRow(rowIndex).createCell(colIndex).setCellValue(value);
 	}
 	
 	/**

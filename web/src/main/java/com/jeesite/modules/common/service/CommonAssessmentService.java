@@ -24,6 +24,7 @@ import com.jeesite.modules.common.util.CommonUserUtil;
 
 import com.jeesite.modules.common.util.ThisDateUtil;
 import com.jeesite.modules.common.vo.ExportUploadScoreVo;
+import com.jeesite.modules.common.vo.ExportUploadScoreVoH5;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -398,6 +399,9 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 									}
 									String[] softwareNameArray =  softwareNameAll.split(",");
 									for (int n = 0; n < softwareNameArray.length; n++) {
+										if(softwareNameArray[n].equals("车技通汽车网络营销H5制作教学平台")){
+											continue;
+										}
 										for (int k = 0; k < softDetails.size(); k++) {
 											JSONObject jox = softDetails.getJSONObject(k);
 											if(jox.getString("softwareName").equals(softwareNameArray[n])){
@@ -426,12 +430,12 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			}
 			System.out.println("sumx="+sumx);
 			if(msgList.size()==0){
-				for (int j = 0; j < commonAssessmentStuList.size(); j++) {
-					commonAssessmentStuService.update(commonAssessmentStuList.get(j));
-				}
+                for (CommonAssessmentStu commonAssessmentStu : commonAssessmentStuList) {
+                    commonAssessmentStuService.update(commonAssessmentStu);
+                }
 				super.update(commonAssessment);
 			}else{
-				return new CommonResult(CodeConstant.EXCEL_WRONG_DATA,"数据无法正确解析", msgList);
+				return new CommonResult<>(CodeConstant.EXCEL_WRONG_DATA,"数据无法正确解析", msgList);
 			}
 
 		}
@@ -457,58 +461,59 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		CommonAssessmentStu con = new CommonAssessmentStu();
 		con.setAssessmentId(ca.getId());
 		List<CommonAssessmentStu> commonAssessmentStuList = commonAssessmentStuService.findList(con);
-		for (int i = 0; i < commonAssessmentStuList.size(); i++) {
-			CommonAssessmentStu cas = commonAssessmentStuList.get(i);
-			String scoreDetails = cas.getScoreDetails();
-			JSONArray scoreDetails_jsonArray = JSONArray.parseArray(scoreDetails);
-			System.out.println(scoreDetails_jsonArray);
-			Double totalScore = 0.0;
-			int subjectPassNum = 0;
-			for (int j = 0; j < scoreDetails_jsonArray.size(); j++) {
-				// 循环拿出一项
-				System.out.println(cas.getId());
-				JSONObject oneSubject = scoreDetails_jsonArray.getJSONObject(j);
-				String weight = oneSubject.getString("weight");
-				String passScore = oneSubject.getString("passScore");
-				JSONArray softDetails = oneSubject.getJSONArray("softDetails");
-				Double oneSubjectScore = 0.0;
-				for (int k = 0; k < softDetails.size(); k++) {
-					JSONObject oneSoft = softDetails.getJSONObject(k);
-					String subjScore = oneSoft.getString("subjScore");
-					String objScore = oneSoft.getString("objScore");
-					String subjScoreWeight = oneSoft.getString("subjScoreWeight");
-					String objScoreWeight = oneSoft.getString("objScoreWeight");
-					String softwareWeight = oneSoft.getString("softwareWeight");
-					if(!NumberUtils.isParsable(objScore)){
-						objScore = "0";
-					}
-					oneSubjectScore += NumberUtils.mul(NumberUtils.add(NumberUtils.mul(NumberUtils.createDouble(subjScore), NumberUtils.createDouble(subjScoreWeight)/100),
-							NumberUtils.mul(NumberUtils.createDouble(objScore), NumberUtils.createDouble(objScoreWeight)/100)), NumberUtils.createDouble(softwareWeight)/100);
-				}
-				if(NumberUtils.createDouble(passScore)<=oneSubjectScore){
-					subjectPassNum++;
-				}
-				oneSubject.put("gainScore", oneSubjectScore);
-				totalScore += NumberUtils.mul(oneSubjectScore, NumberUtils.createDouble(weight)/100);
-				scoreDetails_jsonArray.set(j, oneSubject);
-			}
-			if("0".equals(needSinglePass)){ // 不需要单独每项通过，直接看总分即可
-				if(totalScore>passScore_scheme){
-					cas.setDataStatus("2");
-				}else{
-					cas.setDataStatus("3");
-				}
-			}else{
-				if(totalScore>passScore_scheme&&subjectPassNum==scoreDetails_jsonArray.size()){
-					cas.setDataStatus("2");
-				}else{
-					cas.setDataStatus("3");
-				}
-			}
-			cas.setTotalScore(totalScore.toString());
-			cas.setScoreDetails(scoreDetails_jsonArray.toJSONString());
-			commonAssessmentStuService.update(cas);
-		}
+        for (CommonAssessmentStu cas : commonAssessmentStuList) {
+            String scoreDetails = cas.getScoreDetails();
+            JSONArray scoreDetails_jsonArray = JSONArray.parseArray(scoreDetails);
+            System.out.println(scoreDetails_jsonArray);
+            Double totalScore = 0.0;
+            int subjectPassNum = 0;
+            for (int j = 0; j < scoreDetails_jsonArray.size(); j++) {
+                // 循环拿出一项
+                System.out.println(cas.getId());
+                JSONObject oneSubject = scoreDetails_jsonArray.getJSONObject(j);
+                String weight = oneSubject.getString("weight");
+                String passScore = oneSubject.getString("passScore");
+                JSONArray softDetails = oneSubject.getJSONArray("softDetails");
+                Double oneSubjectScore = 0.0;
+                for (int k = 0; k < softDetails.size(); k++) {
+                    JSONObject oneSoft = softDetails.getJSONObject(k);
+                    String subjScore = oneSoft.getString("subjScore");
+                    String objScore = oneSoft.getString("objScore");
+                    String subjScoreWeight = oneSoft.getString("subjScoreWeight");
+                    String objScoreWeight = oneSoft.getString("objScoreWeight");
+                    String softwareWeight = oneSoft.getString("softwareWeight");
+                    if (!NumberUtils.isParsable(objScore)) {
+                        objScore = "0";
+                    }
+                    oneSubjectScore += NumberUtils.mul(NumberUtils.add(NumberUtils.mul(NumberUtils.createDouble(subjScore), NumberUtils.createDouble(subjScoreWeight) / 100),
+                            NumberUtils.mul(NumberUtils.createDouble(objScore), NumberUtils.createDouble(objScoreWeight) / 100)), NumberUtils.createDouble(softwareWeight) / 100);
+                }
+                if (NumberUtils.createDouble(passScore) <= oneSubjectScore) {
+                    subjectPassNum++;
+                }
+                oneSubject.put("gainScore", oneSubjectScore);
+                totalScore += NumberUtils.mul(oneSubjectScore, NumberUtils.createDouble(weight) / 100);
+                scoreDetails_jsonArray.set(j, oneSubject);
+            }
+            if ("0".equals(needSinglePass)) { // 不需要单独每项通过，直接看总分即可
+                if (totalScore > passScore_scheme) {
+                    cas.setDataStatus("2");
+                } else {
+                    cas.setDataStatus("3");
+                }
+            } else {
+                if (totalScore > passScore_scheme && subjectPassNum == scoreDetails_jsonArray.size()) {
+                    cas.setDataStatus("2");
+                } else {
+                    cas.setDataStatus("3");
+                }
+            }
+            BigDecimal b = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+            cas.setTotalScore(b.toString());
+            cas.setScoreDetails(scoreDetails_jsonArray.toJSONString());
+            commonAssessmentStuService.update(cas);
+        }
 		super.update(commonAssessment);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
@@ -832,10 +837,22 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			exportUploadScoreVoList.add(exportUploadScoreVo);
 		}
 
+//		List<ExportUploadScoreVoH5> exportUploadScoreVoH5List = new ArrayList<>();
+//		for (CommonAssessmentStu c: commonAssessmentStuList) {
+//			ExportUploadScoreVoH5 exportUploadScoreVoH5 = new ExportUploadScoreVoH5();
+//			exportUploadScoreVoH5.setUserName(c.getLoginName());
+//			exportUploadScoreVoH5.setTrueName(c.getTrueName());
+//			exportUploadScoreVoH5.setSchoolName(c.getSchoolName());
+//			//exportUploadScoreVoH5.setSoftwareName("不用输入");
+//			exportUploadScoreVoH5List.add(exportUploadScoreVoH5);
+//		}
+
+
 		CommonAssessment commonAssessment = super.get(id);
 		CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(commonAssessment.getAssessmentSchemeId());
 		JSONArray schemeDetails = JSONArray.parseArray(commonAssessmentScheme.getSchemeDetails());
 		ExcelExport ee = null;
+		int created = 0;
 		for (int i = 0; i < schemeDetails.size(); i++) {
 			JSONObject jsonObject = schemeDetails.getJSONObject(i);
 			List<String> headerList = new ArrayList<>();
@@ -848,19 +865,49 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			headerList.add("学校");
 			headerWidthList.add(Integer.valueOf(40*256));
 			JSONArray ja = JSONArray.parseArray(jsonObject.getString("softDetails"));
+//			if(ja.size()==1&&ja.getJSONObject(0).getString("softwareId").equals("6")){
+//				continue;
+//			}
+			int haveH5 = 0;
+			int h5Index = 3;
 			for (int j = 0; j < ja.size(); j++) {
 				JSONObject jo = ja.getJSONObject(j);
+				if(jo.getString("softwareId").equals("6")){
+					haveH5 = 1;
+					h5Index = h5Index + j;
+				}
 				headerList.add(jo.getString("softwareName"));
-				System.out.println(jo.getString("softwareName"));
 				headerWidthList.add(Integer.valueOf(10*256));
+
 			}
-			if(i == 0){
+			if(created == 0){
 				ee = new ExcelExport(jsonObject.getString("title"), null, headerList, headerWidthList);
+
 				ee.makeAnnotationList(ExportUploadScoreVo.class);
-				ee.setDataList(exportUploadScoreVoList);
+				if(haveH5==0){
+					ee.setDataList(exportUploadScoreVoList);
+				}else{
+					for (String s : headerList) {
+						System.out.println(s);
+					}
+					ee.setDataList(exportUploadScoreVoList);
+				}
+//				ee.setDataList(haveH5==0?exportUploadScoreVoList:exportUploadScoreVoH5List);
+				created = 1;
 			}else{
 				ee.createSheet(jsonObject.getString("title"), null, headerList, headerWidthList);
-				ee.setDataList(exportUploadScoreVoList);
+				//ee.setDataList(exportUploadScoreVoList);
+				if(haveH5==0){
+					ee.setDataList(exportUploadScoreVoList);
+				}else{
+					for (String s : headerList) {
+						System.out.println(s);
+					}
+					ee.setDataList(exportUploadScoreVoList);
+					for(int ii = 1;ii<=commonAssessmentStuList.size();ii++){
+						ee.setCellValue(ii, h5Index, "不需要输入");
+					}
+				}
 			}
 		}
 		return ee;
