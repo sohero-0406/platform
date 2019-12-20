@@ -23,7 +23,7 @@ public class TokenFilter implements Filter {
             "/loadStuListByIds", "/loadAssessmentNameList", "/loadAssessmentDateList", "/loadAssessmentTimeList", "/uploadScores",
             "/vehicleInfo/", "/vehicleBrand/getByEntity", "/vehicleSeries/getByEntity", "/vehicleBrand/findList", "/vehicleSeries/findList",
             "/loadOneExamStu", "/loadOneUser", "/loadMajorList", "/loadClassList", "/loadStuListByExamUserIds", "/loadStuListAndOtherByExamUserIds",
-            "/loadStuListAndOtherByUserIds", "/loadVehicleImages", "/findPartsForVehicleParts", "/findNameByPartsCode"};
+            "/loadStuListAndOtherByUserIds", "/loadVehicleImages"};
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -61,9 +61,11 @@ public class TokenFilter implements Filter {
             //claims.get
             if (claims == null || JwtUtils.isTokenExpired(claims.getExpiration())) {
                 if (claims == null) {
-                    httpServletResponse.sendRedirect("/platform/common/commonUser/unLogin");
+//                    httpServletResponse.sendRedirect("/platform/common/commonUser/unLogin");
+                    httpServletRequest.getRequestDispatcher("/common/commonUser/unLogin").forward(httpServletRequest, httpServletResponse);
                 } else {
-                    httpServletResponse.sendRedirect("/platform/common/commonUser/tokenExpired");
+//                    httpServletResponse.sendRedirect("/platform/common/commonUser/tokenExpired");
+                    httpServletRequest.getRequestDispatcher("/common/commonUser/tokenExpired").forward(httpServletRequest, httpServletResponse);
                 }
             } else {
                 if (uri.contains("/add") || uri.contains("/save")) {
