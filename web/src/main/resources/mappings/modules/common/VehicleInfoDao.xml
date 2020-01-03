@@ -40,7 +40,7 @@
 			and niankuan = #{vehicleInfo.niankuan}
 		</if>
 	</select>
-`
+
 	<select id="selectOneWithField" resultType="VehicleInfo">
 		select id as id, chexingmingcheng as chexingmingcheng, chexi as chexi, chexi_id as chexiId,
 		changshangzhidaojia as changshangzhidaojia, fadongji as fadongji, biansuxiang as biansuxiang,
