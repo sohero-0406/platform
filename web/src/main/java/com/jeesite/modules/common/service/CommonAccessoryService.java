@@ -177,13 +177,13 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 					msgX += "配件等级长度不能大于45;";sum++;
 				}
 			}
-			if(StringUtils.isBlank(commonAccessory.getAccessorySpecifications())){
-				msgX += "规格不能为空;";sum++;
-			}else {
-				if (commonAccessory.getAccessorySpecifications().length()>20) {
-					msgX += "规格长度不能大于20;";sum++;
-				}
+//			if(StringUtils.isBlank(commonAccessory.getAccessorySpecifications())){
+//				msgX += "规格不能为空;";sum++;
+//			}else {
+			if (commonAccessory.getAccessorySpecifications().length()>20) {
+				msgX += "规格长度不能大于20;";sum++;
 			}
+//			}
 			if(StringUtils.isBlank(commonAccessory.getAccessoryUnit())){
 				msgX += "单位不能为空;";sum++;
 			}else {

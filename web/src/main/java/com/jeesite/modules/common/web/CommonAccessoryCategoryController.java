@@ -138,7 +138,7 @@ public class CommonAccessoryCategoryController extends BaseController {
 	@RequestMapping(value = "uploadCommonAccessoryAndCategory")
 	@ResponseBody
 	public CommonResult uploadCommonAccessoryAndCategory(MultipartFile file, CommonAccessoryCategory commonAccessoryCategory) throws Exception {
-		ExcelImport ei = new ExcelImport(file, 1, 0);
+		ExcelImport ei = new ExcelImport(file, 2, 0);
 		List<CommonAccessory> commonAccessoryList = ei.getDataList(CommonAccessory.class);
 		return commonAccessoryCategoryService.saveCategoryAndCommonAccessory(commonAccessoryCategory, commonAccessoryList);
 	}

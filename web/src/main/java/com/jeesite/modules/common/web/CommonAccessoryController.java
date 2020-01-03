@@ -136,13 +136,12 @@ public class CommonAccessoryController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "categoryId", value = "车型分类的id", required = true, dataType="String"),
 			@ApiImplicitParam(name = "file", value = "上传的数据文件", required = true, dataType="MultipartFile")
-
 	})
 	@Log(operationName = "上传配件信息", operationType = Log.OPERA_TYPE_ADD)
 	@RequestMapping(value = "uploadCommonAccessoryByCategoryId")
 	@ResponseBody
 	public CommonResult uploadCommonAccessoryByCategoryId(String categoryId, MultipartFile file) throws Exception {
-		ExcelImport ei = new ExcelImport(file, 1, 0);
+		ExcelImport ei = new ExcelImport(file, 2, 0);
 		List<CommonAccessory> commonAccessoryList = ei.getDataList(CommonAccessory.class);
 		return commonAccessoryService.saveByCategoryId(commonAccessoryList, categoryId);
 	}
