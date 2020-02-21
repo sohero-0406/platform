@@ -173,5 +173,16 @@ public class CommonSchoolController extends BaseController {
 		commonSchoolService.delete(commonSchool);
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
 	}
+
+
+	@ApiOperation(value = "根据json删除学校")
+	@ApiImplicitParam(name = "json", value = "删除信息的json数据", required = true, dataType = "String")
+	@Log(operationName = "根据json删除学校", operationType = Log.OPERA_TYPE_DEL)
+	@RequestMapping(value = "deleteSchool")
+	@ResponseBody
+	public CommonResult deleteSchool(String json) {
+
+		return commonSchoolService.deleteCommonSchool(json);
+	}
 	
 }

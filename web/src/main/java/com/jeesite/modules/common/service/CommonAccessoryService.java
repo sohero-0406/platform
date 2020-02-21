@@ -105,6 +105,7 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 	 * @param json
 	 * @return
 	 */
+	@Transactional
 	public CommonResult deleteCommonCommonAccessory(String json){
 		String commonUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(commonUserId);

@@ -3,15 +3,22 @@
  */
 package com.jeesite.modules.common.service;
 
-import java.util.List;
-
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.collect.ListUtils;
+import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.modules.common.entity.*;
+import com.jeesite.modules.common.util.CommonUserUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.common.entity.CommonSchool;
 import com.jeesite.modules.common.dao.CommonSchoolDao;
+
+import javax.xml.ws.Action;
+import java.util.List;
 
 /**
  * 院校表Service
@@ -21,7 +28,12 @@ import com.jeesite.modules.common.dao.CommonSchoolDao;
 @Service
 @Transactional(readOnly=true)
 public class CommonSchoolService extends CrudService<CommonSchoolDao, CommonSchool> {
-	
+
+	@Autowired
+	private CommonUserService commonUserService;
+	@Autowired
+	private CommonAssessmentService commonAssessmentService;
+
 	/**
 	 * 获取单条数据
 	 * @param commonSchool
@@ -35,7 +47,7 @@ public class CommonSchoolService extends CrudService<CommonSchoolDao, CommonScho
 	/**
 	 * 查询分页数据
 	 * @param commonSchool 查询条件 commonSchool.page 分页对象
-	 * @return
+	 * @return 1
 	 */
 	@Override
 	public Page<CommonSchool> findPage(CommonSchool commonSchool) {
@@ -44,10 +56,10 @@ public class CommonSchoolService extends CrudService<CommonSchoolDao, CommonScho
 	
 	/**
 	 * 保存数据（插入或更新）
-	 * @param commonSchool
+	 * @param commonSchool 被保存或更新的学校实体
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void save(CommonSchool commonSchool) {
 		super.save(commonSchool);
 	}
@@ -57,17 +69,17 @@ public class CommonSchoolService extends CrudService<CommonSchoolDao, CommonScho
 	 * @param commonSchool
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void updateStatus(CommonSchool commonSchool) {
 		super.updateStatus(commonSchool);
 	}
 	
 	/**
 	 * 删除数据
-	 * @param commonSchool
+	 * @param commonSchool 被删除的学校试题，必须有id
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void delete(CommonSchool commonSchool) {
 		super.delete(commonSchool);
 	}
@@ -76,5 +88,46 @@ public class CommonSchoolService extends CrudService<CommonSchoolDao, CommonScho
 		return dao.getByEntity(commonSchool);
 	}
 
+
+	@Transactional
+	public CommonResult deleteCommonSchool(String json) {
+
+		String loginUserId = PreEntity.getUserIdByToken();
+		CommonUser loginUser = commonUserService.get(loginUserId);
+		if(!"1".equals(loginUser.getRoleId())){
+			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
+		}
+
+		JSONObject jsonObject = JSONObject.parseObject(json);
+		Integer length =jsonObject.getInteger("length");
+		JSONArray ja = JSONArray.parseArray(jsonObject.getString("datas"));
+		int deletedNum = 0;
+		for (int i = 0; i < length; i++) {
+			String id = ja.getString(i);
+			CommonSchool cu = this.get(id);
+			if(cu!=null){
+				CommonUser cuCon = new CommonUser();
+				cuCon.setSchoolId(id);
+				List<CommonUser>  cuList = commonUserService.findList(cuCon);
+				CommonAssessment caCon = new CommonAssessment();
+				caCon.setSchoolId(id);
+				List<CommonAssessment> caList = commonAssessmentService.findList(caCon);
+				if(ListUtils.isEmpty(caList)&&ListUtils.isEmpty(cuList)){
+					super.delete(cu);
+					deletedNum++;
+				}
+			}
+		}
+		JSONObject object = new JSONObject();
+		object.put("deletedNum", deletedNum);
+		int x = length - deletedNum;
+		object.put("notDeletedNum", x);
+		if(x>0){
+			return new CommonResult(CodeConstant.DATA_LOCK, "有"+x+"条件数据不符合删除条件，不能删除，符合的已删除", object);
+		}else{
+			return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+		}
+
+	}
 
 }

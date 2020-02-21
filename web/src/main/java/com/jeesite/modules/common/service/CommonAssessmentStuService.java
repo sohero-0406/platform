@@ -248,12 +248,12 @@ public class CommonAssessmentStuService extends CrudService<CommonAssessmentStuD
     public CommonResult loadAssessmentDateList(String commonUserId, String assessmentName) {
 		CommonUser loginUser = commonUserService.get(commonUserId);
 		if(!"2".equals(loginUser.getRoleId())){
-			return new CommonResult(CodeConstant.ERROR_DATA, "您传入的参数不正确");
+			return new CommonResult<>(CodeConstant.ERROR_DATA, "您传入的参数不正确");
 		}
 
 		List<String> assessmentDateList = dao.loadDateList(loginUser.getSchoolId(), assessmentName);
 
-		return new CommonResult(assessmentDateList);
+		return new CommonResult<>(assessmentDateList);
     }
 
 	public List<String> loadAssessmentDateListBySchoolId(String schoolId, String assessmentName) {

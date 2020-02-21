@@ -38,12 +38,12 @@ public class FilePathUtil {
 
 
         }else{
-            String path = "/hardDisk2/platform/"+folderName+"/";
+            String path = "/home/hey/platform/"+folderName+"/";
             File p = new File(path);
             if(!p.exists()){
                 p.mkdir();
             }
-            return "/hardDisk2/platform/"+folderName+"/";
+            return "/home/hey/platform/"+folderName+"/";
         }
 
 

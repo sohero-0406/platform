@@ -34,65 +34,12 @@ public class CommonAssessmentController extends BaseController {
 
 	@Autowired
 	private CommonAssessmentService commonAssessmentService;
-	
-//	/**
-//	 * 获取数据
-//	 */
-//	@ModelAttribute
-//	public CommonAssessment get(String id, boolean isNewRecord) {
-//		return commonAssessmentService.get(id, isNewRecord);
-//	}
-//
-//	/**
-//	 * 查询列表
-//	 */
-//	@RequestMapping(value = {"list", ""})
-//	public String list(CommonAssessment commonAssessment, Model model) {
-//		model.addAttribute("commonAssessment", commonAssessment);
-//		return "modules/common/commonAssessmentList";
-//	}
-//
-//	/**
-//	 * 查询列表数据
-//	 */
-//	@RequestMapping(value = "listData")
-//	@ResponseBody
-//	public Page<CommonAssessment> listData(CommonAssessment commonAssessment, HttpServletRequest request, HttpServletResponse response) {
-//		commonAssessment.setPage(new Page<>(request, response));
-//		Page<CommonAssessment> page = commonAssessmentService.findPage(commonAssessment);
-//		return page;
-//	}
-//
-//	/**
-//	 * 查看编辑表单
-//	 */
-//	@RequestMapping(value = "form")
-//	public String form(CommonAssessment commonAssessment, Model model) {
-//		model.addAttribute("commonAssessment", commonAssessment);
-//		return "modules/common/commonAssessmentForm";
-//	}
-//
-//	/**
-//	 * 保存考核表
-//	 */
-//	@PostMapping(value = "save")
-//	@ResponseBody
-//	public String save(@Validated CommonAssessment commonAssessment) {
-//		commonAssessmentService.save(commonAssessment);
-//		return renderResult(Global.TRUE, text("保存考核表成功！"));
-//	}
-//
-//	/**
-//	 * 删除考核表
-//	 */
-//	@RequestMapping(value = "delete")
-//	@ResponseBody
-//	public String delete(CommonAssessment commonAssessment) {
+
 	/**
 	 * 保存、更新考核
-	 * @param commonAssessment
-	 * @param userConfig
-	 * @return
+	 * @param commonAssessment 1
+	 * @param userConfig 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "保存、更新考核")
 	@ApiImplicitParams({
@@ -108,8 +55,8 @@ public class CommonAssessmentController extends BaseController {
 
 	/**
 	 * 加载考核的分页数据
-	 * @param commonAssessment
-	 * @return
+	 * @param commonAssessment 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "加载考核的分页数据")
 	@ApiImplicitParam(name = "commonAssessment", value = "查询的考核条件对象", required = true, dataType="CommonAssessment")
@@ -122,8 +69,8 @@ public class CommonAssessmentController extends BaseController {
 
 	/**
 	 * 根据id加载考核
-	 * @param id
-	 * @return
+	 * @param id 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "根据id加载考核")
 	@ApiImplicitParam(name = "id", value = "考核的id", required = true, dataType="String")
@@ -153,7 +100,7 @@ public class CommonAssessmentController extends BaseController {
 	 * 更新考核状态（包括上传主观评分表）
 	 * @param commonAssessment 要更新的对象
 	 * @param file 上传的评分表文件
-	 * @return
+	 * @return 1
 	 */
 	@ApiOperation(value = "更新考核状态")
 	@ApiImplicitParams({
@@ -170,8 +117,8 @@ public class CommonAssessmentController extends BaseController {
 
 	/**
 	 * 上传客观评分
-	 * @param scoreInfo
-	 * @return
+	 * @param scoreInfo 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "上传客观评分")
 	@ApiImplicitParam(name = "scoreInfo", value = "教师端上传来的分数json数据", required = true, dataType="String")
@@ -193,10 +140,19 @@ public class CommonAssessmentController extends BaseController {
 		return commonAssessmentService.parseScoreInfoAll(scoreInfo);
 	}
 
+	@ApiOperation(value = "根据项目名称上传客观评分")
+	@ApiImplicitParam(name = "scoreInfo", value = "教师端上传来的分数json数据", required = true, dataType="String")
+	@Log(operationName = "根据项目名称上传客观评分", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "uploadScoresByProjectName")
+	@ResponseBody
+	public CommonResult uploadScoresByProjectName(String scoreInfo){
+		return commonAssessmentService.parseScoreInfoByProjectName(scoreInfo);
+	}
+
 	/**
 	 * 根据登录人加载考核名称
-	 * @param commonUserId
-	 * @return
+	 * @param commonUserId 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "根据登录人加载考核名称")
 	@ApiImplicitParam(name = "commonUserId", value = "用户id", required = true, dataType="String")
@@ -213,13 +169,27 @@ public class CommonAssessmentController extends BaseController {
 			@ApiImplicitParam(name = "commonUserId", value = "用户id", required = true, dataType="String"),
 			@ApiImplicitParam(name = "softwareId", value = "软件id", required = true, dataType="String")
 	})
-
-	@Log(operationName = "根据登录人加载考核名称", operationType = Log.OPERA_TYPE_SEL)
+	@Log(operationName = "根据登录人加载考核名称")
 	@RequestMapping(value = "loadAssessmentNameListBySoftwareId")
 	@ResponseBody
-	public CommonResult loadAssessmentNameListBySoftwareId(String commonUserId, String softwareId){
+	public CommonResult<List<String>> loadAssessmentNameListBySoftwareId(String commonUserId, String softwareId){
 
 		return commonAssessmentService.loadAssessmentNameList(commonUserId, softwareId);
+	}
+
+
+	@ApiOperation(value = "根据登录人加载考核名称")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "commonUserId", value = "用户id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "assessmentName", value = "考核名称", required = true, dataType="String"),
+			@ApiImplicitParam(name = "softwareId", value = "软件id", required = true, dataType="String")
+	})
+	@Log(operationName = "根据登录人加载考核名称")
+	@RequestMapping(value = "loadProjectNameList")
+	@ResponseBody
+	public CommonResult<List<String>> loadProjectNameList(String commonUserId, String assessmentName, String softwareId){
+
+		return commonAssessmentService.loadProjectNameList(commonUserId, assessmentName, softwareId);
 	}
 
 
@@ -227,20 +197,20 @@ public class CommonAssessmentController extends BaseController {
 	/**
 	 * 加载考核名称
 	 *
-	 * @return
+	 * @return 1
 	 */
 	@ApiOperation(value = "加载考核名称")
-	@Log(operationName = "加载考核名称", operationType = Log.OPERA_TYPE_SEL)
+	@Log(operationName = "加载考核名称")
 	@RequestMapping(value = "loadAssessmentNameListWithCalc")
 	@ResponseBody
-	public CommonResult loadAssessmentNameList(){
+	public CommonResult<List<String>> loadAssessmentNameList(){
 		return commonAssessmentService.loadAssessmentNameList();
 	}
 
 
 	/**
 	 * 导出用户模板
-	 * @param response
+	 * @param response 1
 	 */
 	@ApiOperation(value = "导出上传考生基本信息模板")
 	@Log(operationName = "导出上传考生基本信息模板", operationType = Log.OPERA_TYPE_OTHER)
@@ -263,7 +233,7 @@ public class CommonAssessmentController extends BaseController {
 
 	@ApiOperation(value = "下载带有学生新的评分表")
 	@ApiImplicitParam(name = "id", value = "考核的id", required = true, dataType="String")
-	@Log(operationName = "下载带有学生新的评分表", operationType = Log.OPERA_TYPE_SEL)
+	@Log(operationName = "下载带有学生新的评分表")
 	@RequestMapping(value = "downloadStandardScoreMode")
 	public void downloadStandardScoreMode(String id, HttpServletResponse response){
 		ExcelExport ee = commonAssessmentService.makeExcelMode(id);

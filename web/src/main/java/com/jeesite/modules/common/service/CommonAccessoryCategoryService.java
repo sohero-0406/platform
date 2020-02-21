@@ -1,27 +1,21 @@
-/**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
- */
 package com.jeesite.modules.common.service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.StringUtils;
-import com.jeesite.modules.common.dao.CommonAccessoryDao;
-import com.jeesite.modules.common.dao.CommonUserDao;
+import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.common.dao.CommonAccessoryCategoryDao;
 import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.common.dao.CommonAccessoryCategoryDao;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 配件分类表Service
@@ -41,8 +35,8 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
     /**
      * 获取单条数据
      *
-     * @param commonAccessoryCategory
-     * @return
+     * @param commonAccessoryCategory 配件分类
+     * @return CommonAccessoryCategory
      */
     @Override
     public CommonAccessoryCategory get(CommonAccessoryCategory commonAccessoryCategory) {
@@ -53,7 +47,7 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
      * 查询分页数据
      *
      * @param commonAccessoryCategory 查询条件 commonAccessoryCategory.page 分页对象
-     * @return
+     * @return Page<CommonAccessoryCategory>
      */
     @Override
     public Page<CommonAccessoryCategory> findPage(CommonAccessoryCategory commonAccessoryCategory) {
@@ -63,10 +57,10 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
     /**
      * 保存数据（插入或更新）
      *
-     * @param commonAccessoryCategory
+     * @param commonAccessoryCategory 配件分类
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void save(CommonAccessoryCategory commonAccessoryCategory) {
         super.save(commonAccessoryCategory);
     }
@@ -74,10 +68,10 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
     /**
      * 更新状态
      *
-     * @param commonAccessoryCategory
+     * @param commonAccessoryCategory 配件分类
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void updateStatus(CommonAccessoryCategory commonAccessoryCategory) {
         super.updateStatus(commonAccessoryCategory);
     }
@@ -85,10 +79,10 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
     /**
      * 删除数据
      *
-     * @param commonAccessoryCategory
+     * @param commonAccessoryCategory 配件分类
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void delete(CommonAccessoryCategory commonAccessoryCategory) {
         super.delete(commonAccessoryCategory);
     }
@@ -97,45 +91,45 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
     /**
      * 根据对象条件加载分页配件分类数据
      *
-     * @param commonAccessoryCategory
-     * @return
+     * @param commonAccessoryCategory 查询条件
+     * @return CommonResult
      */
-    public CommonResult findPageByCondition(CommonAccessoryCategory commonAccessoryCategory) {
+    public CommonResult<Page<CommonAccessoryCategory>> findPageByCondition(CommonAccessoryCategory commonAccessoryCategory) {
         String loginUserId = PreEntity.getUserIdByToken();
         CommonUser loginUser = commonUserService.get(loginUserId);
         if ("1".equals(loginUser.getRoleId())) {
-            return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, super.findPage(commonAccessoryCategory));
+            return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, super.findPage(commonAccessoryCategory));
         }
-        return new CommonResult(CodeConstant.NO_RIGHT, "您有权限进行该操作");
+        return new CommonResult<>(CodeConstant.NO_RIGHT, "您有权限进行该操作");
     }
 
     /**
      * 保存配件分类数据，并保存对应上传的配件数据
      *
-     * @param commonAccessoryCategory
-     * @param commonAccessoryList
-     * @return
+     * @param commonAccessoryCategory 配件分类
+     * @param commonAccessoryList   配件列表
+     * @return CommonResult
      */
-    @Transactional(readOnly = false)
-    public CommonResult saveCategoryAndCommonAccessory(CommonAccessoryCategory commonAccessoryCategory, List<CommonAccessory> commonAccessoryList) {
+    @Transactional
+    public CommonResult<JSONObject> saveCategoryAndCommonAccessory(CommonAccessoryCategory commonAccessoryCategory, List<CommonAccessory> commonAccessoryList) {
         if (StringUtils.isBlank(commonAccessoryCategory.getCategoryName())) {
-            return new CommonResult(CodeConstant.ERROR_DATA, "您为传入车型名称");
+            return new CommonResult<>(CodeConstant.ERROR_DATA, "您为传入车型名称");
         }
         if (StringUtils.isNotBlank(commonAccessoryCategory.getCategoryName()) && commonAccessoryCategory.getCategoryName().length() > 100) {
-            return new CommonResult(CodeConstant.ERROR_DATA, "车型名称长度不得超过100");
+            return new CommonResult<>(CodeConstant.ERROR_DATA, "车型名称长度不得超过100");
         }
         String loginUserId = PreEntity.getUserIdByToken();
         CommonUser loginUser = commonUserService.get(loginUserId);
         if (!"1".equals(loginUser.getRoleId())) {
-            return new CommonResult(CodeConstant.NO_RIGHT, "您有权限进行该操作");
+            return new CommonResult<>(CodeConstant.NO_RIGHT, "您有权限进行该操作");
         }
         if (ListUtils.isEmpty(commonAccessoryList)) {
-            return new CommonResult(CodeConstant.EXCEL_NO_DATA, "您传入的EXCEL表格没有数据");
+            return new CommonResult<>(CodeConstant.EXCEL_NO_DATA, "您传入的EXCEL表格没有数据");
         }
 
         List<String> msgList = new ArrayList<>();
         List<CommonAccessory> okCommonAccessoryList = new ArrayList<>();
-        String msg = "";
+        StringBuilder msg = new StringBuilder();
         for (CommonAccessory commonAccessory : commonAccessoryList) {
             int sum = 0;
             String msgX = "编号为\"" + commonAccessory.getAccessoryIndex() + "\"的配件:";
@@ -208,7 +202,7 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
             }
             if (sum > 0) {
                 msgList.add(msgX);
-                msg += msgX + "<br/>";
+                msg.append(msgX).append("<br/>");
             } else {
                 okCommonAccessoryList.add(commonAccessory);
             }
@@ -224,13 +218,13 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
             jo.put("successNum", okCommonAccessoryList.size());
             jo.put("errorNum", commonAccessoryList.size() - okCommonAccessoryList.size());
             jo.put("msgList", msgList);
-            return new CommonResult(CodeConstant.EXCEL_WRONG_DATA, "excel文件中没有一个数据能正常上传", jo);
+            return new CommonResult<>(CodeConstant.EXCEL_WRONG_DATA, "excel文件中没有一个数据能正常上传", jo);
         }
         JSONObject jo = new JSONObject();
         jo.put("successNum", okCommonAccessoryList.size());
         jo.put("errorNum", commonAccessoryList.size() - okCommonAccessoryList.size());
         jo.put("msgList", msgList);
-        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, msg, jo);
+        return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, msg.toString(), jo);
     }
 
     // 只是逻辑删除
@@ -238,15 +232,15 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
     /**
      * 删除配件分类数据（逻辑删除）
      *
-     * @param json
-     * @return
+     * @param json 要删除的数据
+     * @return CommonResult
      */
-    @Transactional(readOnly = false)
-    public CommonResult deleteCommonAccessoryCategory(String json) {
+    @Transactional
+    public CommonResult<JSONObject> deleteCommonAccessoryCategory(String json) {
         String loginUserId = PreEntity.getUserIdByToken();
         CommonUser loginUser = commonUserService.get(loginUserId);
         if (!"1".equals(loginUser.getRoleId())) {
-            return new CommonResult(CodeConstant.NO_RIGHT, "您有权限进行该操作");
+            return new CommonResult<>(CodeConstant.NO_RIGHT, "您有权限进行该操作");
         }
         JSONObject jsonObject = JSONObject.parseObject(json);
         Integer length = jsonObject.getInteger("length");
@@ -265,40 +259,40 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
         int x = length - deletedNum;
         object.put("notDeletedNum", x);
         if (x > 0) {
-            return new CommonResult(CodeConstant.DATA_LOCK, "有" + x + "条件数据不符合删除条件，不能删除，符合的已删除", object);
+            return new CommonResult<>(CodeConstant.DATA_LOCK, "有" + x + "条件数据不符合删除条件，不能删除，符合的已删除", object);
         } else {
-            return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+            return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, object);
         }
     }
 
     /**
      * 更新配件分类信息，其实只是更新了分类的名称
      *
-     * @param commonAccessoryCategory
-     * @return
+     * @param commonAccessoryCategory 要更新的配件分类
+     * @return CommonResult
      */
-    @Transactional(readOnly = false)
-    public CommonResult updateCommonAccessoryCategory(CommonAccessoryCategory commonAccessoryCategory) {
+    @Transactional
+    public CommonResult<Object> updateCommonAccessoryCategory(CommonAccessoryCategory commonAccessoryCategory) {
         if (commonAccessoryCategory.getId() == null) {
-            return new CommonResult(CodeConstant.ERROR_DATA, "您传入的数据错误");
+            return new CommonResult<>(CodeConstant.ERROR_DATA, "您传入的数据错误");
         }
         String loginUserId = PreEntity.getUserIdByToken();
         CommonUser loginUser = commonUserService.get(loginUserId);
         if (!"1".equals(loginUser.getRoleId())) {
-            return new CommonResult(CodeConstant.NO_RIGHT, "您有权限进行该操作");
+            return new CommonResult<>(CodeConstant.NO_RIGHT, "您有权限进行该操作");
         }
         super.update(commonAccessoryCategory);
-        return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL);
+        return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL);
     }
 
     /**
      * 配件项目，调用车型查配件
      */
-    public CommonResult findPartsForVehicleParts() {
-        return new CommonResult(dao.findPartsForVehicleParts());
+    public CommonResult<List<CommonAccessoryCategory>> findPartsForVehicleParts() {
+        return new CommonResult<>(dao.findPartsForVehicleParts());
     }
 
-    public CommonResult findNameByPartsCode(String code) {
-        return new CommonResult(dao.findNameByPartsCode(code));
+    public CommonResult<List<String>> findNameByPartsCode(String code) {
+        return new CommonResult<>(dao.findNameByPartsCode(code));
     }
 }

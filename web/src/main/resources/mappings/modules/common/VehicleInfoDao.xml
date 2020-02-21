@@ -29,7 +29,7 @@
 	<select id="findListWithField" resultType="VehicleInfo">
 		select id as id, pinpai as pinpai, chexi as chexi, chexi_id as chexiId, niankuan as niankuan, chexingmingcheng as chexingmingcheng, chexing_id as chexingId
 		from  common_vehicle_info
-		where  status = '0' and changshangzhidaojia != 0
+		where  status = '0' and changshangzhidaojia != '0'
 		<if test="vehicleInfo.pinpaiId!=null and vehicleInfo.pinpaiId!=''">
 			and pinpai_id = #{vehicleInfo.pinpaiId}
 		</if>
