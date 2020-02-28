@@ -145,6 +145,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 				JSONObject oneSoft = softDetails.getJSONObject(j);
 				JSONObject oneMark = new JSONObject();
 				oneMark.put("softwareId", oneSoft.getString("softwareId"));
+				oneMark.put("projectName", jsonObject.getString("title"));
 				oneMark.put("mark", "0");
 				softUploadedMarks.add(oneMark);
 			}
@@ -715,7 +716,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 									int uploadedFlag = 0;
 									for (int m = 0; m < softUploadedMarks_array.size(); m++) {
 										JSONObject oneMark = softUploadedMarks_array.getJSONObject(m);
-										if(oneMark.getString("softwareId").equals(oneSoft.getInteger("softwareId").toString())){
+										if(oneMark.getString("softwareId").equals(oneSoft.getInteger("softwareId").toString())
+											&&oneMark.getString("projectName").equals(projectName)){
 											if("1".equals(oneMark.getString("mark"))){
 												resultMsgList.add("身份证号为"+commonAssessmentStu.getLoginName()+"的软件分数已经上传!");
 												uploadedFlag = 1;
@@ -1031,11 +1033,13 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		return ee;
 	}
 
-	public CommonResult<List<String>> loadProjectNameList(String commonUserId, String assessmentName, String softwareId) {
+	public CommonResult<List<String>> loadProjectNameList(String commonUserId, String assessmentName, String softwareId, String assessmentDate) {
 		CommonAssessment caCon = new CommonAssessment();
 		caCon.setAssessmentName(assessmentName);
+		caCon.setStartDate(assessmentDate);
 		caCon.setDataStatus("2");
-		CommonAssessment ca = dao.getByEntity(caCon);
+		//CommonAssessment ca = dao.getByEntity(caCon);
+		CommonAssessment ca = dao.loadOneByCondition(caCon);
 		String casId = ca.getAssessmentSchemeId();
 		CommonAssessmentScheme cas = commonAssessmentSchemeService.get(casId);
 		JSONArray schemeDetails = JSONArray.parseArray(cas.getSchemeDetails());

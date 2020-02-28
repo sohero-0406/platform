@@ -182,14 +182,15 @@ public class CommonAssessmentController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "commonUserId", value = "用户id", required = true, dataType="String"),
 			@ApiImplicitParam(name = "assessmentName", value = "考核名称", required = true, dataType="String"),
-			@ApiImplicitParam(name = "softwareId", value = "软件id", required = true, dataType="String")
+			@ApiImplicitParam(name = "softwareId", value = "软件id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "assessmentDate", value = "考核日期", required = true, dataType="String")
 	})
 	@Log(operationName = "根据登录人加载考核名称")
 	@RequestMapping(value = "loadProjectNameList")
 	@ResponseBody
-	public CommonResult<List<String>> loadProjectNameList(String commonUserId, String assessmentName, String softwareId){
+	public CommonResult<List<String>> loadProjectNameList(String commonUserId, String assessmentName, String softwareId, String assessmentDate){
 
-		return commonAssessmentService.loadProjectNameList(commonUserId, assessmentName, softwareId);
+		return commonAssessmentService.loadProjectNameList(commonUserId, assessmentName, softwareId, assessmentDate);
 	}
 
 

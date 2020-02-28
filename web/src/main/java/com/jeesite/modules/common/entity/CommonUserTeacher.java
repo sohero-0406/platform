@@ -102,7 +102,7 @@ public class CommonUserTeacher extends PreEntity<CommonUserTeacher> {
 	}
 
 	@Length(min=0, max=20, message="手机号长度不能超过 20 个字符")
-	@ExcelField(title="手机号", align = ExcelField.Align.CENTER, sort = 7)
+	@ExcelField(title="手机号", align = ExcelField.Align.CENTER, sort = 3)
 	public String getPhoneNum() {
 		return phoneNum;
 	}
@@ -112,7 +112,7 @@ public class CommonUserTeacher extends PreEntity<CommonUserTeacher> {
 	}
 
 
-	@ExcelField(title="专业", align = ExcelField.Align.CENTER, sort = 5)
+	@ExcelField(title="专业", align = ExcelField.Align.CENTER, sort = 6)
 	public String getMajorName() {
 		return majorName;
 	}
@@ -130,7 +130,7 @@ public class CommonUserTeacher extends PreEntity<CommonUserTeacher> {
 		this.className = className;
 	}
 
-	@ExcelField(title="学校", align = ExcelField.Align.CENTER, sort = 4)
+	@ExcelField(title="学校", align = ExcelField.Align.CENTER, sort = 5)
 	public String getSchoolName() {
 		return schoolName;
 	}
@@ -139,7 +139,7 @@ public class CommonUserTeacher extends PreEntity<CommonUserTeacher> {
 		this.schoolName = schoolName;
 	}
 
-    @ExcelField(title="性别", align = ExcelField.Align.CENTER, sort = 3)
+    @ExcelField(title="性别", align = ExcelField.Align.CENTER, sort = 4)
     public String getGender() {
         return gender;
     }

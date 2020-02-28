@@ -17,7 +17,7 @@
 
 	<select id="loadNameListBySoftwareId" resultType="String">
 		select ca.assessment_name as assessmentName from common_assessment as ca, common_assessment_scheme as cas
-		where ca.school_id = #{schoolId} and ca.data_status = '2' and cas.scheme_details like CONCAT('%', #{softwareIdStr}, '%') group by ca.assessment_name
+		where ca.school_id = #{schoolId} and ca.data_status = '2' and cas.scheme_details like CONCAT('%', #{softwareIdStr}, '%') and ca.assessment_scheme_id = cas.id group by ca.assessment_name
 	</select>
 
     <select id="loadCalcedNameList" resultType="String">
@@ -35,4 +35,8 @@
 		</if>
 	</select>
 
+
+	<select id="loadOneByCondition" resultType="CommonAssessment">
+		select * from common_assessment as ca where ca.assessment_name = #{assessmentName} and ca.start_date &lt;= #{startDate} and ca.end_date &gt;= #{startDate} and ca.data_status = #{dataStatus} and status = '0'
+	</select>
 </mapper>

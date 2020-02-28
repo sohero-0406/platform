@@ -427,11 +427,11 @@ public class CommonUserController extends BaseController {
                 CommonUser commonUser = new CommonUser();
                 commonUser.setUserName("120101198807071557");
                 commonUser.setTrueName("王峰");
+                commonUser.setPhoneNum("13912345678");
                 commonUser.setGender("男");
                 commonUser.setSchoolName("北京大学");
                 commonUser.setMajorName("汽车营销");
                 commonUser.setClassName("营销一班");
-                commonUser.setPhoneNum("13912345678");
                 list.add(commonUser);
                 new ExcelExport("人员信息", CommonUser.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
             }else{
@@ -440,10 +440,10 @@ public class CommonUserController extends BaseController {
                 CommonUser commonUser = new CommonUser();
                 commonUser.setUserName("120101198807071557");
                 commonUser.setTrueName("王峰");
+                commonUser.setPhoneNum("13912345678");
                 commonUser.setGender("男");
                 commonUser.setSchoolName("北京大学");
                 commonUser.setMajorName("汽车营销");
-                commonUser.setPhoneNum("13912345678");
                 list.add(commonUser);
                 new ExcelExport("人员信息", CommonUserTeacher.class, ExcelField.Type.EXPORT).setDataList(list).write(response, fileName).close();
             }

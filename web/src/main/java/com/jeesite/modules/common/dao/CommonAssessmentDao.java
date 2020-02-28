@@ -25,4 +25,6 @@ public interface CommonAssessmentDao extends CrudDao<CommonAssessment> {
 
 	Integer countConflictNum(String startDate, String endDate, String id);
 
+	CommonAssessment loadOneByCondition(CommonAssessment con);
+
 }
