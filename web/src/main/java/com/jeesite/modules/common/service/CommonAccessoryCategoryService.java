@@ -160,15 +160,15 @@ public class CommonAccessoryCategoryService extends CrudService<CommonAccessoryC
                     sum++;
                 }
             }
-            if (StringUtils.isBlank(commonAccessory.getAccessorySpecifications())) {
-                msgX += "规格不能为空;";
-                sum++;
-            } else {
-                if (commonAccessory.getAccessorySpecifications().length() > 20) {
+//            if (StringUtils.isBlank(commonAccessory.getAccessorySpecifications())) {
+//                msgX += "规格不能为空;";
+//                sum++;
+//            } else {
+                if (commonAccessory.getAccessorySpecifications()!=null&&commonAccessory.getAccessorySpecifications().length() > 20) {
                     msgX += "规格长度不能大于20;";
                     sum++;
                 }
-            }
+//            }
             if (StringUtils.isBlank(commonAccessory.getAccessoryUnit())) {
                 msgX += "单位不能为空;";
                 sum++;
