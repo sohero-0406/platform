@@ -101,14 +101,18 @@ public class VehicleSeriesController extends BaseController {
     @ResponseBody
     public CommonResult findList(String pinpaiId) {
         CommonResult comRes = new CommonResult();
-        if (pinpaiId == null || pinpaiId.trim().length() <= 0) {
-            comRes.setCode("1010");
-            comRes.setMsg("未按照接口要求进行数据查询！");
-            return comRes;
-        }
+        List<VehicleSeries> vehicleSeriesList = new ArrayList<>();
         VehicleSeries vehicleSeries = new VehicleSeries();
-        vehicleSeries.setPinpaiId(pinpaiId);
-        List<VehicleSeries> vehicleSeriesList = vehicleSeriesService.findList(vehicleSeries);
+        if (pinpaiId == null || pinpaiId.trim().length() <= 0) {
+            // 二手车鉴定评估项目中需要不限品牌加载车系数据，下面代码先注释
+            // comRes.setCode("1010");
+            // comRes.setMsg("未按照接口要求进行数据查询！");
+            // 不限品牌的时候，固定加载10个车系数据：卡罗拉、轩逸、朗逸、速腾、思域、奥迪A4L、迈腾、宝马3系、雅阁、凯美瑞
+            vehicleSeriesList = vehicleSeriesService.findListByChexiString();
+        }else{
+            vehicleSeries.setPinpaiId(pinpaiId);
+            vehicleSeriesList = vehicleSeriesService.findList(vehicleSeries);
+        }
         List<VehicleSeries> dataList = new ArrayList<>();
         for (VehicleSeries vs : vehicleSeriesList) {
             vehicleSeries = new VehicleSeries();

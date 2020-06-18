@@ -442,4 +442,30 @@ public class VehicleInfoController extends BaseController {
         return new CommonResult(chexingIdList);
     }
 
+    @ApiOperation(value = "根据车系id加载对应的车型数据集合")
+    @ApiImplicitParam(name = "chexiId", value = "车系id", required = true, dataType="String")
+    @Log(operationName = "根据车系id加载对应的车型数据集合")
+    @RequestMapping(value = "loadCheXingList")
+    @ResponseBody
+    public CommonResult loadCheXingList(String chexiId){
+        List<VehicleInfo> chexingIdList = vehicleInfoService.loadCheXingList(chexiId);
+        if(ListUtils.isEmpty(chexingIdList)){
+            return new CommonResult(CodeConstant.ERROR_DATA, "未查询出任何数据");
+        }
+        return new CommonResult(chexingIdList);
+    }
+
+    @ApiOperation(value = "根据车系id加载对应的级别数据集合")
+    @ApiImplicitParam(name = "chexiId", value = "车系id", required = true, dataType="String")
+    @Log(operationName = "根据车系id加载对应的级别数据集合")
+    @RequestMapping(value = "loadJibieList")
+    @ResponseBody
+    public CommonResult loadJibieList(String chexiId){
+        List<String> jibieList = vehicleInfoService.loadJibieList(chexiId);
+        if(ListUtils.isEmpty(jibieList)){
+            return new CommonResult(CodeConstant.ERROR_DATA, "未查询出任何数据");
+        }
+        return new CommonResult(jibieList);
+    }
+
 }

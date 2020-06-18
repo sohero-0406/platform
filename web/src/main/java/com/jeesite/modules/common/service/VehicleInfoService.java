@@ -153,13 +153,13 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
         for (VehicleInfo vehicleInfo: vehicleInfoList) {
 			VehicleBrand vehicleBrandCon = new VehicleBrand();
 			vehicleBrandCon.setPinpai(vehicleInfo.getPinpai());
-			VehicleBrand vehicleBrand = vehicleBrandService.get(vehicleBrandCon);
+			VehicleBrand vehicleBrand = vehicleBrandService.getByEntity(vehicleBrandCon);
 			vehicleInfo.setPinpaiId(vehicleBrand.getId());
 			vehicleInfo.setPinpaiLogo(vehicleBrand.getPinpaiLogo());
 
 			VehicleSeries vehicleSeriesCon = new VehicleSeries();
 			vehicleSeriesCon.setChexi(vehicleInfo.getChexi());
-			VehicleSeries vehicleSeries = vehicleSeriesService.get(vehicleSeriesCon);
+			VehicleSeries vehicleSeries = vehicleSeriesService.getByEntity(vehicleSeriesCon);
 			vehicleInfo.setChexiId(vehicleSeries.getId());
 
 			VehicleInfo con = new VehicleInfo();
@@ -318,5 +318,13 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
 
 	public List<String> loadCheXingIds(String chexiId){
 		return dao.loadCheXingIds(chexiId);
+	}
+
+	public List<VehicleInfo> loadCheXingList(String chexiId) {
+		return dao.loadCheXingList(chexiId);
+	}
+
+	public List<String> loadJibieList(String chexiId) {
+		return dao.loadJibieList(chexiId);
 	}
 }

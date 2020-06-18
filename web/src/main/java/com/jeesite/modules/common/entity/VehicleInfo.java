@@ -577,7 +577,7 @@ public class VehicleInfo extends PreEntity<VehicleInfo> {
 		this.pinpaiLogo = pinpaiLogo;
 	}
 
-	@ExcelField(title="车系", align = ExcelField.Align.CENTER, sort = 4)
+	@ExcelField(title="车系", align = ExcelField.Align.CENTER, sort = 3)
 	public String getChexi() {
 		return chexi;
 	}

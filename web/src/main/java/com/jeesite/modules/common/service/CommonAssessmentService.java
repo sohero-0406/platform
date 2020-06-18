@@ -203,7 +203,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			}
 			super.update(commonAssessment);
 			for (CommonAssessmentStu commonAssessmentStu:commonAssessmentStuList) {
-				commonAssessmentStu.setAssessmentId(commonAssessment.getAssessmentSchemeId());
+				commonAssessmentStu.setAssessmentId(commonAssessment.getId());
 			}
 			commonAssessmentStuService.saveList(commonAssessmentStuList);
 		}

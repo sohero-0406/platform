@@ -56,4 +56,11 @@
 		select chexing_id as chexingId from common_vehicle_info where chexi_id = #{chexiId}  and status = '0'
 	</select>
 
+	<select id="loadCheXingList" resultType="com.jeesite.modules.common.entity.VehicleInfo">
+		select chexingmingcheng as chexingmingcheng, chexing_id as chexingId from common_vehicle_info where chexi_id = #{chexiId}  and status = '0'
+	</select>
+	<select id="loadJibieList" resultType="String">
+		select jibie as jibie from common_vehicle_info where chexi_id = #{chexiId}  and status = '0' group by jibie
+	</select>
+
 </mapper>

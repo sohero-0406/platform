@@ -29,7 +29,7 @@
     </select>
 
 	<select id="countConflictNum" resultType="Integer">
-		select count(ca.id) as totalNum from common_assessment as ca where (ca.start_date between #{startDate} and #{endDate} or ca.end_date between #{startDate} and #{endDate})
+		select count(ca.id) as totalNum from common_assessment as ca where (ca.start_date between #{startDate} and #{endDate} or ca.end_date between #{startDate} and #{endDate} or (ca.start_date &lt; #{startDate} and ca.end_date &gt; #{endDate}) )
 		<if test="id!=null">
 			and ca.id != #{id}
 		</if>

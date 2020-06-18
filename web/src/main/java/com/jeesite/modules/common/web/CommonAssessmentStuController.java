@@ -32,64 +32,6 @@ public class CommonAssessmentStuController extends BaseController {
 
 	@Autowired
 	private CommonAssessmentStuService commonAssessmentStuService;
-	
-//	/**
-//	 * 获取数据
-//	 */
-//	@ModelAttribute
-//	public CommonAssessmentStu get(String id, boolean isNewRecord) {
-//		return commonAssessmentStuService.get(id, isNewRecord);
-//	}
-	
-//	/**
-//	 * 查询列表
-//	 */
-//	@RequestMapping(value = {"list", ""})
-//	public String list(CommonAssessmentStu commonAssessmentStu, Model model) {
-//		model.addAttribute("commonAssessmentStu", commonAssessmentStu);
-//		return "modules/common/commonAssessmentStuList";
-//	}
-//
-//	/**
-//	 * 查询列表数据
-//	 */
-//	@RequestMapping(value = "listData")
-//	@ResponseBody
-//	public Page<CommonAssessmentStu> listData(CommonAssessmentStu commonAssessmentStu, HttpServletRequest request, HttpServletResponse response) {
-//		commonAssessmentStu.setPage(new Page<>(request, response));
-//		Page<CommonAssessmentStu> page = commonAssessmentStuService.findPage(commonAssessmentStu);
-//		return page;
-//	}
-//
-//	/**
-//	 * 查看编辑表单
-//	 */
-//	@RequestMapping(value = "form")
-//	public String form(CommonAssessmentStu commonAssessmentStu, Model model) {
-//		model.addAttribute("commonAssessmentStu", commonAssessmentStu);
-//		return "modules/common/commonAssessmentStuForm";
-//	}
-//
-//	/**
-//	 * 保存考核学生表
-//	 */
-//	@PostMapping(value = "save")
-//	@ResponseBody
-//	public String save(@Validated CommonAssessmentStu commonAssessmentStu) {
-//		commonAssessmentStuService.save(commonAssessmentStu);
-//		return renderResult(Global.TRUE, text("保存考核学生表成功！"));
-//	}
-//
-//	/**
-//	 * 删除考核学生表
-//	 */
-//	@RequestMapping(value = "delete")
-//	@ResponseBody
-//	public String delete(CommonAssessmentStu commonAssessmentStu) {
-//		commonAssessmentStuService.delete(commonAssessmentStu);
-//		return renderResult(Global.TRUE, text("删除考核学生表成功！"));
-//	}
-
 
 	/**
 	 * 加载分页考生数据

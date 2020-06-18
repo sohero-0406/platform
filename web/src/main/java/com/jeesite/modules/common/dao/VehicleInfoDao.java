@@ -32,4 +32,8 @@ public interface VehicleInfoDao extends CrudDao<VehicleInfo> {
     VehicleInfo selectOneWithField(@Param("vehicleInfo")VehicleInfo vehicleInfo,@Param("fieldList") List<SelectVO> fieldList);
 
     List<String> loadCheXingIds(String chexiId);
+
+    List<VehicleInfo> loadCheXingList(String chexiId);
+
+    List<String> loadJibieList(String chexiId);
 }

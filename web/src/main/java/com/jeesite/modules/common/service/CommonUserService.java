@@ -225,10 +225,18 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
                     msg += user.getUserName()+"姓名的长度不得大于32!<br/>";
 //                    return new CommonResult(CodeConstant.ERROR_DATA, "姓名的长度不得大于32!");
                 }
+                if(StringUtils.isBlank(user.getMajorName())){
+                    sum++;
+                    msg += user.getUserName()+"专业不能为空<br/>";
+                }
                 if(StringUtils.isNotBlank(user.getMajorName())&&user.getMajorName().length()>100){
                     sum++;
                     msg += user.getUserName()+"专业的长度不得大于100!<br/>";
                     //return new CommonResult(CodeConstant.ERROR_DATA, "专业的长度不得大于100!");
+                }
+                if(StringUtils.isBlank(user.getClassName())){
+                    sum++;
+                    msg += user.getUserName()+"班级不能为空<br/>";
                 }
                 if(StringUtils.isNotBlank(user.getClassName())&&user.getClassName().length()>100){
                     sum++;

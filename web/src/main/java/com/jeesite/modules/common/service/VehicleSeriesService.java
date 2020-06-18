@@ -76,4 +76,8 @@ public class VehicleSeriesService extends CrudService<VehicleSeriesDao, VehicleS
     public VehicleSeries getByEntity(VehicleSeries vehicleSeries) {
 		return dao.getByEntity(vehicleSeries);
     }
+
+	public List<VehicleSeries> findListByChexiString() {
+		return dao.findListByChexiString();
+	}
 }
