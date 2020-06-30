@@ -41,4 +41,6 @@ public class CodeConstant {
     public static final String EXCEL_WRONG_DATA = "8011";
 
     public static final String WRONG_PASS = "8012";
+
+    public static final String NO_DATA = "8013";
 }
