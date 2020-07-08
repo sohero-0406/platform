@@ -189,7 +189,6 @@ public class CommonAssessmentController extends BaseController {
 	@RequestMapping(value = "loadProjectNameList")
 	@ResponseBody
 	public CommonResult<List<String>> loadProjectNameList(String commonUserId, String assessmentName, String softwareId, String assessmentDate){
-
 		return commonAssessmentService.loadProjectNameList(commonUserId, assessmentName, softwareId, assessmentDate);
 	}
 

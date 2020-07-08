@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * 车辆配置全表DAO接口
+ *
  * @author chenlitao
  * @version 2019-07-04
  */
@@ -20,20 +21,25 @@ import java.util.List;
 public interface VehicleInfoDao extends CrudDao<VehicleInfo> {
     /**
      * 根据车系id加载车型名称数据
+     *
      * @param chexiId
      * @return
      */
-	List<VehicleInfo> findVehicleName(String chexiId);
+    List<VehicleInfo> findVehicleName(String chexiId);
 
     VehicleInfo getCarModel(String chexingId);
 
-    List<VehicleInfo> findListWithField(@Param("vehicleInfo") VehicleInfo vehicleInfo, @Param("fieldList")List<SelectVO> fieldList);
+    List<VehicleInfo> findListWithField(@Param("vehicleInfo") VehicleInfo vehicleInfo, @Param("fieldList") List<SelectVO> fieldList);
 
-    VehicleInfo selectOneWithField(@Param("vehicleInfo")VehicleInfo vehicleInfo,@Param("fieldList") List<SelectVO> fieldList);
+    VehicleInfo selectOneWithField(@Param("vehicleInfo") VehicleInfo vehicleInfo, @Param("fieldList") List<SelectVO> fieldList);
 
     List<String> loadCheXingIds(String chexiId);
 
     List<VehicleInfo> loadCheXingList(String chexiId);
 
     List<String> loadJibieList(String chexiId);
+
+    List<VehicleInfo> findAllForAppraisal(@Param("chexi") String chexi);
+
+    VehicleInfo findDetailForAppraisal(String id);
 }

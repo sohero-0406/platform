@@ -62,5 +62,32 @@
 	<select id="loadJibieList" resultType="String">
 		select jibie as jibie from common_vehicle_info where chexi_id = #{chexiId}  and status = '0' group by jibie
 	</select>
+    <select id="findAllForAppraisal" resultType="com.jeesite.modules.common.entity.VehicleInfo">
+		SELECT id,chexi,shouzimu,pinpai,niankuan,fadongji FROM `common_vehicle_info`
+		<where>
+			<if test="chexi!=null and chexi!=''">
+				and chexi like concat('%',#{chexi},'%')
+			</if>
+		</where>
+	</select>
+	<select id="findDetailForAppraisal" resultType="com.jeesite.modules.common.entity.VehicleInfo">
+		SELECT
+			chexingmingcheng,
+			changshangzhidaojia_yuan,
+			jibie,
+			changkuangao_mm,
+			fadongji,
+			zuidagonglv_kW,
+			zuidaniuju_N_m,
+			qudongfangshi,
+			biansuxiang,
+			huanbaobiaozhun,
+			gongxinbuzongheyouhao_L_100km,
+			chemenshu_ge,
+			zuoweishu_ge
+		FROM
+			`common_vehicle_info`
+		where id = #{id}
+	</select>
 
 </mapper>

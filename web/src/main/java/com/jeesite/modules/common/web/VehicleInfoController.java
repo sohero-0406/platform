@@ -12,6 +12,7 @@ import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.VehicleInfo;
 import com.jeesite.modules.common.service.VehicleInfoService;
 import com.jeesite.modules.common.vo.SelectVO;
+import com.jeesite.modules.common.vo.vehicleInfo.FindDetailForAppraisalRespVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -468,4 +469,21 @@ public class VehicleInfoController extends BaseController {
         return new CommonResult(jibieList);
     }
 
+    @ApiOperation(value = "二手车项目查询车型数据")
+    @Log(operationName = "二手车项目查询车型数据")
+    @RequestMapping(value = "findAllForAppraisal")
+    @ResponseBody
+    public CommonResult<Map<String, Map<String, List<VehicleInfo>>>> findAllForAppraisal(String chexi){
+        Map<String, Map<String, List<VehicleInfo>>> map = vehicleInfoService.findAllForAppraisal(chexi);
+        return new CommonResult<>(map);
+    }
+
+    @ApiOperation(value = "二手车项目查询车详情")
+    @Log(operationName = "二手车项目查询车详情")
+    @RequestMapping(value = "findDetailForAppraisal")
+    @ResponseBody
+    public CommonResult<FindDetailForAppraisalRespVO> findDetailForAppraisal(String id){
+        FindDetailForAppraisalRespVO respVO = vehicleInfoService.findDetailForAppraisal(id);
+        return new CommonResult<>(respVO);
+    }
 }
