@@ -14,7 +14,8 @@ public class FileLocalConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         System.out.println(FileLocalConfig.class.getResource("").toString());
-        String url = FileLocalConfig.class.getResource("").toString().replace("file:/", "");
+        String url = FileLocalConfig.class.getResource("").toString().replace("jar:file:/", "");
+        url = url.replace("file:/", "");
 
         System.out.println("**********************");
         System.out.println(url);
