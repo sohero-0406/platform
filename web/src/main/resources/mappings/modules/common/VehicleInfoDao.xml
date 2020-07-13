@@ -84,7 +84,8 @@
 			huanbaobiaozhun,
 			gongxinbuzongheyouhao_L_100km,
 			chemenshu_ge,
-			zuoweishu_ge
+			zuoweishu_ge,
+			cheshenjiegou
 		FROM
 			`common_vehicle_info`
 		where id = #{id}

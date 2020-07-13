@@ -34,6 +34,8 @@ public class FindDetailForAppraisalRespVO {
     private String chemenshuGe;
     @ApiModelProperty("座位数")
     private String zuoweishuGe;
+    @ApiModelProperty("车身结构")
+    private String cheshenjiegou;
     @ApiModelProperty("图片列表")
     private List<String> imageList;
 }
