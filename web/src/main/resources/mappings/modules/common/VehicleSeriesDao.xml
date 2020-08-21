@@ -12,8 +12,8 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 
-	<select id="findListByChexiString" resultType="com.jeesite.modules.common.entity.VehicleSeries">
+    <select id="findListByChexiString" resultType="com.jeesite.modules.common.entity.VehicleSeries">
         SELECT * FROM `common_vehicle_series`  where  chexi in
-        ("卡罗拉","轩逸","朗逸","速腾","思域","奥迪A4L","迈腾","宝马3系","雅阁","凯美瑞")
+        ("凯美瑞","卡罗拉","朗逸","捷达","迈腾","君越","英朗","凯越","宝马3系","奔驰C级","福克斯","蒙迪欧")
     </select>
 </mapper>

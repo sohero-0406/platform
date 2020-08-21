@@ -3,12 +3,14 @@
  */
 package com.jeesite.modules.common.web;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.jeesite.common.config.Global;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.entity.CommonResult;
-import com.jeesite.modules.common.entity.VehicleSeries;
+import com.jeesite.modules.common.entity.VehicleBrand;
+import com.jeesite.modules.common.service.VehicleBrandService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jeesite.common.config.Global;
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.common.entity.VehicleBrand;
-import com.jeesite.modules.common.service.VehicleBrandService;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,6 +112,32 @@ public class VehicleBrandController extends BaseController {
         comRes.setData(dataList);
 	    return comRes;
     }
+
+	@ApiOperation(value = "二手车项目查询车辆品牌")
+	@RequestMapping(value = "findBrandList")
+	@ResponseBody
+	public CommonResult findBrandList(){
+		CommonResult comRes = new CommonResult();
+		VehicleBrand vehicleBrand = new VehicleBrand();
+		List<VehicleBrand> vehicleBrandList = vehicleBrandService.findList(vehicleBrand);
+		List<VehicleBrand> dataList1 = new ArrayList<>();
+		List<VehicleBrand> dataList2 = new ArrayList<>();
+		for (VehicleBrand vb : vehicleBrandList){
+			vehicleBrand = new VehicleBrand();
+			vehicleBrand.setPinpaiId(vb.getPinpaiId());
+			vehicleBrand.setShouzimu(vb.getShouzimu());
+			vehicleBrand.setPinpai(vb.getPinpai());
+			String brandString = "丰田，大众，别克，福特，吉利，荣威，现代，雪佛兰，宝马，奔驰，广汽传媒，比亚迪";
+			if (brandString.contains(vehicleBrand.getPinpai())){
+				dataList1.add(vehicleBrand);
+			}else{
+				dataList2.add(vehicleBrand);
+			}
+		}
+		dataList1.addAll(dataList2);
+		comRes.setData(dataList1);
+		return comRes;
+	}
 
 	/**
 	 * 查询实体
