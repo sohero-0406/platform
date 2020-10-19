@@ -24,7 +24,7 @@ public class TokenFilter implements Filter {
             "/vehicleInfo/", "/vehicleBrand/getByEntity", "/vehicleSeries/getByEntity", "/vehicleBrand/findList", "/vehicleSeries/findList",
             "/loadOneExamStu", "/loadOneUser", "/loadMajorList", "/loadClassList", "/loadStuListByExamUserIds", "/loadStuListAndOtherByExamUserIds",
             "/loadStuListAndOtherByUserIds", "/loadVehicleImages", "/findPartsForVehicleParts", "/findNameByPartsCode", "/loadProjectNameList",
-            "/uploadScoresByProjectName"};
+            "/uploadScoresByProjectName", "/vehicleBrand/findBrandList"};
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
