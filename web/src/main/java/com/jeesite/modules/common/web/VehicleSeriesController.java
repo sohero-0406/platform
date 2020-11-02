@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.modules.common.entity.CommonResult;
-import com.jeesite.modules.common.entity.VehicleInfo;
+import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +26,9 @@ import com.jeesite.modules.common.entity.VehicleSeries;
 import com.jeesite.modules.common.service.VehicleSeriesService;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 车辆车系表Controller
@@ -134,5 +137,20 @@ public class VehicleSeriesController extends BaseController {
     public CommonResult getByEntity(VehicleSeries vehicleSeries) {
         vehicleSeries = vehicleSeriesService.getByEntity(vehicleSeries);
         return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, vehicleSeries);
+    }
+
+    @ApiOperation(value = "网约车项目查询车辆车系")
+    @PostMapping(value = "findSeriesListForWyc")
+    @ResponseBody
+    public CommonResult<List> findSeriesListForWyc(String pinpaiId) {
+        CommonResult comRes = new CommonResult();
+        List<VehicleSeries> vehicleSeriesList = new ArrayList<>();
+        VehicleSeries vehicleSeries = new VehicleSeries();
+        if (StringUtils.isNotBlank(pinpaiId)) {
+            vehicleSeries.setPinpaiId(pinpaiId);
+            vehicleSeriesList = vehicleSeriesService.findList(vehicleSeries);
+        }
+        comRes.setData(vehicleSeriesList.stream().sorted(Comparator.comparing(VehicleSeries::getChexi)).collect(Collectors.toList()));
+        return comRes;
     }
 }

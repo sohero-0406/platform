@@ -16,6 +16,7 @@ import com.jeesite.modules.common.vo.vehicleInfo.FindDetailForAppraisalRespVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,10 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 车辆配置全表Controller
@@ -485,5 +484,27 @@ public class VehicleInfoController extends BaseController {
     public CommonResult<FindDetailForAppraisalRespVO> findDetailForAppraisal(String id){
         FindDetailForAppraisalRespVO respVO = vehicleInfoService.findDetailForAppraisal(id);
         return new CommonResult<>(respVO);
+    }
+
+    @ApiOperation(value = "网约车项目查询车辆车型")
+    @PostMapping(value = "findModelListForWyc")
+    @ResponseBody
+    public CommonResult<List> findModelListForWyc(String chexiId) {
+        CommonResult comRes = new CommonResult();
+        List<VehicleInfo> vehicleInfos = new ArrayList<>();
+        VehicleInfo vehicleInfo = new VehicleInfo();
+        if (StringUtils.isNotBlank(chexiId)) {
+            vehicleInfo.setChexiId(chexiId);
+            vehicleInfos = vehicleInfoService.findList(vehicleInfo);
+        }
+        comRes.setData(vehicleInfos.stream().sorted(Comparator.comparing(VehicleInfo::getChexingmingcheng)).collect(Collectors.toList()));
+        return comRes;
+    }
+
+    @ApiOperation(value = "网约车项目查询车辆信息")
+    @PostMapping(value = "loadVehicleInfoForWyc")
+    @ResponseBody
+    public CommonResult<VehicleInfo> loadVehicleInfoForWyc(String id) {
+        return new CommonResult<>(vehicleInfoService.get(id));
     }
 }

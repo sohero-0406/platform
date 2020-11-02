@@ -23,10 +23,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 车辆品牌表Controller
+ *
  * @author chenlitao
  * @version 2019-07-04
  */
@@ -36,7 +39,7 @@ public class VehicleBrandController extends BaseController {
 
 	@Autowired
 	private VehicleBrandService vehicleBrandService;
-	
+
 	/**
 	 * 获取数据
 	 */
@@ -44,7 +47,7 @@ public class VehicleBrandController extends BaseController {
 	public VehicleBrand get(String id, boolean isNewRecord) {
 		return vehicleBrandService.get(id, isNewRecord);
 	}
-	
+
 	/**
 	 * 查询列表
 	 */
@@ -53,7 +56,7 @@ public class VehicleBrandController extends BaseController {
 		model.addAttribute("vehicleBrand", vehicleBrand);
 		return "modules/common/vehicleBrandList";
 	}
-	
+
 	/**
 	 * 查询列表数据
 	 */
@@ -83,7 +86,7 @@ public class VehicleBrandController extends BaseController {
 		vehicleBrandService.save(vehicleBrand);
 		return renderResult(Global.TRUE, text("保存车辆品牌表成功！"));
 	}
-	
+
 	/**
 	 * 删除车辆品牌表
 	 */
@@ -138,6 +141,34 @@ public class VehicleBrandController extends BaseController {
 		comRes.setData(dataList1);
 		return comRes;
 	}
+
+
+	@ApiOperation(value = "网约车项目查询车辆品牌")
+	@RequestMapping(value = "findBrandListForWyc")
+	@ResponseBody
+	public CommonResult<List> findBrandListForWyc() {
+		CommonResult<List> comRes = new CommonResult<>();
+		VehicleBrand vehicleBrand = new VehicleBrand();
+		List<VehicleBrand> vehicleBrandList = vehicleBrandService.findList(vehicleBrand);
+		List<VehicleBrand> dataList1 = new ArrayList<>();
+		List<VehicleBrand> dataList2 = new ArrayList<>();
+		for (VehicleBrand vb : vehicleBrandList) {
+			vehicleBrand = new VehicleBrand();
+			vehicleBrand.setPinpaiId(vb.getPinpaiId());
+			vehicleBrand.setShouzimu(vb.getShouzimu());
+			vehicleBrand.setPinpai(vb.getPinpai());
+			String brandString = "丰田，大众，别克，福特，吉利，荣威，现代，雪佛兰，宝马，奔驰，广汽传媒，比亚迪";
+			if (brandString.contains(vehicleBrand.getPinpai())) {
+				dataList1.add(vehicleBrand);
+			} else {
+				dataList2.add(vehicleBrand);
+			}
+		}
+		dataList1.addAll(dataList2);
+		comRes.setData(dataList1.stream().sorted(Comparator.comparing(VehicleBrand::getShouzimu)).collect(Collectors.toList()));
+		return comRes;
+	}
+
 
 	/**
 	 * 查询实体
