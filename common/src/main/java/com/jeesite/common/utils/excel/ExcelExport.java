@@ -146,6 +146,11 @@ public class ExcelExport implements Closeable{
 	public ExcelExport(String title, List<String> headerList, List<Integer> headerWidthList) {
 		this(null, null, title, headerList, headerWidthList);
 	}
+
+	public ExcelExport(String title, String sheetName) {
+		this.wb = createWorkbook();
+		this.sheet = this.wb.createSheet(sheetName);
+	}
 	
 	/**
 	 * 构造函数
@@ -672,13 +677,13 @@ public class ExcelExport implements Closeable{
 			}
 		}
 	}
-	
-//	/**
-//	 * 导出测试
-//	 */
+
+	/**
+	 * 导出测试
+	 */
 //	public static void main(String[] args) throws Throwable {
-//		
-//		// 初始化表头
+
+		// 初始化表头
 //		List<String> headerList = ListUtils.newArrayList();
 //		for (int i = 1; i <= 10; i++) {
 //			headerList.add("表头"+i);
@@ -693,7 +698,7 @@ public class ExcelExport implements Closeable{
 //		for (int i = 1; i <=100; i++) {
 //			dataList.add(rowList);
 //		}
-//		
+
 //		// 创建一个Sheet表，并导入数据
 //		ExcelExport ee = new ExcelExport("表格1", "表格标题1", headerList, null);
 //		for (int i = 0; i < dataList.size(); i++) {
@@ -702,7 +707,7 @@ public class ExcelExport implements Closeable{
 //				ee.addCell(row, j, dataList.get(i).get(j));
 //			}
 //		}
-//		
+//
 //		// 再创建一个Sheet表，并导入数据
 //		ee.createSheet("表格2", "表格标题2", headerList, null);
 //		for (int i = 0; i < dataList.size(); i++) {
@@ -711,15 +716,20 @@ public class ExcelExport implements Closeable{
 //				ee.addCell(row, j, dataList.get(i).get(j)+"2");
 //			}
 //		}
-//		
-//		// 输出到文件
-//		ee.writeFile("target/export.xlsx");
+
+//		ExcelExport ee = new ExcelExport("1", "2");
+//		Row row = ee.addRow();
+//		ee.addCell(row, 0, "666");
+//		ee.addCell(row, 1, "777");
 //
-//		// 清理销毁
+//		// 输出到文件
+//		ee.writeFile("target/123654987.xlsx");
+
+		// 清理销毁
 //		ee.dispose();
-//		
+
 //		log.debug("Export success.");
-//		
+//
 //	}
 
 }

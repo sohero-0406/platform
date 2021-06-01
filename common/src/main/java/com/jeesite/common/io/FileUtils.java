@@ -1,24 +1,10 @@
-/**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
- */
 package com.jeesite.common.io;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.util.Enumeration;
-import java.util.List;
-
-import javax.activation.MimetypesFileTypeMap;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.jeesite.common.codec.EncodeUtils;
+import com.jeesite.common.collect.ListUtils;
+import com.jeesite.common.lang.StringUtils;
+import net.sf.jmimemagic.Magic;
+import net.sf.jmimemagic.MagicMatch;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.tools.zip.ZipEntry;
@@ -28,12 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
-import com.jeesite.common.codec.EncodeUtils;
-import com.jeesite.common.collect.ListUtils;
-import com.jeesite.common.lang.StringUtils;
-
-import net.sf.jmimemagic.Magic;
-import net.sf.jmimemagic.MagicMatch;
+import javax.activation.MimetypesFileTypeMap;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * 文件操作工具类
@@ -418,7 +404,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	/**
 	 * 写入文件
-	 * @param file 要写入的文件
+	 * @param fileName 要写入的文件
 	 */
 	public static void writeToFile(String fileName, String content, boolean append) {
 		try {
@@ -431,7 +417,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	/**
 	 * 写入文件
-	 * @param file 要写入的文件
+	 * @param fileName 要写入的文件
 	 */
 	public static void writeToFile(String fileName, String content, String encoding, boolean append) {
 		try {
@@ -631,7 +617,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	/**
 	 * 获取待压缩文件在ZIP文件中entry的名字，即相对于跟目录的相对路径名
-	 * @param dirPat 目录名
+	 * @param dirPath 目录名
 	 * @param file entry文件名
 	 * @return
 	 */
@@ -868,7 +854,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	/**
 	 * 获取文件名(带扩展名)
-	 * @param pathname 文件路径名
+	 * @param fileName 文件路径名
 	 */
 	public static String getFileName(String fileName) {
         return new File(fileName).getName();
@@ -888,7 +874,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	/**
 	 * 获取文件扩展名(返回小写)
-	 * @param pathname 文件名
+	 * @param fileName 文件名
 	 * @return 例如：test.jpg  返回：  jpg
 	 */
 	public static String getFileExtension(String fileName) {

@@ -64,7 +64,7 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 	 * @param commonAssessmentScheme 1
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void save(CommonAssessmentScheme commonAssessmentScheme) {
 
 		super.save(commonAssessmentScheme);
@@ -92,6 +92,18 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 			int schemeWeight = 0;
 			for (int i = 0; i < schemeDetails.size(); i++) {
 				JSONObject oneScheme = schemeDetails.getJSONObject(i);
+				if(oneScheme.getString("title").contains(":")||
+						oneScheme.getString("title").contains("：")||
+						oneScheme.getString("title").contains("\\")||
+						oneScheme.getString("title").contains("/")||
+						oneScheme.getString("title").contains("?")||
+						oneScheme.getString("title").contains("？")||
+						oneScheme.getString("title").contains("*")||
+						oneScheme.getString("title").contains("[")||
+						oneScheme.getString("title").contains("]")||
+						oneScheme.getString("title").length()>31){
+					return new CommonResult<>(CodeConstant.ERROR_DATA, oneScheme.getString("title")+"格式不正确，或者长度超过31");
+				}
 				if(needSinglePass.equals("1")&& NumberUtils.createDouble(oneScheme.getString("passScore"))>100){
 					return new CommonResult<>(CodeConstant.ERROR_DATA, oneScheme.getString("title")+"的及格分不能大于100");
 				}
@@ -105,14 +117,20 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 					if(oneSoftWeight!=100){
 						return new CommonResult<>(CodeConstant.ERROR_DATA, oneScheme.getString("title")+"下的"+oneSoft.getString("softwareName")+"主客观权重不为100");
 					}
+					oneSoft.put("answerDetailFile", "");
+					oneSoft.put("workOrderFile", "");
+					softDetails.set(j, oneSoft);
 				}
 				if(softWeight!=100){
 					return new CommonResult<>(CodeConstant.ERROR_DATA, oneScheme.getString("title")+"的软件权重之和不为100");
 				}
+				oneScheme.put("softDetails", softDetails);
+				schemeDetails.set(i, oneScheme);
 			}
 			if(schemeWeight!=100){
 				return new CommonResult<>(CodeConstant.ERROR_DATA, "各个考核项的权重之和不为100");
 			}
+			commonAssessmentScheme.setSchemeDetails(schemeDetails.toJSONString());
 			if(commonAssessmentScheme.getId()!=null&&!"".equals(commonAssessmentScheme.getId())){
 				super.update(commonAssessmentScheme);
 			}else{
@@ -149,7 +167,7 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 	 * @param commonAssessmentScheme
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void updateStatus(CommonAssessmentScheme commonAssessmentScheme) {
 		super.updateStatus(commonAssessmentScheme);
 	}
@@ -157,10 +175,10 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 
 	/**
 	 * 更新方案状态 更新的是dataStatus字段
-	 * @param commonAssessmentScheme
-	 * @return
+	 * @param commonAssessmentScheme 1
+	 * @return 1
 	 */
-	@Transactional(readOnly=false)
+	@Transactional
 	public CommonResult updateCommonAssessmentSchemeStatus(CommonAssessmentScheme commonAssessmentScheme) {
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
@@ -202,20 +220,20 @@ public class CommonAssessmentSchemeService extends CrudService<CommonAssessmentS
 
 	/**
 	 * 删除数据
-	 * @param commonAssessmentScheme
+	 * @param commonAssessmentScheme 1
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void delete(CommonAssessmentScheme commonAssessmentScheme) {
 		super.delete(commonAssessmentScheme);
 	}
 
 	/**
 	 * 根据json配置文件删除方案数据
-	 * @param json
-	 * @return
+	 * @param json 1
+	 * @return 1
 	 */
-	@Transactional(readOnly=false)
+	@Transactional
 	public CommonResult deleteCommonAssessmentScheme(String json) {
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);

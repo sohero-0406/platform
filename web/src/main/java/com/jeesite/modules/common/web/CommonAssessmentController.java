@@ -1,6 +1,9 @@
 package com.jeesite.modules.common.web;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.jeesite.common.codec.EncodeUtils;
 import com.jeesite.common.constant.CodeConstant;
 import com.jeesite.common.utils.excel.ExcelExport;
 import com.jeesite.common.utils.excel.annotation.ExcelField;
@@ -10,18 +13,27 @@ import com.jeesite.modules.common.entity.CommonAssessment;
 import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.UserCondition;
 import com.jeesite.modules.common.service.CommonAssessmentService;
+import com.jeesite.modules.common.vo.DownLoadFinalZipReqVO;
+import com.jeesite.modules.common.vo.SoftInVO;
+import com.jeesite.modules.common.vo.SoftwareName;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 考核表Controller
@@ -29,11 +41,15 @@ import java.util.List;
  * @version 2019-08-05
  */
 @Controller
-@RequestMapping(value = "${adminPath}/common/commonAssessment")
+@RequestMapping(value = "/common/commonAssessment")
 public class CommonAssessmentController extends BaseController {
 
-	@Autowired
 	private CommonAssessmentService commonAssessmentService;
+
+	@Autowired
+	public void setCommonAssessmentService(CommonAssessmentService commonAssessmentService) {
+		this.commonAssessmentService = commonAssessmentService;
+	}
 
 	/**
 	 * 保存、更新考核
@@ -177,7 +193,6 @@ public class CommonAssessmentController extends BaseController {
 		return commonAssessmentService.loadAssessmentNameList(commonUserId, softwareId);
 	}
 
-
 	@ApiOperation(value = "根据登录人加载项目名称")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "commonUserId", value = "用户id", required = true, dataType="String"),
@@ -192,8 +207,6 @@ public class CommonAssessmentController extends BaseController {
 		return commonAssessmentService.loadProjectNameList(commonUserId, assessmentName, softwareId, assessmentDate);
 	}
 
-
-
 	/**
 	 * 加载考核名称
 	 *
@@ -206,7 +219,6 @@ public class CommonAssessmentController extends BaseController {
 	public CommonResult<List<String>> loadAssessmentNameList(){
 		return commonAssessmentService.loadAssessmentNameList();
 	}
-
 
 	/**
 	 * 导出用户模板
@@ -239,5 +251,142 @@ public class CommonAssessmentController extends BaseController {
 		ExcelExport ee = commonAssessmentService.makeExcelMode(id);
 		ee.write(response, "评分表.xlsx").close();
 	}
-	
+
+
+	@ApiOperation(value = "下面软件上传一个答题详情文件")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "answerDetailFile", value = "答题详情文件", required = true, dataType="MultipartFile"),
+			@ApiImplicitParam(name = "commonAssessmentStuId", value = "考生id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "softwareId", value = "软件id", required = true, dataType="String")
+	})
+	@Log(operationName = "下面软件上传一个答题详情文件", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "uploadAnswerDetailFile", method= RequestMethod.POST)
+	@ResponseBody
+	public CommonResult<String> uploadAnswerDetailFile(MultipartFile answerDetailFile, String commonAssessmentStuId, String softwareId) {
+		return commonAssessmentService.uploadAnswerDetailFile(answerDetailFile, commonAssessmentStuId, softwareId, "");
+	}
+
+	@ApiOperation(value = "下面软件上传一个工单文件")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "workOrderFile", value = "工单文件", required = true, dataType="MultipartFile"),
+			@ApiImplicitParam(name = "commonAssessmentStuId", value = "考生id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "softwareId", value = "软件id", required = true, dataType="String")
+	})
+	@Log(operationName = "下面软件上传一个工单文件", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "uploadWorkOrderFile", method= RequestMethod.POST)
+	@ResponseBody
+	public CommonResult<String> uploadWorkOrderFile(MultipartFile workOrderFile, String commonAssessmentStuId, String softwareId) {
+		return commonAssessmentService.uploadWorkOrderFile(workOrderFile, commonAssessmentStuId, softwareId, "");
+	}
+
+	@ApiOperation(value = "根据项目名称下面软件上传一个答题详情文件")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "answerDetailFile", value = "答题详情文件", required = true, dataType="MultipartFile"),
+			@ApiImplicitParam(name = "commonAssessmentStuId", value = "考生id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "softwareId", value = "软件id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "projectName", value = "项目名称", required = true, dataType="String")
+	})
+	@Log(operationName = "下面软件上传一个答题详情文件", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "uploadAnswerDetailFileByProjectName", method= RequestMethod.POST)
+	@ResponseBody
+	public CommonResult<String> uploadAnswerDetailFileByProjectName(MultipartFile answerDetailFile, String commonAssessmentStuId, String softwareId, String projectName) {
+		return commonAssessmentService.uploadAnswerDetailFile(answerDetailFile, commonAssessmentStuId, softwareId, projectName);
+	}
+
+	@ApiOperation(value = "根据项目名称下面软件上传一个工单文件")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "workOrderFile", value = "工单文件", required = true, dataType="MultipartFile"),
+			@ApiImplicitParam(name = "commonAssessmentStuId", value = "考生id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "softwareId", value = "软件id", required = true, dataType="String"),
+			@ApiImplicitParam(name = "projectName", value = "项目名称", required = true, dataType="String")
+	})
+	@Log(operationName = "下面软件上传一个工单文件", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "uploadWorkOrderFileByProjectName", method= RequestMethod.POST)
+	@ResponseBody
+	public CommonResult<String> uploadWorkOrderFileByProjectName(MultipartFile workOrderFile, String commonAssessmentStuId, String softwareId, String projectName) {
+		return commonAssessmentService.uploadWorkOrderFile(workOrderFile, commonAssessmentStuId, softwareId, projectName);
+	}
+
+
+	@ApiOperation(value = "加载某次考核里的所有软件")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "assessmentId", value = "考核id", required = true, dataType="String")
+	})
+	@Log(operationName = "加载某次考核里的所有软件", operationType = Log.OPERA_TYPE_UPD)
+	@RequestMapping(value = "loadSoftListByAssessmentId", method= RequestMethod.POST)
+	@ResponseBody
+	public CommonResult<List<SoftwareName>> loadSoftListByAssessmentId(String assessmentId) {
+		return commonAssessmentService.loadSoftListByAssessmentId(assessmentId);
+	}
+
+
+	@ApiOperation(value = "根据某考核加载得分详情excel、软件答题详情文件，工单文件，最会后成为一个压缩包")
+	@Log(operationName = "根据某考核加载得分详情excel、软件答题详情文件，工单文件，最会后成为一个压缩包")
+	@RequestMapping(value = "downLoadFinalZip", method= RequestMethod.POST)
+	public void downLoadFinalZip(HttpServletResponse response, @RequestBody DownLoadFinalZipReqVO vo)  throws IOException {
+		//response 输出流
+		ServletOutputStream out = response.getOutputStream();
+		//压缩输出流
+		ZipOutputStream zipOutputStream = new ZipOutputStream(out);
+
+		try {
+			//考试或练习名称
+			CommonAssessment commonAssessment = commonAssessmentService.get(vo.getAssessmentId());
+			String name = commonAssessment.getAssessmentName()+commonAssessment.getStartDate()+"-"+commonAssessment.getEndDate();
+			String fileName = name + "考核文件汇总.zip";
+			response.setContentType("application/octet-stream; charset=utf-8");
+			response.setHeader("Content-Disposition", "attachment; filename=" + EncodeUtils.encodeUrl(fileName));
+			commonAssessmentService.downLoadFinalZip(zipOutputStream, vo);
+			zipOutputStream.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			//注意关闭顺序，否则可能文件错误
+			zipOutputStream.close();
+			out.close();
+		}
+	}
+
+	@ApiOperation(value = "根据某考核加载得分详情excel、软件答题详情文件，工单文件，最会后成为一个压缩包")
+	@Log(operationName = "根据某考核加载得分详情excel、软件答题详情文件，工单文件，最会后成为一个压缩包")
+	@RequestMapping(value = "downLoadFinalZipWithFormData", method= RequestMethod.POST)
+	public void downLoadFinalZipWithFormData(HttpServletResponse response, String assessmentId, String softInVOList)  throws IOException {
+		//response 输出流
+		ServletOutputStream out = response.getOutputStream();
+		//压缩输出流
+		ZipOutputStream zipOutputStream = new ZipOutputStream(out);
+
+		try {
+			DownLoadFinalZipReqVO vo = new DownLoadFinalZipReqVO();
+			vo.setAssessmentId(assessmentId);
+			JSONArray ja = JSONArray.parseArray(softInVOList);
+			List<SoftInVO> softInVOList_1 = new ArrayList<>();
+			for (int i = 0; i < ja.size(); i++) {
+				JSONObject oneSoft = ja.getJSONObject(i);
+				SoftInVO softInVO = new SoftInVO();
+				softInVO.setSoftwareId(oneSoft.getString("softwareId"));
+				softInVO.setIsDownAnswerDetail(oneSoft.getString("isDownAnswerDetail"));
+				softInVO.setIsDownWorkOrder(oneSoft.getString("isDownWorkOrder"));
+				softInVO.setProjectName(oneSoft.getString("projectName"));
+				softInVOList_1.add(softInVO);
+			}
+			vo.setSoftInVOList(softInVOList_1);
+
+			//考试或练习名称
+			CommonAssessment commonAssessment = commonAssessmentService.get(assessmentId);
+			String name = commonAssessment.getAssessmentName()+commonAssessment.getStartDate()+"-"+commonAssessment.getEndDate();
+			String fileName = name + "考核文件汇总.zip";
+			response.setContentType("application/octet-stream; charset=utf-8");
+			response.setHeader("Content-Disposition", "attachment; filename=" + EncodeUtils.encodeUrl(fileName));
+			commonAssessmentService.downLoadFinalZip(zipOutputStream, vo);
+			zipOutputStream.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			//注意关闭顺序，否则可能文件错误
+			zipOutputStream.close();
+			out.close();
+		}
+	}
+
 }

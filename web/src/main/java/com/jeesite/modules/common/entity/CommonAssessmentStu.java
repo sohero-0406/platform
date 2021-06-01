@@ -155,7 +155,7 @@ public class CommonAssessmentStu extends PreEntity<CommonAssessmentStu> {
 		this.assessmentTime = assessmentTime;
 	}
 
-	@Length(min=0, max=300, message="软件分数上传标识长度不能超过 1000 个字符")
+	@Length(min=0, max=3000, message="软件分数上传标识长度不能超过 3000 个字符")
 	public String getSoftUploadedMarks() {
 		return softUploadedMarks;
 	}

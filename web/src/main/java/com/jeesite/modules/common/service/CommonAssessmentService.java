@@ -1,43 +1,40 @@
-/**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
- */
 package com.jeesite.modules.common.service;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.math.BigDecimal;
-import java.util.*;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.entity.Page;
+import com.jeesite.common.io.FileUtils;
 import com.jeesite.common.lang.NumberUtils;
 import com.jeesite.common.lang.StringUtils;
+import com.jeesite.common.service.CrudService;
 import com.jeesite.common.utils.excel.ExcelExport;
 import com.jeesite.common.utils.excel.ExcelImport;
-import com.jeesite.modules.common.dao.CommonAssessmentSchemeDao;
-import com.jeesite.modules.common.dao.CommonAssessmentStuDao;
-import com.jeesite.modules.common.dao.CommonUserDao;
+import com.jeesite.modules.common.dao.CommonAssessmentDao;
 import com.jeesite.modules.common.entity.*;
 import com.jeesite.modules.common.util.CommonUserUtil;
-
+import com.jeesite.modules.common.util.FilePathUtil;
 import com.jeesite.modules.common.util.ThisDateUtil;
+import com.jeesite.modules.common.vo.DownLoadFinalZipReqVO;
 import com.jeesite.modules.common.vo.ExportUploadScoreVo;
-import com.jeesite.modules.common.vo.ExportUploadScoreVoH5;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.omg.IOP.Codec;
+import com.jeesite.modules.common.vo.SoftInVO;
+import com.jeesite.modules.common.vo.SoftwareName;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.common.dao.CommonAssessmentDao;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 考核表Service
@@ -56,11 +53,13 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 	private CommonAssessmentSchemeService commonAssessmentSchemeService;
 	@Autowired
 	private CommonSchoolService commonSchoolService;
+	@Autowired
+	private CommonBasicSchemeService commonBasicSchemeService;
 
 	/**
 	 * 获取单条数据
-	 * @param commonAssessment
-	 * @return
+	 * @param commonAssessment 1
+	 * @return 1
 	 */
 	@Override
 	public CommonAssessment get(CommonAssessment commonAssessment) {
@@ -71,7 +70,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 	 * 查询分页数据
 	 * @param commonAssessment 查询条件 commonAssessment.page 分页对象
 	 *
-	 * @return
+	 * @return 1
 	 */
 	@Override
 	public Page<CommonAssessment> findPage(CommonAssessment commonAssessment) {
@@ -81,17 +80,17 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 	
 	/**
 	 * 保存数据（插入或更新）
-	 * @param commonAssessment
+	 * @param commonAssessment 1
 	 */
 	//@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public CommonResult save(CommonAssessment commonAssessment, String userConfig) {
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(StringUtils.isBlank(commonAssessment.getStartDate())||StringUtils.isBlank(commonAssessment.getEndDate())){
 			return new CommonResult(CodeConstant.PARA_MUST_NEED, "必须传入开始日期和结束日期");
 		}
-		if(dao.countConflictNum(commonAssessment.getStartDate(), commonAssessment.getEndDate(), commonAssessment.getId())>0){
+		if(dao.countConflictNum(commonAssessment.getStartDate(), commonAssessment.getEndDate(), commonAssessment.getId(), commonAssessment.getSchoolId(), commonAssessment.getAssessmentSchemeId())>0){
 			return new CommonResult(CodeConstant.ERROR_DATA, "开始日期和结束日期不能和其他有重复或者冲突");
 		}
 		if(commonAssessment.getId()==null){
@@ -129,9 +128,9 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	/**
 	 * 在考核之下 保存考生数据
-	 * @param commonAssessment
-	 * @param userConfig
-	 * @return
+	 * @param commonAssessment 1
+	 * @param userConfig 1
+	 * @return 1
 	 */
 	private CommonResult saveCommonSchemeStus(CommonAssessment commonAssessment, String userConfig) {
 		String assessmentId = commonAssessment.getId();
@@ -212,28 +211,28 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	/**
 	 * 更新状态
-	 * @param commonAssessment
+	 * @param commonAssessment 1
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void updateStatus(CommonAssessment commonAssessment) {
 		super.updateStatus(commonAssessment);
 	}
 	
 	/**
 	 * 删除数据
-	 * @param commonAssessment
+	 * @param commonAssessment 1
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void delete(CommonAssessment commonAssessment) {
 		super.delete(commonAssessment);
 	}
 
 	/**
 	 * 根据条件加载考核分页数据
-	 * @param commonAssessment
-	 * @return
+	 * @param commonAssessment 1
+	 * @return 1
 	 */
 	public CommonResult findPageCommonAssessment(CommonAssessment commonAssessment) {
 		String loginUserId = PreEntity.getUserIdByToken();
@@ -251,10 +250,10 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	/**
 	 * 根据json 删除考核数据
-	 * @param json
-	 * @return
+	 * @param json 1
+	 * @return 1
 	 */
-	@Transactional(readOnly=false)
+	@Transactional
 	public CommonResult deleteCommonAssessment(String json) {
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
@@ -323,7 +322,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	/**
 	 * 物理删除一个考核数据
-	 * @param ca
+	 * @param ca 1
 	 */
 	private void deleteOneAssessment(CommonAssessment ca){
 		CommonAssessmentStu con = new CommonAssessmentStu();
@@ -339,12 +338,12 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	/**
 	 * 更新考核状态 <br/>变为2是开始<br/>变为3是结束<br/>变为4是上传评分表 <br/>变为5是统计总分
-	 * @param commonAssessment
-	 * @param file
-	 * @return
-	 * @throws Exception
+	 * @param commonAssessment  1
+	 * @param file 1
+	 * @return 1
+	 * @throws 1
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public CommonResult updateCommonAssessmentStatus(CommonAssessment commonAssessment, MultipartFile file) throws Exception {
 		CommonAssessment ca = super.get(commonAssessment.getId());
 		if(file==null){
@@ -383,10 +382,10 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 					while(ei.getRow(rowIndex)!=null){
 						Row row = ei.getRow(rowIndex);
 						String userName = ei.getCellValue(row, 0).toString();
-						if(userName.length()!=18){
-							msgList.add(userName+"长度不是18，请检查");
+						if(userName.trim().length()!=18){
+							msgList.add(userName.trim()+"长度不是18，请检查");
 						}else{
-							if(cas.getLoginName().equals(userName)){ //如果一样则代表这一行是该考生的该项的成绩
+							if(cas.getLoginName().equals(userName.trim())){ //如果一样则代表这一行是该考生的该项的成绩
 								JSONArray softDetails = jsonObject.getJSONArray("softDetails");
 								int colIndex = 3;
 								Object startSoftwareCell = ei.getCellValue(row0, colIndex);
@@ -400,7 +399,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 									}
 									String[] softwareNameArray =  softwareNameAll.split(",");
 									for (int n = 0; n < softwareNameArray.length; n++) {
-										if(softwareNameArray[n].equals("车技通汽车网络营销H5制作教学平台")){
+										if(softwareNameArray[n].contains("H5")){
 											continue;
 										}
 										for (int k = 0; k < softDetails.size(); k++) {
@@ -445,8 +444,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	/**
 	 * 计算总分
-	 * @param commonAssessment
-	 * @return
+	 * @param commonAssessment 1
+	 * @return 1
 	 */
 	private CommonResult calcTotalScore(CommonAssessment commonAssessment) {
 		CommonAssessment ca = super.get(commonAssessment.getId());
@@ -457,7 +456,10 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			return new CommonResult(CodeConstant.NO_RIGHT, "分数已统计完毕!");
 		}
 		CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(ca.getAssessmentSchemeId());
-		Double passScore_scheme = NumberUtils.createDouble(commonAssessmentScheme.getPassScore());
+//		Double passScore_scheme = NumberUtils.createDouble(commonAssessmentScheme.getPassScore());
+
+		BigDecimal passScore_scheme = new BigDecimal(commonAssessmentScheme.getPassScore()).setScale(2, BigDecimal.ROUND_HALF_UP);
+
 		String needSinglePass = commonAssessmentScheme.getNeedSinglePass();
 		CommonAssessmentStu con = new CommonAssessmentStu();
 		con.setAssessmentId(ca.getId());
@@ -466,7 +468,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
             String scoreDetails = cas.getScoreDetails();
             JSONArray scoreDetails_jsonArray = JSONArray.parseArray(scoreDetails);
             System.out.println(scoreDetails_jsonArray);
-            Double totalScore = 0.0;
+            double totalScore = 0.0;
             int subjectPassNum = 0;
             for (int j = 0; j < scoreDetails_jsonArray.size(); j++) {
                 // 循环拿出一项
@@ -478,7 +480,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
                 Double oneSubjectScore = 0.0;
                 for (int k = 0; k < softDetails.size(); k++) {
                     JSONObject oneSoft = softDetails.getJSONObject(k);
-                    String subjScore = oneSoft.getString("subjScore");
+                    String subjScore = oneSoft.getString("subjScore")==null?"0":oneSoft.getString("subjScore");
                     String objScore = oneSoft.getString("objScore");
                     String subjScoreWeight = oneSoft.getString("subjScoreWeight");
                     String objScoreWeight = oneSoft.getString("objScoreWeight");
@@ -489,21 +491,28 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
                     oneSubjectScore += NumberUtils.mul(NumberUtils.add(NumberUtils.mul(NumberUtils.createDouble(subjScore), NumberUtils.createDouble(subjScoreWeight) / 100),
                             NumberUtils.mul(NumberUtils.createDouble(objScore), NumberUtils.createDouble(objScoreWeight) / 100)), NumberUtils.createDouble(softwareWeight) / 100);
                 }
-                if (NumberUtils.createDouble(passScore) <= oneSubjectScore) {
-                    subjectPassNum++;
-                }
-                oneSubject.put("gainScore", oneSubjectScore);
+                BigDecimal passScore_b = new BigDecimal(passScore).setScale(2, BigDecimal.ROUND_HALF_UP);
+				BigDecimal oneSubjectScore_b = new BigDecimal(oneSubjectScore).setScale(2, BigDecimal.ROUND_HALF_UP);
+				if(oneSubjectScore_b.compareTo(passScore_b)>=0){
+					subjectPassNum++;
+				}
+//                if (NumberUtils.createDouble(passScore) <= oneSubjectScore) {
+//                    subjectPassNum++;
+//                }
+                BigDecimal bigDecimal = NumberUtils.createBigDecimal(oneSubjectScore.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                oneSubject.put("gainScore", bigDecimal.toString());
                 totalScore += NumberUtils.mul(oneSubjectScore, NumberUtils.createDouble(weight) / 100);
                 scoreDetails_jsonArray.set(j, oneSubject);
             }
+            BigDecimal totalScore_b = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP);
             if ("0".equals(needSinglePass)) { // 不需要单独每项通过，直接看总分即可
-                if (totalScore > passScore_scheme) {
-                    cas.setDataStatus("2");
-                } else {
-                    cas.setDataStatus("3");
-                }
+            	if(totalScore_b.compareTo(passScore_scheme)<0){
+					cas.setDataStatus("3");
+				}else {
+					cas.setDataStatus("2");
+				}
             } else {
-                if (totalScore > passScore_scheme && subjectPassNum == scoreDetails_jsonArray.size()) {
+                if (totalScore_b.compareTo(passScore_scheme)>=0 && subjectPassNum == scoreDetails_jsonArray.size()) {
                     cas.setDataStatus("2");
                 } else {
                     cas.setDataStatus("3");
@@ -522,8 +531,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	/**
 	 * 解析教师端上传来的某个软件的学生分数，并保存到考生的得分详情里
-	 * @param scoreInfo
-	 * @return
+	 * @param scoreInfo 1
+	 * @return 1
 	 */
 	@Transactional
 	public CommonResult parseScoreInfo(String scoreInfo){
@@ -558,20 +567,20 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		CommonAssessmentStu con = new CommonAssessmentStu();
 		con.setId_in(commonAssessmentStuIds.split(","));
 		List<CommonAssessmentStu> commonAssessmentStuList = commonAssessmentStuService.findList(con);
-		Set<String> commonAssessmentSet = new HashSet<>();
-		for (int i = 0; i <commonAssessmentStuList.size(); i++) {
-			commonAssessmentSet.add(commonAssessmentStuList.get(i).getAssessmentId());
-		}
-		String[] assessmentIds = new String[commonAssessmentSet.size()];
-		Iterator<String> iterator = commonAssessmentSet.iterator();
-		int index = 0;
-		while(iterator.hasNext()){
-			assessmentIds[index] = iterator.next();
-		}
-
-		CommonAssessment commonAssessmentCon = new CommonAssessment();
-		commonAssessmentCon.setId_in(assessmentIds);
-		List<CommonAssessment> commonAssessmentList = dao.findList(commonAssessmentCon);
+//		Set<String> commonAssessmentSet = new HashSet<>();
+//		for (int i = 0; i <commonAssessmentStuList.size(); i++) {
+//			commonAssessmentSet.add(commonAssessmentStuList.get(i).getAssessmentId());
+//		}
+//		String[] assessmentIds = new String[commonAssessmentSet.size()];
+//		Iterator<String> iterator = commonAssessmentSet.iterator();
+//		int index = 0;
+//		while(iterator.hasNext()){
+//			assessmentIds[index] = iterator.next();
+//		}
+//
+//		CommonAssessment commonAssessmentCon = new CommonAssessment();
+//		commonAssessmentCon.setId_in(assessmentIds);
+//		List<CommonAssessment> commonAssessmentList = dao.findList(commonAssessmentCon);
 
 		for (int i = 0; i < jsonArray.size(); i++) {
 			JSONObject object = jsonArray.getJSONObject(i);
@@ -673,19 +682,19 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		CommonAssessmentStu con = new CommonAssessmentStu();
 		con.setId_in(commonAssessmentStuIds.split(","));
 		List<CommonAssessmentStu> commonAssessmentStuList = commonAssessmentStuService.findList(con);
-		Set<String> commonAssessmentSet = new HashSet<>();
-		for (int i = 0; i <commonAssessmentStuList.size(); i++) {
-			commonAssessmentSet.add(commonAssessmentStuList.get(i).getAssessmentId());
-		}
-		String[] assessmentIds = new String[commonAssessmentSet.size()];
-		Iterator<String> iterator = commonAssessmentSet.iterator();
-		int index = 0;
-		while(iterator.hasNext()){
-			assessmentIds[index] = iterator.next();
-		}
-
-		CommonAssessment commonAssessmentCon = new CommonAssessment();
-		commonAssessmentCon.setId_in(assessmentIds);
+//		Set<String> commonAssessmentSet = new HashSet<>();
+//		for (int i = 0; i <commonAssessmentStuList.size(); i++) {
+//			commonAssessmentSet.add(commonAssessmentStuList.get(i).getAssessmentId());
+//		}
+//		String[] assessmentIds = new String[commonAssessmentSet.size()];
+//		Iterator<String> iterator = commonAssessmentSet.iterator();
+//		int index = 0;
+//		while(iterator.hasNext()){
+//			assessmentIds[index] = iterator.next();
+//		}
+//
+//		CommonAssessment commonAssessmentCon = new CommonAssessment();
+//		commonAssessmentCon.setId_in(assessmentIds);
 		// List<CommonAssessment> commonAssessmentList = dao.findList(commonAssessmentCon);
 
 		for (int i = 0; i < jsonArray.size(); i++) {
@@ -755,7 +764,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, (commonAssessmentStuList.size()-resultMsgList.size())+"条分数全部解析并上传成功!", resultMsgList);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public CommonResult parseScoreInfoAll(String scoreInfo) {
 		List<String> msgList = new ArrayList<>();
 		List<String> resultMsgList = new ArrayList<>();
@@ -787,19 +796,19 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		CommonAssessmentStu con = new CommonAssessmentStu();
 		con.setId_in(commonAssessmentStuIds.split(","));
 		List<CommonAssessmentStu> commonAssessmentStuList = commonAssessmentStuService.findList(con);
-		Set<String> commonAssessmentSet = new HashSet<>();
-		for (int i = 0; i <commonAssessmentStuList.size(); i++) {
-			commonAssessmentSet.add(commonAssessmentStuList.get(i).getAssessmentId());
-		}
-		String[] assessmentIds = new String[commonAssessmentSet.size()];
-		Iterator<String> iterator = commonAssessmentSet.iterator();
-		int index = 0;
-		while(iterator.hasNext()){
-			assessmentIds[index] = iterator.next();
-		}
-		CommonAssessment commonAssessmentCon = new CommonAssessment();
-		commonAssessmentCon.setId_in(assessmentIds);
-		List<CommonAssessment> commonAssessmentList = dao.findList(commonAssessmentCon);
+//		Set<String> commonAssessmentSet = new HashSet<>();
+//		for (int i = 0; i <commonAssessmentStuList.size(); i++) {
+//			commonAssessmentSet.add(commonAssessmentStuList.get(i).getAssessmentId());
+//		}
+//		String[] assessmentIds = new String[commonAssessmentSet.size()];
+//		Iterator<String> iterator = commonAssessmentSet.iterator();
+//		int index = 0;
+//		while(iterator.hasNext()){
+//			assessmentIds[index] = iterator.next();
+//		}
+//		CommonAssessment commonAssessmentCon = new CommonAssessment();
+//		commonAssessmentCon.setId_in(assessmentIds);
+//		List<CommonAssessment> commonAssessmentList = dao.findList(commonAssessmentCon);
 		for (int i = 0; i < jsonArray.size(); i++) {
 			JSONObject object = jsonArray.getJSONObject(i);
 			String serverExamStuId = object.getString("serverExamStuId");
@@ -868,9 +877,9 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	/**
 	 * 从考核列表里选一个考核返回
-	 * @param commonAssessmentList
-	 * @param commonAssessmentId
-	 * @return
+	 * @param commonAssessmentList 1
+	 * @param commonAssessmentId 1
+	 * @return 1
 	 */
 	private CommonAssessmentScheme getSchemeByCommonAssessmentList(List<CommonAssessment> commonAssessmentList, String commonAssessmentId){
 		for (int i = 0; i < commonAssessmentList.size(); i++) {
@@ -884,8 +893,8 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 
 	/**
 	 * 根据用户id 返回 考核名称 (给教师端用)
-	 * @param commonUserId
-	 * @return
+	 * @param commonUserId 1
+	 * @return 1
 	 */
 	public CommonResult loadAssessmentNameList(String commonUserId){
 		CommonUser loginUser = commonUserService.get(commonUserId);
@@ -979,11 +988,11 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 			List<Integer> headerWidthList = new ArrayList<>();
 
 			headerList.add("登录名（身份证号）");
-			headerWidthList.add(Integer.valueOf(20*256));
+			headerWidthList.add(20 * 256);
 			headerList.add("姓名");
-			headerWidthList.add(Integer.valueOf(10*256));
+			headerWidthList.add(10 * 256);
 			headerList.add("学校");
-			headerWidthList.add(Integer.valueOf(40*256));
+			headerWidthList.add(40 * 256);
 			JSONArray ja = JSONArray.parseArray(jsonObject.getString("softDetails"));
 //			if(ja.size()==1&&ja.getJSONObject(0).getString("softwareId").equals("6")){
 //				continue;
@@ -997,7 +1006,7 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 					h5Index = h5Index + j;
 				}
 				headerList.add(jo.getString("softwareName"));
-				headerWidthList.add(Integer.valueOf(10*256));
+				headerWidthList.add(10 * 256);
 
 			}
 			if(created == 0){
@@ -1034,10 +1043,15 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 	}
 
 	public CommonResult<List<String>> loadProjectNameList(String commonUserId, String assessmentName, String softwareId, String assessmentDate) {
+
 		CommonAssessment caCon = new CommonAssessment();
 		caCon.setAssessmentName(assessmentName);
 		caCon.setStartDate(assessmentDate);
 		caCon.setDataStatus("2");
+		if(StringUtils.isNotBlank(commonUserId)){
+			CommonUser commonUser = this.commonUserService.get(commonUserId);
+			caCon.setSchoolId(commonUser.getSchoolId());
+		}
 		//CommonAssessment ca = dao.getByEntity(caCon);
 		CommonAssessment ca = dao.loadOneByCondition(caCon);
 		String casId = ca.getAssessmentSchemeId();
@@ -1058,9 +1072,602 @@ public class CommonAssessmentService extends CrudService<CommonAssessmentDao, Co
 		return new CommonResult<>(projectNameList);
 	}
 
+	@Transactional
+	public CommonResult<String> uploadAnswerDetailFile(MultipartFile answerDetailFile, String commonAssessmentStuId, String softwareId, String projectName) {
+		File x = new File(FilePathUtil.getFileSavePath("platformPic")+projectName+answerDetailFile.getOriginalFilename());
+		try {
+			answerDetailFile.transferTo(x);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		CommonAssessmentStu commonAssessmentStu = this.commonAssessmentStuService.get(commonAssessmentStuId);
+		String schemeDetail = commonAssessmentStu.getScoreDetails();
+		JSONArray ja = JSONArray.parseArray(schemeDetail);
+		if(StringUtils.isNotBlank(projectName)){
+			for (int k = 0; k < ja.size(); k++) {
+				JSONObject oneProject = ja.getJSONObject(k);
+				if(projectName.equals(oneProject.getString("title"))){
+					JSONArray softDetails = oneProject.getJSONArray("softDetails");
+					for (int l = 0; l < softDetails.size(); l++) {
+						JSONObject oneSoft = softDetails.getJSONObject(l);
+						if(softwareId.equals(oneSoft.getInteger("softwareId")+"")){
+							oneSoft.put("answerDetailFile", projectName+answerDetailFile.getOriginalFilename());
+							softDetails.set(l, oneSoft);
+							ja.getJSONObject(k).put("softDetails", softDetails);
+							break;
+						}
+					}
+				}
+			}
+		}else{
+			for (int k = 0; k < ja.size(); k++) {
+				JSONArray softDetails = ja.getJSONObject(k).getJSONArray("softDetails");
+				for (int l = 0; l < softDetails.size(); l++) {
+					JSONObject oneSoft = softDetails.getJSONObject(l);
+					if(softwareId.equals(oneSoft.getInteger("softwareId")+"")){
+						oneSoft.put("answerDetailFile", projectName+answerDetailFile.getOriginalFilename());
+						softDetails.set(l, oneSoft);
+						ja.getJSONObject(k).put("softDetails", softDetails);
+						break;
+					}
+				}
+			}
+		}
+
+		commonAssessmentStu.setScoreDetails(ja.toJSONString());
+		this.commonAssessmentStuService.update(commonAssessmentStu);
+		System.out.println("答题详情文件上传完毕");
+		return new CommonResult<>();
+	}
+
+	@Transactional
+	public CommonResult<String> uploadWorkOrderFile(MultipartFile workOrderFile, String commonAssessmentStuId, String softwareId, String projectName) {
+		File x = new File(FilePathUtil.getFileSavePath("platformPic")+projectName+workOrderFile.getOriginalFilename());
+		try {
+			workOrderFile.transferTo(x);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		CommonAssessmentStu commonAssessmentStu = this.commonAssessmentStuService.get(commonAssessmentStuId);
+		String schemeDetail = commonAssessmentStu.getScoreDetails();
+		JSONArray ja = JSONArray.parseArray(schemeDetail);
+
+		if(StringUtils.isNotBlank(projectName)){
+			for (int k = 0; k < ja.size(); k++) {
+				JSONObject oneProject = ja.getJSONObject(k);
+				if(projectName.equals(oneProject.getString("title"))){
+					JSONArray softDetails = oneProject.getJSONArray("softDetails");
+					for (int l = 0; l < softDetails.size(); l++) {
+						JSONObject oneSoft = softDetails.getJSONObject(l);
+						if(softwareId.equals(oneSoft.getInteger("softwareId")+"")){
+							oneSoft.put("workOrderFile", projectName+workOrderFile.getOriginalFilename());
+							softDetails.set(l, oneSoft);
+							ja.getJSONObject(k).put("softDetails", softDetails);
+							break;
+						}
+					}
+				}
+			}
+		}else{
+			for (int k = 0; k < ja.size(); k++) {
+				JSONArray softDetails = ja.getJSONObject(k).getJSONArray("softDetails");
+				for (int l = 0; l < softDetails.size(); l++) {
+					JSONObject oneSoft = softDetails.getJSONObject(l);
+					if(softwareId.equals(oneSoft.getInteger("softwareId")+"")){
+						oneSoft.put("workOrderFile", projectName+workOrderFile.getOriginalFilename());
+						softDetails.set(l, oneSoft);
+						ja.getJSONObject(k).put("softDetails", softDetails);
+						break;
+					}
+				}
+			}
+		}
+		commonAssessmentStu.setScoreDetails(ja.toJSONString());
+		this.commonAssessmentStuService.update(commonAssessmentStu);
+		System.out.println("工单上传完毕");
+		return new CommonResult<>();
+	}
+
+	public CommonResult<List<SoftwareName>> loadSoftListByAssessmentId(String assessmentId) {
+		CommonAssessment commonAssessment = this.get(assessmentId);
+		CommonAssessmentScheme commonAssessmentScheme = this.commonAssessmentSchemeService.get(commonAssessment.getAssessmentSchemeId());
+		String schemeDetail = commonAssessmentScheme.getSchemeDetails();
+		JSONArray ja = JSONArray.parseArray(schemeDetail);
+		List<SoftwareName> softwareNameList = new ArrayList<>();
+		for (int k = 0; k < ja.size(); k++) {
+			JSONArray softDetails = ja.getJSONObject(k).getJSONArray("softDetails");
+			for (int l = 0; l < softDetails.size(); l++) {
+				JSONObject oneSoft = softDetails.getJSONObject(l);
+				SoftwareName softwareName = new SoftwareName();
+				softwareName.setProjectName(ja.getJSONObject(k).getString("title"));
+				softwareName.setSoftId(oneSoft.getInteger("softwareId").toString());
+				softwareName.setSoftName(oneSoft.getString("softwareName"));
+				softwareNameList.add(softwareName);
+			}
+		}
+		return new CommonResult<>(softwareNameList);
+	}
+
+	public void downLoadFinalZip(ZipOutputStream zipOutputStream, DownLoadFinalZipReqVO vo) throws IOException {
+
+//		String schemeDetails = commonAssessmentScheme.getSchemeDetails();
+		JSONArray jsonArray_schemeDetails = null;
+		CommonAssessmentStu con = new CommonAssessmentStu();
+		con.setAssessmentId(vo.getAssessmentId());
+		List<CommonAssessmentStu> commonAssessmentStuList = this.commonAssessmentStuService.findList(con);
+		for (CommonAssessmentStu commonAssessmentStu : commonAssessmentStuList) {
+			String schemeDetail = commonAssessmentStu.getScoreDetails();
+			CommonUser commonUser = this.commonUserService.get(commonAssessmentStu.getCommonUserId());
+			JSONArray ja = JSONArray.parseArray(schemeDetail);
+			if(jsonArray_schemeDetails==null){
+				jsonArray_schemeDetails = ja;
+			}
+			for (int k = 0; k < ja.size(); k++) {
+				JSONObject oneProject = ja.getJSONObject(k);
+				JSONArray softDetails = oneProject.getJSONArray("softDetails");
+				List<SoftInVO> softInVOList = vo.getSoftInVOList();
+				for (int l = 0; l < softDetails.size(); l++) {
+					JSONObject oneSoft = softDetails.getJSONObject(l);
+					for (SoftInVO softInVO : softInVOList) {
+						if(softInVO.getProjectName().equals(oneProject.getString("title"))){
+							if(softInVO.getSoftwareId().equals(oneSoft.getInteger("softwareId").toString())){
+								if("1".equals(softInVO.getIsDownAnswerDetail())){
+									if(StringUtils.isNotBlank(oneSoft.getString("answerDetailFile"))){
+										File answerDetailFile = new File(FilePathUtil.getFileSavePath("platformPic")+oneSoft.getString("answerDetailFile"));
+										FileInputStream fileInputStream = new FileInputStream(answerDetailFile);
+										String fileExtension = FileUtils.getFileExtension(oneSoft.getString("answerDetailFile"));
+										String zipEntryName = commonUser.getTrueName()
+												+commonUser.getUserName()+"/"
+												+ oneProject.getString("title")+"/"
+												+oneSoft.getString("softwareName")+"/"
+												+commonUser.getUserName()+"-"+commonUser.getTrueName()+"-"
+												+oneProject.getString("title")+"-"+oneSoft.getString("softwareName")+"-"+"答题详情."+fileExtension;
+										System.out.println(zipEntryName);
+										ZipEntry z = new ZipEntry(zipEntryName);
+										zipOutputStream.putNextEntry(z);
+										int readByte;
+										byte[] buf = new byte[4096];
+										while ((readByte = fileInputStream.read(buf)) != -1) {
+											zipOutputStream.write(buf, 0, readByte);
+										}
+										zipOutputStream.closeEntry();
+										fileInputStream.close();
+									}
+								}
+								if("1".equals(softInVO.getIsDownWorkOrder())){
+									if(StringUtils.isNotBlank(oneSoft.getString("workOrderFile"))){
+										File workOrderFileFile = new File(FilePathUtil.getFileSavePath("platformPic")+oneSoft.getString("workOrderFile"));
+										FileInputStream fileInputStream = new FileInputStream(workOrderFileFile);
+										String zipEntryName = commonUser.getTrueName()
+												+commonUser.getUserName()+"/"
+												+ oneProject.getString("title")+"/"
+												+oneSoft.getString("softwareName")+"/"+commonUser.getUserName()+"-"+commonUser.getTrueName()+"-"
+												+oneProject.getString("title")+"-"+oneSoft.getString("softwareName")+"-"+"考核报告.xls";
+										System.out.println(zipEntryName);
+										ZipEntry z = new ZipEntry(zipEntryName);
+										zipOutputStream.putNextEntry(z);
+										int readByte;
+										byte[] buf = new byte[4096];
+										while ((readByte = fileInputStream.read(buf)) != -1) {
+											zipOutputStream.write(buf, 0, readByte);
+										}
+										zipOutputStream.closeEntry();
+										fileInputStream.close();
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		CommonAssessment commonAssessment = this.get(vo.getAssessmentId());
+		CommonAssessmentScheme commonAssessmentScheme = this.commonAssessmentSchemeService.get(commonAssessment.getAssessmentSchemeId());
+		CommonBasicScheme commonBasicScheme = this.commonBasicSchemeService.get(commonAssessmentScheme.getBasicSchemeId());
+		// 最后写入一个 成绩的详情excel文件
+		ExcelExport ee = new ExcelExport("啦啦", "总表");
+		Workbook wb = ee.getWorkbook();
+		Sheet sheet = wb.getSheetAt(0);
+		sheet.setColumnWidth(0, 256*5);
+		sheet.setColumnWidth(1, 256*20);
+		sheet.setColumnWidth(2, 256*12);
+		sheet.setColumnWidth(3, 256*12);
+		sheet.setColumnWidth(4, 256*12);
+		sheet.setColumnWidth(5, 256*12);
+		sheet.setColumnWidth(6, 256*12);
+		sheet.setColumnWidth(7, 256*12);
+		sheet.setColumnWidth(8, 256*12);
+		sheet.setColumnWidth(9, 256*12);
+		sheet.setColumnWidth(10, 256*12);
+		sheet.setColumnWidth(11, 256*12);
+		sheet.setColumnWidth(12, 256*12);
+		sheet.setColumnWidth(13, 256*12);
+		sheet.setColumnWidth(14, 256*12);
+
+		List<CellRangeAddress> cellRangeAddressList = this.cellRangeAddressList();
+		ee.addMergedRegionList(cellRangeAddressList);
+//		CellRangeAddress cellRangeAddress = cellRangeAddressList.get(0);
+//		sheet.addMergedRegion(cellRangeAddress);
+//		RegionUtil.setBorderBottom(CellStyle.BORDER_DOUBLE, cellRangeAddress, sheet, wb);
+//		RegionUtil.setBorderLeft(CellStyle.BORDER_DOUBLE, cellRangeAddress, sheet, wb);
+//		RegionUtil.setBorderRight(CellStyle.BORDER_DOUBLE, cellRangeAddress, sheet, wb);
+//		RegionUtil.setBorderTop(CellStyle.BORDER_DOUBLE, cellRangeAddress, sheet, wb);
+//		RegionUtil.setBottomBorderColor(IndexedColors.RED.getIndex(), cellRangeAddress, sheet, wb);
+//		RegionUtil.setLeftBorderColor(IndexedColors.RED.getIndex(), cellRangeAddress, sheet, wb);
+//		RegionUtil.setRightBorderColor(IndexedColors.RED.getIndex(), cellRangeAddress, sheet, wb);
+//		RegionUtil.setTopBorderColor(IndexedColors.RED.getIndex(), cellRangeAddress, sheet, wb);
+
+//		for (CellRangeAddress cellRangeAddress : cellRangeAddressList) {
+//			RegionUtil.setBorderBottom(CellStyle.BORDER_DOUBLE, cellRangeAddress, sheet, wb);
+//			RegionUtil.setBorderLeft(CellStyle.BORDER_DOUBLE, cellRangeAddress, sheet, wb);
+//			RegionUtil.setBorderRight(CellStyle.BORDER_DOUBLE, cellRangeAddress, sheet, wb);
+//			RegionUtil.setBorderTop(CellStyle.BORDER_DOUBLE, cellRangeAddress, sheet, wb);
+//			RegionUtil.setBottomBorderColor(IndexedColors.RED.getIndex(), cellRangeAddress, sheet, wb);
+//			RegionUtil.setLeftBorderColor(IndexedColors.RED.getIndex(), cellRangeAddress, sheet, wb);
+//			RegionUtil.setRightBorderColor(IndexedColors.RED.getIndex(), cellRangeAddress, sheet, wb);
+//			RegionUtil.setTopBorderColor(IndexedColors.RED.getIndex(), cellRangeAddress, sheet, wb);
+//		}
+
+		Row row = ee.addRow(); // 第一行
+
+		CellStyle style = wb.createCellStyle();
+		style.setAlignment(CellStyle.ALIGN_CENTER);
+		style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		makeBlackBorder(style);
+		Font titleFont = wb.createFont();
+		titleFont.setFontName("宋体");
+		titleFont.setFontHeightInPoints((short) 20);
+		titleFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		style.setFont(titleFont);
+		ee.addCell(row, 0, commonBasicScheme.getScoreFileTitle()).setCellStyle(style);
+		for (int i = 1; i < 15; i++) {
+			ee.addCell(row, i, "").setCellStyle(style);
+		}
+
+		row = ee.addRow(); // 第二行
+		style = wb.createCellStyle();
+		style.setAlignment(CellStyle.ALIGN_CENTER);
+		style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		makeBlackBorder(style);
+		titleFont = wb.createFont();
+		titleFont.setFontName("宋体");
+		titleFont.setFontHeightInPoints((short) 18);
+		titleFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		style.setFont(titleFont);
+		ee.addCell(row, 0, commonBasicScheme.getBasicStart()+commonBasicScheme.getBasicName()).setCellStyle(style);
+		for (int i = 1; i < 15; i++) {
+			ee.addCell(row, i, "").setCellStyle(style);
+		}
+		row = ee.addRow(); // 第三行
+		CellStyle style_b_12 = wb.createCellStyle();
+		style_b_12.setAlignment(CellStyle.ALIGN_CENTER);
+		style_b_12.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		makeBlackBorder(style_b_12);
+		titleFont = wb.createFont();
+		titleFont.setFontName("宋体");
+		titleFont.setFontHeightInPoints((short) 12);
+		titleFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		style_b_12.setFont(titleFont);
+
+		String basicName = commonBasicScheme.getBasicName();
+		String basicNameX = basicName.substring(basicName.length()-3, basicName.length()-1);
+		ee.addCell(row, 0, basicNameX).setCellStyle(style_b_12);
+		ee.addCell(row, 1, "").setCellStyle(style_b_12);
+		ee.addCell(row, 2, "单元").setCellStyle(style_b_12);
+		ee.addCell(row, 3, "1").setCellStyle(style_b_12);
+		ee.addCell(row, 4, "").setCellStyle(style_b_12);
+		ee.addCell(row, 5, "2").setCellStyle(style_b_12);
+		ee.addCell(row, 6, "").setCellStyle(style_b_12);
+		ee.addCell(row, 7, "3").setCellStyle(style_b_12);
+		ee.addCell(row, 8, "").setCellStyle(style_b_12);
+		ee.addCell(row, 9, "4").setCellStyle(style_b_12);
+		ee.addCell(row, 10, "").setCellStyle(style_b_12);
+		ee.addCell(row, 11, "考核总成绩").setCellStyle(style_b_12);
+		ee.addCell(row, 12, "复核成绩总成绩").setCellStyle(style_b_12);
+		ee.addCell(row, 13, "总分").setCellStyle(style_b_12);
+		ee.addCell(row, 14, "考评情况说明").setCellStyle(style_b_12);
+		row = ee.addRow(); // 第四行
+//		RegionUtil.setRegionUtil/
+		CellStyle style_red_12 = wb.createCellStyle();
+		style_red_12.setAlignment(CellStyle.ALIGN_CENTER);
+		style_red_12.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		makeBlackBorder(style_red_12);
+		titleFont = wb.createFont();
+		titleFont.setFontName("宋体");
+		titleFont.setFontHeightInPoints((short) 12);
+		titleFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		titleFont.setColor(Font.COLOR_RED);
+		style_red_12.setFont(titleFont);
+		ee.addCell(row, 0, "").setCellStyle(style_red_12);
+		ee.addCell(row, 1, "").setCellStyle(style_red_12);
+		ee.addCell(row, 2, "").setCellStyle(style_red_12);
+		ee.addCell(row, 3, "考核项目一").setCellStyle(style_red_12);
+		ee.addCell(row, 4, "").setCellStyle(style_red_12);
+		ee.addCell(row, 5, "考核项目二").setCellStyle(style_red_12);
+		ee.addCell(row, 6, "").setCellStyle(style_red_12);
+		ee.addCell(row, 7, "考核项目三").setCellStyle(style_red_12);
+		ee.addCell(row, 8, "").setCellStyle(style_red_12);
+		ee.addCell(row, 9, "考核项目四").setCellStyle(style_red_12);
+		ee.addCell(row, 10, "").setCellStyle(style_red_12);
+		ee.addCell(row, 11, "").setCellStyle(style_red_12);
+		ee.addCell(row, 12, "").setCellStyle(style_red_12);
+		ee.addCell(row, 13, "").setCellStyle(style_red_12);
+		ee.addCell(row, 14, "").setCellStyle(style_red_12);
+		row = ee.addRow(); // 第五行
+		ee.addCell(row, 0, "").setCellStyle(style_b_12);
+		ee.addCell(row, 1, "").setCellStyle(style_b_12);
+		ee.addCell(row, 2, "").setCellStyle(style_b_12);
+		ee.addCell(row, 3, "考核分数").setCellStyle(style_b_12);
+		ee.addCell(row, 4, "复核成绩").setCellStyle(style_b_12);
+		ee.addCell(row, 5, "考核分数").setCellStyle(style_b_12);
+		ee.addCell(row, 6, "复核成绩").setCellStyle(style_b_12);
+		ee.addCell(row, 7, "考核分数").setCellStyle(style_b_12);
+		ee.addCell(row, 8, "复核成绩").setCellStyle(style_b_12);
+		ee.addCell(row, 9, "考核分数").setCellStyle(style_b_12);
+		ee.addCell(row, 10, "复核成绩").setCellStyle(style_b_12);
+		ee.addCell(row, 11, "").setCellStyle(style_b_12);
+		ee.addCell(row, 12, "").setCellStyle(style_b_12);
+		ee.addCell(row, 13, "").setCellStyle(style_b_12);
+		ee.addCell(row, 14, "").setCellStyle(style_b_12);
+
+
+
+		row = ee.addRow(); // 第六行
+		ee.addCell(row, 0, "序号").setCellStyle(style_b_12);
+		ee.addCell(row, 1, "准考证号/身份证号").setCellStyle(style_b_12);
+		ee.addCell(row, 2, "姓名").setCellStyle(style_b_12);
+		ee.addCell(row, 3, jsonArray_schemeDetails.getJSONObject(0).getString("weight")+"%").setCellStyle(style_b_12);
+		ee.addCell(row, 4, "").setCellStyle(style_b_12);
+		ee.addCell(row, 5, jsonArray_schemeDetails.getJSONObject(1).getString("weight")+"%").setCellStyle(style_b_12);
+		ee.addCell(row, 6, "").setCellStyle(style_b_12);
+		ee.addCell(row, 7, jsonArray_schemeDetails.getJSONObject(2).getString("weight")+"%").setCellStyle(style_b_12);
+		ee.addCell(row, 8, "").setCellStyle(style_b_12);
+		ee.addCell(row, 9, jsonArray_schemeDetails.getJSONObject(3).getString("weight")+"%").setCellStyle(style_b_12);
+		ee.addCell(row, 10, "").setCellStyle(style_b_12);
+		ee.addCell(row, 11, "100").setCellStyle(style_b_12);
+		ee.addCell(row, 12, "").setCellStyle(style_b_12);
+		ee.addCell(row, 13, "").setCellStyle(style_b_12);
+		ee.addCell(row, 14, "").setCellStyle(style_b_12);
+		int index = 1;
+		CellStyle style_12 = wb.createCellStyle();
+		style_12.setAlignment(CellStyle.ALIGN_CENTER);
+		style_12.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		makeBlackBorder2(style_12);
+		titleFont = wb.createFont();
+		titleFont.setFontName("宋体");
+		titleFont.setFontHeightInPoints((short) 12);
+		style_12.setFont(titleFont);
+		int finalPassNum = 0;
+		int p1PassNum = 0, p2PassNum = 0, p3PassNum = 0, p4PassNum = 0;
+		for (CommonAssessmentStu commonAssessmentStu : commonAssessmentStuList) {
+			if("2".equals(commonAssessmentStu.getDataStatus())){
+				finalPassNum++;
+			}
+			String schemeDetail = commonAssessmentStu.getScoreDetails();
+			CommonUser commonUser = this.commonUserService.get(commonAssessmentStu.getCommonUserId());
+			row = ee.addRow(); // 写入成绩
+			ee.addCell(row, 0, index+"").setCellStyle(style_12);
+			ee.addCell(row, 1, commonUser.getUserName()).setCellStyle(style_12);
+			ee.addCell(row, 2, commonUser.getTrueName()).setCellStyle(style_12);
+			JSONArray ja = JSONArray.parseArray(schemeDetail);
+			for (int k = 0; k < ja.size(); k++) {
+				JSONObject oneDetail = ja.getJSONObject(k);
+				String gainScore = oneDetail.getString("gainScore");
+				String passScore = oneDetail.getString("passScore");
+				ee.addCell(row, k*2 + 3, gainScore).setCellStyle(style_12);
+				ee.addCell(row, k*2 + 4, "").setCellStyle(style_12);
+				if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+					if(k==0){
+						int c = NumberUtils.createBigDecimal(gainScore).compareTo(NumberUtils.createBigDecimal(passScore));
+						if(c>=0){
+							p1PassNum++;
+						}
+					}
+					if(k==1){
+						int c = NumberUtils.createBigDecimal(gainScore).compareTo(NumberUtils.createBigDecimal(passScore));
+						if(c>=0){
+							p2PassNum++;
+						}
+					}
+					if(k==2){
+						int c = NumberUtils.createBigDecimal(gainScore).compareTo(NumberUtils.createBigDecimal(passScore));
+						if(c>=0){
+							p3PassNum++;
+						}
+					}
+					if(k==3){
+						int c = NumberUtils.createBigDecimal(gainScore).compareTo(NumberUtils.createBigDecimal(passScore));
+						if(c>=0){
+							p4PassNum++;
+						}
+					}
+				}
+			}
+			ee.addCell(row, 11, commonAssessmentStu.getTotalScore()	);
+			ee.addCell(row, 12, "").setCellStyle(style_12);
+			ee.addCell(row, 13, "").setCellStyle(style_12);
+			ee.addCell(row, 14, "").setCellStyle(style_12);
+			index++;
+		}
+		// 最后数据分析
+
+		row = ee.addRow();
+		int r1 = row.getRowNum();
+
+		ee.addCell(row, 0, "数据分析").setCellStyle(style_b_12);
+		ee.addCell(row, 1, "").setCellStyle(style_b_12);
+		ee.addCell(row, 2, "通过人数").setCellStyle(style_b_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			ee.addCell(row, 3, p1PassNum+"").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 3, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 4, "").setCellStyle(style_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			ee.addCell(row, 5, p2PassNum+"").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 5, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 6, "").setCellStyle(style_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			ee.addCell(row, 7, p3PassNum+"").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 7, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 8, "").setCellStyle(style_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			ee.addCell(row, 9, p4PassNum+"").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 9, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 10, "").setCellStyle(style_12);
+		ee.addCell(row, 11, finalPassNum+"").setCellStyle(style_12);
+		ee.addCell(row, 12, "").setCellStyle(style_12);
+		ee.addCell(row, 13, "").setCellStyle(style_12);
+		ee.addCell(row, 14, "").setCellStyle(style_12);
+
+		row = ee.addRow();
+
+		ee.addCell(row, 0, "").setCellStyle(style_b_12);
+		ee.addCell(row, 1, "").setCellStyle(style_b_12);
+		ee.addCell(row, 2, "未通过人数").setCellStyle(style_b_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			ee.addCell(row, 3, (commonAssessmentStuList.size()-p1PassNum)+"").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 3, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 4, "").setCellStyle(style_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			ee.addCell(row, 5, (commonAssessmentStuList.size()-p2PassNum)+"").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 5, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 6, "").setCellStyle(style_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			ee.addCell(row, 7, (commonAssessmentStuList.size()-p3PassNum)+"").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 7, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 8, "").setCellStyle(style_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			ee.addCell(row, 9, (commonAssessmentStuList.size()-p4PassNum)+"").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 9, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 10, "").setCellStyle(style_12);
+		ee.addCell(row, 11, (commonAssessmentStuList.size()-finalPassNum)+"").setCellStyle(style_12);
+		ee.addCell(row, 12, "").setCellStyle(style_12);
+		ee.addCell(row, 13, "").setCellStyle(style_12);
+		ee.addCell(row, 14, "").setCellStyle(style_12);
+
+		row = ee.addRow();
+		int r2 = row.getRowNum();
+
+		ee.addCell(row, 0, "").setCellStyle(style_b_12);
+		ee.addCell(row, 1, "").setCellStyle(style_b_12);
+		ee.addCell(row, 2, "通过率").setCellStyle(style_b_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			BigDecimal b1 = NumberUtils.createBigDecimal(p1PassNum+"");
+			BigDecimal b2 = NumberUtils.createBigDecimal(commonAssessmentStuList.size()+"");
+			BigDecimal b3 = b1.multiply(NumberUtils.createBigDecimal("100")).divide(b2, 2, BigDecimal.ROUND_HALF_UP);
+			ee.addCell(row, 3, b3.toString()+"%").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 3, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 4, "").setCellStyle(style_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			BigDecimal b1 = NumberUtils.createBigDecimal(p2PassNum+"");
+			BigDecimal b2 = NumberUtils.createBigDecimal(commonAssessmentStuList.size()+"");
+			BigDecimal b3 = b1.multiply(NumberUtils.createBigDecimal("100")).divide(b2, 2, BigDecimal.ROUND_HALF_UP);
+			ee.addCell(row, 5, b3.toString()+"%").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 5, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 6, "").setCellStyle(style_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			BigDecimal b1 = NumberUtils.createBigDecimal(p3PassNum+"");
+			BigDecimal b2 = NumberUtils.createBigDecimal(commonAssessmentStuList.size()+"");
+			BigDecimal b3 = b1.multiply(NumberUtils.createBigDecimal("100")).divide(b2, 2, BigDecimal.ROUND_HALF_UP);
+			ee.addCell(row, 7, b3.toString()+"%").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 7, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 8, "").setCellStyle(style_12);
+		if("1".equals(commonAssessmentScheme.getNeedSinglePass())){
+			BigDecimal b1 = NumberUtils.createBigDecimal(p4PassNum+"");
+			BigDecimal b2 = NumberUtils.createBigDecimal(commonAssessmentStuList.size()+"");
+			BigDecimal b3 = b1.multiply(NumberUtils.createBigDecimal("100")).divide(b2, 2, BigDecimal.ROUND_HALF_UP);
+			ee.addCell(row, 9, b3.toString()+"%").setCellStyle(style_12);
+		}else{
+			ee.addCell(row, 9, "").setCellStyle(style_12);
+		}
+		ee.addCell(row, 10, "").setCellStyle(style_12);
+		BigDecimal b1 = NumberUtils.createBigDecimal(finalPassNum+"");
+		BigDecimal b2 = NumberUtils.createBigDecimal(commonAssessmentStuList.size()+"");
+		BigDecimal b3 = b1.multiply(NumberUtils.createBigDecimal("100")).divide(b2, 2, BigDecimal.ROUND_HALF_UP);
+		ee.addCell(row, 11, b3.toString()+"%").setCellStyle(style_12);
+		ee.addCell(row, 12, "").setCellStyle(style_12);
+		ee.addCell(row, 13, "").setCellStyle(style_12);
+		ee.addCell(row, 14, "").setCellStyle(style_12);
+
+		CellRangeAddress rangeAddress = new CellRangeAddress(r1, r2, 0, 1);
+		sheet.addMergedRegion(rangeAddress);
+
+		String zipEntryName = commonBasicScheme.getFileName()+".xlsx";
+		ZipEntry z = new ZipEntry(zipEntryName);
+		zipOutputStream.putNextEntry(z);
+		ee.write(zipOutputStream);
+	}
+
+	private void makeBlackBorder(CellStyle style) {
+		style.setBorderRight(CellStyle.BORDER_MEDIUM);
+		style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+		style.setBorderLeft(CellStyle.BORDER_MEDIUM);
+		style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+		style.setBorderBottom(CellStyle.BORDER_MEDIUM);
+		style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+		style.setBorderTop(CellStyle.BORDER_MEDIUM);
+		style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+	}
+
+	private void makeBlackBorder2(CellStyle style) {
+		style.setBorderRight(CellStyle.BORDER_MEDIUM);
+		style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+		style.setBorderLeft(CellStyle.BORDER_MEDIUM);
+		style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+		style.setBorderBottom(CellStyle.BORDER_THIN);
+		style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+		style.setBorderTop(CellStyle.BORDER_THIN);
+		style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+	}
+
+
+	private List<CellRangeAddress> cellRangeAddressList(){
+		List<CellRangeAddress> cellRangeAddressList = new ArrayList<>();
+		cellRangeAddressList.add(new CellRangeAddress(0, 0, 0, 14));
+		cellRangeAddressList.add(new CellRangeAddress(1, 1, 0, 14));
+		cellRangeAddressList.add(new CellRangeAddress(2, 4, 0, 1));
+		cellRangeAddressList.add(new CellRangeAddress(2, 4, 2, 2));
+		cellRangeAddressList.add(new CellRangeAddress(2, 2, 3, 4));
+		cellRangeAddressList.add(new CellRangeAddress(2, 2, 5, 6));
+		cellRangeAddressList.add(new CellRangeAddress(2, 2, 7, 8));
+		cellRangeAddressList.add(new CellRangeAddress(2, 2, 9, 10));
+		cellRangeAddressList.add(new CellRangeAddress(3, 3, 3, 4));
+		cellRangeAddressList.add(new CellRangeAddress(3, 3, 5, 6));
+		cellRangeAddressList.add(new CellRangeAddress(3, 3, 7, 8));
+		cellRangeAddressList.add(new CellRangeAddress(3, 3, 9, 10));
+		cellRangeAddressList.add(new CellRangeAddress(2, 4, 11, 11));
+		cellRangeAddressList.add(new CellRangeAddress(2, 4, 12, 12));
+		cellRangeAddressList.add(new CellRangeAddress(2, 4, 13, 13));
+		cellRangeAddressList.add(new CellRangeAddress(2, 4, 14, 14));
+		return cellRangeAddressList;
+	}
 
 //    public CommonResult loadAssessmentStuTempList(List<UploadStu> uploadStuList) {
 //		commonUserService.fillUserConditionList()
 //		return null;
 //    }
+
 }

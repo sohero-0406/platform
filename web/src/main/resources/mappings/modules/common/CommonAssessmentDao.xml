@@ -29,14 +29,22 @@
     </select>
 
 	<select id="countConflictNum" resultType="Integer">
-		select count(ca.id) as totalNum from common_assessment as ca where (ca.start_date between #{startDate} and #{endDate} or ca.end_date between #{startDate} and #{endDate} or (ca.start_date &lt; #{startDate} and ca.end_date &gt; #{endDate}) )
+		select count(ca.id) as totalNum
+		from common_assessment as ca
+		where (ca.start_date between #{startDate} and #{endDate} or ca.end_date between #{startDate} and #{endDate} or (ca.start_date &lt; #{startDate} and ca.end_date &gt; #{endDate}) )
+		and ca.school_id = #{schoolId} and ca.assessment_scheme_id = #{assessmentSchemeId}
 		<if test="id!=null">
 			and ca.id != #{id}
 		</if>
 	</select>
 
 
-	<select id="loadOneByCondition" resultType="CommonAssessment">
-		select * from common_assessment as ca where ca.assessment_name = #{assessmentName} and ca.start_date &lt;= #{startDate} and ca.end_date &gt;= #{startDate} and ca.data_status = #{dataStatus} and status = '0'
+	<select id="loadOneByCondition" resultType="com.jeesite.modules.common.entity.CommonAssessment">
+		select * from common_assessment as ca
+		where ca.assessment_name = #{assessmentName} and ca.start_date &lt;= #{startDate} and ca.end_date &gt;= #{startDate} and ca.data_status = #{dataStatus} and status = '0'
+		<if test="schoolId!=null and schoolId!=''">
+			and school_id = #{schoolId}
+		</if>
+
 	</select>
 </mapper>

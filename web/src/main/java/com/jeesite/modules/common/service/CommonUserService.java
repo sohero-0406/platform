@@ -208,7 +208,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
         for (CommonUser user: userList) {
             user.setPassword("123456");
             CommonUser con = new CommonUser();
-            con.setUserName(user.getUserName());
+            con.setUserName(user.getUserName().trim());
             List<CommonUser> exist = super.findList(con);
             if(exist!=null&&exist.size()>0){
                 msg += user.getUserName()+"已存在！<br/>";
@@ -234,14 +234,16 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
                     msg += user.getUserName()+"专业的长度不得大于100!<br/>";
                     //return new CommonResult(CodeConstant.ERROR_DATA, "专业的长度不得大于100!");
                 }
-                if(StringUtils.isBlank(user.getClassName())){
-                    sum++;
-                    msg += user.getUserName()+"班级不能为空<br/>";
-                }
-                if(StringUtils.isNotBlank(user.getClassName())&&user.getClassName().length()>100){
-                    sum++;
-                    msg += user.getUserName()+"班级的长度不得大于100!<br/>";
-                    //return new CommonResult(CodeConstant.ERROR_DATA, "班级的长度不得大于100!");
+                if("3".equals(roleId)){
+                    if(StringUtils.isBlank(user.getClassName())){
+                        sum++;
+                        msg += user.getUserName()+"班级不能为空<br/>";
+                    }
+                    if(StringUtils.isNotBlank(user.getClassName())&&user.getClassName().length()>100){
+                        sum++;
+                        msg += user.getUserName()+"班级的长度不得大于100!<br/>";
+                        //return new CommonResult(CodeConstant.ERROR_DATA, "班级的长度不得大于100!");
+                    }
                 }
                 if(user.getUserName().trim().length()!=18){
                     msg += user.getUserName()+"长度不是18！<br/>";
@@ -261,6 +263,7 @@ public class CommonUserService extends CrudService<CommonUserDao, CommonUser> {
                     user.setRoleId(roleId);
 
                     user.setPassword(user.getPhoneNum().substring(user.getPhoneNum().length()-6));
+                    user.setUserName(user.getUserName().trim());
                     super.save(user);
                     okNum++;
                 }

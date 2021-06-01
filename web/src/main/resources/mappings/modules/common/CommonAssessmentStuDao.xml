@@ -68,9 +68,9 @@
 	<select id="findAssessmentStuListByConditionAndSchoolId" resultType="CommonAssessmentStu">
 		select cas.*, ca.assessment_name as assessmentName from common_assessment_stu as cas, common_assessment as ca where
 			cas.assessment_id in (select id from common_assessment where data_status = '5' ) and cas.assessment_id = ca.id
-			and cas.school_id = #{schoolId}
+			and ca.school_id = #{schoolId}
 			<if test="commonAssessmentStu.assessmentId!=null and commonAssessmentStu.assessmentId!=''">
-				and ca.assessment_id = #{commonAssessmentStu.assessmentId}
+				and ca.id = #{commonAssessmentStu.assessmentId}
 			</if>
 			<if test="commonAssessmentStu.assessmentName!=null and commonAssessmentStu.assessmentName!=''">
 				and ca.assessment_name = #{commonAssessmentStu.assessmentName}
@@ -99,9 +99,9 @@
 	<select id="findAssessmentStuListByConditionAndSchoolIdCount" resultType="Long">
 		select count(cas.id) from common_assessment_stu as cas, common_assessment as ca where
 			cas.assessment_id in (select id from common_assessment where data_status = '5' ) and cas.assessment_id = ca.id
-			and cas.school_id = #{schoolId}
+			and ca.school_id = #{schoolId}
 			<if test="commonAssessmentStu.assessmentId!=null and commonAssessmentStu.assessmentId!=''">
-				and ca.assessment_id = #{commonAssessmentStu.assessmentId}
+				and ca.id = #{commonAssessmentStu.assessmentId}
 			</if>
 			<if test="commonAssessmentStu.assessmentName!=null and commonAssessmentStu.assessmentName!=''">
 				and ca.assessment_name = #{commonAssessmentStu.assessmentName}

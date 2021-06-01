@@ -1,6 +1,4 @@
-/**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
- */
+
 package com.jeesite.modules.common.service;
 
 import java.util.ArrayList;
@@ -34,13 +32,17 @@ import com.jeesite.modules.common.dao.CommonAccessoryDao;
 @Transactional(readOnly=true)
 public class CommonAccessoryService extends CrudService<CommonAccessoryDao, CommonAccessory> {
 
-	@Autowired
 	private  CommonUserService commonUserService;
+
+	@Autowired
+	public void setCommonUserService(CommonUserService commonUserService) {
+		this.commonUserService = commonUserService;
+	}
 
 	/**
 	 * 获取单条数据
-	 * @param commonAccessory
-	 * @return
+	 * @param commonAccessory 1
+	 * @return 1
 	 */
 	@Override
 	public CommonAccessory get(CommonAccessory commonAccessory) {
@@ -50,7 +52,7 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 	/**
 	 * 查询分页数据
 	 * @param commonAccessory 查询条件 commonAccessory.page 分页对象
-	 * @return
+	 * @return 1
 	 */
 	@Override
 	public Page<CommonAccessory> findPage(CommonAccessory commonAccessory) {
@@ -59,30 +61,30 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 	
 	/**
 	 * 保存数据（插入或更新）
-	 * @param commonAccessory
+	 * @param commonAccessory 1
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void save(CommonAccessory commonAccessory) {
 		super.save(commonAccessory);
 	}
 	
 	/**
 	 * 更新状态
-	 * @param commonAccessory
+	 * @param commonAccessory 1
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void updateStatus(CommonAccessory commonAccessory) {
 		super.updateStatus(commonAccessory);
 	}
 	
 	/**
 	 * 删除数据
-	 * @param commonAccessory
+	 * @param commonAccessory 1
 	 */
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional
 	public void delete(CommonAccessory commonAccessory) {
 		super.delete(commonAccessory);
 	}
@@ -90,23 +92,23 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 
 	/**
 	 * 根据对象条件加载配件分页信息
-	 * @param commonAccessory
-	 * @return
+	 * @param commonAccessory 1
+	 * @return 1
 	 */
-	public CommonResult findPageByCondition(CommonAccessory commonAccessory){
+	public CommonResult<Page<CommonAccessory>> findPageByCondition(CommonAccessory commonAccessory){
 		if(!PageUtils.checkPageParams(commonAccessory)){
-			return new CommonResult(CodeConstant.PARA_MUST_NEED, "您未传入分页数据");
+			return new CommonResult<>(CodeConstant.PARA_MUST_NEED, "您未传入分页数据");
 		}
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, super.findPage(commonAccessory));
+		return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, super.findPage(commonAccessory));
 	}
 
 	/**
 	 * 根据删除的json文件删除数据 （逻辑删除）
-	 * @param json
-	 * @return
+	 * @param json 1
+	 * @return 1
 	 */
 	@Transactional
-	public CommonResult deleteCommonCommonAccessory(String json){
+	public CommonResult<JSONObject> deleteCommonCommonAccessory(String json){
 		String commonUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(commonUserId);
 		if(CommonUserUtil.isSuperAdmin(loginUser)){
@@ -124,31 +126,31 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 			int x = length - deletedNum;
 			object.put("notDeletedNum", x);
 			if(x>0){
-				return new CommonResult(CodeConstant.DATA_LOCK, "有"+x+"条件数据不符合删除条件，不能删除，符合的已删除", object);
+				return new CommonResult<>(CodeConstant.DATA_LOCK, "有"+x+"条件数据不符合删除条件，不能删除，符合的已删除", object);
 			}else{
-				return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, object);
+				return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, object);
 			}
 		}else{
-			return new CommonResult(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
+			return new CommonResult<>(CodeConstant.NO_RIGHT, "您没有权限进行该操作");
 		}
 
 	}
 
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void saveList(List<CommonAccessory> commonAccessoryList){
 		dao.insertBatch(commonAccessoryList);
 	}
 
-	@Transactional(readOnly = false)
-	public CommonResult saveByCategoryId(List<CommonAccessory> commonAccessoryList, String categoryId) {
+	@Transactional
+	public CommonResult<JSONObject> saveByCategoryId(List<CommonAccessory> commonAccessoryList, String categoryId) {
 		String loginUserId = PreEntity.getUserIdByToken();
 		CommonUser loginUser = commonUserService.get(loginUserId);
 		if(!"1".equals(loginUser.getRoleId())){
-			return new CommonResult(CodeConstant.NO_RIGHT, "您有权限进行该操作");
+			return new CommonResult<>(CodeConstant.NO_RIGHT, "您有权限进行该操作");
 		}
 		if(ListUtils.isEmpty(commonAccessoryList)){
-			return new CommonResult(CodeConstant.EXCEL_NO_DATA, "您传入的EXCEL表格没有数据");
+			return new CommonResult<>(CodeConstant.EXCEL_NO_DATA, "您传入的EXCEL表格没有数据");
 		}
 		List<String> msgList = new ArrayList<>();
 		List<CommonAccessory> okCommonAccessoryList = new ArrayList<>();
@@ -226,12 +228,12 @@ public class CommonAccessoryService extends CrudService<CommonAccessoryDao, Comm
 			jo.put("successNum", okCommonAccessoryList.size());
 			jo.put("errorNum", commonAccessoryList.size()-okCommonAccessoryList.size());
 			jo.put("msgList", msgList);
-			return new CommonResult(CodeConstant.EXCEL_WRONG_DATA, "excel文件中没有一个数据能正常上传", jo);
+			return new CommonResult<>(CodeConstant.EXCEL_WRONG_DATA, "excel文件中没有一个数据能正常上传", jo);
 		}
 		JSONObject jo = new JSONObject();
 		jo.put("successNum", okCommonAccessoryList.size());
 		jo.put("errorNum", commonAccessoryList.size()-okCommonAccessoryList.size());
 		jo.put("msgList", msgList);
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, msg, jo);
+		return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, msg, jo);
 	}
 }

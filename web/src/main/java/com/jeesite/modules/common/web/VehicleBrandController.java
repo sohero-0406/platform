@@ -11,6 +11,7 @@ import com.jeesite.modules.common.entity.CommonResult;
 import com.jeesite.modules.common.entity.VehicleBrand;
 import com.jeesite.modules.common.service.VehicleBrandService;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -119,7 +120,7 @@ public class VehicleBrandController extends BaseController {
 	@ApiOperation(value = "二手车项目查询车辆品牌")
 	@RequestMapping(value = "findBrandList")
 	@ResponseBody
-	public CommonResult findBrandList(){
+	public CommonResult findBrandList(String brandString){
 		CommonResult comRes = new CommonResult();
 		VehicleBrand vehicleBrand = new VehicleBrand();
 		List<VehicleBrand> vehicleBrandList = vehicleBrandService.findList(vehicleBrand);
@@ -130,8 +131,9 @@ public class VehicleBrandController extends BaseController {
 			vehicleBrand.setPinpaiId(vb.getPinpaiId());
 			vehicleBrand.setShouzimu(vb.getShouzimu());
 			vehicleBrand.setPinpai(vb.getPinpai());
-			String brandString = "丰田，大众，别克，福特，吉利，荣威，现代，雪佛兰，宝马，奔驰，广汽传媒，比亚迪";
-			if (brandString.contains(vehicleBrand.getPinpai())){
+			// 修改为前端入参来控制，这样可以避免每次更新变动都需要更新大平台的问题
+//			String brandString = "丰田，大众，别克，福特，日产，荣威，现代，雪佛兰，宝马，奔驰，广汽传祺，比亚迪";
+			if (StringUtils.isNotBlank(brandString) && brandString.contains(vehicleBrand.getPinpai())){
 				dataList1.add(vehicleBrand);
 			}else{
 				dataList2.add(vehicleBrand);
@@ -146,8 +148,8 @@ public class VehicleBrandController extends BaseController {
 	@ApiOperation(value = "网约车项目查询车辆品牌")
 	@RequestMapping(value = "findBrandListForWyc")
 	@ResponseBody
-	public CommonResult<List> findBrandListForWyc() {
-		CommonResult<List> comRes = new CommonResult<>();
+	public CommonResult<List<VehicleBrand>> findBrandListForWyc() {
+		CommonResult<List<VehicleBrand>> comRes = new CommonResult<>();
 		VehicleBrand vehicleBrand = new VehicleBrand();
 		List<VehicleBrand> vehicleBrandList = vehicleBrandService.findList(vehicleBrand);
 		List<VehicleBrand> dataList1 = new ArrayList<>();

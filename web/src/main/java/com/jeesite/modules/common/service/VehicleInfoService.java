@@ -170,13 +170,13 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
             VehicleBrand vehicleBrandCon = new VehicleBrand();
             vehicleBrandCon.setPinpai(vehicleInfo.getPinpai());
             VehicleBrand vehicleBrand = vehicleBrandService.getByEntity(vehicleBrandCon);
-            vehicleInfo.setPinpaiId(vehicleBrand.getId());
+            vehicleInfo.setPinpaiId(vehicleBrand.getPinpaiId());
             vehicleInfo.setPinpaiLogo(vehicleBrand.getPinpaiLogo());
 
             VehicleSeries vehicleSeriesCon = new VehicleSeries();
             vehicleSeriesCon.setChexi(vehicleInfo.getChexi());
             VehicleSeries vehicleSeries = vehicleSeriesService.getByEntity(vehicleSeriesCon);
-            vehicleInfo.setChexiId(vehicleSeries.getId());
+            vehicleInfo.setChexiId(vehicleSeries.getChexiId());
 
             VehicleInfo con = new VehicleInfo();
             con.setChexingmingcheng(vehicleInfo.getChexingmingcheng());
@@ -187,6 +187,8 @@ public class VehicleInfoService extends CrudService<VehicleInfoDao, VehicleInfo>
             } else {
                 vehicleInfo.setUploadDate(DateUtils.getDate());
                 super.save(vehicleInfo);
+                vehicleInfo.setChexingId(vehicleInfo.getId());
+                this.update(vehicleInfo);
                 okNum++;
             }
         }

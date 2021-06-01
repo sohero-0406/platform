@@ -1,6 +1,4 @@
-/**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
- */
+
 package com.jeesite.modules.common.entity;
 
 import com.jeesite.common.utils.excel.annotation.ExcelField;
@@ -16,7 +14,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  * @author mayuhu
  * @version 2019-08-12
  */
-@Table(name="common_accessory", alias="a", columns={
+@Table(name="common_accessory", columns={
 		@Column(name="id", attrName="id", label="主键", isPK=true),
 		@Column(name="accessory_index", attrName="accessoryIndex", label="配件编号"),
 		@Column(name="accessory_name", attrName="accessoryName", label="配件名称", queryType=QueryType.LIKE),
@@ -53,7 +51,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		super(id);
 	}
 	
-	@Length(min=0, max=50, message="配件编号长度不能超过 50 个字符")
+	@Length(max=50, message="配件编号长度不能超过 50 个字符")
 	@ExcelField(title="配件编号", align = ExcelField.Align.CENTER, sort = 1)
 	public String getAccessoryIndex() {
 		return accessoryIndex;
@@ -63,7 +61,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		this.accessoryIndex = accessoryIndex;
 	}
 	
-	@Length(min=0, max=100, message="配件名称长度不能超过 100 个字符")
+	@Length(max=100, message="配件名称长度不能超过 100 个字符")
 	@ExcelField(title="配件名称", align = ExcelField.Align.CENTER, sort = 2)
 	public String getAccessoryName() {
 		return accessoryName;
@@ -73,7 +71,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		this.accessoryName = accessoryName;
 	}
 	
-	@Length(min=0, max=100, message="配件品牌长度不能超过 100 个字符")
+	@Length(max=100, message="配件品牌长度不能超过 100 个字符")
 	@ExcelField(title="配件品牌", align = ExcelField.Align.CENTER, sort = 3)
 	public String getAccessoryBrand() {
 		return accessoryBrand;
@@ -83,7 +81,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		this.accessoryBrand = accessoryBrand;
 	}
 	
-	@Length(min=0, max=45, message="配件等级长度不能超过 45 个字符")
+	@Length(max=45, message="配件等级长度不能超过 45 个字符")
 	@ExcelField(title="配件等级", align = ExcelField.Align.CENTER, sort = 4)
 	public String getAccessoryLevel() {
 		return accessoryLevel;
@@ -93,7 +91,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		this.accessoryLevel = accessoryLevel;
 	}
 	
-	@Length(min=0, max=20, message="规格长度不能超过 20 个字符")
+	@Length(max=20, message="规格长度不能超过 20 个字符")
 	@ExcelField(title="规格", align = ExcelField.Align.CENTER, sort = 5)
 	public String getAccessorySpecifications() {
 		return accessorySpecifications;
@@ -103,7 +101,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		this.accessorySpecifications = accessorySpecifications;
 	}
 	
-	@Length(min=0, max=10, message="单位长度不能超过 10 个字符")
+	@Length(max=10, message="单位长度不能超过 10 个字符")
 	@ExcelField(title="单位", align = ExcelField.Align.CENTER, sort = 6)
 	public String getAccessoryUnit() {
 		return accessoryUnit;
@@ -113,7 +111,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		this.accessoryUnit = accessoryUnit;
 	}
 	
-	@Length(min=0, max=20, message="指导价长度不能超过 20 个字符")
+	@Length(max=20, message="指导价长度不能超过 20 个字符")
 	@ExcelField(title="指导价", align = ExcelField.Align.CENTER, sort = 7)
 	public String getAccessoryPrice() {
 		return accessoryPrice;
@@ -123,7 +121,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		this.accessoryPrice = accessoryPrice;
 	}
 	
-	@Length(min=0, max=100, message="产地长度不能超过 100 个字符")
+	@Length(max=100, message="产地长度不能超过 100 个字符")
 	@ExcelField(title="产地", align = ExcelField.Align.CENTER, sort = 8)
 	public String getAccessoryPlaceOfOrigin() {
 		return accessoryPlaceOfOrigin;
@@ -133,7 +131,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		this.accessoryPlaceOfOrigin = accessoryPlaceOfOrigin;
 	}
 	
-	@Length(min=0, max=10, message="是否 进口 取值 “是”或者“否”长度不能超过 10 个字符")
+	@Length(max=10, message="是否 进口 取值 “是”或者“否”长度不能超过 10 个字符")
 	@ExcelField(title="是否进口", align = ExcelField.Align.CENTER, sort = 9)
 	public String getAccessoryImport() {
 		return accessoryImport;
@@ -143,7 +141,7 @@ public class CommonAccessory extends PreEntity<CommonAccessory> {
 		this.accessoryImport = accessoryImport;
 	}
 	
-	@Length(min=0, max=64, message="配件分类id长度不能超过 64 个字符")
+	@Length(max=64, message="配件分类id长度不能超过 64 个字符")
 	public String getCategoryId() {
 		return categoryId;
 	}

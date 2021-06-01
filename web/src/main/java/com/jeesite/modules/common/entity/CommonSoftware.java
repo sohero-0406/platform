@@ -29,7 +29,8 @@ public class CommonSoftware extends DataEntity<CommonSoftware> {
 	private String softwareName;		// 软件名称
 	private String softwareTypeId;		// 软件种类id
 	private String softwareDesc;		// software_desc
-	
+
+
 	public CommonSoftware() {
 		this(null);
 	}

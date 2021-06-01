@@ -23,7 +23,7 @@ public interface CommonAssessmentDao extends CrudDao<CommonAssessment> {
 
 	List<String> loadCalcedNameList(@Param("schoolId") String schoolId);
 
-	Integer countConflictNum(String startDate, String endDate, String id);
+	Integer countConflictNum(String startDate, String endDate, String id, String schoolId, String assessmentSchemeId);
 
 	CommonAssessment loadOneByCondition(CommonAssessment con);
 

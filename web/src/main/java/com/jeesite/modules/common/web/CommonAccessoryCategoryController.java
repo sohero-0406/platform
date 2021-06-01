@@ -37,8 +37,12 @@ import java.util.List;
 @RequestMapping(value = "/common/commonAccessoryCategory")
 public class CommonAccessoryCategoryController extends BaseController {
 
-	@Autowired
 	private CommonAccessoryCategoryService commonAccessoryCategoryService;
+
+	@Autowired
+	public void setCommonAccessoryCategoryService(CommonAccessoryCategoryService commonAccessoryCategoryService) {
+		this.commonAccessoryCategoryService = commonAccessoryCategoryService;
+	}
 
 	/**
 	 * 加载分页配件分类数据

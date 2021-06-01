@@ -1,5 +1,7 @@
 package com.jeesite.modules.common.web;
 
+import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.entity.Page;
 import com.jeesite.common.utils.excel.ExcelImport;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.aop.Log;
@@ -23,37 +25,41 @@ import java.util.List;
  * @version 2019-08-12
  */
 @Controller
-@RequestMapping(value = "${adminPath}/common/commonAccessory")
+@RequestMapping(value = "/common/commonAccessory")
 public class CommonAccessoryController extends BaseController {
 
-	@Autowired
 	private CommonAccessoryService commonAccessoryService;
+
+	@Autowired
+	public void setCommonAccessoryService(CommonAccessoryService commonAccessoryService) {
+		this.commonAccessoryService = commonAccessoryService;
+	}
 
 	/**
 	 * 加载配件分页数据
-	 * @param commonAccessory
-	 * @return
+	 * @param commonAccessory 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "加载配件分页数据")
 	@ApiImplicitParam(name = "commonAccessory", value = "查询的配件条件对象", required = true, dataType="CommonAccessory")
 	@Log(operationName = "加载配件分页数据")
 	@RequestMapping(value = "listCommonAccessory")
 	@ResponseBody
-	public CommonResult listCommonAccessory(CommonAccessory commonAccessory){
+	public CommonResult<Page<CommonAccessory>> listCommonAccessory(CommonAccessory commonAccessory){
 		return commonAccessoryService.findPageByCondition(commonAccessory);
 	}
 
 	/**
 	 * 删除配件信息
-	 * @param json
-	 * @return
+	 * @param json 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "删除配件信息")
 	@ApiImplicitParam(name = "json", value = "删除的json信息", required = true, dataType="String")
 	@Log(operationName = "删除配件信息", operationType = Log.OPERA_TYPE_DEL)
 	@RequestMapping(value = "deleteCommonAccessory")
 	@ResponseBody
-	public CommonResult deleteCommonAccessory(String json) {
+	public CommonResult<JSONObject> deleteCommonAccessory(String json) {
 
 		return commonAccessoryService.deleteCommonCommonAccessory(json);
 	}
@@ -66,7 +72,7 @@ public class CommonAccessoryController extends BaseController {
 	@Log(operationName = "上传配件信息", operationType = Log.OPERA_TYPE_ADD)
 	@RequestMapping(value = "uploadCommonAccessoryByCategoryId")
 	@ResponseBody
-	public CommonResult uploadCommonAccessoryByCategoryId(String categoryId, MultipartFile file) throws Exception {
+	public CommonResult<JSONObject> uploadCommonAccessoryByCategoryId(String categoryId, MultipartFile file) throws Exception {
 		ExcelImport ei = new ExcelImport(file, 2, 0);
 		List<CommonAccessory> commonAccessoryList = ei.getDataList(CommonAccessory.class);
 		return commonAccessoryService.saveByCategoryId(commonAccessoryList, categoryId);

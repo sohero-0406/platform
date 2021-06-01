@@ -1,36 +1,26 @@
-/**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
- */
-package com.jeesite.modules.common.web;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+package com.jeesite.modules.common.web;
 
 import com.jeesite.common.codec.EncodeUtils;
 import com.jeesite.common.constant.CodeConstant;
+import com.jeesite.common.entity.Page;
 import com.jeesite.common.io.FileUtils;
+import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.common.aop.Log;
-import com.jeesite.modules.common.entity.CommonAssessment;
-import com.jeesite.modules.common.entity.CommonBasicScheme;
+import com.jeesite.modules.common.entity.CommonAssessmentScheme;
 import com.jeesite.modules.common.entity.CommonResult;
+import com.jeesite.modules.common.service.CommonAssessmentSchemeService;
 import com.jeesite.modules.common.util.FilePathUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import com.jeesite.common.config.Global;
-import com.jeesite.common.entity.Page;
-import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.common.entity.CommonAssessmentScheme;
-import com.jeesite.modules.common.service.CommonAssessmentSchemeService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,12 +33,15 @@ import java.util.List;
  * @version 2019-08-05
  */
 @Controller
-@RequestMapping(value = "${adminPath}/common/commonAssessmentScheme")
+@RequestMapping(value = "/common/commonAssessmentScheme")
 public class CommonAssessmentSchemeController extends BaseController {
 
-	@Autowired
 	private CommonAssessmentSchemeService commonAssessmentSchemeService;
-	
+
+	@Autowired
+	public void setCommonAssessmentSchemeService(CommonAssessmentSchemeService commonAssessmentSchemeService) {
+		this.commonAssessmentSchemeService = commonAssessmentSchemeService;
+	}
 //	/**
 //	 * 获取数据
 //	 */
@@ -108,8 +101,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 
 	/**
 	 * 加载分页考核方案数据
-	 * @param commonAssessmentScheme
-	 * @return
+	 * @param commonAssessmentScheme 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "加载分页考核方案数据")
 	@ApiImplicitParam(name = "commonAssessmentScheme", value = "查询方案的条件对象", required = true, dataType="CommonAssessmentScheme")
@@ -123,8 +116,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 
 	/**
 	 * 加载列表考核方案数据
-	 * @param commonAssessmentScheme
-	 * @return
+	 * @param commonAssessmentScheme 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "加载列表考核方案数据")
 	@ApiImplicitParam(name = "commonAssessmentScheme", value = "查询方案的条件对象", required = true, dataType="CommonAssessmentScheme")
@@ -139,8 +132,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 
 	/**
 	 * 保存、更新考核方案
-	 * @param commonAssessmentScheme
-	 * @return
+	 * @param commonAssessmentScheme 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "保存、更新考核方案")
 	@ApiImplicitParam(name = "commonAssessmentScheme", value = "保存或者更新的对象", required = true, dataType="CommonAssessmentScheme")
@@ -153,8 +146,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 
 	/**
 	 * 根据id加载考核方案
-	 * @param id
-	 * @return
+	 * @param id 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "根据id加载考核方案")
 	@ApiImplicitParam(name = "id", value = "方案的id", required = true, dataType="String")
@@ -167,8 +160,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 
 	/**
 	 * 删除考核方案
-	 * @param json
-	 * @return
+	 * @param json 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "删除考核方案")
 	@ApiImplicitParam(name = "json", value = "删除方案的json数据", required = true, dataType="String")
@@ -181,8 +174,8 @@ public class CommonAssessmentSchemeController extends BaseController {
 
 	/**
 	 * 更新考核方案状态
-	 * @param commonAssessmentScheme
-	 * @return
+	 * @param commonAssessmentScheme 1
+	 * @return 1
 	 */
 	@ApiOperation(value = "更新考核方案状态")
 	@ApiImplicitParam(name = "commonAssessmentScheme", value = "要更新状态的对象", required = true, dataType="CommonAssessmentScheme")
@@ -195,37 +188,35 @@ public class CommonAssessmentSchemeController extends BaseController {
 
 	/**
 	 * 上传评分表样例
-	 * @param file
-	 * @return
-	 * @throws IOException
+	 * @param file 1
+	 * @return 1
+	 * @throws IOException 1
 	 */
 	@ApiOperation(value = "上传评分表样例")
 	@ApiImplicitParam(name = "file", value = "评分样例文件", required = true, dataType="MultipartFile")
 	@Log(operationName = "上传评分表样例", operationType = Log.OPERA_TYPE_OTHER)
 	@RequestMapping(value = "uploadSchemeTable")
 	@ResponseBody
-	public CommonResult uploadSchemeTable(MultipartFile file) throws IOException {
+	public CommonResult<String> uploadSchemeTable(MultipartFile file) throws IOException {
 		String end = FileUtils.getFileExtension(file.getOriginalFilename());
-		if(!end.equals("xls")&&!end.equals("xlsx")){
-			return new CommonResult(CodeConstant.WRONG_FILE, "文件名后缀不正确!");
+		if(!"xls".equals(end)&&!"xlsx".equals(end)){
+			return new CommonResult<>(CodeConstant.WRONG_FILE, "文件名后缀不正确!");
 		}
 		File x = new File(FilePathUtil.getFileSavePath("schemeTable")+"schemeTable"+System.currentTimeMillis()+"."+end);
 		file.transferTo(x);
-		return new CommonResult(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
+		return new CommonResult<>(CodeConstant.REQUEST_SUCCESSFUL, "上传成功", x.getName());
 	}
 
 	/**
-	 * 上传评分表样例
-	 * @param id
-	 * @param response
-	 * @return
-	 * @throws IOException
+	 * 下载评分表样例
+	 * @param id 1
+	 * @param response 1
 	 */
 	@ApiOperation(value = "下载评分表样例")
 	@ApiImplicitParam(name = "id", value = "方案的id", required = true, dataType="String")
 	@Log(operationName = "下载评分表样例", operationType = Log.OPERA_TYPE_OTHER)
 	@RequestMapping(value = "downloadSchemeTable")
-	public void downloadSchemeTable(String id, HttpServletResponse response) throws IOException {
+	public void downloadSchemeTable(String id, HttpServletResponse response) {
 		CommonAssessmentScheme commonAssessmentScheme = commonAssessmentSchemeService.get(id);
 
 		File file = new File(FilePathUtil.getFileSavePath("schemeTable")+commonAssessmentScheme.getSchemeTable());
@@ -239,7 +230,7 @@ public class CommonAssessmentSchemeController extends BaseController {
 			response.setHeader("Content-Disposition", "attachment; filename="+ EncodeUtils.encodeUrl("评分表.xlsx"));
 			// 输出文件流
 			ServletOutputStream out = response.getOutputStream();
-			int len = -1;
+			int len;
 			while ((len = is.read(fileBytes, 0, 1024)) != -1) {
 				out.write(fileBytes, 0, len);
 			}
