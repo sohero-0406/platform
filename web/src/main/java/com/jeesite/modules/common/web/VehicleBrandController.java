@@ -148,9 +148,10 @@ public class VehicleBrandController extends BaseController {
 	@ApiOperation(value = "网约车项目查询车辆品牌")
 	@RequestMapping(value = "findBrandListForWyc")
 	@ResponseBody
-	public CommonResult<List<VehicleBrand>> findBrandListForWyc() {
+	public CommonResult<List<VehicleBrand>> findBrandListForWyc(String shouzimu) {
 		CommonResult<List<VehicleBrand>> comRes = new CommonResult<>();
 		VehicleBrand vehicleBrand = new VehicleBrand();
+		vehicleBrand.setShouzimu(shouzimu);
 		List<VehicleBrand> vehicleBrandList = vehicleBrandService.findList(vehicleBrand);
 		List<VehicleBrand> dataList1 = new ArrayList<>();
 		List<VehicleBrand> dataList2 = new ArrayList<>();
